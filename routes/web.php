@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\BetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,4 +38,13 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('products', ProductController::class);
 
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+
+    Route::get('/play', [PlayerController::class, 'index'])->name('play');
+
+    Route::get('/fight', [OperatorController::class, 'fight'])->name('operator.fight');
+    Route::get('/transactions', [OperatorController::class, 'transactions'])->name('operator.transactions');
+    Route::get('/transaction/records', [OperatorController::class, 'getTransactions']);
+
+    // Bets
+    Route::get('/bet/total', [BetController::class, 'getTotalBetAmountPerFight']);
 });
