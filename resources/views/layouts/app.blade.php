@@ -6,7 +6,7 @@
 
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
-
+  <link rel="icon" href="{{ asset('img/sabong-aficionado.ico') }}" type="image/x-icon">
   <title>{{ config('app.name', 'Laravel') }}</title>
 
   <!-- Fonts -->
@@ -15,6 +15,7 @@
 
   <!-- Scripts -->
   @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css">
 </head>
 <body>
   <header>
@@ -38,14 +39,15 @@
           <li><a class="md:p-4 py-2 block" href="{{ route('register') }}">{{ __('Register') }}</a></li>
           @endif
           @else
-          @if ($role->name == 'Admin')
+          @if (session('role') == 'Admin')
           <li><a class="md:p-4 py-2 block" href="{{ route('users.index') }}">Manage Users</a></li>
           <li><a class="md:p-4 py-2 block" href="{{ route('roles.index') }}">Manage Role</a></li>
           @endif
-          @if ($role->name == 'Operator')
-          <li><a class="md:p-4 py-2 block" href="{{ route('users.index') }}">Fight</a></li>
+          @if (session('role') == 'Operator')
+          <li><a class="md:p-4 py-2 block" href="{{ route('operator.fight') }}">Fight</a></li>
+          <li><a class="md:p-4 py-2 block" href="{{ route('operator.transactions') }}">Transactions</a></li>
           @endif
-          @if ($role->name == 'Player')
+          @if (session('role') == 'Player')
           <li><a class="md:p-4 py-2 block" href="{{ route('play') }}">Play</a></li>
           @endif
           <li>
@@ -69,9 +71,6 @@
     </nav>
   </header>
   <div id="app">
-      
-
-
     <main class="py-4">
       <div class="container">
         <div class="row justify-content-center">
@@ -89,11 +88,12 @@
   </div>
 </body>
 </html>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+@yield('additional-scripts')
 <script>
   const button = document.querySelector('#menu-button');
   const menu = document.querySelector('#menu');
-
-
   button.addEventListener('click', () => {
     menu.classList.toggle('hidden');
   });

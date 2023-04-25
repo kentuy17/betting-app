@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -38,4 +39,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('products', ProductController::class);
 
     Route::get('/play', [PlayerController::class, 'index'])->name('play');
+
+    Route::get('/fight', [OperatorController::class, 'fight'])->name('operator.fight');
+    Route::get('/transactions', [OperatorController::class, 'transactions'])->name('operator.transactions');
+    Route::get('/transaction/records', [OperatorController::class, 'getTransactions']);
 });

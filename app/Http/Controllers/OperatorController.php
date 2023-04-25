@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ModelHasRoles;
-use App\Models\Roles;
+use App\Models\Transactions;
 
 class OperatorController extends Controller
 {
@@ -27,7 +27,24 @@ class OperatorController extends Controller
      */
     public function index(): View
     {
-        $role = $this->getUserRole();
-        return view('home', compact('role'));
+        return view('home');
+    }
+
+    public function fight(): View
+    {
+        return view('operator.fight');
+    }
+
+    public function transactions()
+    {
+        return view('operator.transactions');
+    }
+
+    public function getTransactions()
+    {
+        $trans = Transactions::with('user')->get();
+        return response()->json([
+            'data' => $trans
+        ]);
     }
 }
