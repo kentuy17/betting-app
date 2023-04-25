@@ -28,6 +28,6 @@ class PlayerController extends Controller
     public function index(): View
     {
         $role = $this->getUserRole();
-        return view('player.dashboard', compact('role'));
+        return view('player.play', compact('role'));
     }
 }

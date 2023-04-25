@@ -43,7 +43,7 @@ class LoginController extends Controller
     {
         $role = $this->getUserRole();
         if($role->name == 'Player') {
-            $this->redirectTo = '/dashboard';
+            $this->redirectTo = '/play';
         } 
         
         if($role->name == 'Operator') {
