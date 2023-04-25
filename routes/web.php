@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OperatorController;
+use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
@@ -36,8 +38,6 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
-
-    Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
     Route::get('/play', [PlayerController::class, 'index'])->name('play');
 

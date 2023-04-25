@@ -17,6 +17,7 @@ class Controller extends BaseController
     {
         $modelRole = ModelHasRoles::where('model_id',Auth::user()->id)->first();
         $roles = Roles::where('id',$modelRole->role_id)->first();
+        session(['role' => $roles->name]);
         return $roles;
     }
 }
