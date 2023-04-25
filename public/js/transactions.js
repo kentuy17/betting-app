@@ -1,7 +1,12 @@
 $(document).ready(function () {
   $('#transactions-table').DataTable({
-    ajax: '/transaction/records',
-    columns: [
+    "bPaginate": true,
+    "bLengthChange": false,
+    "bFilter": false,
+    "bInfo": false,
+    "bAutoWidth": false,
+    "ajax": '/transaction/records',
+    "columns": [
       {
         "data": "user.id"
       },

@@ -21,6 +21,11 @@ class Transactions extends Model
         'updated_at'
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime:M d, Y h:s A',
+        'updated_at' => 'datetime:M d, Y h:s A',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
