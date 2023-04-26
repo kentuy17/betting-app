@@ -9,14 +9,14 @@
           <table class=" w-100" id="bethistory-table">
             <thead>
               <tr>
-                <th>Fight Number</th>
-                <th>UserID</th>
-                <th>Side</th>
-                <th>Bet Amount</th>
-                <th>Win Amount</th>
-                <th>percent</th>
-                <th>date</th>
-                <th>status</th>
+                <th>EVENT</th>
+                <th>FIGHT #</th>
+                <th>SIDE</th>
+                <th>BET AMOUNT</th>
+                <th>WIN AMOUNT</th>
+                <th>PERCENT %</th>
+                <th>DATE</th>
+                <th>WINNER</th>
               </tr>
             </thead>
             {{-- <tbody>
@@ -38,5 +38,5 @@
 @endsection
 
 @section('additional-scripts')
-<script src="{{ asset('js/betHistory.js') }}" defer></script>
+<script src="{{ asset('js/bet-history.js') }}" defer></script>
 @endsection

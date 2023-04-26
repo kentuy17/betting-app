@@ -33,6 +33,6 @@ class PlayerController extends Controller
 
     public function bethistory()
     {
-        return view('player.bethistory');
+        return view('player.bet-history');
     }
 }

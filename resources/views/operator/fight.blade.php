@@ -130,6 +130,5 @@
 @endsection
 
 @section('additional-scripts')
-<script src="{{ asset('js/transactions.js') }}" defer></script>
 <script src="{{ asset('js/fight.js') }}" defer></script>
 @endsection

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\Fight;
 
 class BetHistory extends Model
 {
@@ -32,7 +33,13 @@ class BetHistory extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
-        /**
+
+    public function fight()
+    {
+        return $this->belongsTo(Fight::class, 'fight_no', 'fight_no');
+    }
+    
+    /**
      * @var array
      */
 

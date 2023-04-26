@@ -17,21 +17,38 @@
   @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css"/>
+  <link rel="stylesheet" href="{{ asset('css/dark-mode.css') }}" type="text/css">
+  <style>
+    .active-nav {
+      color: var(--bs-link-hover-color);
+      font-weight: 700;
+    }
+    .icon-logo {
+      max-height: 3rem;
+    }
+    .logo-container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+    }
+  </style>
 
 </head>
-<body>
+<body class="dark-mode">
   <header>
     <nav class="flex flex-wrap items-center justify-between w-full py-2 md:py-0 px-4 text-lg text-gray-700 bg-white">
-      <div>
-        <a href="{{ url('/') }}">
-          Sabong Aficionado
+      <div >
+        <a href="{{ url('/') }}" class="logo-container" class="flex">
+          <img class="icon-logo" src="{{ asset('img/sabong-aficionado-icon.png') }}" alt="Sabong Aficionado">
+          <p class="pl-2 font-medium font-mono text-xl">SABONG AFICIONADO</p>
         </a>
       </div>
       <svg xmlns="http://www.w3.org/2000/svg" id="menu-button" class="h-6 w-6 cursor-pointer md:hidden block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
       </svg>
       <div class="hidden w-full md:flex md:items-center md:w-auto" id="menu">
-        <ul class="text-base text-gray-700 md:flex md:justify-between md:pt-0">
+        <ul class="text-base md:flex md:justify-between md:pt-0 uppercase">
           @guest
           @if (Route::has('login'))
           <li><a class="md:p-4 py-2 block" href="{{ route('login') }}">{{ __('Login') }}</a></li>
@@ -50,8 +67,14 @@
           <li><a class="md:p-4 py-2 block" href="{{ route('operator.transactions') }}">Transactions</a></li>
           @endif
           @if (session('role') == 'Player')
-          <li><a class="md:p-4 py-2 block" href="{{ route('play') }}">Play</a></li>
-          <li><a class="md:p-4 py-2 block" href="{{ route('player.bethistory') }}">Bet History</a></li>
+          <li>
+            <a class="@if(Route::current()->getName() == 'play') {{ 'active-nav' }} @endif md:p-4 py-2 block" 
+              href="{{ route('play') }}">Play</a>
+          </li>
+          <li>
+            <a class="@if(Route::current()->getName() == 'player.bethistory') {{ 'active-nav' }} @endif md:p-4 py-2 block" 
+              href="{{ route('player.bethistory') }}">Bet History</a>
+          </li>
           @endif
           <li>
             <a id="navbarDropdown" class="md:p-4 py-2 block dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

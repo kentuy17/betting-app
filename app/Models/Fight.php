@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Bet;
+use App\Models\DerbyEvent;
 
 class Fight extends Model
 {
@@ -18,7 +19,8 @@ class Fight extends Model
         'game_winner',
         'status',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'event_id'
     ];
 
     protected $casts = [
@@ -29,6 +31,11 @@ class Fight extends Model
     public function bet()
     {
         return $this->hasMany(Bet::class, 'fight_no', 'fight_no');
+    }
+
+    public function event()
+    {
+        return $this->belongsTo(DerbyEvent::class, 'event_id');
     }
 
 
