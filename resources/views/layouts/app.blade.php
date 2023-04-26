@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css"/>
   <link rel="stylesheet" href="{{ asset('css/dark-mode.css') }}" type="text/css">
+  @yield('additional-styles')
   <style>
     .active-nav {
       color: var(--bs-link-hover-color);
