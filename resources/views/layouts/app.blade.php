@@ -7,7 +7,7 @@
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="icon" href="{{ asset('img/sabong-aficionado.ico') }}" type="image/x-icon">
-  <title>{{ config('app.name', 'Laravel') }}</title>
+  <title>{{ config('app.name', 'Sabong Aficionado') }}</title>
 
   <!-- Fonts -->
   <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -16,6 +16,7 @@
   <!-- Scripts -->
   @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css">
+
 </head>
 <body>
   <header>

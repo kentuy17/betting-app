@@ -25,6 +25,11 @@ $(document).ready(function () {
       {
         "data": "status"
       },
-    ]
+    ],
+    "createdRow": function( row, data, dataIndex){
+      if( data.status ==  `pending`){
+        $(row).css({"background-color":"red"});
+      }
+    }
   });
 });

@@ -9,6 +9,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BetController;
+use App\Http\Controllers\FightController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,4 +48,8 @@ Route::group(['middleware' => ['auth']], function() {
 
     // Bets
     Route::get('/bet/total', [BetController::class, 'getTotalBetAmountPerFight']);
+
+    // Fight
+    Route::get('/fight/current', [FightController::class, 'getCurrentFight']);
+    Route::post('/fight/update-status', [FightController::class, 'updateFight']);
 });
