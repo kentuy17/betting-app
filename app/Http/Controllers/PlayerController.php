@@ -31,8 +31,8 @@ class PlayerController extends Controller
         return view('player.play', compact('role'));
     }
 
-    public function reports()
+    public function bethistory()
     {
-        return view('player.betHistory');
+        return view('player.bethistory');
     }
 }

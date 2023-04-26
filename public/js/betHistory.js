@@ -8,23 +8,29 @@ $(document).ready(function () {
       "ajax": '/bet/history',
       "columns": [
         {
-          "data": "user.id"
+          "data": "fight_no"
         },
         {
-          "data": "user.name"
+          "data": "user_id"
         },
         {
-          "data": "amount"
+          "data": "side"
         },
         {
-          "data": "mobile_number"
+          "data": "betamount"
+        },
+        {
+          "data": "winamount"
+        },
+        {
+          "data": "percent"
         },
         {
           "data": "created_at"
         },
         {
           "data": "status"
-        },
+        }
       ]
     });
   });

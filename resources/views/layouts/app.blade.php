@@ -51,7 +51,7 @@
           @endif
           @if (session('role') == 'Player')
           <li><a class="md:p-4 py-2 block" href="{{ route('play') }}">Play</a></li>
-          <li><a class="md:p-4 py-2 block" href="{{ route('player.reports') }}">Reports</a></li>
+          <li><a class="md:p-4 py-2 block" href="{{ route('player.bethistory') }}">Bet History</a></li>
           @endif
           <li>
             <a id="navbarDropdown" class="md:p-4 py-2 block dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

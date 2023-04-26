@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('products', ProductController::class);
 
     Route::get('/play', [PlayerController::class, 'index'])->name('play');
+    Route::get('/play/history', [PlayerController::class, 'bethistory'])->name('player.bethistory');
 
     Route::get('/fight', [OperatorController::class, 'fight'])->name('operator.fight');
     Route::get('/transactions', [OperatorController::class, 'transactions'])->name('operator.transactions');

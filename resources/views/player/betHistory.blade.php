@@ -10,7 +10,7 @@
             <thead>
               <tr>
                 <th>Fight Number</th>
-                <th>Name</th>
+                <th>UserID</th>
                 <th>Side</th>
                 <th>Bet Amount</th>
                 <th>Win Amount</th>
