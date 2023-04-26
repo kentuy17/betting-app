@@ -30,4 +30,9 @@ class PlayerController extends Controller
         $role = $this->getUserRole();
         return view('player.play', compact('role'));
     }
+
+    public function reports()
+    {
+        return view('player.betHistory');
+    }
 }

@@ -4,7 +4,7 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-12">
-      <div class="card col-md-8">
+      <div class="card col-md-12">
         <div class="card-header">{{ __('Bet History') }}</div>
           <table class=" w-100" id="bethistory-table">
             <thead>

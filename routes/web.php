@@ -54,4 +54,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/fight/current', [FightController::class, 'getCurrentFight']);
     Route::get('/fight/update-status', [FightController::class, 'updateFight']);
 
+    // Player
+    Route::get('/reports', [PlayerController::class, 'reports'])->name('player.reports');
+
 });
