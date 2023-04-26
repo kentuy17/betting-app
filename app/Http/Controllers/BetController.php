@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Bet;
+use App\Models\BetHistory;
+
 
 class BetController extends Controller
 {
@@ -23,5 +25,16 @@ class BetController extends Controller
     {
         $bets = Bet::where('fight_no',$fight_no)->sum('amount');
         return $bets;
+    }
+
+    public function getBetHistoryByUser()
+    {
+        //$sUser = User::where('user_id',session('user_id'))->first();
+        $sUser = Auth::user()->id;
+        $history = BetHistory::where('user_id', $sUser)->get();
+
+        return response()->json([
+              'data' => $history,
+        ]);
     }
 }

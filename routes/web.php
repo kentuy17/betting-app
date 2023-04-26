@@ -48,8 +48,10 @@ Route::group(['middleware' => ['auth']], function() {
 
     // Bets
     Route::get('/bet/total', [BetController::class, 'getTotalBetAmountPerFight']);
+    Route::get('/bet/history', [BetController::class, 'getBetHistoryByUser']);
 
-    // Fight
+    //Fight
     Route::get('/fight/current', [FightController::class, 'getCurrentFight']);
-    Route::post('/fight/update-status', [FightController::class, 'updateFight']);
+    Route::get('/fight/update-status', [FightController::class, 'updateFight']);
+
 });
