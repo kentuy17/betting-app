@@ -5,8 +5,8 @@
   <div class="row justify-content-center">
     <div class="col-md-12">
       <div class="card col-md-12">
-        <div class="card-header">{{ __('Bet History') }}</div>
-          <table class=" w-100" id="bethistory-table">
+        <div class="card-header font-bold">{{ __('BET HISTORY') }}</div>
+          <table class="table table-striped" style="width: 100%" id="bethistory-table">
             <thead>
               <tr>
                 <th>EVENT</th>
