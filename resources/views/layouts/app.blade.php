@@ -14,10 +14,16 @@
   <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
   <!-- Scripts -->
-  @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" type="text/css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" type="text/css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css"/>
+
+  @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
+
+  <!-- Custom -->
   <link rel="stylesheet" href="{{ asset('css/dark-mode.css') }}" type="text/css">
+
+  @yield('additional-styles')
   <style>
     .active-nav {
       color: var(--bs-link-hover-color);
@@ -31,6 +37,9 @@
       flex-direction: row;
       flex-wrap: nowrap;
       align-items: center;
+    }
+    .dataTables_wrapper .dataTables_paginate a.paginate_button {
+      margin: 0px;
     }
   </style>
 
@@ -63,16 +72,16 @@
           <li><a class="md:p-4 py-2 block" href="{{ route('roles.index') }}">Manage Role</a></li>
           @endif
           @if (session('role') == 'Operator')
-          <li><a class="md:p-4 py-2 block" href="{{ route('operator.fight') }}">Fight</a></li>
-          <li><a class="md:p-4 py-2 block" href="{{ route('operator.transactions') }}">Transactions</a></li>
+          <li><a class="md:pl-4 py-2 block" href="{{ route('operator.fight') }}">Fight</a></li>
+          <li><a class="md:pl-4 py-2 block" href="{{ route('operator.transactions') }}">Transactions</a></li>
           @endif
           @if (session('role') == 'Player')
           <li>
-            <a class="@if(Route::current()->getName() == 'play') {{ 'active-nav' }} @endif md:p-4 py-2 block" 
+            <a class="@if(Route::current()->getName() == 'play') {{ 'active-nav' }} @endif py-2 block" 
               href="{{ route('play') }}">Play</a>
           </li>
           <li>
-            <a class="@if(Route::current()->getName() == 'player.bethistory') {{ 'active-nav' }} @endif md:p-4 py-2 block" 
+            <a class="@if(Route::current()->getName() == 'player.bethistory') {{ 'active-nav' }} @endif md:pl-4 py-2 block" 
               href="{{ route('player.bethistory') }}">Bet History</a>
           </li>
           @endif
@@ -116,6 +125,7 @@
 </html>
 <script src="https://code.jquery.com/jquery-3.5.1.js" type="text/javascript" ></script>
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js" type="text/javascript" ></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js" type="text/javascript" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js" type="text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" type="text/javascript"></script>
 @yield('additional-scripts')

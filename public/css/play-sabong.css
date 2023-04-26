@@ -1,0 +1,213 @@
+.fight-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.total-bets {
+  color: blue;
+  text-align: center;
+  font-weight: bold;
+}
+
+.win-chance {
+  text-align: center;
+  font-weight: bold;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  pointer-events: all !important;
+}
+
+.results .bet-result-chart {
+  /* max-width: 720px; */
+  overflow-x: auto;
+  max-height: 300px !important;
+  /* margin: 2rem 0; */
+}
+
+.bet-result-chart table tr td {
+  padding: 2.5px !important;
+  border: 1px solid rgba(0, 0, 0, .178) !important;
+}
+
+.results .bet-result-chart table tr td div {
+  height: 2rem;
+  width: 2rem;
+}
+
+.results .bet-result-chart table tr td .circleRedAll {
+  background-color: #f34141;
+}
+
+.results .bet-result-chart table tr td .circleBlueAll {
+  background-color: #0d6efd;
+}
+
+.results .bet-result-chart table tr td .circleGreenAll {
+  background-color: green;
+}
+
+.results .bet-result-chart table tr td .circleCancelAll {
+  background-color: rgba(0, 0, 0, .178);
+}
+
+.circleCancelAll,
+.circleBlueAll,
+.circleGreenAll,
+.circleRedAll {
+  height: 2rem;
+  width: 2rem;
+  border-radius: 1.2rem;
+  text-align: center;
+  color: #fff;
+  line-height: 30px;
+  font-weight: 700;
+}
+
+.bet-dark h4,
+.bet-dark h6,
+.bet-dark p,
+.bet-dark a {
+  color: #fff;
+}
+
+body.bet-dark .input-group-text {
+  color: #e9ecef;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #080e15;
+  border: 1px solid #292f3e;
+  border-radius: 0;
+}
+
+body.bet-dark .form-control {
+  color: #ffffff;
+  background-color: #080e15;
+  background-clip: padding-box;
+  border: 1px solid #292f3e;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.sm-gutters>[class*=col-] {
+  padding-right: 7px;
+  padding-left: 7px;
+}
+
+.fright {
+  float: right;
+}
+
+.bet-bg-head {
+  background: #ecf4fe;
+  padding: 13px;
+}
+
+.bet-boxed-area {
+  border: 1px solid #f1f1f1;
+  background: #fff;
+}
+
+body.bet-dark .bet-bg-head {
+  background: #1f2638;
+  padding: 13px;
+}
+
+body.bet-dark .bet-boxed-area {
+  background: #131722;
+  border: none;
+  color: #fff;
+}
+
+.bet-up {
+  color: #01aa78 !important;
+}
+
+.bet-down {
+  color: #eb6a61 !important;
+}
+
+.bet-button-green-full {
+  background: #0d6efd;
+  color: #fff;
+  padding: 9px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  font-size: 20px;
+  transition: all 0.4s ease;
+}
+
+.bet-button-green-full:hover {
+  background: blue;
+  text-decoration: none;
+  color: #fff;
+}
+
+.bet-button-red-full {
+  background: #eb6a61 !important;
+  border: none !important;
+  color: #fff;
+  padding: 9px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  font-size: 20px;
+  transition: all 0.4s ease;
+}
+
+.bet-button-red-full:hover {
+  text-decoration: none;
+  color: #fff;
+  background: #f34141;
+}
+
+.menu-green {
+  background: #0d6efd;
+}
+
+.menu-green button {
+  color: #fff !important;
+}
+
+.menu-green button:hover {
+  border-bottom: none !important;
+  background: #f34141 !important;
+}
+
+.bet-buy-sell-form>p {
+  padding: 10px;
+  margin-bottom: 0;
+}
+
+.bet-buy {
+  padding: 20px;
+  border-top: 1px solid #f1f1f1;
+  border-right: 1px solid #f1f1f1;
+}
+
+.bet-sell {
+  padding: 20px;
+  border-top: 1px solid #f1f1f1;
+}
+
+body.bet-dark .bet-buy {
+  padding: 20px;
+  border-top: 1px solid #292f3e;
+  border-right: 1px solid #292f3e;
+}
+
+body.bet-dark .bet-sell {
+  padding: 20px;
+  border-top: 1px solid #292f3e;
+}
+
+.amounts-bet-btn {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  flex-direction: row;
+}
