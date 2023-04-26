@@ -14,7 +14,7 @@
       <div class="card col-md-6 mx-4">
         <div class="fight-container pt-8 px-4">
           <div>
-            <p class="text-success label--sides mb-4 text-4xl font-bold">MERON</p>
+            <p class="text-danger label--sides mb-4 text-4xl font-bold">MERON</p>
             <div>
               <p id="m-total-bets" class="total-bets">0</p>
               <p id="m-win-chance" class="win-chance">180.54%</p>
@@ -28,7 +28,7 @@
             <p class="text-secondary text-center mt-4 font-medium text-3xl" id="fight-status">____</p>
           </div>
           <div>
-            <p class="text-danger label--sides mb-4 text-4xl font-bold">WALA</p>
+            <p class="text-primary label--sides mb-4 text-4xl font-bold">WALA</p>
             <div>
               <p id="w-total-bets" class="total-bets">0</p>
               <p id="w-win-chance" class="win-chance">170.54%</p>
@@ -36,9 +36,12 @@
           </div>
         </div>
         <div class="flex flex-col lg:flex-row lg:gap-0 gap-2 justify-evenly mt-7">
-          <button id="open-fight" class="btn btn-primary btn-lg">OPEN</button>
+          <button id="open-fight" class="btn btn-success btn-lg">OPEN</button>
           <button id="close-fight" class="btn btn-danger btn-lg">CLOSE</button>
           <button id="done-fight" class="btn btn-secondary btn-lg disabled" disabled>DONE</button>
+        </div>
+        <div class="flex flex-col lg:flex-row lg:gap-0 gap-2 justify-evenly mt-7">
+          <button id="open-fight" class="btn btn-primary btn-sm">Cancel Fight</button>
         </div>
       </div>
     </div>

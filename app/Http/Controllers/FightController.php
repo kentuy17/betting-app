@@ -45,7 +45,7 @@ class FightController extends Controller
             ->first();
 
         if($request->status == 'D') {
-            return $this->fightDone($fight);
+            return $this->fightDone($fight, $request->result);
         }
 
         $update_fight = $fight->update([

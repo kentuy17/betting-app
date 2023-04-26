@@ -16,6 +16,7 @@
   <!-- Scripts -->
   @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css"/>
 
 </head>
 <body>
@@ -89,8 +90,10 @@
   </div>
 </body>
 </html>
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js" type="text/javascript" ></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js" type="text/javascript" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" type="text/javascript"></script>
 @yield('additional-scripts')
 <script>
   const button = document.querySelector('#menu-button');

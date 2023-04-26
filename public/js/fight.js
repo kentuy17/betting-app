@@ -21,7 +21,6 @@ $(function() {
 
       if(response.data.status == 'C') {
         await setFightStatus('CLOSED');
-        console.log(fightStatus(), 'fightStatus');
         $('#done-fight').removeClass('disabled').prop('disabled',false);
       }
 
@@ -33,13 +32,13 @@ $(function() {
     }
   });
 
-  function updateFightStatus(status) {
+  function updateFightStatus(status,result=null) {
     $.ajax({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       },
       type:'POST',
-      data: {status: status},
+      data: {status:status, result:result},
       url: '/fight/update-status',
       success: async function(resp) {
         if(status == 'C') {
@@ -82,9 +81,37 @@ $(function() {
 
   $('#done-fight').on('click', function(e) {
     e.preventDefault();
-    updateFightStatus('D');
-    $(this).addClass('disabled').prop('disabled',true);
-    $('#open-fight').removeClass('disabled').prop('disabled', false);
-    $('#done-fight').removeClass('disabled').prop('disabled', false);
+    Swal.fire({
+      title: 'RESULT:',
+      showCancelButton: true,
+      showCloseButton: false,
+      showDenyButton: true,
+      allowOutsideClick: false,
+      confirmButtonText: 'MERON',
+      confirmButtonColor: 'red',
+      denyButtonText: 'WALA',
+      denyButtonColor: 'blue',
+      cancelButtonText: 'DRAW',
+      allowEscapeKey: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        alert('MERON WINS')
+        return 'M';
+      } else if (result.isDenied) {
+        alert('WALA WINS');
+        return 'W';
+      } else {
+        alert('DRAW');
+        return 'D';
+      }
+    }).then((result) => {
+      updateFightStatus(done='D',result);
+    });
+
+    // 
+    // $(this).addClass('disabled').prop('disabled',true);
+    // $('#open-fight').removeClass('disabled').prop('disabled', false);
+    // $('#done-fight').removeClass('disabled').prop('disabled', false);
+
   });
 });
