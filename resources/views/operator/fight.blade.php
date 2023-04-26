@@ -4,14 +4,14 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-12 flex justify-between">
-      <div class="card col-md-6">
+      <div class="card col-md-6 col-sm-12">
         <div class="card-header">{{ __('x100 Exp.') }}</div>
         <video width="100%">
           <source src="{{ asset('videos/e-sabong.mp4') }}" type="video/mp4">
           Your browser does not support the video tag.
         </video>
       </div>
-      <div class="card col-md-6 mx-4">
+      <div class="card col-md-6 mx-4 col-sm-12">
         <div class="fight-container pt-8 px-4">
           <div>
             <p class="text-danger label--sides mb-4 text-4xl font-bold">MERON</p>
@@ -46,18 +46,13 @@
       </div>
     </div>
     <div class="my-4 card col-md-12">
-      <table class=" w-100" id="transactions-table">
-        <thead>
-          <tr>
-            <th>Player ID</th>
-            <th>Name</th>
-            <th>Amount</th>
-            <th>Mobile#</th>
-            <th>Date</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-      </table>
+      <div class="results">
+        <div class="bet-result-chart">
+          <table id="tblBaccaratResultConsecutive" class="cell-border w-100 dataTable no-footer">
+              <tbody></tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -80,6 +75,57 @@
     cursor: not-allowed;
     pointer-events: all !important;
   }
+  .results .bet-result-chart {
+    /* max-width: 720px; */
+    overflow-x: auto;
+    max-height: 300px !important;
+    margin: 2rem 0;
+  }
+
+  .bet-result-chart table tr td {
+    padding: 2.5px !important;
+    border: 1px solid rgba(0, 0, 0, .178) !important;
+  }
+
+  .results .bet-result-chart table tr td div {
+      height: 2rem;
+      width: 2rem;
+  }
+
+  .results .bet-result-chart table tr td .circleRedAll {
+    height: 2rem;
+    width: 2rem;
+    background-color: #f34141;
+    border-radius: 1.2rem;
+    text-align: center;
+    color: #fff;
+    line-height: 25px;
+    font-weight: 700;
+  }
+
+  .results .bet-result-chart table tr td .circleBlueAll {
+    height: 2rem;
+    width: 2rem;
+    background-color: #0d6efd;
+    border-radius: 1.2rem;
+    text-align: center;
+    color: #fff;
+    line-height: 25px;
+    font-weight: 700;
+  }
+
+  .results .bet-result-chart table tr td .circleGreenAll {
+    height: 2rem;
+    width: 2rem;
+    background-color: green;
+    border-radius: 1.2rem;
+    text-align: center;
+    color: #fff;
+    line-height: 25px;
+    font-weight: 700;
+  }
+  
+
 </style>
 @endsection
 
