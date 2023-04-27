@@ -25,7 +25,7 @@
             <div>POINTS: <span id="current-pts" class="font-bold">1500.00</span></div>
           </div>
           <div class="text-center">
-            <span class="btn btn-block gradient-status-close btn-lg" id="player-fight-status">_____</span>
+            <span class="btn btn-block gradient-status-close btn-lg" id="player-fight-status">@{{message}}</span>
           </div>
           <div class="row no-gutters">
             <div class="col-md-6">
@@ -94,6 +94,42 @@
 @endsection
 
 @section('additional-scripts')
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<script>
+  const { createApp } = Vue
+  createApp({
+    data() {
+      return {
+        message: '_____',
+        fight: [],
+        fightNo: 0
+      }
+    },
+    mounted() {
+      fetch('fight/current')
+        .then(resp => resp.json())
+        .then(json => {
+          this.fight = json.data
+          this.message = this.setFightStatus(json.data.status)
+        });
+    },
+    methods: {
+      setFightStatus(status) {
+        if(status == null) {
+          return '_____'
+        }
+        if(status == 'O') {
+          return 'OPEN'
+        }
+        if(status == 'C') {
+          return 'CLOSE'
+        }
+      }
+    }
+  }).mount('#player-fight-status')
+</script>
+
 <script src="{{ asset('js/play.js') }}" defer></script>
 <script>
   const useState = (defaultValue) => {

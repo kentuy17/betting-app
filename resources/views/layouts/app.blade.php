@@ -71,8 +71,9 @@
           <li><a class="md:p-4 py-2 block" href="{{ route('roles.index') }}">Manage Role</a></li>
           @endif
           @if (session('role') == 'Operator')
-          <li><a class="md:pl-4 py-2 block" href="{{ route('operator.fight') }}">Fight</a></li>
-          <li><a class="md:pl-4 py-2 block" href="{{ route('operator.transactions') }}">Transactions</a></li>
+          <li><a class="md:pl-4 py-2 block" href="{{ route('operator.derby.event') }}">EVENT</a></li>
+          <li><a class="md:pl-4 py-2 block" href="{{ route('operator.fight') }}">FIGHT</a></li>
+          <li><a class="md:pl-4 py-2 block" href="{{ route('operator.transactions') }}">TRANSACTIONS</a></li>
           @endif
           @if (session('role') == 'Player')
           <li>
@@ -122,10 +123,14 @@
   </div>
 </body>
 </html>
-<script src="https://code.jquery.com/jquery-3.5.1.js" type="text/javascript" ></script>
+{{-- <script src="https://code.jquery.com/jquery-3.5.1.js" type="text/javascript" ></script> --}}
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js" type="text/javascript" ></script>
+{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> --}}
 <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js" type="text/javascript" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js" type="text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" type="text/javascript"></script>
 @yield('additional-scripts')
 <script>
