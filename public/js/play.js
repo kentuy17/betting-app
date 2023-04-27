@@ -16,67 +16,24 @@ $(function() {
     type: 'GET',
     data: {},
     success: async function(response){
+      var statusDiv = $('#player-fight-status').removeClass('gradient-status-open gradient-status-close');
       await setFightNo(response.data.fight_no);
       $('#fight-no').html(fightNo());
 
       if(response.data.status == 'C') {
         await setFightStatus('CLOSED');
+        statusDiv.addClass('gradient-status-close');
         $('#done-fight').removeClass('disabled').prop('disabled',false);
       }
 
       if(response.data.status == 'O') {
         await setFightStatus('OPEN');
+        statusDiv.addClass('gradient-status-open')
       }
 
+      statusDiv.html(fightStatus());
       $('#fight-status').html(fightStatus());
     }
-  });
-
-  function updateFightStatus(status,result=null) {
-    $.ajax({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      },
-      type:'POST',
-      data: {status:status, result:result},
-      url: '/fight/update-status',
-      success: async function(resp) {
-        if(status == 'C') {
-          await setFightStatus('CLOSED');
-        }
-  
-        if(status == 'O') {
-          await setFightStatus('OPEN');
-        }
-
-        if(status == 'D') {
-          await setFightStatus('____');
-          await setFightNo(resp.data.fight_no);
-          $('#fight-no').html(fightNo());
-        }
-  
-        $('#fight-status').html(fightStatus());
-      },
-      error: function (request, status, error) {
-        console.log(error);
-      }
-
-    })
-  }
-
-  $('#open-fight').on('click', function(e) {
-    e.preventDefault();
-    updateFightStatus('O');
-    $(this).addClass('disabled').prop('disabled',true);
-    $('#close-fight').removeClass('disabled').prop('disabled', false);
-  });
-
-  $('#close-fight').on('click', function(e) {
-    e.preventDefault();
-    updateFightStatus('C');
-    $(this).addClass('disabled').prop('disabled',true);
-    $('#open-fight').removeClass('disabled').prop('disabled', false);
-    $('#done-fight').removeClass('disabled').prop('disabled', false);
   });
 
   $('#done-fight').on('click', function(e) {
@@ -164,4 +121,5 @@ $(function() {
         }
       }
     });
+
 });

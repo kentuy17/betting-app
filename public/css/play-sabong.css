@@ -211,3 +211,17 @@ body.bet-dark .bet-sell {
   justify-content: center;
   flex-direction: row;
 }
+
+.gradient-status-open {
+  background: #28a745 linear-gradient(180deg,#429a56,#218838) repeat-x!important;
+  border-color: #1e7e34;
+  color: #ececec;
+  pointer-events: none;
+}
+
+.gradient-status-close {
+  background: #6c757d linear-gradient(180deg,#73797f,#5a6268) repeat-x!important;
+  border-color: #545b62;
+  color: #ececec;
+  pointer-events: none;
+}

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Fight;
+use App\Events\Fight as FightEvent;
 
 class FightController extends Controller
 {
@@ -48,11 +49,12 @@ class FightController extends Controller
             return $this->fightDone($fight, $request->result);
         }
 
-        $update_fight = $fight->update([
-            'status' => $request->status
-        ]);
-
-        return $update_fight;
+        $updated = $fight->update(['status' => $request->status]);
+        if($updated) {
+            event(new FightEvent($fight));
+        }
+        
+        return $fight;
     }
 
     private function fightDone($last_fight, $winner='M')
@@ -65,6 +67,8 @@ class FightController extends Controller
         $new_fight = Fight::create([
             'user_id' => Auth::user()->id,
         ]);
+
+        event(new FightEvent($new_fight));
 
         return response()->json([
             'data' => $new_fight
