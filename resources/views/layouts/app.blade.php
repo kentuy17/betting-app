@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" type="text/css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css"/>
 
-  @vite('resources/js/app.js')
+  @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
 
   <!-- Custom -->
   <link rel="stylesheet" href="{{ asset('css/dark-mode.css') }}" type="text/css">
