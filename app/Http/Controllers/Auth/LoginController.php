@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -39,8 +40,14 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    public function username()
+    {
+        return 'username';
+    }
+
     public function redirectTo()
     {
+        \Log::channel('custom')->info(json_encode(Auth::user(),JSON_PRETTY_PRINT));
         $role = $this->getUserRole();
         if($role->name == 'Player') {
             $this->redirectTo = '/play';

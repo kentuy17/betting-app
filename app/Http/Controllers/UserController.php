@@ -54,8 +54,8 @@ class UserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
+            'username' => 'required',
+            'email' => 'email|unique:users,email',
             'password' => 'required|same:confirm-password',
             'roles' => 'required'
         ]);
