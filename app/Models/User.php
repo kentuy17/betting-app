@@ -30,8 +30,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
+        'username',
+        'phone_no',
         'password',
+        'email',
+        'points'
     ];
 
     /**
@@ -52,4 +55,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function bet()
+    {
+        return $this->hasMany(Bet::class, 'user_id', 'id');
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Models\ModelHasRoles;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -49,10 +50,11 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        \Log::channel('register')->info(json_encode($data,JSON_PRETTY_PRINT));
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'username' => ['required', 'string', 'max:255'],
+            'phone_no' => ['string', 'string', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
     }
 
@@ -64,10 +66,20 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
+        $create = User::create([
+            'username' => $data['username'],
+            'phone_no' => $data['phone'],
             'password' => Hash::make($data['password']),
         ]);
+
+        ModelHasRoles::create([
+            'role_id' => '2',
+            'model_type' => "App\Models\User",
+            'model_id' => $create->id,
+        ]);
+
+        \Log::channel('register')->info($create);
+
+        return $create;
     }
 }

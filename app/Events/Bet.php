@@ -14,12 +14,16 @@ class Bet
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $id;
+    public $type;
+
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public function __construct($id, $type)
     {
-        //
+        $this->id = $id;
+        $this->$type = $type;
     }
 
     /**
@@ -27,10 +31,11 @@ class Bet
      *
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
-    public function broadcastOn(): array
+    public function broadcastOn()
     {
-        return [
-            new PrivateChannel('channel-name'),
-        ];
+        // return [
+        //     new PrivateChannel('channel-name'),
+        // ];
+        return new Channel('betChannel');
     }
 }

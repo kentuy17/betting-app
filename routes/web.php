@@ -48,6 +48,8 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/play', [PlayerController::class, 'index'])->name('play');
         Route::get('/play/history', [PlayerController::class, 'bethistory'])->name('player.bethistory');
         Route::get('/reports', [PlayerController::class, 'reports'])->name('player.reports');
+
+        Route::post('/bet/add', [BetController::class, 'addBet']);
     });
 
     // Operator

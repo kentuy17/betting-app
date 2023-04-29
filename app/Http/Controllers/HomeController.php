@@ -10,6 +10,7 @@ use App\Models\Roles;
 
 class HomeController extends Controller
 {
+    protected $redirectTo;
     /**
      * Create a new controller instance.
      *
@@ -25,9 +26,21 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index(): View
+    public function index()
     {
         $role = $this->getUserRole();
-        return view('home', compact('role'));
+        if($role->name == 'Player') {
+            $this->redirectTo = '/play';
+        } 
+        
+        if($role->name == 'Operator') {
+            $this->redirectTo = '/fight';
+        }
+
+        if($role->name == 'Admin') {
+            $this->redirectTo = '/users';
+        }
+
+        return redirect($this->redirectTo);
     }
 }

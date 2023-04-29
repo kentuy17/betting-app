@@ -34,7 +34,8 @@ class FightController extends Controller
         }
 
         return response()->json([
-            'data' => $current
+            'data' => $current,
+            'points' => Auth::user()->points,
         ]);
     }
 

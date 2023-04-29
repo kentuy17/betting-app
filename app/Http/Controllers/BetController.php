@@ -7,7 +7,7 @@ use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Bet;
 use App\Models\BetHistory;
-
+use App\Models\User;
 
 class BetController extends Controller
 {
@@ -36,5 +36,41 @@ class BetController extends Controller
         return response()->json([
               'data' => $history,
         ]);
+    }
+
+    // $status = ['F' => 'Fighting', 'D' => 'Done'];
+    public function addBet(Request $request)
+    {
+        try {
+            if(Auth::user()->points < $request->amount) {
+                $this->hacking($request, 'Bet');
+                return response()->json([
+                    'status' => 400,
+                    'error' => 'Invalid amount!!!'
+                ], 400);
+            }
+
+            $bet = Bet::create([
+                'fight_no' => $request->fight_no,
+                'user_id' => Auth::user()->id,
+                'amount' => $request->amount,
+                'side' => $request->side,
+                'status' => 'F'
+            ]);
+
+            Auth::user()->decrement('points', $request->amount);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'error' => $e->getMessage()
+            ]);
+        }
+        
+        return response()->json([
+            'status' => 'OK',
+            'data' => $bet
+        ]);
+
     }
 }

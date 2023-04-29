@@ -87,7 +87,7 @@
           @endif
           <li>
             <a id="navbarDropdown" class="md:p-4 py-2 block dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-              {{ Auth::user()->name }}
+              {{ Auth::user()->username }}
             </a>
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); 
@@ -110,7 +110,7 @@
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-md-12">
-            <div class="card">
+            <div class="card border-none" style="background-color: #454d55 !important">
               <div class="card-body">
                 @yield('content')
               </div>
