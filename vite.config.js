@@ -8,7 +8,9 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/sass/app.scss',
+                'resources/css/app.css',
                 'resources/js/app.js',
+                'resources/js/play-vue.js',
             ],
             refresh: true,
         }),
