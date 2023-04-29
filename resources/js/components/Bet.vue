@@ -143,7 +143,9 @@ export default {
           });
 
         if(data.status == 'OK') {
-          this.total.meron += this.betAmount;
+          betSide == 'M' 
+            ? this.total.meron += this.betAmount 
+            : this.total.wala += this.betAmount
           this.player.points -= this.betAmount
         }
       } catch (err) {
