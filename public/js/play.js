@@ -11,30 +11,30 @@ $(function() {
 
   const [fightStatus, setFightStatus] = useState('____');
 
-  $.ajax({
-    url: 'fight/current',
-    type: 'GET',
-    data: {},
-    success: async function(response){
-      var statusDiv = $('#player-fight-status').removeClass('gradient-status-open gradient-status-close');
-      await setFightNo(response.data.fight_no);
-      $('#fight-no').html(fightNo());
+  // $.ajax({
+  //   url: 'fight/current',
+  //   type: 'GET',
+  //   data: {},
+  //   success: async function(response){
+  //     var statusDiv = $('#player-fight-status').removeClass('gradient-status-open gradient-status-close');
+  //     await setFightNo(response.data.fight_no);
+  //     $('#fight-no').html(fightNo());
 
-      if(response.data.status == 'C') {
-        await setFightStatus('CLOSED');
-        statusDiv.addClass('gradient-status-close');
-        $('#done-fight').removeClass('disabled').prop('disabled',false);
-      }
+  //     if(response.data.status == 'C') {
+  //       await setFightStatus('CLOSED');
+  //       statusDiv.addClass('gradient-status-close');
+  //       $('#done-fight').removeClass('disabled').prop('disabled',false);
+  //     }
 
-      if(response.data.status == 'O') {
-        await setFightStatus('OPEN');
-        statusDiv.addClass('gradient-status-open')
-      }
+  //     if(response.data.status == 'O') {
+  //       await setFightStatus('OPEN');
+  //       statusDiv.addClass('gradient-status-open')
+  //     }
 
-      statusDiv.html(fightStatus());
-      $('#fight-status').html(fightStatus());
-    }
-  });
+  //     statusDiv.html(fightStatus());
+  //     $('#fight-status').html(fightStatus());
+  //   }
+  // });
 
   $('#done-fight').on('click', function(e) {
     e.preventDefault();

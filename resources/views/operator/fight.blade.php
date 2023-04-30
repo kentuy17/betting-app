@@ -41,7 +41,7 @@
           <button id="done-fight" class="btn btn-secondary btn-lg disabled" disabled>DONE</button>
         </div>
         <div class="flex flex-col lg:flex-row lg:gap-0 gap-2 justify-evenly mt-7">
-          <button id="open-fight" class="btn btn-primary btn-sm">Cancel Fight</button>
+          <button id="cancel-fight" class="btn btn-primary btn-sm">Cancel Fight</button>
         </div>
       </div>
     </div>

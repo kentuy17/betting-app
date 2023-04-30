@@ -23,6 +23,11 @@ class Fight extends Model
         'event_id'
     ];
 
+    protected $hidden = [
+        'user_id',
+        'amount',
+    ];
+
     protected $casts = [
         'created_at' => 'datetime:M d, Y h:s A',
         'updated_at' => 'datetime:M d, Y h:s A',

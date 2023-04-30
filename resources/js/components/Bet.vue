@@ -14,7 +14,7 @@
             <p class="text-center text-xl"><b class="bet-up">{{formatMoney(total.meron)}}</b></p>
             <div class="bet-buy">
               <div>
-                <p>PAYOUT: <span class="fright">100% x 0.2 = 0.02</span></p>
+                <p>PAYOUT: <span class="fright">{{ percentage.meron }}% = {{ formatMoney(payout.meron) }}</span></p>
               </div>
               <div class="text-center mt-3 mb-3 bet-up">
               </div>
@@ -24,10 +24,10 @@
         </div>
         <div class="col-md-6">
           <div class="bet-buy-sell-form">
-            <p class="text-center text-xl"><b class="bet-down">{{formatMoney(total.wala)}}</b></p>
+            <p class="text-center text-xl"><b class="bet-down">{{ formatMoney(total.wala) }}</b></p>
             <div class="bet-sell">
               <div>
-                <p>PAYOUT: <span class="fright">100% x 0.2 = 0.02</span></p>
+                <p>PAYOUT: <span class="fright">{{ percentage.wala }}% = {{ formatMoney(payout.wala) }}</span></p>
               </div>
               <div class="text-center mt-3 mb-3 bet-down">
               </div>
@@ -43,13 +43,13 @@
         </div>
       </div>
       <div class="col-md-12">
-        <div class="amounts-bet-btn py-2">
+        <div class="amounts-bet-btn py-2 flex-wrap">
           <button 
             v-for="(amnt, index) in amounts" 
             v-bind:key="index" 
             @click="betManual(amnt)" 
-            class="btn btn-success btn-sm mx-1">
-            {{amnt}}
+            class="btn btn-success btn-sm m-1">
+            {{ amnt }}
           </button>
         </div>
       </div>
@@ -68,8 +68,16 @@ export default {
       betAmount: 0,
       amounts: [20, 50, 100, 500, 1000, 2000, 5000],
       total: {
-        meron: parseFloat(6023.14),
-        wala: parseFloat(5000.11)
+        meron: 0.00,
+        wala: 0.00,
+      },
+      payout: {
+        meron: 0.00,
+        wala: 0.00,
+      },
+      percentage: {
+        meron: 187.00,
+        wala: 187.00,
       },
       player: {
         points: 0
@@ -80,9 +88,18 @@ export default {
     fetch('fight/current')
       .then(resp => resp.json())
       .then(json => {
-        this.fight = json.data
-        this.message = this.setFightStatus(json.data)
+        this.fight = json.current
+        console.log(json);
+        this.message = this.setFightStatus(json.current)
         this.player.points = json.points
+      });
+
+    window.Echo.channel('fight')
+      .listen('.fight', async (e)=>{
+        if(e == null) return
+        console.log(e);
+        this.fight = e.fight
+        this.message = this.setFightStatus(e.fight)
       });
   },
   watch: {
@@ -95,6 +112,7 @@ export default {
     },
 
     setFightStatus(data) {
+      console.log(data);
       this.fightNo = data.fight_no
       if(data.status == null) {
         return '_____'
