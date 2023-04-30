@@ -24,7 +24,7 @@
         </div>
         <div class="col-md-6">
           <div class="bet-buy-sell-form">
-            <p class="text-center text-xl"><b class="bet-down">{{total.wala}}</b></p>
+            <p class="text-center text-xl"><b class="bet-down">{{formatMoney(total.wala)}}</b></p>
             <div class="bet-sell">
               <div>
                 <p>PAYOUT: <span class="fright">100% x 0.2 = 0.02</span></p>
@@ -42,7 +42,7 @@
           <div class="input-group-append"> <button @click="clear" class="input-group-text">CLEAR</button> </div>
         </div>
       </div>
-      <div class="col-md-12" style="">
+      <div class="col-md-12">
         <div class="amounts-bet-btn py-2">
           <button 
             v-for="(amnt, index) in amounts" 
