@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fights', function (Blueprint $oTable) {
-            $oTable->bigIncrements('fight_no')->autoIncrement();
+            $oTable->id();
+            $oTable->integer('fight_no')->nullable();
             $oTable->integer('user_id');
             $oTable->string('status', 1)->nullable();
             $oTable->string('game_winner', 1)->nullable();
