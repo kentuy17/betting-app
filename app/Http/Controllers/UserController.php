@@ -163,7 +163,14 @@ class UserController extends Controller
 
     public function editprofile(Request $request, $id) 
     {
-        //$data = $request -> validated();
+        $this->validate($request, [
+            'phone_no' => 'required|regex:/(09)[0-9]{9}/',
+        ]);
+        
+        if(User::where('phone_no', '=', $request->phone_no)->exists()) {
+            return Redirect()->back()->withInput()->with('error', 'This Number exist !');
+        }
+
         $user = User::find($id);
         $user->phone_no = $request['phone_no'];
         $userArray=$user->toArray();
