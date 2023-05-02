@@ -2,6 +2,7 @@
     
 namespace App\Http\Controllers;
     
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -20,6 +21,7 @@ class UserController extends Controller
          $this->middleware('permission:user-create', ['only' => ['create','store']]);
          $this->middleware('permission:user-edit', ['only' => ['edit','update']]);
          $this->middleware('permission:user-delete', ['only' => ['destroy']]);
+         $this->middleware('auth');
     }
     /**
      * Display a listing of the resource.
@@ -44,7 +46,6 @@ class UserController extends Controller
         $roles = Role::pluck('name','name')->all();
         return view('users.create',compact('roles'));
     }
-    
     /**
      * Store a newly created resource in storage.
      *
@@ -141,5 +142,33 @@ class UserController extends Controller
         User::find($id)->delete();
         return redirect()->route('users.index')
                         ->with('success','User deleted successfully');
+    }
+
+    public function profile()
+    {
+        $user = Auth::user();
+        return view('users.userprofile', compact('user'));
+        //return view('users.userprofile');
+    }
+
+    public function getProfileByUserID()
+    {
+        $profile = User::where('id', Auth::user()->id)
+            ->get();
+
+        return response()->json([
+              'data' => $profile,
+        ]);
+    }
+
+    public function editprofile(Request $request, $id) 
+    {
+        //$data = $request -> validated();
+        $user = User::find($id);
+        $user->phone_no = $request['phone_no'];
+        $userArray=$user->toArray();
+        $user->updateContactNumber($id,$userArray);
+
+        return view('users.userprofile', compact('user'));
     }
 }
