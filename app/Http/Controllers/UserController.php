@@ -161,30 +161,35 @@ class UserController extends Controller
         ]);
     }
 
-    public function editprofile(Request $request, $id) 
+    public function editprofile(Request $request) 
     {
-        $this->validate($request, [
-            'phone_no' => 'required|regex:/(09)[0-9]{9}/',
-        ]);
-        
-        if( User::where('phone_no', '=', $request->phone_no)->exists() 
-            && $request->phone_no != Auth::user()->phone_no ) {
-            return Redirect()->back()->withInput()->with('error', 'This Number exist !');
-        }
-
-        $user = User::find($id);
-        $user->phone_no = $request['phone_no'];
-
-        if($user->password != $request->new_pass) {
-            if($request->new_pass != $request->confirm_pass) {
-                return redirect('/user/profile')->with('error', 'Password did not Match!');
+        try {
+            $this->validate($request, [
+                'phone_no' => 'required|regex:/(09)[0-9]{9}/',
+            ]);
+            
+            if( User::where('phone_no', '=', $request->phone_no)->exists() 
+                && $request->phone_no != Auth::user()->phone_no ) {
+                return Redirect()->back()->withInput()->with('error', 'This Number exist !');
             }
-
-            $user->password = $request->password;
+    
+            $user = User::find(Auth::user()->id);
+            $user->phone_no = $request['phone_no'];
+            $user->password = bcrypt($request->new_pass);
+    
+            if(Auth::user()->password != bcrypt($request->new_pass)) {
+                if($request->new_pass != $request->confirm_pass) {
+                    return redirect('/user/profile')->with('error', 'Password did not Match!');
+                }
+    
+                $user->password = bcrypt($request->new_pass);
+            }
+    
+            $userArray=$user->toArray();
+            $user->updateContactNumber($user->id,$userArray);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
-
-        $userArray=$user->toArray();
-        $user->updateContactNumber($id,$userArray);
 
         return redirect('/user/profile')->with('success', 'Updated Successfully!');
     }

@@ -158,7 +158,7 @@
     <div class="col-md-12">
       <div class="card col-md-12">
         <div class="card-body">
-          <form method="POST" action="{{ url('/user/profile/'.$user->id) }}">
+          <form method="POST" action="{{ url('/user/profile/') }}">
             <div class="col-md-8 card" id="basic-info">
               <div class="card-header">
                 <h5>Profile Info</h5>
@@ -209,6 +209,7 @@
                     </div>
                   </div>
                 </div>
+                {{ session('error') }}
                 <button type="submit" class="btn bg-gradient-dark btn-sm float-end mt-4">Update</button>
               </div>
             </div>

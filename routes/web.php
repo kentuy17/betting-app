@@ -50,7 +50,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/reports', [PlayerController::class, 'reports'])->name('player.reports');
         Route::post('/bet/add', [BetController::class, 'addBet']);
         Route::get('/user/profile', [UserController::class, 'profile'])->name('users.profile');
-        Route::post('/user/profile/{post_id}', [UserController::class, 'editprofile']);
+        Route::post('/user/profile/', [UserController::class, 'editprofile']);
     });
 
     // Operator
@@ -74,5 +74,6 @@ Route::group(['middleware' => ['auth']], function() {
 
     //Fight
     Route::get('/fight/current', [FightController::class, 'getCurrentFight']);
+    Route::get('/fight/results', [FightController::class, 'fightResults']);
 
 });

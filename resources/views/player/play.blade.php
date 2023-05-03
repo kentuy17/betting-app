@@ -58,8 +58,8 @@
 
   $(function() {
     $('.bet-amount').on('input', function() {
-      if ($(this).val() < 10) {
-        let amt = parseInt($(this).val());
+      if (parseFloat($(this).val()) < 10) {
+        let amt = parseFloat($(this).val());
         $(this).val(amt);
       }
     });
