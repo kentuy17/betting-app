@@ -167,7 +167,7 @@
                 @csrf
                 <div class="row">
                   <div class="col-12">
-                    <label class="form-label">Credit Points</label>
+                    <label class="text-black form-label">Credit Points</label>
                     <div class="input-group">
                       <input id="credit_points" class="form-control disabled" type="text" disabled="" value="{{ $user->points }}" >
                     </div>
@@ -175,7 +175,7 @@
                 </div>
                 <div class="row">
                   <div class="col-12">
-                    <label class="form-label mt-4">Username</label>
+                    <label class="text-black form-label mt-4">Username</label>
                     <div class="input-group">
                       <input id="username" name="username" class="form-control" type="text" value="{{ $user->username }}" placeholder="Username"  >
                     </div>
@@ -183,7 +183,7 @@
                 </div>
                 <div class="row">
                   <div class="col-12">
-                    <label class="form-label mt-4">Phone No.</label>
+                    <label class="text-black form-label mt-4">Phone No.</label>
                     <div class="input-group">
                       <input id="phone_no" name="phone_no" class="form-control" type="text" value="{{ $user->phone_no }}" placeholder="09*********"  >
                     </div>
@@ -197,13 +197,13 @@
                 </div>
                 <div class="row">
                   <div class="col-md-6">
-                    <label class="form-label mt-4">New Password</label>
+                    <label class="text-black form-label mt-4">New Password</label>
                     <div class="input-group">
                       <input id="new_pass" name="new_pass" class="form-control disabled" type="password" placeholder="******" >
                     </div>
                   </div>
                   <div class="col-md-6">
-                    <label class="form-label mt-4">Confirm Password</label>
+                    <label class="text-black form-label mt-4">Confirm Password</label>
                     <div class="input-group">
                       <input id="confirm_pass" name="confirm_pass" class="form-control" type="password" placeholder="******" >
                     </div>
