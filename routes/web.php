@@ -74,5 +74,6 @@ Route::group(['middleware' => ['auth']], function() {
 
     //Fight
     Route::get('/fight/current', [FightController::class, 'getCurrentFight']);
+    Route::get('/fight/results', [FightController::class, 'fightResults']);
 
 });

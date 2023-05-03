@@ -8,13 +8,14 @@
       <div class="text-center">
         <span class="btn btn-block gradient-status-close btn-lg vue-components">{{message}}</span>
       </div>
+      <!--  -->
       <div class="row no-gutters">
         <div class="col-md-6">
           <div class="bet-buy-sell-form">
             <p class="text-center text-xl"><b class="bet-up">{{formatMoney(total.meron)}}</b></p>
             <div class="bet-buy">
               <div>
-                <p>PAYOUT: <span class="fright">{{ percentage.meron }}% = {{ formatMoney(payout.meron) }}</span></p>
+                <p>PAYOUT: <span class="fright">{{ percentage.meron }} = {{ formatMoney(payout.meron) }}</span></p>
               </div>
               <div class="text-center mt-3 mb-3 bet-up">
               </div>
@@ -27,7 +28,7 @@
             <p class="text-center text-xl"><b class="bet-down">{{ formatMoney(total.wala) }}</b></p>
             <div class="bet-sell">
               <div>
-                <p>PAYOUT: <span class="fright">{{ percentage.wala }}% = {{ formatMoney(payout.wala) }}</span></p>
+                <p>PAYOUT: <span class="fright">{{ percentage.wala }} = {{ formatMoney(payout.wala) }}</span></p>
               </div>
               <div class="text-center mt-3 mb-3 bet-down">
               </div>
@@ -38,7 +39,7 @@
       </div>
       <div class="col-md-12">
         <div class="input-group px-4 py-2" style="">
-          <input type="number" class="form-control bet-amount" v-model="betAmount" min="0.00">
+          <input type="number" class="form-control bet-amount" v-model="betAmount" min="0">
           <div class="input-group-append"> <button @click="clear" class="input-group-text">CLEAR</button> </div>
         </div>
       </div>
@@ -89,10 +90,12 @@ export default {
       .then(resp => resp.json())
       .then(json => {
         this.fight = json.current
-        console.log(json);
+        console.log(json, 'fight');
+        // console.log(json, 'json');
         this.message = this.setFightStatus(json.current)
         this.player.points = json.points
-      });
+        this.total = json.bets
+      }); 
 
     window.Echo.channel('fight')
       .listen('.fight', async (e)=>{
@@ -162,8 +165,8 @@ export default {
 
         if(data.status == 'OK') {
           betSide == 'M' 
-            ? this.total.meron += this.betAmount 
-            : this.total.wala += this.betAmount
+            ? this.total.meron = parseFloat(this.total.meron) + parseFloat(this.betAmount)
+            : this.total.wala = parseFloat(this.total.wala) + parseFloat(this.betAmount)
           this.player.points -= this.betAmount
         }
       } catch (err) {
