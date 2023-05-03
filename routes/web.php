@@ -50,6 +50,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/reports', [PlayerController::class, 'reports'])->name('player.reports');
         Route::post('/bet/add', [BetController::class, 'addBet']);
         Route::get('/user/profile', [UserController::class, 'profile'])->name('users.profile');
+        Route::post('/user/profile/{post_id}', [UserController::class, 'editprofile']);
     });
 
     // Operator
@@ -68,7 +69,6 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/bet/total', [BetController::class, 'getTotalBetAmountPerFight']);
     Route::get('/bet/history', [BetController::class, 'getBetHistoryByUserController']);
     Route::get('/profile', [UserController::class, 'getProfileByUserID']);
-    Route::put('profile/post/{post_id}', [UserController::class, 'editprofile']);
 
 
 
