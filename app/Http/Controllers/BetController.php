@@ -27,7 +27,7 @@ class BetController extends Controller
         return $bets;
     }
 
-    public function getBetHistoryByUser()
+    public function getBetHistoryByUserController()
     {
         $history = BetHistory::where('user_id', Auth::user()->id)
             ->with('fight.event')
