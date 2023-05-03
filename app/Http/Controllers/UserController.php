@@ -167,15 +167,25 @@ class UserController extends Controller
             'phone_no' => 'required|regex:/(09)[0-9]{9}/',
         ]);
         
-        if(User::where('phone_no', '=', $request->phone_no)->exists()) {
+        if( User::where('phone_no', '=', $request->phone_no)->exists() 
+            && $request->phone_no != Auth::user()->phone_no ) {
             return Redirect()->back()->withInput()->with('error', 'This Number exist !');
         }
 
         $user = User::find($id);
         $user->phone_no = $request['phone_no'];
+
+        if($user->password != $request->new_pass) {
+            if($request->new_pass != $request->confirm_pass) {
+                return redirect('/user/profile')->with('error', 'Password did not Match!');
+            }
+
+            $user->password = $request->password;
+        }
+
         $userArray=$user->toArray();
         $user->updateContactNumber($id,$userArray);
 
-        return view('users.userprofile', compact('user'));
+        return redirect('/user/profile')->with('success', 'Updated Successfully!');
     }
 }
