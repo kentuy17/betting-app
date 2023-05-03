@@ -12,6 +12,7 @@ use Hash;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
     
 class UserController extends Controller
 {
@@ -161,21 +162,35 @@ class UserController extends Controller
         ]);
     }
 
-    public function editprofile(Request $request, $id) 
+    public function editprofile(Request $request, $id) : RedirectResponse
     {
         $this->validate($request, [
-            'phone_no' => 'required|regex:/(09)[0-9]{9}/',
-        ]);
+            'phone_no' => 'required'
+        ]);   
+        $trimPhone = $request->phone_no;
+        if (Str::startsWith($request->phone_no, ['+63', '63']))
+        {
+             $trimPhone = preg_replace('/^\+?63/', '0', $trimPhone);
+        }else if (Str::startsWith($request->phone_no, ['9']))
+        {
+            $trimPhone = '0' . $request->phone_no;
+        }
+
+            $this->validate($request, [
+           'phone_no' => ['regex:/(0?9|\+?63)[0-9]{9}/'],
+            ]);
         
-        if(User::where('phone_no', '=', $request->phone_no)->exists()) {
+
+        
+        if(User::where('phone_no', '=', $trimPhone)->exists()) {
             return Redirect()->back()->withInput()->with('error', 'This Number exist !');
         }
 
         $user = User::find($id);
-        $user->phone_no = $request['phone_no'];
+        $user->phone_no = $trimPhone;
         $userArray=$user->toArray();
         $user->updateContactNumber($id,$userArray);
 
-        return view('users.userprofile', compact('user'));
+        return Redirect()->back()->withInput()->with('Success', 'Phone Number updated successfully !');
     }
 }
