@@ -6,6 +6,7 @@ $(document).ready(function () {
     "bInfo": false,
     "bAutoWidth": false,
     "ajax": '/event/lists',
+    "scrollX": true,
     "columns": [
       {
         "data": "id"
@@ -23,20 +24,28 @@ $(document).ready(function () {
         })
       }, {
         "data": null,
-        render: (() => {
-          return 'WAITING'
+        render: ((data, type, row, meta) => {
+          return data.status
         })
       },
       {
         "data": null,
         render: (data, type, row, meta) => {
-          return `Edit | Delete`
+          let act = data.status == 'ACTIVE' ? `<i class="fa-solid fa-stop"></i>` : `<i class="fa-solid fa-play"></i>`;
+          return `<a href="javascript:void(0)" data-id="${row.id}" class="btn btn-link text-primary btn-icon btn-sm play">${act}</a>
+          <a href="javascript:void(0)" data-id="${row.id}" class="btn btn-link text-secondary btn-icon btn-sm edit"><i class="fa-solid fa-pencil"></i></a>
+          <a href="javascript:void(0)" data-id="${row.id}" class="btn btn-link text-danger btn-icon btn-sm remove"><i class="fa-solid fa-xmark"></i></a>
+          </td>`
         }
       }
     ],
     "createdRow": function( row, data, dataIndex){
       if( data.status ==  `pending`){
         $(row).css({"background-color":"red"});
+      }
+
+      if(data.status == 'ACTIVE') {
+        $(row).addClass('table-success');
       }
     }
   });
@@ -45,6 +54,12 @@ $(document).ready(function () {
     $('#sched-date').val(moment().format('YYYY-MM-DD'));
 
     $('#add-derby').on('click', function(e) {
+      if($('#event-name').val() == '') {
+        alert('Event Name is Required!');
+        $(this).focus();
+        return;
+      }
+
       e.preventDefault();
       data = {
         name: $('#event-name').val(),

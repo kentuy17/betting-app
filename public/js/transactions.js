@@ -1,11 +1,12 @@
 $(document).ready(function () {
   $('#transactions-table').DataTable({
+    "ajax": '/transaction/records',
     "bPaginate": true,
     "bLengthChange": false,
     "bFilter": false,
     "bInfo": false,
     "bAutoWidth": false,
-    "ajax": '/transaction/records',
+    "scrollX": true,
     "columns": [
       {
         "data": "user.id"
