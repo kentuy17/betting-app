@@ -49,7 +49,7 @@ button:disabled {
 }
 
 .results .bet-result-chart table tr td .circleCancelAll {
-  background-color: rgba(0, 0, 0, .178);
+  background-color: gray;
 }
 
 .circleCancelAll,
@@ -126,6 +126,14 @@ body.bet-dark .bet-boxed-area {
 
 .bet-down {
   color: #eb6a61 !important;
+}
+
+.bet-meron {
+  color: #eb6a61 !important;
+}
+
+.bet-wala {
+  color: #0d6efd;
 }
 
 .bet-button-green-full {

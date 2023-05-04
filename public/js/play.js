@@ -11,30 +11,34 @@ $(function() {
 
   const [fightStatus, setFightStatus] = useState('____');
 
-  $.ajax({
-    url: 'fight/current',
-    type: 'GET',
-    data: {},
-    success: async function(response){
-      var statusDiv = $('#player-fight-status').removeClass('gradient-status-open gradient-status-close');
-      await setFightNo(response.data.fight_no);
-      $('#fight-no').html(fightNo());
+  const [lastWinner, setLastWinner] = useState('');
 
-      if(response.data.status == 'C') {
-        await setFightStatus('CLOSED');
-        statusDiv.addClass('gradient-status-close');
-        $('#done-fight').removeClass('disabled').prop('disabled',false);
-      }
+  const [lastPostion, setLastPosition] = useState('');
 
-      if(response.data.status == 'O') {
-        await setFightStatus('OPEN');
-        statusDiv.addClass('gradient-status-open')
-      }
+  // $.ajax({
+  //   url: 'fight/current',
+  //   type: 'GET',
+  //   data: {},
+  //   success: async function(response){
+  //     var statusDiv = $('#player-fight-status').removeClass('gradient-status-open gradient-status-close');
+  //     await setFightNo(response.data.fight_no);
+  //     $('#fight-no').html(fightNo());
 
-      statusDiv.html(fightStatus());
-      $('#fight-status').html(fightStatus());
-    }
-  });
+  //     if(response.data.status == 'C') {
+  //       await setFightStatus('CLOSED');
+  //       statusDiv.addClass('gradient-status-close');
+  //       $('#done-fight').removeClass('disabled').prop('disabled',false);
+  //     }
+
+  //     if(response.data.status == 'O') {
+  //       await setFightStatus('OPEN');
+  //       statusDiv.addClass('gradient-status-open')
+  //     }
+
+  //     statusDiv.html(fightStatus());
+  //     $('#fight-status').html(fightStatus());
+  //   }
+  // });
 
   $('#done-fight').on('click', function(e) {
     e.preventDefault();
@@ -72,7 +76,7 @@ $(function() {
 
   });
 
-  fetch('js/results.json') // change to ajax later
+  fetch('/fight/results') // change to ajax later
     .then((response) => response.json())
     .then((json) => {
       for (var j = 1; j <= 7; j++) {
@@ -108,6 +112,11 @@ $(function() {
           element.classList.add("circleCancelAll");
           element.innerHTML = dataArr[x-1][1];
         }
+
+        if(x == dataArr.length-1) {
+          setLastPosition({y:y,c:c});
+        }
+
         if(dataArr[x - 1][0] == dataArr[x][0]){
           if (y == 7){ 
             y = 1;
@@ -120,6 +129,60 @@ $(function() {
           c++;
         }
       }
+      getLastWinner(dataArr);
     });
 
+  function getLastWinner(dataArr) {
+    if(dataArr[dataArr.length-2][0] == 'Meron Wins') {
+      setLastWinner('M');
+    }
+
+    if(dataArr[dataArr.length-2][0] == 'Wala Wins') {
+      setLastWinner('W');
+    }
+
+    if(dataArr[dataArr.length-2][0] == 'Draw') {
+      setLastWinner('D');
+    }
+
+    if(dataArr[dataArr.length-2][0] == 'Cancelled') {
+      setLastWinner('C');
+    }    
+  }
+
+  window.Echo.channel('fight')
+  .listen('.fight', async (e)=>{
+    let prev = e.fight.prev;
+    if(prev) {
+      var pos, p;
+      if(lastWinner() == e.fight.prev.game_winner) {
+        pos = $(`#tdBaccaratAllConsecutive-${lastPostion().y+1}${lastPostion().c}`)
+        p = {y:lastPostion().y+1, c:lastPostion().c}
+      } else {
+        pos = $(`#tdBaccaratAllConsecutive-1${lastPostion().c+1}`)
+        p = {y:1, c:lastPostion().c+1}
+      }
+
+      pos.html(e.fight.prev.fight_no);
+
+      if(e.fight.prev.game_winner == 'M') {
+        pos.addClass('circleRedAll')
+      } 
+      else if(e.fight.prev.game_winner == 'W') {
+        pos.addClass('circleBlueAll')
+      }
+      else if(e.fight.prev.game_winner == 'D') {
+        pos.addClass('circleGreenAll')
+      }
+      else{
+        pos.addClass('circleCancelAll')
+      }
+
+      setLastWinner(e.fight.prev.game_winner)
+      setLastPosition(p)
+    }
+  })
+ 
+
 });
+

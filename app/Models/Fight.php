@@ -11,8 +11,8 @@ class Fight extends Model
 {
     use HasFactory;
     protected $table = 'fights';
-    protected $primaryKey = 'fight_no';
     protected $fillable = [
+        'id',
         'fight_no',
         'user_id',
         'amount',
@@ -23,6 +23,11 @@ class Fight extends Model
         'event_id'
     ];
 
+    protected $hidden = [
+        'user_id',
+        'amount',
+    ];
+
     protected $casts = [
         'created_at' => 'datetime:M d, Y h:s A',
         'updated_at' => 'datetime:M d, Y h:s A',
@@ -30,7 +35,7 @@ class Fight extends Model
 
     public function bet()
     {
-        return $this->hasMany(Bet::class, 'fight_no', 'fight_no');
+        return $this->hasMany(Bet::class, 'fight_no');
     }
 
     public function event()

@@ -2,6 +2,7 @@
     
 namespace App\Http\Controllers;
     
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -20,6 +21,7 @@ class UserController extends Controller
          $this->middleware('permission:user-create', ['only' => ['create','store']]);
          $this->middleware('permission:user-edit', ['only' => ['edit','update']]);
          $this->middleware('permission:user-delete', ['only' => ['destroy']]);
+         $this->middleware('auth');
     }
     /**
      * Display a listing of the resource.
@@ -44,7 +46,6 @@ class UserController extends Controller
         $roles = Role::pluck('name','name')->all();
         return view('users.create',compact('roles'));
     }
-    
     /**
      * Store a newly created resource in storage.
      *
@@ -141,5 +142,55 @@ class UserController extends Controller
         User::find($id)->delete();
         return redirect()->route('users.index')
                         ->with('success','User deleted successfully');
+    }
+
+    public function profile()
+    {
+        $user = Auth::user();
+        return view('users.userprofile', compact('user'));
+        //return view('users.userprofile');
+    }
+
+    public function getProfileByUserID()
+    {
+        $profile = User::where('id', Auth::user()->id)
+            ->get();
+
+        return response()->json([
+              'data' => $profile,
+        ]);
+    }
+
+    public function editprofile(Request $request) 
+    {
+        try {
+            $this->validate($request, [
+                'phone_no' => 'required|regex:/(09)[0-9]{9}/',
+            ]);
+            
+            if( User::where('phone_no', '=', $request->phone_no)->exists() 
+                && $request->phone_no != Auth::user()->phone_no ) {
+                return Redirect()->back()->withInput()->with('error', 'This Number exist !');
+            }
+    
+            $user = User::find(Auth::user()->id);
+            $user->phone_no = $request['phone_no'];
+            $user->password = bcrypt($request->new_pass);
+    
+            if(Auth::user()->password != bcrypt($request->new_pass)) {
+                if($request->new_pass != $request->confirm_pass) {
+                    return redirect('/user/profile')->with('error', 'Password did not Match!');
+                }
+    
+                $user->password = bcrypt($request->new_pass);
+            }
+    
+            $userArray=$user->toArray();
+            $user->updateContactNumber($user->id,$userArray);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect('/user/profile')->with('success', 'Updated Successfully!');
     }
 }
