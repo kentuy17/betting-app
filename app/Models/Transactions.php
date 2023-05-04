@@ -9,12 +9,14 @@ use App\Models\User;
 class Transactions extends Model
 {
     use HasFactory;
-    protected $table = 'trasnsactions';
+    protected $table = 'transactions';
     protected $primaryKey = 'id';
     protected $fillable = [
         'name',
         'user_id',
         'amount',
+        'action',
+        'processedBy',
         'mobile_number',
         'status',
         'created_at',
