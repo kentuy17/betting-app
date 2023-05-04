@@ -51,6 +51,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/bet/add', [BetController::class, 'addBet']);
         Route::get('/user/profile', [UserController::class, 'profile'])->name('users.profile');
         Route::post('/user/profile/', [UserController::class, 'editprofile']);
+        Route::get('/deposit', [PlayerController::class, 'deposit'])->name('deposit');
     });
 
     // Operator

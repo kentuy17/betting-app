@@ -14,6 +14,7 @@ class Bet extends Model
     protected $primaryKey = 'bet_no';
     protected $fillable = [
         'bet_no',
+        'fight_id',
         'fight_no',
         'user_id',
         'amount',
@@ -35,6 +36,6 @@ class Bet extends Model
 
     public function fight()
     {
-        return $this->belongsTo(Fight::class, 'fight_no', 'fight_no');
+        return $this->belongsTo(Fight::class, 'fight_id', 'id');
     }
 }

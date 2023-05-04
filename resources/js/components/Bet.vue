@@ -3,7 +3,7 @@
     <div class="bet-boxed-area">
       <div class="bet-bg-head flex flex-nowrap justify-between items-center">
         <h6><b class="text-lg">FIGHT # </b> <b id="fight-no" class="text-lg">{{ fightNo }}</b></h6>
-        <div>POINTS: <span id="current-pts" class="font-bold">{{formatMoney(player.points)}}</span></div>
+        <div>POINTS: <a id="current-pts" href='/deposit' class="underline font-bold">{{formatMoney(player.points)}}</a></div>
       </div>
       <div class="text-center">
         <span class="btn btn-block gradient-status-close btn-lg vue-components">{{message}}</span>
@@ -12,7 +12,7 @@
       <div class="row no-gutters">
         <div class="col-md-6">
           <div class="bet-buy-sell-form">
-            <p class="text-center text-xl"><b class="bet-up">{{formatMoney(total.meron)}}</b></p>
+            <p class="text-center text-xl"><b class="bet-meron">{{formatMoney(total.meron)}}</b></p>
             <div class="bet-buy">
               <div>
                 <p>PAYOUT: <span class="fright">{{ percentage.meron }} = {{ formatMoney(payout.meron) }}</span></p>
@@ -25,7 +25,7 @@
         </div>
         <div class="col-md-6">
           <div class="bet-buy-sell-form">
-            <p class="text-center text-xl"><b class="bet-down">{{ formatMoney(total.wala) }}</b></p>
+            <p class="text-center text-xl"><b class="bet-wala">{{ formatMoney(total.wala) }}</b></p>
             <div class="bet-sell">
               <div>
                 <p>PAYOUT: <span class="fright">{{ percentage.wala }} = {{ formatMoney(payout.wala) }}</span></p>
@@ -90,7 +90,6 @@ export default {
       .then(resp => resp.json())
       .then(json => {
         this.fight = json.current
-        console.log(json, 'fight');
         // console.log(json, 'json');
         this.message = this.setFightStatus(json.current)
         this.player.points = json.points
@@ -99,10 +98,28 @@ export default {
 
     window.Echo.channel('fight')
       .listen('.fight', async (e)=>{
+        // console.log(e);
         if(e == null) return
-        console.log(e);
-        this.fight = e.fight
-        this.message = this.setFightStatus(e.fight)
+
+        if(e.fight.curr) {
+          this.fight = e.fight.curr
+          this.total.meron = this.total.wala = '0.00'
+        } 
+        else {
+          this.fight = e.fight  
+        }
+
+        this.message = this.setFightStatus(this.fight)
+      });
+
+    window.Echo.channel('bet')
+      .listen('.bet', async (e)=>{
+        // console.log(e);
+        if(e.bet.side === 'M') {
+          this.total.meron = this.total.meron + e.bet.amount
+        } else {
+          this.total.wala = this.total.wala + e.bet.amount
+        }
       });
   },
   watch: {
@@ -115,7 +132,6 @@ export default {
     },
 
     setFightStatus(data) {
-      console.log(data);
       this.fightNo = data.fight_no
       if(data.status == null) {
         return '_____'
@@ -136,6 +152,10 @@ export default {
       this.betAmount = 0
     },
 
+    topUp() {
+      window.location.href = 'add-credits'
+    },
+
     async betMeron () {
       const { data } = await axios.post('/bet/add', {
           fight_no: this.fightNo,
@@ -147,13 +167,18 @@ export default {
 
     async addBet (betSide) {
       try {
+        if(this.message !== 'OPEN') {
+          alert('Cannot Bet')
+          return
+        }
+
         if (this.betAmount < 10) {
-          alert('Minimum bet is 10.00');
+          alert('Minimum bet is 10.00')
           return
         }
 
         if(this.betAmount > this.player.points) {
-          alert('Insuficient Points');
+          alert('Insuficient Points')
           return
         }
 
@@ -164,11 +189,9 @@ export default {
           });
 
         if(data.status == 'OK') {
-          betSide == 'M' 
-            ? this.total.meron = parseFloat(this.total.meron) + parseFloat(this.betAmount)
-            : this.total.wala = parseFloat(this.total.wala) + parseFloat(this.betAmount)
           this.player.points -= this.betAmount
         }
+
       } catch (err) {
         alert(err.response.data.error);
       }

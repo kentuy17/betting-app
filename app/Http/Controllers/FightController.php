@@ -27,10 +27,10 @@ class FightController extends Controller
 
     private function getTotalBets()
     {
-        $meron = Bet::where(['fight_no' => $this->fight->id, 'side' => 'M'])
+        $meron = Bet::where(['fight_id' => $this->fight->id, 'side' => 'M'])
             ->sum('amount');
 
-        $wala = Bet::where(['fight_no' => $this->fight->id, 'side' => 'W'])
+        $wala = Bet::where(['fight_id' => $this->fight->id, 'side' => 'W'])
             ->sum('amount');
 
         return [
@@ -109,6 +109,9 @@ class FightController extends Controller
             'status' => 'D',
             'game_winner' => $winner
         ]);
+
+        Bet::where('fight_id',$last_fight->id)
+            ->update(['status' => 'D']);
 
         $new_fight = Fight::create([
             'user_id' => Auth::user()->id,

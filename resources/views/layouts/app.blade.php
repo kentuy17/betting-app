@@ -93,6 +93,8 @@
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
               <a class="@if(Route::current()->getName() == 'users.profile') {{ 'active-nav' }} @endif md:pl-4 py-2 block" 
               href="{{ route('users.profile') }}">My Profile</a>
+              <a class="@if(Route::current()->getName() == 'deposit') {{ 'active-nav' }} @endif md:pl-4 py-2 block" 
+                href="{{ route('deposit') }}">Deposit</a>
               <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); 
                 document.getElementById('logout-form').submit();">
                 {{ __('Logout') }}
