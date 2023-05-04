@@ -158,7 +158,7 @@
     <div class="col-md-12">
       <div class="card col-md-12">
         <div class="card-body">
-          <form method="POST" action="{{ url('/user/profile/') }}">
+          <form method="POST" action="{{ url('/user/profile/'.$user->id) }}">
             <div class="col-md-8 card" id="basic-info">
               <div class="card-header">
                 <h5>Profile Info</h5>
