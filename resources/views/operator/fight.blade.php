@@ -4,14 +4,14 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-12 flex justify-between">
-      <div class="card col-md-6 col-sm-12 d-none">
+      <div class="card col-md-6 col-sm-12">
         <div class="card-header">{{ __('x100 Exp.') }}</div>
         <video width="100%">
           <source src="{{ asset('videos/e-sabong.mp4') }}" type="video/mp4">
           Your browser does not support the video tag.
         </video>
       </div>
-      <div class="card col-md-6 col-sm-12">
+      <div class="card col-md-6 mx-4 col-sm-12">
         <div class="fight-container pt-8 px-4">
           <div>
             <p class="text-danger label--sides mb-4 text-4xl font-bold">MERON</p>
@@ -41,7 +41,7 @@
           <button id="done-fight" class="btn btn-secondary btn-lg disabled" disabled>DONE</button>
         </div>
         <div class="flex flex-col lg:flex-row lg:gap-0 gap-2 justify-evenly mt-7">
-          <button id="cancel-fight" class="btn btn-primary btn-sm">Cancel Fight</button>
+          <button id="open-fight" class="btn btn-primary btn-sm">Cancel Fight</button>
         </div>
       </div>
     </div>

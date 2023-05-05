@@ -17,7 +17,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" type="text/css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" type="text/css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
   @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
 
@@ -93,8 +92,6 @@
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
               <a class="@if(Route::current()->getName() == 'users.profile') {{ 'active-nav' }} @endif md:pl-4 py-2 block" 
               href="{{ route('users.profile') }}">My Profile</a>
-              <a class="@if(Route::current()->getName() == 'deposit') {{ 'active-nav' }} @endif md:pl-4 py-2 block" 
-                href="{{ route('deposit') }}">Deposit</a>
               <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); 
                 document.getElementById('logout-form').submit();">
                 {{ __('Logout') }}

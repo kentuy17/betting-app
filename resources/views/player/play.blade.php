@@ -58,8 +58,8 @@
 
   $(function() {
     $('.bet-amount').on('input', function() {
-      if (parseFloat($(this).val()) < 10) {
-        let amt = parseFloat($(this).val());
+      if ($(this).val() < 10) {
+        let amt = parseInt($(this).val());
         $(this).val(amt);
       }
     });
@@ -78,28 +78,28 @@
     //   }
     // });
 
-    // window.Echo.channel('fight')
-    //   .listen('.fight', async (e)=>{
-    //     var stat;
-    //     var statusDiv = $('#player-fight-status').removeClass('gradient-status-open gradient-status-close');
-    //     var fightNoDiv = $('#fight-no');
-    //     if(e.fight.status == 'C') {
-    //       stat = 'CLOSED';
-    //       statusDiv.addClass('gradient-status-close')
-    //     } else if(e.fight.status == 'O') {
-    //       stat = 'OPEN';
-    //       statusDiv.addClass('gradient-status-open')
-    //     } else if(e.fight.status == null) {
-    //       stat = '____';
-    //       statusDiv.addClass('gradient-status-close')
-    //     }
+    window.Echo.channel('fight')
+      .listen('.fight', async (e)=>{
+        var stat;
+        var statusDiv = $('#player-fight-status').removeClass('gradient-status-open gradient-status-close');
+        var fightNoDiv = $('#fight-no');
+        if(e.fight.status == 'C') {
+          stat = 'CLOSED';
+          statusDiv.addClass('gradient-status-close')
+        } else if(e.fight.status == 'O') {
+          stat = 'OPEN';
+          statusDiv.addClass('gradient-status-open')
+        } else if(e.fight.status == null) {
+          stat = '____';
+          statusDiv.addClass('gradient-status-close')
+        }
         
-    //     await setFightStatus(stat);
-    //     await setFightNo(e.fight.fight_no);
+        await setFightStatus(stat);
+        await setFightNo(e.fight.fight_no);
 
-    //     statusDiv.html(fightStatus());
-    //     fightNoDiv.html(fightNo());
-    //   })
+        statusDiv.html(fightStatus());
+        fightNoDiv.html(fightNo());
+      })
   })
   
 </script>

@@ -6,8 +6,7 @@
     <div class="col-md-12">
       <div class="card col-md-8">
         <div class="card-header">{{ __('Transaction History') }}</div>
-        <div class="card-body">
-          <table class="table table-striped w-100" id="transactions-table">
+          <table class=" w-100" id="transactions-table">
             <thead>
               <tr>
                 <th>Player ID</th>
@@ -18,8 +17,9 @@
                 <th>Status</th>
               </tr>
             </thead>
+            {{-- <tbody>
+            </tbody> --}}
           </table>
-        </div>
         </div>
         <div class="card-body">
           @if (session('status'))

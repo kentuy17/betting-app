@@ -19,7 +19,6 @@ $(document).ready(function () {
       "bFilter": false,
       "bInfo": false,
       "bAutoWidth": false,
-      "scrollX": true,
       "ajax": '/bet/history',
       "columns": [
         {

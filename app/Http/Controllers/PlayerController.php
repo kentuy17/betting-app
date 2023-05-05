@@ -35,10 +35,4 @@ class PlayerController extends Controller
     {
         return view('player.bet-history');
     }
-
-    public function deposit()
-    {
-        $user = Auth::user();
-        return view('users.userprofile', compact('user'));
-    }
 }

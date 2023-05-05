@@ -6,16 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Bet;
-use App\Events\Bet as BetEvent;
 use App\Models\BetHistory;
 use App\Models\User;
-use App\Models\DerbyEvent;
-use App\Models\Fight;
 
 class BetController extends Controller
 {
-    private $current_event;
-    private $current_fight;
     /**
      * Create a new controller instance.
      *
@@ -24,7 +19,6 @@ class BetController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->current_event = DerbyEvent::where('status','ACTIVE')->first();
     }
 
     public function getTotalBetAmountPerFight($fight_no=1)
@@ -44,13 +38,6 @@ class BetController extends Controller
         ]);
     }
 
-    private function getCurrentFight($fight_no)
-    {
-        $this->current_fight = Fight::where('event_id',$this->current_event->id)
-            ->where('fight_no', $fight_no)
-            ->first();
-    }
-
     // $status = ['F' => 'Fighting', 'D' => 'Done'];
     public function addBet(Request $request)
     {
@@ -63,12 +50,7 @@ class BetController extends Controller
                 ], 400);
             }
 
-            $this->current_fight = Fight::where('event_id', $this->current_event->id)
-                ->where('fight_no', $request->fight_no)
-                ->first();
-
             $bet = Bet::create([
-                'fight_id' => $this->current_fight->id,
                 'fight_no' => $request->fight_no,
                 'user_id' => Auth::user()->id,
                 'amount' => $request->amount,
@@ -76,7 +58,6 @@ class BetController extends Controller
                 'status' => 'F'
             ]);
 
-            event(new BetEvent($bet));
             Auth::user()->decrement('points', $request->amount);
 
         } catch (\Exception $e) {

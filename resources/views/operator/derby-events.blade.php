@@ -13,7 +13,7 @@
             <div class="form-group row my-2">
               <label for="event-name" class="col-sm-2 col-form-label">Name</label>
               <div class="col-sm-10">
-                <input type="text" required class="form-control" id="event-name" placeholder="Event Name">
+                <input type="email" class="form-control" id="event-name" placeholder="Event Name">
               </div>
             </div>
             <div class="form-group row my-2">
@@ -38,27 +38,30 @@
         </form>
       </div>
     </div>
-  </div>
-  <div class="row col-md-12 justify-content-center">
-    <div class="card">
-      <div class="card-body">
-        <table class="table table-striped w-100" id="events-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>EVENT NAME</th>
-              <th>SCHED DATE</th>
-              <th>START TIME</th>
-              <th>STATUS</th>
-              <th>ACTION</th>
-            </tr>
-          </thead>
-        </table>
-      </div>
+    <div class="card-header font-bold">DERBY EVENTS LIST</div>
+      <table class="table table-striped w-100" id="events-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>EVENT NAME</th>
+            <th>SCHED DATE</th>
+            <th>START TIME</th>
+            <th>STATUS</th>
+            <th>ACTION</th>
+          </tr>
+        </thead>
+        {{-- <tbody>
+        </tbody> --}}
+      </table>
     </div>
-    
-    {{-- <div class="card-header font-bold">DERBY EVENTS LIST</div> --}}
-      
+    <div class="card-body">
+      @if (session('status'))
+      <div class="alert alert-success" role="alert">
+        {{ session('status') }}
+      </div>
+      @endif
+
+    </div>
     
   </div>
 </div>
