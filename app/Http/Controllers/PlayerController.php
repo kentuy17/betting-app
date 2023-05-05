@@ -39,6 +39,6 @@ class PlayerController extends Controller
     public function deposit()
     {
         $user = Auth::user();
-        return view('users.userprofile', compact('user'));
+        return view('player.deposit', compact('user'));
     }
 }
