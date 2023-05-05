@@ -20,6 +20,7 @@ class Bet extends Model
         'amount',
         'side',
         'status',
+        'win_amount',
         'created_at',
         'updated_at'
     ];

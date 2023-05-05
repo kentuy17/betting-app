@@ -10,6 +10,7 @@ use App\Models\Roles;
 use App\Models\Hacking;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class Controller extends BaseController
 {
@@ -30,5 +31,10 @@ class Controller extends BaseController
             'request' => json_encode($request->all()),
             'violation' => $violation
         ]);
+    }
+
+    public function logger($message, $note='')
+    {
+        Log::channel('custom')->info(json_encode([$note => $message], JSON_PRETTY_PRINT));
     }
 }

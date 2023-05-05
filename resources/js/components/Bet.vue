@@ -12,10 +12,11 @@
       <div class="row no-gutters">
         <div class="col-md-6">
           <div class="bet-buy-sell-form">
-            <p class="text-center text-xl"><b class="bet-meron">{{formatMoney(total.meron)}}</b></p>
+            <!-- <p class="text-center text-xl"><b class="bet-meron">{{formatMoney(total.meron)}}</b></p> -->
+            <p class="text-center text-xl"><b class="bet-meron">{{ formatMoney(total.meron) }}</b></p>
             <div class="bet-buy">
               <div>
-                <p>PAYOUT: <span class="fright">{{ percentage.meron }} = {{ formatMoney(payout.meron) }}</span></p>
+                <p>PAYOUT: <span class="fright">{{ formatMoney(meronPercentage) }} = {{ formatMoney(meronWinAmount) }}</span></p>
               </div>
               <div class="text-center mt-3 mb-3 bet-up">
               </div>
@@ -28,7 +29,7 @@
             <p class="text-center text-xl"><b class="bet-wala">{{ formatMoney(total.wala) }}</b></p>
             <div class="bet-sell">
               <div>
-                <p>PAYOUT: <span class="fright">{{ percentage.wala }} = {{ formatMoney(payout.wala) }}</span></p>
+                <p>PAYOUT: <span class="fright">{{ formatMoney(walaPercentage) }} = {{ formatMoney(walaWinAmount) }}</span></p>
               </div>
               <div class="text-center mt-3 mb-3 bet-down">
               </div>
@@ -69,19 +70,24 @@ export default {
       betAmount: 0,
       amounts: [20, 50, 100, 500, 1000, 2000, 5000],
       total: {
-        meron: 0.00,
-        wala: 0.00,
+        meron: 0,
+        wala: 0,
       },
       payout: {
-        meron: 0.00,
-        wala: 0.00,
+        meron: 0,
+        wala: 0,
       },
       percentage: {
-        meron: 187.00,
-        wala: 187.00,
+        meron: 187,
+        wala: 187,
       },
       player: {
-        points: 0
+        points: 0,
+        id: '',
+        bets: {
+          meron: 0,
+          wala: 0,
+        },
       }
     }
   },
@@ -90,11 +96,21 @@ export default {
       .then(resp => resp.json())
       .then(json => {
         this.fight = json.current
-        // console.log(json, 'json');
+        console.log(json, 'json');
         this.message = this.setFightStatus(json.current)
         this.player.points = json.points
-        this.total = json.bets
-      }); 
+        this.player.id = json.id
+        this.total = json.bets,
+        this.player.bets = json.player
+      })
+      .then(() => {
+        window.Echo.private('user.'+this.player.id)
+          .listen('Result', async (e)=>{
+            console.log(e);
+            alert('Congratulations! You win ' + e.bet.win_amount)
+            this.player.points += e.bet.win_amount
+          });
+      })
 
     window.Echo.channel('fight')
       .listen('.fight', async (e)=>{
@@ -103,7 +119,7 @@ export default {
 
         if(e.fight.curr) {
           this.fight = e.fight.curr
-          this.total.meron = this.total.wala = '0.00'
+          this.total.meron = this.total.wala = 0
         } 
         else {
           this.fight = e.fight  
@@ -121,14 +137,80 @@ export default {
           this.total.wala = this.total.wala + e.bet.amount
         }
       });
+
+    
   },
   watch: {
     // 
   },
 
+  computed: {
+    totalSum() {
+      return this.total.meron + this.total.wala
+    }, 
+
+    // GET FROM EACH SIDE
+    meronComm() {
+      return this.total.meron * 10 / 100
+    },
+
+    walaComm() {
+      return this.total.wala * 10 / 100
+    },
+
+    meronPercentage() {
+      let win = this.totalSum - this.meronComm
+      return win / this.total.meron * 100
+    },
+
+    walaPercentage() {
+      let win = this.totalSum - this.walaComm
+      return win / this.total.wala * 100
+    },
+
+    meronWinAmount() {
+      return (this.player.bets.meron * this.meronPercentage) / 100
+    },
+
+    walaWinAmount() {
+      return (this.player.bets.wala * this.walaPercentage) / 100
+    }
+
+    // GET FROM 5% TOTAL BETS
+    // commission() {
+    //   return this.totalSum * 10 / 100
+    // },
+
+    // meronPercentage() {
+    //   let gross = this.totalSum - this.total.meron
+    //   let tong = gross * 0.1
+    //   let net = (gross - tong) / this.total.meron * 100
+    //   return net + 100
+    // },
+
+    // walaPercentage() {
+    //   // let gross = this.totalSum - this.commission
+    //   // return gross / this.total.wala * 100
+    //   let gross = this.totalSum - this.total.wala
+    //   let tong = gross * 0.1
+    //   return ((gross - tong) * 2) + 100
+    // },
+
+    // meronWinAmount() {
+    //   return this.meronPercentage * this.player.bets.meron / 100
+    // },
+
+    // walaWinAmount() {
+    //   return this.walaPercentage * this.player.bets.wala / 100
+    // }
+
+
+  },
+
   methods: {
     formatMoney(value) {
-      return new Intl.NumberFormat('en-US').format(value);
+      return isNaN(value) ? '0.00' : new Intl.NumberFormat('en-US')
+        .format(value.toFixed(2));
     },
 
     setFightStatus(data) {
@@ -155,16 +237,7 @@ export default {
     topUp() {
       window.location.href = 'add-credits'
     },
-
-    async betMeron () {
-      const { data } = await axios.post('/bet/add', {
-          fight_no: this.fightNo,
-          amount: this.betAmount,
-          side: 'M'
-        });
-      console.log(data);
-    },
-
+    
     async addBet (betSide) {
       try {
         if(this.message !== 'OPEN') {
@@ -182,6 +255,10 @@ export default {
           return
         }
 
+        if(!confirm(`Bet ${this.betAmount}?`)) {
+          return
+        }
+
         const { data } = await axios.post('/bet/add', {
             fight_no: this.fightNo,
             amount: this.betAmount,
@@ -190,6 +267,9 @@ export default {
 
         if(data.status == 'OK') {
           this.player.points -= this.betAmount
+          betSide == 'M' 
+            ? this.player.bets.meron += this.betAmount
+            : this.player.bets.wala += this.betAmount 
         }
 
       } catch (err) {

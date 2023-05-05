@@ -7,14 +7,18 @@ use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Fight;
 use App\Events\Fight as FightEvent;
+use App\Events\Result;
 use App\Models\DerbyEvent;
 use App\Models\Bet;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class FightController extends Controller
 {
     public $current_event;
     public $prev_match;
     public $fight;
+    private $percent = 5;
     /**
      * Create a new controller instance.
      *
@@ -39,18 +43,28 @@ class FightController extends Controller
         ];
     }
 
+    private function getTotalPlayerBet()
+    {
+        $bet_meron = Bet::where([
+                'fight_id' => $this->fight->id,
+                'side' => 'M',
+                'user_id' => Auth::user()->id,
+            ])->sum('amount');
+
+        $bet_wala = Bet::where([
+            'fight_id' => $this->fight->id,
+            'side' => 'W',
+            'user_id' => Auth::user()->id,
+        ])->sum('amount');
+
+        return [
+            'meron' => $bet_meron,
+            'wala' => $bet_wala,
+        ];
+    }
+
     public function getCurrentFight()
     {
-        // $current = Fight::whereNotNull('fight_no')
-        //     ->whereNull('game_winner')
-        //     ->orderBy('fight_no','desc')
-        //     ->first();
-
-        // if(!$current) {
-        //     $current = Fight::create([
-        //         'user_id' => Auth::user()->id
-        //     ]);
-        // }
         $this->current_event = DerbyEvent::where('status', 'ACTIVE')->first();
 
         $this->prev_match = Fight::where('event_id', $this->current_event)
@@ -68,7 +82,9 @@ class FightController extends Controller
             'current' => $this->fight,
             'points' => Auth::user()->points,
             'event' => $this->current_event,
-            'bets' => $this->getTotalBets()
+            'bets' => $this->getTotalBets(),
+            'player' => $this->getTotalPlayerBet(),
+            'id' => Auth::user()->id,
         ]);
     }
 
@@ -82,13 +98,21 @@ class FightController extends Controller
             ->first();
     }
 
+    private function calcFightPercentage()
+    {
+        $bets = $this->getTotalBets();
+        $total_bets = $bets['meron'] + $bets['wala'];
+        $commision = $this->percent * $total_bets / 100;
+        $win = $total_bets - $commision;
+
+        return [
+            'meron' => $bets['meron'] > 0 ? $win / $bets['meron'] * 100 : 0,
+            'wala' => $bets['wala'] > 0 ? $win / $bets['wala'] * 100 : 0,
+        ];
+    }
+
     public function updateFight(Request $request)
     {
-        // $fight = Fight::whereNotNull('fight_no')
-        //     ->whereNull('game_winner')
-        //     ->orderBy('fight_no','desc')
-        //     ->first();
-
         $fight = $this->currenctMatch();
 
         if($request->status == 'D') {
@@ -107,7 +131,7 @@ class FightController extends Controller
     {
         $last_fight->update([
             'status' => 'D',
-            'game_winner' => $winner
+            'game_winner' => $winner,
         ]);
 
         Bet::where('fight_id',$last_fight->id)
@@ -125,6 +149,29 @@ class FightController extends Controller
         ];
 
         event(new FightEvent($fight));
+
+        if($winner == 'M' || $winner == 'W') {
+            $this->fight = $last_fight;
+            $calc = $this->calcFightPercentage();
+            $percentage = $winner == 'M' ? $calc['meron'] : $calc['wala'];
+            
+            $user_bets = Bet::where([
+                    'side' => $winner, 
+                    'fight_id' => $last_fight->id
+                ])->get();
+
+            foreach($user_bets as $bet) {
+                $update = Bet::find($bet->bet_no);
+                $update->win_amount = $bet->amount * $percentage / 100;
+                $update->save();
+
+                $user = User::find(Auth::user()->id);
+                $user->points += $bet->amount * $percentage / 100;
+                $user->save();
+
+                event(new Result($update));
+            }
+        }
 
         return response()->json([
             'data' => $new_fight
