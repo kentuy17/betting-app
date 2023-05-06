@@ -144,4 +144,10 @@
   button.addEventListener('click', () => {
     menu.classList.toggle('hidden');
   });
+
+  $(function(){
+    setTimeout(function() {
+      $('.fade-message').slideUp();
+    }, 5000);
+  });
 </script>

@@ -150,100 +150,181 @@
   .choices__list--dropdown:before{font-family:fontawesome;content:"\f0d8";position:absolute;top:0;left:28px;right:auto;font-size:22px;color:#fff;transition:top .35s ease;}
   .choices[data-type*=select-one] .choices__input{border-bottom-color:#f8f9fa;}
   .choices__list--dropdown .choices__item--selectable.is-highlighted{background:#e9ecef;color:#344767;}
+
+  .inner-tip:hover + .tooltip {
+    display:none !important;
+  }
 </style>
 @endsection
 @section('content')
 <div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-12">
-      <div class="card col-md-12">
-        <div class="card-body">
-          <form method="POST" action="{{ url('/deposit/'.$user->id) }}">
-            <div class="col-md-8 card" id="basic-info">
-              <div class="card-header">
-                <h5>Deposit Form</h5>
-              </div>
-              <div class="card-body pt-0">
-                @csrf
-                <div class="row">
-                  <div class="col-12">
-                    <label class="text-black form-label">Credit Points</label>
-                    <div class="input-group">
-                      <input id="credit_points" class="form-control disabled" type="text" disabled="" value="{{ $user->points }}" >
-                    </div>
-                  </div>
+  <!-- Gateway -->
+  <div class="mb-5 d-flex justify-content-center">
+    <div class="card col-md-6 px-4">
+      <div class="card-header">
+        <h5>Deposit Form</h5>
+      </div>
+      <div>
+        <div class="text-center mb-3">
+          Click to select outlet:
+        </div>
+        <div class="dep-tiles-2 rounded clearfix limit-width m-auto">
+          <div id="g-cash-outlet" class="dep-tile-2 active">
+            <div class="btn-gold rounded gp-shadow-sm d-flex p-2 clickable">
+              <div class="icn"><img src="//static.asiancockfighting.com/img/gcash.png"></div>
+              <div class="info">
+                <div class="name" style="text-transform: uppercase;">
+                  GCash
                 </div>
-                 <div class="row">
-                  <div class="col-12">
-                    <label class="text-black form-label mt-4">Pay Thru</label>
-                    <div class="input-group">
-                      <select id="ewallet" name="ewallet" class="form-control">
-                        <option value="Gcash">Gcash</option>
-                        <option value="Paymaya">Paymaya</option>  
-                      </select>
-                    </div>
-                  </div>
-                </div> 
-                <div class="row">
-                  <div class="col-12">
-                    <label class="text-black form-label mt-4">Phone No.</label>
-                    <div class="input-group">
-                      <input id="phone_no" name="phone_no" class="form-control" type="text" value="{{ $user->phone_no }}" placeholder="09*********"  >
-                    </div>
-                    @if (session('error'))
-                    <p class="text-xs pt-1 text-danger">{{ session('error') }}</p>
-                    @endif
-                    @error('phone_no')
-                    <p class="text-xs pt-1 text-danger">{{ $message }}</p>
-                    @enderror
-                  </div>
+                <div class="desc">
+                  <div>Minimum Cash-in: ₱100.00</div>
+                  <div>Wait Time: Less than 2 mins</div>
                 </div>
-                <!-- <div class="row">
-                  <div class="col-12">
-                    <label class="text-black form-label mt-4">Reference</label>
-                    <div class="input-group">
-                      <input id="reference" name="reference" class="form-control" type="text" placeholder="Reference"  >
-                    </div>
-                  </div>
-                </div> -->
-                <div class="row">
-                  <div class="col-12">
-                    <label class="text-black form-label mt-4">Amount</label>
-                    <div class="input-group">
-                      <input id="amount" name="amount" class="form-control" type="text" placeholder="0"  >
-                    </div>
-                    @if (session('error'))
-                    <p class="text-xs pt-1 text-danger">{{ session('error') }}</p>
-                    @endif
-                    @error('phone_no')
-                    <p class="text-xs pt-1 text-danger">{{ $message }}</p>
-                    @enderror
-                  </div>
-                </div>
-                {{ session('error') }}
-                <button type="submit" class="btn bg-gradient-dark btn-sm float-end mt-4">Deposit</button>
               </div>
             </div>
-          </form>
+          </div>
+          <!---->
+          <div id="uni-ticket-outlet" class="dep-tile-2">
+            <div class="btn-gold rounded gp-shadow-sm d-flex p-2 clickable">
+              <div class="icn"><img src="//static.asiancockfighting.com/img/uniticket-2.jpg"></div>
+              <div class="info">
+                <div class="name" style="text-transform: uppercase;">
+                  UNI-TICKET (MAYA/CREDIT CARD)
+                </div>
+                <div class="desc">
+                  <div>Minimum Cash-in: ₱100.00</div>
+                  <div>Wait Time: 5 - 10min</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+      <div class="mt-3">
+        <div class="dep-tiles-2 rounded clearfix limit-width m-auto pb-2">
+          <div class="text-center mb-2">Send to:</div>
+          <!---->
+          <div class="dep-tile-2">
+            <div class="rounded d-flex p-2 btn-gold">
+              <div class="icn"><img src="img/operator-logo.png"></div>
+              <div class="info flex flex-col justify-content-center">
+                <div class="name" style="text-transform: uppercase;">{{ $operators->users->name }}</div>
+                <div class="name text-uppercase">
+                  <div class="text-xl font-bold" >
+                    <span id="copyNumber">{{ $operators->users->phone_no }}</span>
+                    <a data-toggle="popover" role="button" data-placement="top" data-trigger="focus" title="Copied!" id="copy-icon" 
+                      class="fa-solid fa-copy ml-2"></a>  
+                  </div>
+                  
+                  <div class="d-none">Wait Time: 5 - 10min</div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center mb-2 text-primary text-muted mt-2">Download or take a screenshot
+              of the receipt and attach below</div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-3">
+        <div class="limit-width m-auto">
+          <div class="text-center mb-2">Screenshot of the GCash receipt:</div>
+          <div class="m-auto align-center">
+            <input class="form-control" type="file" id="formFile">
+          </div>
+        </div>
+      </div>
+      <div class="mb-3 pb-3">
+        <div class="limit-width m-auto">
+          <button class="btn bg-gradient-dark btn-sm mt-4 float-right">Submit<i class="fa fa-long-arrow-right"></i></button></div>
+      </div>
+    </div>
+  </div><!-- End Gateway -->
+  <div class="d-flex justify-content-center">
+    <div class="card col-md-6">
+      <div class="card-body">
+        <form method="POST" action="http://localhost:8000/deposit">
+          <div class="col-md-8 card" id="basic-info">
+            <div class="card-header">
+              <h5>Deposit Form</h5>
+            </div>
+            <div class="card-body pt-0">
+              <input type="hidden" name="_token" value="caXZDUCFDuaEyq0YJPP2o0QhpjmsavLEVlwfeXpH">
+              <div class="row">
+                <div class="col-12">
+                  <label class="text-black form-label">Credit Points</label>
+                  <div class="input-group">
+                    <input id="credit_points" class="form-control disabled" type="text" disabled="" value="480501.13">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <label class="text-black form-label mt-4">Pay Thru</label>
+                  <div class="input-group">
+                    <select id="ewallet" name="ewallet" class="form-control">
+                      <option value="Gcash">Gcash</option>
+                      <option value="Paymaya">Paymaya</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <label class="text-black form-label mt-4">Phone No.</label>
+                  <div class="input-group">
+                    <input id="phone_no" name="phone_no" class="form-control" type="text" value="09163377897" placeholder="09*********">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <label class="text-black form-label mt-4">Amount</label>
+                  <div class="input-group">
+                    <input id="amount" name="amount" class="form-control" type="text" placeholder="0">
+                  </div>
+
+                </div>
+              </div>
+              <button type="submit" class="btn bg-gradient-dark btn-sm float-end mt-4">Deposit</button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </div>
+
 @endsection
 
 @section('additional-scripts')
-<!-- <script>
+<script>
   $(function() {
-    $('button[type="submit"]').on('click', function(e) {
-      var pass = $('#new_pass').val();
-      var confirm = $('#confirm_pass').val();
-      
-      if(pass !== confirm) {
-        alert ("Password Mismatch!")
-        return;
+    $('#g-cash-outlet').on('click', function(e) {
+      if(!$(this).hasClass('active')) {
+        $(this).addClass('active');
+        $('#uni-ticket-outlet').removeClass('active');
       }
-    });
+    })
+
+    $('#uni-ticket-outlet').on('click', function(e) {
+      if(!$(this).hasClass('active')) {
+        $(this).addClass('active');
+        $('#g-cash-outlet').removeClass('active');
+      }
+    })
+
+    $('#copy-icon').on('click', function(e) {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($('#copyNumber').text()).select();
+        document.execCommand("copy");
+        $temp.remove();
+
+        $(this).popover('toggle')
+        setTimeout(() => {
+          $('.popover.bs-popover-auto').fadeOut(2000);
+        }, 2000);
+    })
   })
-</script> -->
+</script>
 @endsection
