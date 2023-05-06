@@ -28,6 +28,25 @@ class Transactions extends Model
         'updated_at' => 'datetime:M d, Y h:s A',
     ];
 
+        /**
+     * createTransaction
+     * @param array $aParameter
+     * @return mix
+     */
+    public function createTransaction(array $aParameter)
+    {
+        return $this->create($aParameter);
+    }
+            /**
+     * createTransaction
+     * @param array $aParameter
+     * @return mix
+     */
+    public function updateStatus(int $transID, array $aParameters) 
+    {
+        return $this->where('id', $transID)->update($aParameters);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');

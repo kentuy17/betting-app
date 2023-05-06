@@ -13,6 +13,7 @@ use Illuminate\Support\Arr;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use \Illuminate\Support\Str;
+use App\Models\Transactions;
     
 class UserController extends Controller
 {
@@ -205,5 +206,31 @@ class UserController extends Controller
         }
 
         return redirect('/user/profile')->with('success', 'Updated Successfully!');
+    }
+
+    public function updatePoints($id)
+    {
+        try {
+    
+            $trans = Transactions::find($id);
+            $user = User::find($trans->user_id);
+
+            $user->points += $trans->amount;
+            $trans->status = "completed";
+    
+            $user->save();
+            $trans->save();
+
+            return $user;
+            // $userArray=$user->toArray();
+            // $user->updateContactNumber($user->id,$userArray);
+
+            // $transArray=$trans->toArray();
+            // $trans->updateStatus($trans->id,$userArray);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect('/transaction')->with('success', 'Updated Successfully!');
     }
 }

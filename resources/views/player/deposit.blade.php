@@ -158,7 +158,7 @@
     <div class="col-md-12">
       <div class="card col-md-12">
         <div class="card-body">
-          <form method="POST" action="{{ url('/user/profile/'.$user->id) }}">
+          <form method="POST" action="{{ url('/deposit/'.$user->id) }}">
             <div class="col-md-8 card" id="basic-info">
               <div class="card-header">
                 <h5>Deposit Form</h5>
@@ -173,14 +173,17 @@
                     </div>
                   </div>
                 </div>
-                <div class="row">
+                 <div class="row">
                   <div class="col-12">
-                    <label class="text-black form-label mt-4">Username</label>
+                    <label class="text-black form-label mt-4">Pay Thru</label>
                     <div class="input-group">
-                      <input id="username" name="username" class="form-control" type="text" value="{{ $user->username }}" placeholder="Username"  >
+                      <select id="ewallet" name="ewallet" class="form-control">
+                        <option value="Gcash">Gcash</option>
+                        <option value="Paymaya">Paymaya</option>  
+                      </select>
                     </div>
                   </div>
-                </div>
+                </div> 
                 <div class="row">
                   <div class="col-12">
                     <label class="text-black form-label mt-4">Phone No.</label>
@@ -195,14 +198,14 @@
                     @enderror
                   </div>
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                   <div class="col-12">
                     <label class="text-black form-label mt-4">Reference</label>
                     <div class="input-group">
                       <input id="reference" name="reference" class="form-control" type="text" placeholder="Reference"  >
                     </div>
                   </div>
-                </div>
+                </div> -->
                 <div class="row">
                   <div class="col-12">
                     <label class="text-black form-label mt-4">Amount</label>
@@ -215,20 +218,6 @@
                     @error('phone_no')
                     <p class="text-xs pt-1 text-danger">{{ $message }}</p>
                     @enderror
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label class="text-black form-label mt-4">New Password</label>
-                    <div class="input-group">
-                      <input id="new_pass" name="new_pass" class="form-control disabled" type="password" placeholder="******" >
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <label class="text-black form-label mt-4">Confirm Password</label>
-                    <div class="input-group">
-                      <input id="confirm_pass" name="confirm_pass" class="form-control" type="password" placeholder="******" >
-                    </div>
                   </div>
                 </div>
                 {{ session('error') }}
@@ -244,7 +233,7 @@
 @endsection
 
 @section('additional-scripts')
-<script>
+<!-- <script>
   $(function() {
     $('button[type="submit"]').on('click', function(e) {
       var pass = $('#new_pass').val();
@@ -256,5 +245,5 @@
       }
     });
   })
-</script>
+</script> -->
 @endsection

@@ -10,6 +10,10 @@
           <table class="table table-striped w-100" id="transactions-table">
             <thead>
               <tr>
+                <th>#</th>
+                <th>Action</th>
+                <th>Type</th>
+                <th>Processed By ID</th>
                 <th>Player ID</th>
                 <th>Name</th>
                 <th>Amount</th>
