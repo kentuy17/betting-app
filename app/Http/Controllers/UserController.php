@@ -12,7 +12,6 @@ use Hash;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Str;
     
 class UserController extends Controller
 {
@@ -162,42 +161,35 @@ class UserController extends Controller
         ]);
     }
 
-    public function editprofile(Request $request, $id) : RedirectResponse
+    public function editprofile(Request $request) 
     {
-        $this->validate($request, [
-            'phone_no' => 'required'
-        ]);   
-        $trimPhone = $request->phone_no;
-        if (Str::startsWith($request->phone_no, ['+63', '63']))
-        {
-             $trimPhone = preg_replace('/^\+?63/', '0', $trimPhone);
-        }else if (Str::startsWith($request->phone_no, ['9']))
-        {
-            $trimPhone = '0' . $request->phone_no;
-        }
-
+        try {
             $this->validate($request, [
-           'phone_no' => ['regex:/(0?9|\+?63)[0-9]{9}/'],
+                'phone_no' => 'required|regex:/(09)[0-9]{9}/',
             ]);
-        
-        if( User::where('phone_no', '=', $request->phone_no)->exists() 
-            && $request->phone_no != Auth::user()->phone_no ) {
-            return Redirect()->back()->withInput()->with('error', 'This Number exist !');
-        }
-
-        $user = User::find($id);
-        $user->phone_no = $trimPhone;
-
-        if($user->password != $request->new_pass) {
-            if($request->new_pass != $request->confirm_pass) {
-                return redirect('/user/profile')->with('error', 'Password did not Match!');
+            
+            if( User::where('phone_no', '=', $request->phone_no)->exists() 
+                && $request->phone_no != Auth::user()->phone_no ) {
+                return Redirect()->back()->withInput()->with('error', 'This Number exist !');
             }
-
-            $user->password = $request->password;
+    
+            $user = User::find(Auth::user()->id);
+            $user->phone_no = $request['phone_no'];
+            $user->password = bcrypt($request->new_pass);
+    
+            if(Auth::user()->password != bcrypt($request->new_pass)) {
+                if($request->new_pass != $request->confirm_pass) {
+                    return redirect('/user/profile')->with('error', 'Password did not Match!');
+                }
+    
+                $user->password = bcrypt($request->new_pass);
+            }
+    
+            $userArray=$user->toArray();
+            $user->updateContactNumber($user->id,$userArray);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
-
-        $userArray=$user->toArray();
-        $user->updateContactNumber($id,$userArray);
 
         return redirect('/user/profile')->with('success', 'Updated Successfully!');
     }

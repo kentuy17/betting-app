@@ -6,3 +6,93 @@ body.dark-mode nav {
 body.dark-mode {
   background-color: #454d55;
 }
+
+.card{background:#343a40;border:0;position:relative;width:100%;margin-bottom:30px;box-shadow:0 1px 20px 0 rgba(0,0,0,.1);}
+.card label{color:hsla(0,0%,100%,.6);}
+.card .card-body{padding:15px;}
+.card label{font-size:.75rem;margin-bottom:5px;}
+.card-body{padding:1.25rem;}
+
+.table>tbody>tr>td {
+  color: hsla(0,0%,100%,.7)!important
+}
+
+.table>thead>tr>th {
+  border-bottom-width: 1px px;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 700;
+  border: 0;
+  color: hsla(0,0%,100%,.7);
+}
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+  border-color: hsla(0,0%,100%,.1);
+  padding: 12px 7px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+table.dataTable thead .sorting:before, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_asc_disabled:before, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting_desc_disabled:before {
+  right: 1em;
+  content: "\2191";
+}
+
+.card .card-header:not([data-background-color]) {
+  background-color: transparent;
+}
+
+.card .card-header {
+  padding: 15px 15px 0;
+  border: 0;
+  color: hsla(0,0%,100%,.8);
+}
+
+.card-header:first-child {
+    border-radius: 0.2232rem 0.2232rem 0 0;
+}
+
+.card-header {
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 0;
+  background-color: #f6f9fc;
+  border-bottom: 0.0625rem solid rgba(34,42,66,.05);
+}
+
+.pagination{display:flex;padding-left:0;list-style:none;border-radius:.25rem;}
+.page-link{position:relative;display:block;padding:0 .6875rem;margin-left:-.0625rem;line-height:1.25;color:#fff;background-color:transparent;border:.0625rem solid #e3e3e3;}
+.page-link:hover{z-index:2;color:#6c757d;text-decoration:none;background-color:#e3e3e3;border-color:#e3e3e3;}
+.page-link:focus{z-index:2;outline:0;box-shadow:none;}
+.page-item:first-child .page-link{margin-left:0;border-top-left-radius:.25rem;border-bottom-left-radius:.25rem;}
+.page-item:last-child .page-link{border-top-right-radius:.25rem;border-bottom-right-radius:.25rem;}
+.page-item.active .page-link{z-index:1;color:#fff;background-color:#0d6efd;border-color:#e14eca;}
+.page-item.disabled .page-link{color:#6c757d;pointer-events:none;cursor:auto;background-color:transparent;border-color:#e3e3e3;}
+@media print{
+*,:after,:before{text-shadow:none!important;box-shadow:none!important;}
+a:not(.btn){text-decoration:underline;}
+}
+.pagination .page-item .page-link{border:0;border-radius:30px!important;transition:all .3s;margin:0 3px;min-width:30px;text-align:center;height:30px;line-height:30px;cursor:pointer;text-transform:uppercase;outline:none;}
+.pagination .page-item .page-link:focus,.pagination .page-item .page-link:hover{background-color:hsla(0,0%,100%,.1);color:#fff;border:none;box-shadow:none;}
+.pagination .page-item.active>.page-link{color:#fff;box-shadow:0 1px 20px 0 rgba(0,0,0,.1);}
+.pagination .page-item.active>.page-link,.pagination .page-item.active>.page-link:focus,.pagination .page-item.active>.page-link:hover{background:#0a58ca;background-image:linear-gradient(to bottom left,#0d6efd,#0b5ed7,#0d6efd);background-size:210% 210%;background-position:100% 0;color:#fff;}
+.pagination .page-item.disabled>.page-link{opacity:.5;}
+@media (max-width:767.98px){
+div.dataTables_paginate ul.pagination .page-item:first-of-type,div.dataTables_paginate ul.pagination .page-item:last-of-type,div.dataTables_paginate ul.pagination .page-item:nth-of-type(2),div.dataTables_paginate ul.pagination .page-item:nth-of-type(8){display:none!important;}
+}
+ul li{color:#fff;}
+div.dataTables_wrapper div.dataTables_paginate{margin:0;white-space:nowrap;text-align:right;}
+div.dataTables_wrapper div.dataTables_paginate ul.pagination{margin:2px 0;white-space:nowrap;justify-content:flex-end;}
+@media screen and (max-width:767px){
+div.dataTables_wrapper div.dataTables_paginate{text-align:center;}
+}
+
+.row > .card {
+  padding-right: calc(var(--bs-gutter-x) * 0.1) !important;
+  padding-left: calc(var(--bs-gutter-x) * 0.1) !important;
+}
+
+.table-success, .table>tbody>tr.table-success>td, .table-success>th {
+  background-color: #b8fbee !important;
+  color: black !important;
+  font-weight: 700;
+}

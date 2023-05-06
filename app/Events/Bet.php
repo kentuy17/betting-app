@@ -10,20 +10,19 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class Bet
+class Bet implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $id;
+    public $bet;
     public $type;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($id, $type)
+    public function __construct($bet)
     {
-        $this->id = $id;
-        $this->$type = $type;
+        $this->bet = $bet;
     }
 
     /**
@@ -36,6 +35,12 @@ class Bet
         // return [
         //     new PrivateChannel('channel-name'),
         // ];
-        return new Channel('betChannel');
+        // return new Channel('betChannel');
+        return new Channel('bet');
+    }
+
+    public function broadcastAs()
+    {
+        return 'bet';
     }
 }
