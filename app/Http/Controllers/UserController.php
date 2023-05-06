@@ -12,6 +12,8 @@ use Hash;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use \Illuminate\Support\Str;
+use App\Models\Transactions;
     
 class UserController extends Controller
 {
@@ -165,8 +167,20 @@ class UserController extends Controller
     {
         try {
             $this->validate($request, [
-                'phone_no' => 'required|regex:/(09)[0-9]{9}/',
-            ]);
+                'phone_no' => 'required'
+            ]);   
+            $trimPhone = $request->phone_no;
+            if (Str::startsWith($request->phone_no, ['+63', '63']))
+            {
+                 $trimPhone = preg_replace('/^\+?63/', '0', $trimPhone);
+            }else if (Str::startsWith($request->phone_no, ['9']))
+            {
+                $trimPhone = '0' . $request->phone_no;
+            }
+    
+                $this->validate($request, [
+               'phone_no' => ['regex:/(0?9|\+?63)[0-9]{9}/'],
+                ]);
             
             if( User::where('phone_no', '=', $request->phone_no)->exists() 
                 && $request->phone_no != Auth::user()->phone_no ) {
@@ -174,7 +188,7 @@ class UserController extends Controller
             }
     
             $user = User::find(Auth::user()->id);
-            $user->phone_no = $request['phone_no'];
+            $user->phone_no = $trimPhone;
             $user->password = bcrypt($request->new_pass);
     
             if(Auth::user()->password != bcrypt($request->new_pass)) {
@@ -192,5 +206,31 @@ class UserController extends Controller
         }
 
         return redirect('/user/profile')->with('success', 'Updated Successfully!');
+    }
+
+    public function updatePoints($id)
+    {
+        try {
+    
+            $trans = Transactions::find($id);
+            $user = User::find($trans->user_id);
+
+            $user->points += $trans->amount;
+            $trans->status = "completed";
+    
+            $user->save();
+            $trans->save();
+
+            return $user;
+            // $userArray=$user->toArray();
+            // $user->updateContactNumber($user->id,$userArray);
+
+            // $transArray=$trans->toArray();
+            // $trans->updateStatus($trans->id,$userArray);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect('/transaction')->with('success', 'Updated Successfully!');
     }
 }
