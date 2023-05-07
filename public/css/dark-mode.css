@@ -49,7 +49,7 @@ table.dataTable thead .sorting:before, table.dataTable thead .sorting_asc:before
 }
 
 .card-header:first-child {
-    border-radius: 0.2232rem 0.2232rem 0 0;
+  border-radius: 0.2232rem 0.2232rem 0 0;
 }
 
 .card-header {
@@ -95,4 +95,65 @@ div.dataTables_wrapper div.dataTables_paginate{text-align:center;}
   background-color: #b8fbee !important;
   color: black !important;
   font-weight: 700;
+}
+
+.dep-tile-2 {
+  margin-bottom: 1rem;
+  color: #000;
+}
+
+.dep-tile-2 .icn {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 40px;
+  flex: 0 0 40px;
+  -ms-flex-item-align: center;
+  align-self: center;
+}
+
+.dep-tile-2 .info {
+  -webkit-box-flex: 1;
+  -ms-flex: 1 0 40px;
+  flex: 1 0 40px;
+  padding-left: 1rem;
+/*   color: #fff; */
+}
+
+.dep-tile-2 .desc {
+  font-size: .75rem;
+  line-height: 1rem;
+}
+
+.gp-shadow-sm:hover, .dep-tile-2.active {
+  -webkit-box-shadow: 0 2px 7px -2px #0e0e0ee6;
+  box-shadow: 0 2px 7px -2px #0e0e0ee6;
+  background-color: rgba(78,106,181,.3)!important;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.btn-gold {
+  background-color: rgba(78,106,181,.1)!important;
+  border-color: #ffc10757!important;
+}
+
+.dep-tile-2 .icn img {
+  display: block;
+  width: 100%;
+  border-radius: 50%;
+}
+
+img {
+  vertical-align: middle;
+  border-style: none;
+}
+
+.limit-width {
+  max-width: 330px;
+}
+
+.highlighted-block {
+  background: #2c3f69;
+  border-radius: 20px;
 }

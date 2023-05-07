@@ -47,8 +47,8 @@ class LoginController extends Controller
 
     public function redirectTo()
     {
-        \Log::channel('custom')->info(json_encode(Auth::user(),JSON_PRETTY_PRINT));
         $role = $this->getUserRole();
+        
         if($role->name == 'Player') {
             $this->redirectTo = '/play';
         } 
