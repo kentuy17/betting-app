@@ -25,7 +25,7 @@ class Transactions extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'datetime:M d, Y h:s A',
+        'created_at' => 'datetime:m/d/y h:s',
         'updated_at' => 'datetime:M d, Y h:s A',
     ];
 
@@ -51,5 +51,10 @@ class Transactions extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function operator()
+    {
+        return $this->belongsTo(User::class, 'processedBy');
     }
 }

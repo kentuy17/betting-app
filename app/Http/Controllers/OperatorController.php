@@ -43,7 +43,10 @@ class OperatorController extends Controller
 
     public function getTransactions()
     {
-        $trans = Transactions::with('user')->get();
+        $trans = Transactions::with('user')
+            ->with('operator')
+            ->get();
+            
         return response()->json([
             'data' => $trans
         ]);

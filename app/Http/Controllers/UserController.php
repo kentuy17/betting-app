@@ -221,7 +221,7 @@ class UserController extends Controller
             $user->save();
             $trans->save();
 
-            return $user;
+            // return $user;
             // $userArray=$user->toArray();
             // $user->updateContactNumber($user->id,$userArray);
 
@@ -231,6 +231,6 @@ class UserController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
 
-        return redirect('/transaction')->with('success', 'Updated Successfully!');
+        return redirect()->back()->with('success', 'Updated Successfully!');
     }
 }

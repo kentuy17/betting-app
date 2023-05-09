@@ -10,7 +10,7 @@ use App\Models\Roles;
 use App\Models\User;
 use App\Models\Transactions;
 use \Illuminate\Support\Str;
-use Illuminate\Support\Lottery;
+use Illuminate\Support\Facades\Storage;
 
 class PlayerController extends Controller
 {
@@ -43,10 +43,6 @@ class PlayerController extends Controller
     public function deposit()
     {
         $user = Auth::user();
-        // $operators = ModelHasRoles::where('role_id',3)->with('users')->first();
-        // $operators = ModelHasRoles::with('roles')
-        //     ->where('role_id',3)
-        //     ->first();
         $operators = ModelHasRoles::with('users')
             ->where('role_id',3)
             ->inRandomOrder()
@@ -75,11 +71,10 @@ class PlayerController extends Controller
                 'phone_no' => ['regex:/(0?9|\+?63)[0-9]{9}/'],
             ]);
 
-            $imageName = time().'.'.$request->formFile->extension();  
-     
-            $request->formFile->move(public_path('images'), $imageName);
+            $imageName = time().'.'.$request->formFile->extension();
+            $path = 'public/' . $imageName;
+            Storage::disk('local')->put($path, file_get_contents($request->formFile));
 
-    
             Transactions::create([
                 'user_id' => Auth::user()->id,
                 'action' => 'deposit',

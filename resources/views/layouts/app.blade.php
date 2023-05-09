@@ -41,6 +41,10 @@
     .dataTables_wrapper .dataTables_paginate a.paginate_button {
       margin: 0px;
     }
+    #dropdown-menu {
+      inset:unset !important;
+      transform: none !important;
+    }
   </style>
 
 </head>
@@ -90,10 +94,10 @@
             <a id="navbarDropdown" class="md:p-4 py-2 block dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
               {{ Auth::user()->username }}
             </a>
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <a class="@if(Route::current()->getName() == 'users.profile') {{ 'active-nav' }} @endif md:pl-4 py-2 block" 
+            <div class="dropdown-menu dropdown-menu-end" id="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="@if(Route::current()->getName() == 'users.profile') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" 
               href="{{ route('users.profile') }}">My Profile</a>
-              <a class="@if(Route::current()->getName() == 'deposit') {{ 'active-nav' }} @endif md:pl-4 py-2 block" 
+              <a class="@if(Route::current()->getName() == 'deposit') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" 
                 href="{{ route('deposit') }}">Deposit</a>
               <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); 
                 document.getElementById('logout-form').submit();">

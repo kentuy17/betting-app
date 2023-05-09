@@ -163,6 +163,7 @@
     <div class="card col-md-6 px-4">
       <div class="card-header">
         <h5>Deposit Form</h5>
+        @include('layouts.flash-message')
       </div>
       <div>
         <div class="text-center mb-3">
@@ -171,7 +172,7 @@
         <div class="dep-tiles-2 rounded clearfix limit-width m-auto">
           <div id="g-cash-outlet" class="dep-tile-2 active">
             <div class="btn-gold rounded gp-shadow-sm d-flex p-2 clickable">
-              <div class="icn"><img src="//static.asiancockfighting.com/img/gcash.png"></div>
+              <div class="icn"><img src="{{ asset('img/gcash.png') }}"></div>
               <div class="info">
                 <div class="name" style="text-transform: uppercase;">
                   GCash
@@ -186,7 +187,7 @@
           <!---->
           <div id="uni-ticket-outlet" class="dep-tile-2">
             <div class="btn-gold rounded gp-shadow-sm d-flex p-2 clickable">
-              <div class="icn"><img src="//static.asiancockfighting.com/img/uniticket-2.jpg"></div>
+              <div class="icn"><img src="{{ asset('img/uniticket-2.jpg') }}"></div>
               <div class="info">
                 <div class="name" style="text-transform: uppercase;">
                   UNI-TICKET (MAYA/CREDIT CARD)
@@ -227,27 +228,28 @@
       </div>
       <form action="{{ route('deposit.upload.post') }}" method="POST" enctype="multipart/form-data">
         @csrf
-      <div class="mt-3">
-        <div class="limit-width m-auto">
-          <div class="text-center mb-2">GCash No:</div>
-          <div class="m-auto align-center">
-            <input id="phone_no" name="phone_no" class="form-control" type="text" value="" placeholder="09*********">
+        <div class="mt-3">
+          <div class="limit-width m-auto">
+            <div class="text-center mb-2">GCash No:</div>
+            <div class="m-auto align-center">
+              <input id="phone_no" name="phone_no" class="form-control" type="text" value="{{ $user->phone_no }}" required placeholder="09*********">
+            </div>
           </div>
         </div>
-      </div>
-      <div class="mt-3">
-        <div class="limit-width m-auto">
-          <div class="text-center mb-2">Screenshot of the GCash receipt:</div>
-          <div class="m-auto align-center">
-            <input class="form-control" onchange = "displayImage(this)" type="file" name="formFile" id="formFile">
-            <img id="displayfile" onclick="triggerClick()"/>
+        <div class="mt-3">
+          <div class="limit-width m-auto">
+            <div class="text-center mb-2">Screenshot of the GCash receipt:</div>
+            <div class="m-auto align-center">
+              <input class="form-control" onchange = "displayImage(this)" type="file" required name="formFile" id="formFile">
+              <img id="displayfile" onclick="triggerClick()"/>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="mb-3 pb-3">
-        <div class="limit-width m-auto">
-          <button type="submit" class="btn bg-gradient-dark btn-sm mt-4 float-right">Submit<i class="fa fa-long-arrow-right"></i></button></div>
-      </div>
+        <div class="mb-3 pb-3">
+          <div class="limit-width m-auto">
+            <button type="submit" class="btn bg-gradient-dark btn-sm mt-4 float-right">Submit <i class="fa fa-long-arrow-right"></i></button>
+          </div>
+        </div>
       </form>     
     </div>
   </div>
@@ -273,35 +275,35 @@
     })
 
     $('#copy-icon').on('click', function(e) {
-        var $temp = $("<input>");
-        $("body").append($temp);
-        $temp.val($('#copyNumber').text()).select();
-        document.execCommand("copy");
-        $temp.remove();
+      var $temp = $("<input>");
+      $("body").append($temp);
+      $temp.val($('#copyNumber').text()).select();
+      document.execCommand("copy");
+      $temp.remove();
 
-        $(this).popover('toggle')
-        setTimeout(() => {
-          $('.popover.bs-popover-auto').fadeOut(2000);
-        }, 2000);
+      $(this).popover('toggle')
+      setTimeout(() => {
+        $('.popover.bs-popover-auto').fadeOut(2000);
+      }, 2000);
     })
   })
 </script>
 <script>
 
-   function triggerClick(){
+  function triggerClick(){
     document.querySelector('#formFile').click();
   }
 
   function displayImage(e){
-      if(e.files[0]){
-        var reader = new FileReader();
-        reader.onload = function(e){
-          document.querySelector('#displayfile').
-          setAttribute('src',e.target.result);
-        }
-
-        reader.readAsDataURL(e.files[0]);
+    if(e.files[0]){
+      var reader = new FileReader();
+      reader.onload = function(e){
+        document.querySelector('#displayfile').
+        setAttribute('src',e.target.result);
       }
+
+      reader.readAsDataURL(e.files[0]);
+    }
   }
 </script>
 @endsection
