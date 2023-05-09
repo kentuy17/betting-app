@@ -60,7 +60,7 @@ class PlayerController extends Controller
         try {
             $this->validate($request, [
                 'phone_no' => 'required',
-                'amount' => 'required|numeric|between:100,50000'
+                'formFile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);  
              
             $trimPhone = $request->phone_no;
@@ -74,12 +74,17 @@ class PlayerController extends Controller
             $this->validate($request, [
                 'phone_no' => ['regex:/(0?9|\+?63)[0-9]{9}/'],
             ]);
+
+            $imageName = time().'.'.$request->formFile->extension();  
+     
+            $request->formFile->move(public_path('images'), $imageName);
+
     
             Transactions::create([
                 'user_id' => Auth::user()->id,
-                'amount' => $request->amount,
                 'action' => 'deposit',
                 'mobile_number' => $request->phone_number,
+                'filename' => $imageName,
                 'status' => 'pending',
             ]);
 
@@ -87,6 +92,6 @@ class PlayerController extends Controller
             return redirect()->back()->with('danger', $e->getMessage());
         }
 
-        return redirect()->back()->with('success', 'Updated Successfully!');
+        return redirect()->back()->with('success', 'Submitted Successfully!');
     }
 }

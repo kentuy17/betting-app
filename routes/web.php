@@ -54,7 +54,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/user/profile', [UserController::class, 'profile'])->name('users.profile');
         Route::post('/user/profile', [UserController::class, 'editprofile']);
         Route::get('/deposit', [PlayerController::class, 'deposit'])->name('deposit');
-        Route::post('/deposit', [PlayerController::class, 'depositSubmit']);
+        Route::post('/deposit', [PlayerController::class, 'depositSubmit'])->name('deposit.upload.post');;
         
     });
 

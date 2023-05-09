@@ -225,71 +225,30 @@
           </div>
         </div>
       </div>
+      <form action="{{ route('deposit.upload.post') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+      <div class="mt-3">
+        <div class="limit-width m-auto">
+          <div class="text-center mb-2">GCash No:</div>
+          <div class="m-auto align-center">
+            <input id="phone_no" name="phone_no" class="form-control" type="text" value="" placeholder="09*********">
+          </div>
+        </div>
+      </div>
       <div class="mt-3">
         <div class="limit-width m-auto">
           <div class="text-center mb-2">Screenshot of the GCash receipt:</div>
           <div class="m-auto align-center">
-            <input class="form-control" type="file" id="formFile">
+            <input class="form-control" onchange = "displayImage(this)" type="file" name="formFile" id="formFile">
+            <img id="displayfile" onclick="triggerClick()"/>
           </div>
         </div>
       </div>
       <div class="mb-3 pb-3">
         <div class="limit-width m-auto">
-          <button class="btn bg-gradient-dark btn-sm mt-4 float-right">Submit<i class="fa fa-long-arrow-right"></i></button></div>
+          <button type="submit" class="btn bg-gradient-dark btn-sm mt-4 float-right">Submit<i class="fa fa-long-arrow-right"></i></button></div>
       </div>
-    </div>
-  </div><!-- End Gateway -->
-  <div class="d-flex justify-content-center">
-    <div class="card col-md-6">
-      <div class="card-body">
-        <form method="POST" action="http://localhost:8000/deposit">
-          <div class="col-md-8 card" id="basic-info">
-            <div class="card-header">
-              <h5>Deposit Form</h5>
-            </div>
-            <div class="card-body pt-0">
-              <input type="hidden" name="_token" value="caXZDUCFDuaEyq0YJPP2o0QhpjmsavLEVlwfeXpH">
-              <div class="row">
-                <div class="col-12">
-                  <label class="text-black form-label">Credit Points</label>
-                  <div class="input-group">
-                    <input id="credit_points" class="form-control disabled" type="text" disabled="" value="480501.13">
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-12">
-                  <label class="text-black form-label mt-4">Pay Thru</label>
-                  <div class="input-group">
-                    <select id="ewallet" name="ewallet" class="form-control">
-                      <option value="Gcash">Gcash</option>
-                      <option value="Paymaya">Paymaya</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-12">
-                  <label class="text-black form-label mt-4">Phone No.</label>
-                  <div class="input-group">
-                    <input id="phone_no" name="phone_no" class="form-control" type="text" value="09163377897" placeholder="09*********">
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-12">
-                  <label class="text-black form-label mt-4">Amount</label>
-                  <div class="input-group">
-                    <input id="amount" name="amount" class="form-control" type="text" placeholder="0">
-                  </div>
-
-                </div>
-              </div>
-              <button type="submit" class="btn bg-gradient-dark btn-sm float-end mt-4">Deposit</button>
-            </div>
-          </div>
-        </form>
-      </div>
+      </form>     
     </div>
   </div>
 </div>
@@ -326,5 +285,23 @@
         }, 2000);
     })
   })
+</script>
+<script>
+
+   function triggerClick(){
+    document.querySelector('#formFile').click();
+  }
+
+  function displayImage(e){
+      if(e.files[0]){
+        var reader = new FileReader();
+        reader.onload = function(e){
+          document.querySelector('#displayfile').
+          setAttribute('src',e.target.result);
+        }
+
+        reader.readAsDataURL(e.files[0]);
+      }
+  }
 </script>
 @endsection
