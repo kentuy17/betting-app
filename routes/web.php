@@ -54,8 +54,10 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/user/profile', [UserController::class, 'profile'])->name('users.profile');
         Route::post('/user/profile', [UserController::class, 'editprofile']);
         Route::get('/deposit', [PlayerController::class, 'deposit'])->name('deposit');
-        Route::post('/deposit', [PlayerController::class, 'depositSubmit'])->name('deposit.upload.post');;
-        
+        Route::post('/deposit', [PlayerController::class, 'depositSubmit'])->name('deposit.upload.post');
+        Route::get('/withdrawform', [PlayerController::class, 'profileWithdraw'])->name('player.withdraw');  
+        Route::post('/withdrawform', [PlayerController::class, 'submitWithdraw']);
+      
     });
 
     // Operator
@@ -70,6 +72,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/fight', [OperatorController::class, 'fight'])->name('operator.fight');
     Route::get('/transactions', [OperatorController::class, 'transactions'])->name('operator.transactions');
     Route::get('/transaction/records', [OperatorController::class, 'getTransactions']);
+
 
     // Bets
     Route::get('/bet/total', [BetController::class, 'getTotalBetAmountPerFight']);
