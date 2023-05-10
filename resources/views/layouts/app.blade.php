@@ -11,13 +11,14 @@
 
   <!-- Fonts -->
   <link rel="dns-prefetch" href="//fonts.gstatic.com">
-  <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+  <link href="{{ asset('css/fonts.css') }}" rel="stylesheet">
 
   <!-- Scripts -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" type="text/css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" type="text/css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css"/>
+  <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" type="text/css">
+  <link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap5.min.css') }}" type="text/css">
+  <link rel="stylesheet" href="{{ asset('css/sweetalert.min.css') }}"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
 
   @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
 
@@ -40,6 +41,10 @@
     }
     .dataTables_wrapper .dataTables_paginate a.paginate_button {
       margin: 0px;
+    }
+    #dropdown-menu {
+      inset:unset !important;
+      transform: none !important;
     }
   </style>
 
@@ -90,9 +95,13 @@
             <a id="navbarDropdown" class="md:p-4 py-2 block dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
               {{ Auth::user()->username }}
             </a>
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <a class="@if(Route::current()->getName() == 'users.profile') {{ 'active-nav' }} @endif md:pl-4 py-2 block" 
+            <div class="dropdown-menu dropdown-menu-end" id="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="@if(Route::current()->getName() == 'users.profile') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" 
               href="{{ route('users.profile') }}">My Profile</a>
+              <a class="@if(Route::current()->getName() == 'deposit') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" 
+                href="{{ route('deposit') }}">Deposit</a>
+              <a class="@if(Route::current()->getName() == 'player.withdraw') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" 
+              href="{{ route('player.withdraw') }}">Withdraw</a>
               <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); 
                 document.getElementById('logout-form').submit();">
                 {{ __('Logout') }}
@@ -141,5 +150,11 @@
   const menu = document.querySelector('#menu');
   button.addEventListener('click', () => {
     menu.classList.toggle('hidden');
+  });
+
+  $(function(){
+    setTimeout(function() {
+      $('.fade-message').slideUp();
+    }, 5000);
   });
 </script>

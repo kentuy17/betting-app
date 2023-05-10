@@ -42,6 +42,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
+    Route::resource('transactions', UserController::class);
+
 
     // Player
     Route::group(['middleware' => ['player']], function () {
@@ -50,7 +52,12 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/reports', [PlayerController::class, 'reports'])->name('player.reports');
         Route::post('/bet/add', [BetController::class, 'addBet']);
         Route::get('/user/profile', [UserController::class, 'profile'])->name('users.profile');
-        Route::post('/user/profile/{post_id}', [UserController::class, 'editprofile']);
+        Route::post('/user/profile', [UserController::class, 'editprofile']);
+        Route::get('/deposit', [PlayerController::class, 'deposit'])->name('deposit');
+        Route::post('/deposit', [PlayerController::class, 'depositSubmit'])->name('deposit.upload.post');
+        Route::get('/withdrawform', [PlayerController::class, 'profileWithdraw'])->name('player.withdraw');  
+        Route::post('/withdrawform', [PlayerController::class, 'submitWithdraw']);
+      
     });
 
     // Operator
@@ -59,11 +66,17 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/event', [OperatorController::class, 'eventList'])->name('operator.derby.event');
         Route::get('/event/lists', [OperatorController::class, 'getEvents']);
         Route::post('/event/create', [OperatorController::class, 'addNewEvent']);
+        
+        Route::get('/transaction/deposits', [OperatorController::class, 'getDepositTrans']);
+        Route::get('/transaction/withdrawals', [OperatorController::class, 'getWithdrawTrans']);
+        Route::post('/transaction/deposit', [OperatorController::class, 'processDeposit']);
+        Route::post('/transaction/withdraw', [OperatorController::class, 'processWithdraw']);
     });
 
     Route::get('/fight', [OperatorController::class, 'fight'])->name('operator.fight');
     Route::get('/transactions', [OperatorController::class, 'transactions'])->name('operator.transactions');
-    Route::get('/transaction/records', [OperatorController::class, 'getTransactions']);
+    
+
 
     // Bets
     Route::get('/bet/total', [BetController::class, 'getTotalBetAmountPerFight']);

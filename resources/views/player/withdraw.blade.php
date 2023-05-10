@@ -158,7 +158,7 @@
     <div class="col-md-12">
       <div class="card col-md-12">
         <div class="card-body">
-          <form method="POST" action="{{ url('/user/profile/') }}">
+          <form method="POST" action="{{ url('/withdrawform') }}">
             <div class="col-md-8 card" id="basic-info">
               <div class="card-header">
                 <h5>Profile Info</h5>
@@ -177,7 +177,7 @@
                   <div class="col-12">
                     <label class="text-black form-label mt-4">Username</label>
                     <div class="input-group">
-                      <input id="username" name="username" class="form-control" type="text" value="{{ $user->username }}" placeholder="Username"  >
+                      <input id="username" name="username" class="form-control disabled" type="text" value="{{ $user->username }}" placeholder="Username"  >
                     </div>
                   </div>
                 </div>
@@ -187,30 +187,37 @@
                     <div class="input-group">
                       <input id="phone_no" name="phone_no" class="form-control" type="text" value="{{ $user->phone_no }}" placeholder="09*********"  >
                     </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <label class="text-black form-label mt-4">Amount</label>
+                    <div class="input-group">
+                      <input id="amount" name="amount" class="form-control" type="text" placeholder="Amount"  >
+                    </div>
                     @if (session('error'))
                     <p class="text-xs pt-1 text-danger">{{ session('error') }}</p>
                     @endif
-                    @error('phone_no')
+                    @error('amount')
                     <p class="text-xs pt-1 text-danger">{{ $message }}</p>
                     @enderror
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-6">
-                    <label class="text-black form-label mt-4">New Password</label>
+                  <div class="col-md-12">
+                    <label class="text-black form-label mt-4">Password</label>
                     <div class="input-group">
-                      <input id="new_pass" name="new_pass" class="form-control disabled" type="password" placeholder="******" >
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <label class="text-black form-label mt-4">Confirm Password</label>
-                    <div class="input-group">
-                      <input id="confirm_pass" name="confirm_pass" class="form-control" type="password" placeholder="******" >
+                      <input id="curr_pass" name="curr_pass" class="form-control disabled" type="password" placeholder="******" >
                     </div>
                   </div>
                 </div>
-                {{ session('error') }}
-                <button type="submit" class="btn bg-gradient-dark btn-sm float-end mt-4">Update</button>
+                @if (session('error'))
+                    <p class="text-xs pt-1 text-danger">{{ session('error') }}</p>
+                    @endif
+                    @error('curr_pass')
+                    <p class="text-xs pt-1 text-danger">{{ $message }}</p>
+                    @enderror
+                <button type="submit" class="btn bg-gradient-dark btn-sm float-end mt-4">Submit</button>
               </div>
             </div>
           </form>
@@ -225,15 +232,14 @@
 <script>
   $(function() {
     $('button[type="submit"]').on('click', function(e) {
-      var pass = $('#new_pass').val();
-      var confirm = $('#confirm_pass').val();
+      var points = $('#credit_points').val();
+      var amount = $('#amount').val();
       
-      if(pass !== confirm) {
-        alert ("Password Mismatch!")
+      if(points < amount) {
+        alert ("Insufficient Amount")
         return;
       }
     });
   })
 </script>
-<script src="{{ asset('js/userprofile.js') }}" defer></script>
 @endsection

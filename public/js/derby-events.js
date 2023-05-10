@@ -51,38 +51,38 @@ $(document).ready(function () {
   });
 
   $('#time-start').val(moment().format('HH:mm'));
-    $('#sched-date').val(moment().format('YYYY-MM-DD'));
+  $('#sched-date').val(moment().format('YYYY-MM-DD'));
 
-    $('#add-derby').on('click', function(e) {
-      if($('#event-name').val() == '') {
-        alert('Event Name is Required!');
-        $(this).focus();
-        return;
-      }
+  $('#add-derby').on('click', function(e) {
+    if($('#event-name').val() == '') {
+      alert('Event Name is Required!');
+      $(this).focus();
+      return;
+    }
 
-      e.preventDefault();
-      data = {
-        name: $('#event-name').val(),
-        schedule_date: $('#sched-date').val(),
-        schedule_time: $('#time-start').val()
-      }
+    e.preventDefault();
+    data = {
+      name: $('#event-name').val(),
+      schedule_date: $('#sched-date').val(),
+      schedule_time: $('#time-start').val()
+    }
 
-      $.ajax({
-        headers: {
+    $.ajax({
+      headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        type:'POST',
-        data: data,
-        url: '/event/create',
-        success: function(resp) {
-          console.log(resp);
-          eventsTable.ajax.reload();
-          alert('Event Fight Created!');
-        },
-        error: function(err) {
-          console.log(err);
-        }
-      })
+      },
+      type:'POST',
+      data: data,
+      url: '/event/create',
+      success: function(resp) {
+        console.log(resp);
+        eventsTable.ajax.reload();
+        alert('Event Fight Created!');
+      },
+      error: function(err) {
+        console.log(err);
+      }
     })
+  })
   
 });

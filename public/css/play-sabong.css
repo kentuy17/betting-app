@@ -128,6 +128,14 @@ body.bet-dark .bet-boxed-area {
   color: #eb6a61 !important;
 }
 
+.bet-meron {
+  color: #eb6a61 !important;
+}
+
+.bet-wala {
+  color: #0d6efd;
+}
+
 .bet-button-green-full {
   background: #0d6efd;
   color: #fff;
