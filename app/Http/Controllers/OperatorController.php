@@ -47,6 +47,7 @@ class OperatorController extends Controller
         $trans = Transactions::where('action','deposit')
             ->with('user')
             ->with('operator')
+            ->orderBy('id','desc')
             ->get();
             
         return response()->json([
@@ -58,16 +59,18 @@ class OperatorController extends Controller
     {
         try {
             $trans = Transactions::find($request->id);
-            $trans->status = 'completed';
+            $trans->status = $request->action == 'approve' ? 'completed' : 'failed';
             $trans->processedBy = Auth::user()->id;
             $trans->reference_code = $request->ref_code;
             $trans->amount = $request->amount;
+            $trans->note = $request->note;
             $trans->save();
 
-            $player = User::find($trans->user_id);
-            $player->points +=  $request->amount;
-            $player->save();
-
+            if($request->action == 'approve') {
+                $player = User::find($trans->user_id);
+                $player->points +=  $request->amount;
+                $player->save();
+            }
         } catch (\Exception $e) {
             return response()->json([
                 'msg' => $e->getMessage(),
@@ -86,11 +89,40 @@ class OperatorController extends Controller
         $trans = Transactions::where('action','withdraw')
             ->with('user')
             ->with('operator')
+            ->orderBy('id','desc')
             ->get();
             
         return response()->json([
             'data' => $trans
         ]);
+    }
+
+    public function processWithdraw(Request $request)
+    {
+        try {
+            $trans = Transactions::find($request->id);
+            $trans->status = $request->status == 'reject' ? 'failed' : 'completed';
+            $trans->processedBy = Auth::user()->id;
+            $trans->reference_code = $request->ref_code;
+            $trans->note = $request->note;
+            $trans->save();
+
+            if($request->action == 'approve') {
+                $player = User::find($trans->user_id);
+                $player->points -=  $trans->amount;
+                $player->save();
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'msg' => $e->getMessage(),
+                'status' => 'error',
+            ], 500);
+        }
+
+        return response()->json([
+            'msg' => 'Success!',
+            'status' => 'OK',
+        ], 200);
     }
 
     public function getEvents()

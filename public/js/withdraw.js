@@ -1,4 +1,7 @@
 var withdrawTable = $('#withdraw-trans-table');
+var wPending = 0;
+var unverified = 0;
+
 withdrawTable.DataTable({
   "ajax": '/transaction/withdrawals',
   "bPaginate": true,
@@ -30,7 +33,7 @@ withdrawTable.DataTable({
       "data": "amount"
     },
     {
-      "data": "mobile_number"
+      "data": "reference_code"
     },
     {
       "data": "created_at"
@@ -52,6 +55,24 @@ withdrawTable.DataTable({
   "createdRow": function( row, data, dataIndex){
     if( data.status ==  `pending`){
       $(row).css({"background-color":"var(--bs-red)"});
+      wPending++;
+    }
+
+    if( data.reference_code == null && data.status == 'completed') {
+      $(row).addClass('bg-warning');
+      unverified++;
+    }
+
+    if(wPending > 0) {
+      $('#badge-withdraw').show().text(wPending);
+    } else {
+      $('#badge-withdraw').hide().text(wPending);
+    }
+
+    if(unverified > 0) {
+      $('#badge-withdraw-unverified').show().text(unverified);
+    } else {
+      $('#badge-withdraw-unverified').hide().text(unverified);
     }
   }
 });
@@ -85,34 +106,74 @@ $('#withdraw-trans-table tbody').on('click', 'td.dt-control', function () {
     tr.removeClass('shown');
   } 
   else {
-    console.log(row.data());
     row.child(format(row.data())).show();
     tr.addClass('shown');
   }
 });
 
 withdrawTable.on('click', 'tbody td .view', async function() {
-  var id = $(this).data('id');
+  clearFields();
   var tr = $(this).closest('tr');
   var row = withdrawTable.DataTable().row(tr);
-  // console.log(id);
-  $('#modal-center').modal('show')
-  // $('.modal-body').text(id)
+  $('#withdraw-modal').modal('show')
   $('.modal-title').text(row.data().action.toUpperCase())
-  let storage = $('#trans-receipt').data('storage');
-  let imgSrc = '../img/image-not-found.png';
+  $('input#withdraw-id').val($(this).data('id'));
 
-  if(row.data().filename) {
-    imgSrc = row.data().filename;
-  } 
-
-  $('#trans-receipt').attr('src', storage+'/'+imgSrc);
-  
-
-  // withdrawTable.DataTable().ajax.reload();
+  if(row.data().status != 'pending') {
+    $('input[type="submit"]').prop('disabled', true)
+      .addClass('disabled');
+  } else {
+    $('input[type="submit"]').prop('disabled', false)
+      .removeClass('disabled');
+  }
 })
+
+$('#withdraw-form').on('click', 'input[type="submit"]',function(e) {
+  e.preventDefault();
+  axios.post('/transaction/withdraw', {
+    id: $('#withdraw-id').val(),
+    ref_code: $('#withdraw-ref-code').val(),
+    action: $('#withdraw-action').val(),
+    note: $('#withdraw-note').val(),
+  })
+  .then((res) => {
+    Swal.fire({
+      icon: 'success',
+      confirmButtonColor: 'green',
+      title: res.data.msg,
+      timer: 1500
+    }).then(() =>  {
+      $('#withdraw-modal').modal('hide')
+      clearFields();
+    });
+
+    withdrawTable.DataTable().ajax.reload();
+    wPending = 0, unverified = 0;
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+
+})
+
+$('#withdraw-action').on('change', function(e) {
+  e.preventDefault();
+  let action = $(this).val();
+  if(action == 'update' ) {
+    $('#withdraw-ref-code').prop('disabled',false);
+    $('input[type="submit"]').prop('disabled', false)
+      .removeClass('disabled');
+  }
+  else {
+    $('#withdraw-ref-code').prop('disabled',true);
+    $('input[type="submit"]').prop('disabled', true)
+      .addClass('disabled');
+  }
+});
 
 $('[data-dismiss="modal"]').on('click', function() {
-  $('#modal-center').modal('hide');
+  $('#withdraw-modal').modal('hide');
 })
+
+$('#badge-withdraw-unverified').tooltip().show()
 

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('transactions', function (Blueprint $table) {
             $table->string('reference_code')->after('action')->nullable();
+            $table->longText('note')->after('status')->nullable();
         });
     }
 
@@ -23,6 +24,7 @@ return new class extends Migration
     {
         Schema::table('transactions', function (Blueprint $table) {
             $table->dropColumn('reference_code');
+            $table->dropColumn('note');
         });
     }
 };

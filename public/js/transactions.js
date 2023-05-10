@@ -5,6 +5,8 @@ const TYPE = {
 }
 
 var transactionsTable = $('#deposit-trans-table');
+var pendingCount = 0;
+
 transactionsTable.DataTable({
   "ajax": '/transaction/deposits',
   "bPaginate": true,
@@ -58,11 +60,18 @@ transactionsTable.DataTable({
   "createdRow": function( row, data, dataIndex){
     if( data.status ==  `pending`){
       $(row).css({"background-color":"var(--bs-red)"});
+      pendingCount++;
+    }
+
+    if(pendingCount > 0) {
+      $('#badge-deposit').show().text(pendingCount);
+    } else {
+      $('#badge-deposit').hide().text(pendingCount);
     }
   }
 });
 
-function format(d) {
+function formatDeposit(d) {
   return (
     `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
       <tr>
@@ -77,9 +86,15 @@ function format(d) {
         <td>AMOUNT:</td>
         <td>${d.amount}</td>
       </tr>
+      <tr>
+        <td>NOTE:</td>
+        <td>${d.note}</td>
+      </tr>
     </table>`
   );
 }
+
+
 
 $('#deposit-trans-table tbody').on('click', 'td.dt-control', function () {
   var tr = $(this).closest('tr');
@@ -90,7 +105,7 @@ $('#deposit-trans-table tbody').on('click', 'td.dt-control', function () {
     tr.removeClass('shown');
   } 
   else {
-    row.child(format(row.data())).show();
+    row.child(formatDeposit(row.data())).show();
     tr.addClass('shown');
   }
 });
@@ -108,7 +123,7 @@ transactionsTable.on('click', 'tbody td .view', async function() {
     $('#trans-receipt').attr('src', storage+'/'+row.data().filename);
   }
 
-  if(row.data().status == 'completed') {
+  if(row.data().status != 'pending') {
     $('input[type="submit"]').prop('disabled', true)
       .addClass('disabled');
   } else {
@@ -117,23 +132,29 @@ transactionsTable.on('click', 'tbody td .view', async function() {
   }
 })
 
-$('#deposit-form').on('submit', function(e) {
+$('#deposit-form').on('click', 'input[type="submit"]',function(e) {
   e.preventDefault();
   axios.post('/transaction/deposit', {
     id: $('#trans-id').val(),
     amount: $('#trans-pts').val(),
-    ref_code: $('#ref-code').val()
-  }).then((res) => {
+    ref_code: $('#ref-code').val(),
+    action: $('#trans-action').val(),
+    note: $('#trans-note').val(),
+  })
+  .then((res) => {
     Swal.fire({
       icon: 'success',
       confirmButtonColor: 'green',
       title: res.data.msg,
       timer: 1500
-    }).then(() =>  {
+    })
+    .then(() =>  {
       $('#modal-center').modal('hide')
       clearFields();
     });
+
     transactionsTable.DataTable().ajax.reload();
+    pendingCount = 0;
   })
   .catch((err) => {
     console.log(err);
@@ -141,8 +162,22 @@ $('#deposit-form').on('submit', function(e) {
 
 })
 
+$('#trans-action').on('change', function(e) {
+  e.preventDefault();
+  let action = $(this).val();
+  if(action == 'reject') {
+    $('#trans-pts,#ref-code').prop('disabled',true);
+    $('#trans-note').parent().show()
+  }
+  else {
+    $('#trans-pts,#ref-code').prop('disabled',false);
+    $('#trans-note').parent().hide()
+  }
+});
+
 function clearFields() {
-  $('#trans-pts').val(''), $('#ref-code').val('')
+  $('#trans-pts').val(''), $('#ref-code').val(''), $('#trans-note').val(''),
+    $('#trans-action').val('approve'), $('#trans-note').parent().hide();
 }
 
 
