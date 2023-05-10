@@ -1,14 +1,9 @@
-const TYPE = {
-  pending: 'PENDING',
-  completed: 'COMPLETED',
-  failed: 'FAILED'
-}
+var withdrawTable = $('#withdraw-trans-table');
+var wPending = 0;
+var unverified = 0;
 
-var transactionsTable = $('#deposit-trans-table');
-var pendingCount = 0;
-
-transactionsTable.DataTable({
-  "ajax": '/transaction/deposits',
+withdrawTable.DataTable({
+  "ajax": '/transaction/withdrawals',
   "bPaginate": true,
   "bLengthChange": false,
   "bFilter": false,
@@ -38,7 +33,7 @@ transactionsTable.DataTable({
       "data": "amount"
     },
     {
-      "data": "mobile_number"
+      "data": "reference_code"
     },
     {
       "data": "created_at"
@@ -60,18 +55,30 @@ transactionsTable.DataTable({
   "createdRow": function( row, data, dataIndex){
     if( data.status ==  `pending`){
       $(row).css({"background-color":"var(--bs-red)"});
-      pendingCount++;
+      wPending++;
     }
 
-    if(pendingCount > 0) {
-      $('#badge-deposit').show().text(pendingCount);
+    if( data.reference_code == null && data.status == 'completed') {
+      $(row).addClass('bg-warning');
+      unverified++;
+    }
+
+    if(wPending > 0) {
+      $('#badge-withdraw').show().text(wPending);
     } else {
-      $('#badge-deposit').hide().text(pendingCount);
+      $('#badge-withdraw').hide().text(wPending);
+    }
+
+    if(unverified > 0) {
+      $('#badge-withdraw-unverified').show().text(unverified);
+    } else {
+      $('#badge-withdraw-unverified').hide().text(unverified);
     }
   }
 });
 
-function formatDeposit(d) {
+function format(d) {
+  // `d` is the original data object for the row
   return (
     `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
       <tr>
@@ -86,42 +93,31 @@ function formatDeposit(d) {
         <td>AMOUNT:</td>
         <td>${d.amount}</td>
       </tr>
-      <tr>
-        <td>NOTE:</td>
-        <td>${d.note}</td>
-      </tr>
     </table>`
   );
 }
 
-
-
-$('#deposit-trans-table tbody').on('click', 'td.dt-control', function () {
+$('#withdraw-trans-table tbody').on('click', 'td.dt-control', function () {
   var tr = $(this).closest('tr');
-  var row = transactionsTable.DataTable().row(tr);
+  var row = withdrawTable.DataTable().row(tr);
 
   if (row.child.isShown()) {
     row.child.hide();
     tr.removeClass('shown');
   } 
   else {
-    row.child(formatDeposit(row.data())).show();
+    row.child(format(row.data())).show();
     tr.addClass('shown');
   }
 });
 
-transactionsTable.on('click', 'tbody td .view', async function() {
+withdrawTable.on('click', 'tbody td .view', async function() {
   clearFields();
   var tr = $(this).closest('tr');
-  var row = transactionsTable.DataTable().row(tr);
-  $('#modal-center').modal('show')
+  var row = withdrawTable.DataTable().row(tr);
+  $('#withdraw-modal').modal('show')
   $('.modal-title').text(row.data().action.toUpperCase())
-  $('input#trans-id').val($(this).data('id'));
-
-  let storage = $('#trans-receipt').data('storage');
-  if(row.data().filename) {
-    $('#trans-receipt').attr('src', storage+'/'+row.data().filename);
-  }
+  $('input#withdraw-id').val($(this).data('id'));
 
   if(row.data().status != 'pending') {
     $('input[type="submit"]').prop('disabled', true)
@@ -132,14 +128,13 @@ transactionsTable.on('click', 'tbody td .view', async function() {
   }
 })
 
-$('#deposit-form').on('click', 'input[type="submit"]',function(e) {
+$('#withdraw-form').on('click', 'input[type="submit"]',function(e) {
   e.preventDefault();
-  axios.post('/transaction/deposit', {
-    id: $('#trans-id').val(),
-    amount: $('#trans-pts').val(),
-    ref_code: $('#ref-code').val(),
-    action: $('#trans-action').val(),
-    note: $('#trans-note').val(),
+  axios.post('/transaction/withdraw', {
+    id: $('#withdraw-id').val(),
+    ref_code: $('#withdraw-ref-code').val(),
+    action: $('#withdraw-action').val(),
+    note: $('#withdraw-note').val(),
   })
   .then((res) => {
     Swal.fire({
@@ -147,14 +142,13 @@ $('#deposit-form').on('click', 'input[type="submit"]',function(e) {
       confirmButtonColor: 'green',
       title: res.data.msg,
       timer: 1500
-    })
-    .then(() =>  {
-      $('#modal-center').modal('hide')
+    }).then(() =>  {
+      $('#withdraw-modal').modal('hide')
       clearFields();
     });
 
-    transactionsTable.DataTable().ajax.reload();
-    pendingCount = 0;
+    withdrawTable.DataTable().ajax.reload();
+    wPending = 0, unverified = 0;
   })
   .catch((err) => {
     console.log(err);
@@ -162,26 +156,24 @@ $('#deposit-form').on('click', 'input[type="submit"]',function(e) {
 
 })
 
-$('#trans-action').on('change', function(e) {
+$('#withdraw-action').on('change', function(e) {
   e.preventDefault();
   let action = $(this).val();
-  if(action == 'reject') {
-    $('#trans-pts,#ref-code').prop('disabled',true);
-    $('#trans-note').parent().show()
+  if(action == 'update' ) {
+    $('#withdraw-ref-code').prop('disabled',false);
+    $('input[type="submit"]').prop('disabled', false)
+      .removeClass('disabled');
   }
   else {
-    $('#trans-pts,#ref-code').prop('disabled',false);
-    $('#trans-note').parent().hide()
+    $('#withdraw-ref-code').prop('disabled',true);
+    $('input[type="submit"]').prop('disabled', true)
+      .addClass('disabled');
   }
 });
 
-function clearFields() {
-  $('#trans-pts').val(''), $('#ref-code').val(''), $('#trans-note').val(''),
-    $('#trans-action').val('approve'), $('#trans-note').parent().hide();
-}
-
-
 $('[data-dismiss="modal"]').on('click', function() {
-  $('#modal-center').modal('hide');
+  $('#withdraw-modal').modal('hide');
 })
+
+$('#badge-withdraw-unverified').tooltip().show()
 
