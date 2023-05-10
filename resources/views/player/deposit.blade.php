@@ -229,6 +229,7 @@
       <form action="{{ route('deposit.upload.post') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mt-3">
+          <input type="hidden" name="operator_id" value="{{$operators->users->id}}">
           <div class="limit-width m-auto">
             <div class="text-center mb-2">GCash No:</div>
             <div class="m-auto align-center">

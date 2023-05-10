@@ -21,6 +21,7 @@ class Transactions extends Model
         'status',
         'reference_code',
         'filename',
+        'note',
         'created_at',
         'updated_at'
     ];

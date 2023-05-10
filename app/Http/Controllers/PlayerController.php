@@ -89,6 +89,7 @@ class PlayerController extends Controller
                 'mobile_number' => $request->phone_no,
                 'filename' => $imageName,
                 'status' => 'pending',
+                'processedBy' => $request->operator_id,
             ]);
 
         } catch (\Exception $e) {

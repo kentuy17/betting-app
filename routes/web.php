@@ -70,6 +70,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/transaction/deposits', [OperatorController::class, 'getDepositTrans']);
         Route::get('/transaction/withdrawals', [OperatorController::class, 'getWithdrawTrans']);
         Route::post('/transaction/deposit', [OperatorController::class, 'processDeposit']);
+        Route::post('/transaction/withdraw', [OperatorController::class, 'processWithdraw']);
     });
 
     Route::get('/fight', [OperatorController::class, 'fight'])->name('operator.fight');

@@ -5,10 +5,13 @@
     <div class="col-md-12">
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="deposit-tab" data-bs-toggle="tab" data-bs-target="#deposit-panel" type="button" role="tab" aria-controls="deposit" aria-selected="true">Deposits</button>
+          <button class="nav-link active" id="deposit-tab" data-bs-toggle="tab" data-bs-target="#deposit-panel" type="button" role="tab" aria-controls="deposit" aria-selected="true">
+            Deposits <span id="badge-deposit" style="display: none;" class="badge bg-danger">0</span></button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="withdraw-tab" data-bs-toggle="tab" data-bs-target="#withdraw" type="button" role="tab" aria-controls="withdraw" aria-selected="false">Withdrawals</button>
+          <button class="nav-link" id="withdraw-tab" data-bs-toggle="tab" data-bs-target="#withdraw" type="button" role="tab" aria-controls="withdraw" aria-selected="false">
+            Withdrawals <span id="badge-withdraw" style="display: none;" class="badge bg-danger">0</span> 
+            <span id="badge-withdraw-unverified" data-bs-toggle="tooltip" title="Missing Ref-code" style="display: none;" class="badge bg-warning">4</span></button>
         </li>
       </ul>
       <div class="tab-content" id="myTabContent">
@@ -36,9 +39,9 @@
                 <th>#</th>
                 <th>Type</th>
                 <th>Player</th>
-                <th>Operator</th>
+                <th>Processed By</th>
                 <th>Amount</th>
-                <th>Mobile#</th>
+                <th>Ref Code</th>
                 <th>Date</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -51,7 +54,7 @@
     </div>
   </div>
 </div>
-<!-- Modal -->
+<!-- Deposit Modal -->
 <div class="modal fade" id="modal-center" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-top" role="document">
     <div class="modal-content">
@@ -67,17 +70,28 @@
           <div class="form-group align-center">
             <img id="trans-receipt" data-storage="{{ asset('storage/') }}" src="" alt="">
           </div>
-          <div class="form-group">
+          <div class="form-group mt-2">
             <label for="ref-code">Ref-code</label>
             <input type="text" class="form-control" required id="ref-code" placeholder="Ref-code">
           </div>
-          <div class="form-group">
+          <div class="form-group mt-2">
             <label for="trans-pts">Points</label>
             <input type="number" class="form-control" required id="trans-pts" placeholder="Points">
           </div>
+          <div class="form-group mt-2">
+            <label for="trans-action">Action</label>
+            <select name="trans-action" class="form-control" id="trans-action">
+              <option value="approve">APPROVE</option>
+              <option value="reject">REJECT</option>
+            </select>
+          </div>
+          <div class="form-group mt-2" style="display: none">
+            <label for="trans-note">Note:</label>
+            <textarea name="trans-note" class="form-control" id="trans-note" cols="30" rows="1"></textarea>
+          </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</a>
           <input type="submit" class="btn btn-primary bg-slate-900 btn-sm" value="Submit">
         </div>
       </form>
@@ -85,7 +99,44 @@
   </div>
 </div>
 
-
+<!-- Withdraw Modal -->
+<div class="modal fade" id="withdraw-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-top" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="withdraw-form" method="post">
+        <div class="modal-body">
+          <input type="hidden" name="withdraw-id" id="withdraw-id">
+          <div class="form-group mt-2">
+            <label for="withdraw-ref-code">Ref-code</label>
+            <input type="text" class="form-control" id="withdraw-ref-code" placeholder="Ref-code">
+          </div>
+          <div class="form-group mt-2">
+            <label for="withdraw-action">Action</label>
+            <select name="withdraw-action" class="form-control" id="withdraw-action">
+              <option value="approve">APPROVE</option>
+              <option value="reject">REJECT</option>
+              <option value="update">UPDATE</option>
+            </select>
+          </div>
+          <div class="form-group mt-2" style="display: none">
+            <label for="withdraw-note">Note:</label>
+            <textarea name="withdraw-note" class="form-control" id="withdraw-note" cols="30" rows="1"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</a>
+          <input type="submit" class="btn btn-primary bg-slate-900 btn-sm" value="Submit">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 @endsection
 @section('additional-scripts')
 {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
