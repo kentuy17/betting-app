@@ -157,3 +157,42 @@ img {
   background: #2c3f69;
   border-radius: 20px;
 }
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  border: 0 solid rgba(0, 0, 0, .2);
+  border-radius: .4375rem;
+  outline: 0;
+  box-shadow: 0 15px 35px rgba(50, 50, 93, .2), 0 5px 15px rgba(0, 0, 0, .17);
+  background: #272727 !important;
+  color: #ffffff !important;
+}
+
+.modal-header {
+  padding: 1.25rem;
+  border-bottom: 0 solid #e9ecef;
+  border-top-left-radius: .4375rem;
+  border-top-right-radius: .4375rem;
+}
+
+.modal-body {
+  position: relative;
+  padding: 1.5rem;
+  flex: 1 1 auto;
+  
+}
+
+.modal-footer {
+  display: flex;
+  padding: 1.25rem;
+  border-top: 0 solid #e9ecef;
+  border-bottom-right-radius: .4375rem;
+  border-bottom-left-radius: .4375rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+}
+

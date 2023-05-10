@@ -66,12 +66,15 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/event', [OperatorController::class, 'eventList'])->name('operator.derby.event');
         Route::get('/event/lists', [OperatorController::class, 'getEvents']);
         Route::post('/event/create', [OperatorController::class, 'addNewEvent']);
-        Route::post('/transactions/deposit/{post_id}', [UserController::class, 'updatePoints']);
+        
+        Route::get('/transaction/deposits', [OperatorController::class, 'getDepositTrans']);
+        Route::get('/transaction/withdrawals', [OperatorController::class, 'getWithdrawTrans']);
+        Route::post('/transaction/deposit', [OperatorController::class, 'processDeposit']);
     });
 
     Route::get('/fight', [OperatorController::class, 'fight'])->name('operator.fight');
     Route::get('/transactions', [OperatorController::class, 'transactions'])->name('operator.transactions');
-    Route::get('/transaction/records', [OperatorController::class, 'getTransactions']);
+    
 
 
     // Bets

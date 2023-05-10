@@ -19,6 +19,7 @@ class Transactions extends Model
         'processedBy',
         'mobile_number',
         'status',
+        'reference_code',
         'filename',
         'created_at',
         'updated_at'

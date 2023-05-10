@@ -86,7 +86,7 @@ class PlayerController extends Controller
             Transactions::create([
                 'user_id' => Auth::user()->id,
                 'action' => 'deposit',
-                'mobile_number' => $request->phone_number,
+                'mobile_number' => $request->phone_no,
                 'filename' => $imageName,
                 'status' => 'pending',
             ]);
