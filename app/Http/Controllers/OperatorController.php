@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\ModelHasRoles;
 use App\Models\Transactions;
 use App\Models\DerbyEvent;
+use App\Models\User;
 
 class OperatorController extends Controller
 {
@@ -41,9 +42,49 @@ class OperatorController extends Controller
         return view('operator.transactions');
     }
 
-    public function getTransactions()
+    public function getDepositTrans()
     {
-        $trans = Transactions::with('user')
+        $trans = Transactions::where('action','deposit')
+            ->with('user')
+            ->with('operator')
+            ->get();
+            
+        return response()->json([
+            'data' => $trans
+        ]);
+    }
+
+    public function processDeposit(Request $request)
+    {
+        try {
+            $trans = Transactions::find($request->id);
+            $trans->status = 'completed';
+            $trans->processedBy = Auth::user()->id;
+            $trans->reference_code = $request->ref_code;
+            $trans->amount = $request->amount;
+            $trans->save();
+
+            $player = User::find($trans->user_id);
+            $player->points +=  $request->amount;
+            $player->save();
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'msg' => $e->getMessage(),
+                'status' => 'error',
+            ], 500);
+        }
+        
+        return response()->json([
+            'msg' => 'Success!',
+            'status' => 'OK',
+        ], 200);
+    }
+
+    public function getWithdrawTrans()
+    {
+        $trans = Transactions::where('action','withdraw')
+            ->with('user')
             ->with('operator')
             ->get();
             
