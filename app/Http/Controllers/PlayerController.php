@@ -40,7 +40,10 @@ class PlayerController extends Controller
     {
         return view('player.bet-history');
     }
-
+    public function playerTransaction()
+    {
+        return view('player.player-transaction');
+    }
     public function deposit()
     {
         $user = Auth::user();
@@ -51,6 +54,17 @@ class PlayerController extends Controller
 
         return view('player.deposit', compact('user', 'operators'));
     }
+    public function getTransactionByPlayerController()
+    {
+        $trans = Transactions::where('user_id', Auth::user()->id)
+            ->with('user')
+            ->with('operator')
+            ->get();
+
+        return response()->json([
+              'data' => $trans,
+        ]);
+    }
 
     public function profileWithdraw()
     {
@@ -58,7 +72,6 @@ class PlayerController extends Controller
         return view('player.withdraw', compact('user'));
         //return view('users.userprofile');
     }
-
     public function depositSubmit(Request $request)
     {
         try {

@@ -57,7 +57,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/deposit', [PlayerController::class, 'depositSubmit'])->name('deposit.upload.post');
         Route::get('/withdrawform', [PlayerController::class, 'profileWithdraw'])->name('player.withdraw');  
         Route::post('/withdrawform', [PlayerController::class, 'submitWithdraw']);
-      
+        Route::get('/playertransaction', [PlayerController::class, 'playerTransaction'])->name('player.player-transaction');
     });
 
     // Operator
@@ -75,7 +75,7 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::get('/fight', [OperatorController::class, 'fight'])->name('operator.fight');
     Route::get('/transactions', [OperatorController::class, 'transactions'])->name('operator.transactions');
-    
+    Route::get('/player/transaction', [PlayerController::class, 'getTransactionByPlayerController']);
 
 
     // Bets
