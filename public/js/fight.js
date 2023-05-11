@@ -1,5 +1,4 @@
 $(function() {
-  // console.log('fuck yeah');
   const useState = (defaultValue) => {
     let value = defaultValue;
     const getValue = () => value
@@ -11,111 +10,11 @@ $(function() {
 
   const [fightStatus, setFightStatus] = useState('____');
 
-  $.ajax({
-    url: 'fight/current',
-    type: 'GET',
-    data: {},
-    success: async function(response){
-      await setFightNo(response.data.fight_no);
-      $('#fight-no').html(fightNo());
+  const [lastWinner, setLastWinner] = useState('');
 
-      if(response.data.status == 'C') {
-        await setFightStatus('CLOSED');
-        $('#done-fight').removeClass('disabled').prop('disabled',false);
-      }
+  const [lastPostion, setLastPosition] = useState('');
 
-      if(response.data.status == 'O') {
-        await setFightStatus('OPEN');
-      }
-
-      $('#fight-status').html(fightStatus());
-    }
-  });
-
-  function updateFightStatus(status,result=null) {
-    $.ajax({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      },
-      type:'POST',
-      data: {status:status, result:result},
-      url: '/fight/update-status',
-      success: async function(resp) {
-        if(status == 'C') {
-          await setFightStatus('CLOSED');
-        }
-  
-        if(status == 'O') {
-          await setFightStatus('OPEN');
-        }
-
-        if(status == 'D') {
-          await setFightStatus('____');
-          await setFightNo(resp.data.fight_no);
-          $('#fight-no').html(fightNo());
-        }
-  
-        $('#fight-status').html(fightStatus());
-      },
-      error: function (request, status, error) {
-        console.log(error);
-      }
-
-    })
-  }
-
-  $('#open-fight').on('click', function(e) {
-    e.preventDefault();
-    updateFightStatus('O');
-    $(this).addClass('disabled').prop('disabled',true);
-    $('#close-fight').removeClass('disabled').prop('disabled', false);
-  });
-
-  $('#close-fight').on('click', function(e) {
-    e.preventDefault();
-    updateFightStatus('C');
-    $(this).addClass('disabled').prop('disabled',true);
-    $('#open-fight').removeClass('disabled').prop('disabled', false);
-    $('#done-fight').removeClass('disabled').prop('disabled', false);
-  });
-
-  $('#done-fight').on('click', function(e) {
-    e.preventDefault();
-    Swal.fire({
-      title: 'RESULT:',
-      showCancelButton: true,
-      showCloseButton: false,
-      showDenyButton: true,
-      allowOutsideClick: false,
-      confirmButtonText: 'MERON',
-      confirmButtonColor: 'red',
-      denyButtonText: 'WALA',
-      denyButtonColor: 'blue',
-      cancelButtonText: 'DRAW',
-      allowEscapeKey: false
-    }).then((result) => {
-      if (result.isConfirmed) {
-        alert('MERON WINS')
-        return 'M';
-      } else if (result.isDenied) {
-        alert('WALA WINS');
-        return 'W';
-      } else {
-        alert('DRAW');
-        return 'D';
-      }
-    }).then((result) => {
-      updateFightStatus(done='D',result);
-    });
-
-    // 
-    // $(this).addClass('disabled').prop('disabled',true);
-    // $('#open-fight').removeClass('disabled').prop('disabled', false);
-    // $('#done-fight').removeClass('disabled').prop('disabled', false);
-
-  });
-
-  fetch('js/results.json') // change to ajax later
+  fetch('/fight/results') // change to ajax later
     .then((response) => response.json())
     .then((json) => {
       for (var j = 1; j <= 7; j++) {
@@ -151,6 +50,9 @@ $(function() {
           element.classList.add("circleCancelAll");
           element.innerHTML = dataArr[x-1][1];
         }
+        if(x == dataArr.length-1) {
+          setLastPosition({y:y,c:c});
+        }
         if(dataArr[x - 1][0] == dataArr[x][0]){
           if (y == 7){ 
             y = 1;
@@ -163,5 +65,53 @@ $(function() {
           c++;
         }
       }
+      getLastWinner(dataArr);
     });
+
+  function getLastWinner(dataArr) {
+    if(dataArr[dataArr.length-2][0] == 'Meron Wins') {
+      setLastWinner('M');
+    }
+
+    if(dataArr[dataArr.length-2][0] == 'Wala Wins') {
+      setLastWinner('W');
+    }
+
+    if(dataArr[dataArr.length-2][0] == 'Draw') {
+      setLastWinner('D');
+    }
+
+    if(dataArr[dataArr.length-2][0] == 'Cancelled') {
+      setLastWinner('C');
+    }    
+  }
+
+  window.Echo.channel('fight')
+  .listen('.fight', async (e)=>{
+    let prev = e.fight.prev;
+    if(prev) {
+      var pos, p;
+      if(lastWinner() == e.fight.prev.game_winner && lastPostion().y != 7) {
+        pos = $(`#tdBaccaratAllConsecutive-${lastPostion().y+1}${lastPostion().c}`)
+        p = {y:lastPostion().y+1, c:lastPostion().c}
+      } else {
+        pos = $(`#tdBaccaratAllConsecutive-1${lastPostion().c+1}`)
+        p = {y:1, c:lastPostion().c+1}
+      }
+
+      pos.html(e.fight.prev.fight_no);
+      if(e.fight.prev.game_winner == 'M') {
+        pos.addClass('circleRedAll')
+      } else if(e.fight.prev.game_winner == 'W') {
+        pos.addClass('circleBlueAll')
+      } else if(e.fight.prev.game_winner == 'D') {
+        pos.addClass('circleGreenAll')
+      } else{
+        pos.addClass('circleCancelAll')
+      }
+
+      setLastWinner(e.fight.prev.game_winner)
+      setLastPosition(p)
+    }
+  })
 });

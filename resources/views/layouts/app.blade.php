@@ -14,9 +14,9 @@
   <link href="{{ asset('css/fonts.css') }}" rel="stylesheet">
 
   <!-- Scripts -->
-  <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" type="text/css">
-  <link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap5.min.css') }}" type="text/css">
-  <link rel="stylesheet" href="{{ asset('css/sweetalert.min.css') }}"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" type="text/css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
 
@@ -122,11 +122,12 @@
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-md-12">
-            <div class="card border-none" style="background-color: #454d55 !important">
+            {{-- <div class="card border-none" style="background-color: #454d55 !important">
               <div class="card-body">
-                @yield('content')
+                
               </div>
-            </div>
+            </div> --}}
+            @yield('content')
           </div>
         </div>
       </div>

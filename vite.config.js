@@ -11,6 +11,7 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/js/app.js',
                 'resources/js/play-vue.js',
+                'resources/js/fight-vue.js',
             ],
             refresh: true,
         }),
