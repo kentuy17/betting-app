@@ -27,7 +27,10 @@ withdrawTable.DataTable({
       "data": "user.username"
     },
     {
-      "data": "operator.username"
+      "data": null,
+      render: (data) => {
+        return data.operator != null ? data.operator.username : "--";
+      }
     },
     {
       "data": "amount"

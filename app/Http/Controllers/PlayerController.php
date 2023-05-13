@@ -64,6 +64,7 @@ class PlayerController extends Controller
         $trans = Transactions::where('user_id', Auth::user()->id)
             ->with('user')
             ->with('operator')
+            ->orderBy('id','desc')
             ->get();
 
         return response()->json([
@@ -125,11 +126,34 @@ class PlayerController extends Controller
 
     public function withdrawSubmit(Request $request)
     {
-        $user = User::find(Auth::user()->id);
-        $user->points -=  $request->amount;
-        $user->save();
+        try {
+            $this->validate($request, [
+                'phone_no' => 'required',
+                'amount' => 'required',
+            ]);  
 
-        // return dd($user);
+            $user = User::find(Auth::user()->id);
+            if($user->points < $request->amount) {
+                return redirect()->back()
+                    ->with('danger', 'Insuficient points!');
+            }
+            
+            $user->points -=  $request->amount;
+            $user->save();
+
+            Transactions::create([
+                'user_id' => $user->id,
+                'amount' => $request->amount,
+                'mobile_number' => $request->phone_no,
+                'action' => 'withdraw',
+                'status' => 'pending',
+                'processedBy' => null,
+            ]);
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', $e->getMessage());
+        }
+
         return redirect()->back()->with('success', 'Withdraw Request Successful!');
     }
 
