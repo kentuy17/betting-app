@@ -70,6 +70,10 @@ class OperatorController extends Controller
                 $player = User::find($trans->user_id);
                 $player->points +=  $request->amount;
                 $player->save();
+
+                $operator = User::find(Auth::user()->id);
+                $operator->points +=  $request->amount;
+                $operator->save(); 
             }
         } catch (\Exception $e) {
             return response()->json([
@@ -111,6 +115,10 @@ class OperatorController extends Controller
                 $player = User::find($trans->user_id);
                 $player->points -=  $trans->amount;
                 $player->save();
+
+                $operator = User::find(Auth::user()->id);
+                $operator->points -=  $trans->amount;
+                $operator->save();
             }
         } catch (\Exception $e) {
             return response()->json([

@@ -40,16 +40,35 @@ class PlayerController extends Controller
     {
         return view('player.bet-history');
     }
-
+    public function playerTransaction()
+    {
+        return view('player.player-transaction');
+    }
     public function deposit()
     {
         $user = Auth::user();
+        $op = Auth::user()
+                ->where('active', 1)
+                ->Orderby('points')
+                ->first();
+
         $operators = ModelHasRoles::with('users')
-            ->where('role_id',3)
-            ->inRandomOrder()
-            ->first();
+                ->where('role_id',3)
+                ->where('model_id',$op->id)
+                ->first();
 
         return view('player.deposit', compact('user', 'operators'));
+    }
+    public function getTransactionByPlayerController()
+    {
+        $trans = Transactions::where('user_id', Auth::user()->id)
+            ->with('user')
+            ->with('operator')
+            ->get();
+
+        return response()->json([
+              'data' => $trans,
+        ]);
     }
 
     public function profileWithdraw()

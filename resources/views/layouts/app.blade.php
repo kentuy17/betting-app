@@ -129,6 +129,10 @@
             <a class="@if(Route::current()->getName() == 'player.bethistory') {{ 'active-nav' }} @endif md:pl-4 py-2 block" 
               href="{{ route('player.bethistory') }}">Bet History</a>
           </li>
+          <li>
+            <a class="@if(Route::current()->getName() == 'player.player-transaction') {{ 'active-nav' }} @endif md:pl-4 py-2 block" 
+              href="{{ route('player.player-transaction') }}">Transaction</a>
+          </li>
           @endif
           <li>
             <a id="navbarDropdown" class="md:p-4 py-2 block dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
