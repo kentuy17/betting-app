@@ -57,6 +57,9 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/deposit', [PlayerController::class, 'depositSubmit'])->name('deposit.upload.post');
         Route::get('/withdrawform', [PlayerController::class, 'profileWithdraw'])->name('player.withdraw');  
         Route::post('/withdrawform', [PlayerController::class, 'submitWithdraw']);
+
+        Route::get('/withdraw', [PlayerController::class, 'withdraw'])->name('withdraw');
+        Route::post('/withdraw', [PlayerController::class, 'withdrawSubmit'])->name('withdraw.submit');
       
     });
 

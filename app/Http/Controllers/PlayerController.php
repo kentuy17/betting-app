@@ -59,6 +59,11 @@ class PlayerController extends Controller
         //return view('users.userprofile');
     }
 
+    public function withdraw()
+    {
+        return view('player.withdraw-form');
+    }
+
     public function depositSubmit(Request $request)
     {
         try {
@@ -97,6 +102,16 @@ class PlayerController extends Controller
         }
 
         return redirect()->back()->with('success', 'Submitted Successfully!');
+    }
+
+    public function withdrawSubmit(Request $request)
+    {
+        $user = User::find(Auth::user()->id);
+        $user->points -=  $request->amount;
+        $user->save();
+
+        // return dd($user);
+        return redirect()->back()->with('success', 'Withdraw Request Successful!');
     }
 
     public function submitWithdraw(Request $request) 

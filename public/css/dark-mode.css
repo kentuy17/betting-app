@@ -186,7 +186,6 @@ img {
   position: relative;
   padding: 1.5rem;
   flex: 1 1 auto;
-  
 }
 
 .modal-footer {
@@ -199,4 +198,16 @@ img {
   align-items: center;
   justify-content: flex-end;
 }
-
+.navbar-badge {
+  font-size: .6rem;
+  font-weight: 300;
+  padding: 2px 4px;
+  position: absolute;
+  left: 9px;
+  bottom: 18px;
+}
+.dropdown-menu-lg {
+  max-width: 300px;
+  min-width: 280px;
+  padding: 0;
+}

@@ -1,62 +1,60 @@
 <template>
-  <div>
-    <div class="bet-boxed-area">
-      <div class="bet-bg-head flex flex-nowrap justify-between items-center">
-        <h6><b class="text-lg">FIGHT # </b> <b id="fight-no" class="text-lg">{{ fightNo }}</b></h6>
-        <div>POINTS: <a id="current-pts" href='/deposit' class="underline font-bold">{{formatMoney(player.points)}}</a></div>
-      </div>
-      <div class="text-center">
-        <span class="btn btn-block gradient-status-close btn-lg vue-components">{{message}}</span>
-      </div>
-      <!--  -->
-      <div class="row no-gutters">
-        <div class="col-md-6">
-          <div class="bet-buy-sell-form">
-            <!-- <p class="text-center text-xl"><b class="bet-meron">{{formatMoney(total.meron)}}</b></p> -->
-            <p class="text-center text-xl"><b class="bet-meron">{{ formatMoney(total.meron) }}</b></p>
-            <div class="bet-buy">
-              <div>
-                <p>PAYOUT: <span class="fright">{{ formatMoney(meronPercentage) }} = {{ formatMoney(meronWinAmount) }}</span></p>
-              </div>
-              <div class="text-center mt-3 mb-3 bet-up">
-              </div>
-              <div><button @click="addBet('M')" class="bet-button-red-full">MERON</button></div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="bet-buy-sell-form">
-            <p class="text-center text-xl"><b class="bet-wala">{{ formatMoney(total.wala) }}</b></p>
-            <div class="bet-sell">
-              <div>
-                <p>PAYOUT: <span class="fright">{{ formatMoney(walaPercentage) }} = {{ formatMoney(walaWinAmount) }}</span></p>
-              </div>
-              <div class="text-center mt-3 mb-3 bet-down">
-              </div>
-              <div><button @click="addBet('W')" class="bet-button-green-full">WALA</button></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-12">
-        <div class="input-group px-4 py-2" style="">
-          <input type="number" class="form-control bet-amount" v-model="betAmount" min="0">
-          <div class="input-group-append"> <button @click="clear" class="input-group-text">CLEAR</button> </div>
-        </div>
-      </div>
-      <div class="col-md-12">
-        <div class="amounts-bet-btn py-2 flex-wrap">
-          <button 
-            v-for="(amnt, index) in amounts" 
-            v-bind:key="index" 
-            @click="betManual(amnt)" 
-            class="btn btn-success btn-sm m-1">
-            {{ amnt }}
-          </button>
-        </div>
-      </div>
-
+  <div class="card bet-boxed-area">
+    <div class="bet-bg-head flex flex-nowrap justify-between items-center">
+      <h6><b class="text-lg">FIGHT # </b> <b id="fight-no" class="text-lg">{{ fightNo }}</b></h6>
+      <div>POINTS: <a id="current-pts" href='/deposit' class="underline font-bold">{{formatMoney(player.points)}}</a></div>
     </div>
+    <div class="text-center">
+      <span class="btn btn-block gradient-status-close btn-lg vue-components">{{message}}</span>
+    </div>
+    <!--  -->
+    <div class="row no-gutters">
+      <div class="col-md-6">
+        <div class="bet-buy-sell-form">
+          <!-- <p class="text-center text-xl"><b class="bet-meron">{{formatMoney(total.meron)}}</b></p> -->
+          <p class="text-center text-xl"><b class="bet-meron">{{ formatMoney(total.meron) }}</b></p>
+          <div class="bet-buy">
+            <div>
+              <p>PAYOUT: <span class="fright">{{ formatMoney(meronPercentage) }} = {{ formatMoney(meronWinAmount) }}</span></p>
+            </div>
+            <div class="text-center mt-3 mb-3 bet-up">
+            </div>
+            <div><button @click="addBet('M')" class="bet-button-red-full">MERON</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="bet-buy-sell-form">
+          <p class="text-center text-xl"><b class="bet-wala">{{ formatMoney(total.wala) }}</b></p>
+          <div class="bet-sell">
+            <div>
+              <p>PAYOUT: <span class="fright">{{ formatMoney(walaPercentage) }} = {{ formatMoney(walaWinAmount) }}</span></p>
+            </div>
+            <div class="text-center mt-3 mb-3 bet-down">
+            </div>
+            <div><button @click="addBet('W')" class="bet-button-green-full">WALA</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="input-group px-4 py-2" style="">
+        <input type="number" class="form-control bet-amount" v-model="betAmount" min="0">
+        <div class="input-group-append"> <button @click="clear" class="input-group-text">CLEAR</button> </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="amounts-bet-btn py-2 flex-wrap">
+        <button 
+          v-for="(amnt, index) in amounts" 
+          v-bind:key="index" 
+          @click="betManual(amnt)" 
+          class="btn btn-success btn-sm m-1">
+          {{ amnt }}
+        </button>
+      </div>
+    </div>
+
   </div>
 </template>
 
