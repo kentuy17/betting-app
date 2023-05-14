@@ -40,16 +40,36 @@ class PlayerController extends Controller
     {
         return view('player.bet-history');
     }
-
+    public function playerTransaction()
+    {
+        return view('player.player-transaction');
+    }
     public function deposit()
     {
         $user = Auth::user();
+        $op = Auth::user()
+                ->where('active', 1)
+                ->Orderby('points')
+                ->first();
+
         $operators = ModelHasRoles::with('users')
-            ->where('role_id',3)
-            ->inRandomOrder()
-            ->first();
+                ->where('role_id',3)
+                ->where('model_id',$op->id)
+                ->first();
 
         return view('player.deposit', compact('user', 'operators'));
+    }
+    public function getTransactionByPlayerController()
+    {
+        $trans = Transactions::where('user_id', Auth::user()->id)
+            ->with('user')
+            ->with('operator')
+            ->orderBy('id','desc')
+            ->get();
+
+        return response()->json([
+              'data' => $trans,
+        ]);
     }
 
     public function profileWithdraw()
@@ -57,6 +77,11 @@ class PlayerController extends Controller
         $user = Auth::user();
         return view('player.withdraw', compact('user'));
         //return view('users.userprofile');
+    }
+
+    public function withdraw()
+    {
+        return view('player.withdraw-form');
     }
 
     public function depositSubmit(Request $request)
@@ -97,6 +122,39 @@ class PlayerController extends Controller
         }
 
         return redirect()->back()->with('success', 'Submitted Successfully!');
+    }
+
+    public function withdrawSubmit(Request $request)
+    {
+        try {
+            $this->validate($request, [
+                'phone_no' => 'required',
+                'amount' => 'required',
+            ]);  
+
+            $user = User::find(Auth::user()->id);
+            if($user->points < $request->amount) {
+                return redirect()->back()
+                    ->with('danger', 'Insuficient points!');
+            }
+            
+            $user->points -=  $request->amount;
+            $user->save();
+
+            Transactions::create([
+                'user_id' => $user->id,
+                'amount' => $request->amount,
+                'mobile_number' => $request->phone_no,
+                'action' => 'withdraw',
+                'status' => 'pending',
+                'processedBy' => null,
+            ]);
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'Withdraw Request Successful!');
     }
 
     public function submitWithdraw(Request $request) 

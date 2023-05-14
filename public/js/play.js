@@ -1,5 +1,4 @@
 $(function() {
-  // console.log('fuck yeah');
   const useState = (defaultValue) => {
     let value = defaultValue;
     const getValue = () => value
@@ -14,31 +13,6 @@ $(function() {
   const [lastWinner, setLastWinner] = useState('');
 
   const [lastPostion, setLastPosition] = useState('');
-
-  // $.ajax({
-  //   url: 'fight/current',
-  //   type: 'GET',
-  //   data: {},
-  //   success: async function(response){
-  //     var statusDiv = $('#player-fight-status').removeClass('gradient-status-open gradient-status-close');
-  //     await setFightNo(response.data.fight_no);
-  //     $('#fight-no').html(fightNo());
-
-  //     if(response.data.status == 'C') {
-  //       await setFightStatus('CLOSED');
-  //       statusDiv.addClass('gradient-status-close');
-  //       $('#done-fight').removeClass('disabled').prop('disabled',false);
-  //     }
-
-  //     if(response.data.status == 'O') {
-  //       await setFightStatus('OPEN');
-  //       statusDiv.addClass('gradient-status-open')
-  //     }
-
-  //     statusDiv.html(fightStatus());
-  //     $('#fight-status').html(fightStatus());
-  //   }
-  // });
 
   $('#done-fight').on('click', function(e) {
     e.preventDefault();
@@ -69,11 +43,6 @@ $(function() {
       updateFightStatus(done='D',result);
     });
 
-    // 
-    // $(this).addClass('disabled').prop('disabled',true);
-    // $('#open-fight').removeClass('disabled').prop('disabled', false);
-    // $('#done-fight').removeClass('disabled').prop('disabled', false);
-
   });
 
   fetch('/fight/results') // change to ajax later
@@ -93,9 +62,7 @@ $(function() {
       var c = 1;
       for (var x = 1; x < dataArr.length; x++) {
         var element = document.getElementById("tdBaccaratAllConsecutive-" + y + c);
-        if (!element) {
-          return;
-        }
+        if (!element) return;
         if (dataArr[x - 1][0] == 'Meron Wins') {
           element.classList.add("circleRedAll");
           element.innerHTML = dataArr[x-1][1];
@@ -112,18 +79,14 @@ $(function() {
           element.classList.add("circleCancelAll");
           element.innerHTML = dataArr[x-1][1];
         }
-
         if(x == dataArr.length-1) {
           setLastPosition({y:y,c:c});
         }
-
         if(dataArr[x - 1][0] == dataArr[x][0]){
-          if (y == 7){ 
-            y = 1;
-            c++;
-          } else {
+          if (y == 7)
+            y = 1, c++;
+          else
             y = y + 1;
-          }
         } else {
           y = 1;
           c++;
@@ -155,7 +118,7 @@ $(function() {
     let prev = e.fight.prev;
     if(prev) {
       var pos, p;
-      if(lastWinner() == e.fight.prev.game_winner) {
+      if(lastWinner() == e.fight.prev.game_winner && lastPostion().y != 7) {
         pos = $(`#tdBaccaratAllConsecutive-${lastPostion().y+1}${lastPostion().c}`)
         p = {y:lastPostion().y+1, c:lastPostion().c}
       } else {

@@ -14,9 +14,9 @@
   <link href="{{ asset('css/fonts.css') }}" rel="stylesheet">
 
   <!-- Scripts -->
-  <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" type="text/css">
-  <link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap5.min.css') }}" type="text/css">
-  <link rel="stylesheet" href="{{ asset('css/sweetalert.min.css') }}"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" type="text/css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
 
@@ -46,21 +46,60 @@
       inset:unset !important;
       transform: none !important;
     }
+    @media (max-width:767.98px){
+      #site-name {
+        display: none;
+      }
+      .logo-container {
+        align-content: center;
+      }
+      #notif-nav {
+        display: block !important; 
+      }
+
+    }
   </style>
 
 </head>
 <body class="dark-mode">
   <header>
     <nav class="flex flex-wrap items-center justify-between w-full py-2 md:py-0 px-4 text-lg text-gray-700 bg-white">
-      <div >
-        <a href="{{ url('/') }}" class="logo-container" class="flex">
-          <img class="icon-logo" src="{{ asset('img/sabong-aficionado-icon.png') }}" alt="Sabong Aficionado">
-          <p class="pl-2 font-medium font-mono text-xl">SABONG AFICIONADO</p>
-        </a>
-      </div>
       <svg xmlns="http://www.w3.org/2000/svg" id="menu-button" class="h-6 w-6 cursor-pointer md:hidden block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
       </svg>
+      <div >
+        <a href="{{ url('/') }}" class="logo-container" class="flex">
+          <img class="icon-logo" src="{{ asset('img/sabong-aficionado-icon.png') }}" alt="Sabong Aficionado">
+          <p id="site-name" class="pl-2 font-medium font-mono text-xl">SABONG AFICIONADO</p>
+        </a>
+      </div>
+      <div class="nav-item dropdown" id="notif-nav" style="display: none">
+        <a class="nav-link" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+          <i class="far fa-bell"></i>
+          <span class="badge bg-danger navbar-badge">15</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right hide" style="left: inherit; right: 0px;">
+          <span class="dropdown-item dropdown-header">15 Notifications</span>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-envelope mr-2"></i> 4 new messages
+            <span class="float-right text-muted text-sm">3 mins</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-users mr-2"></i> 8 friend requests
+            <span class="float-right text-muted text-sm">12 hours</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-file mr-2"></i> 3 new reports
+            <span class="float-right text-muted text-sm">2 days</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+        </div>
+
+      </div>
       <div class="hidden w-full md:flex md:items-center md:w-auto" id="menu">
         <ul class="text-base md:flex md:justify-between md:pt-0 uppercase">
           @guest
@@ -90,6 +129,10 @@
             <a class="@if(Route::current()->getName() == 'player.bethistory') {{ 'active-nav' }} @endif md:pl-4 py-2 block" 
               href="{{ route('player.bethistory') }}">Bet History</a>
           </li>
+          <li>
+            <a class="@if(Route::current()->getName() == 'player.player-transaction') {{ 'active-nav' }} @endif md:pl-4 py-2 block" 
+              href="{{ route('player.player-transaction') }}">Transaction</a>
+          </li>
           @endif
           <li>
             <a id="navbarDropdown" class="md:p-4 py-2 block dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -98,15 +141,16 @@
             <div class="dropdown-menu dropdown-menu-end" id="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="@if(Route::current()->getName() == 'users.profile') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" 
               href="{{ route('users.profile') }}">My Profile</a>
+              @if (session('role') == 'Player')
               <a class="@if(Route::current()->getName() == 'deposit') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" 
                 href="{{ route('deposit') }}">Deposit</a>
-              <a class="@if(Route::current()->getName() == 'player.withdraw') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" 
-              href="{{ route('player.withdraw') }}">Withdraw</a>
+              <a class="@if(Route::current()->getName() == 'withdraw') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" 
+              href="{{ route('withdraw') }}">Withdraw</a>
+              @endif
               <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); 
                 document.getElementById('logout-form').submit();">
                 {{ __('Logout') }}
               </a>
-  
               <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                 @csrf
               </form>
@@ -118,15 +162,11 @@
     </nav>
   </header>
   <div id="app">
-    <main class="py-4">
+    <main class="py-2">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-md-12">
-            <div class="card border-none" style="background-color: #454d55 !important">
-              <div class="card-body">
-                @yield('content')
-              </div>
-            </div>
+            @yield('content')
           </div>
         </div>
       </div>

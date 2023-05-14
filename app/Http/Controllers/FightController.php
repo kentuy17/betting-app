@@ -165,7 +165,7 @@ class FightController extends Controller
                 $update->win_amount = $bet->amount * $percentage / 100;
                 $update->save();
 
-                $user = User::find(Auth::user()->id);
+                $user = User::find($bet->user_id);
                 $user->points += $bet->amount * $percentage / 100;
                 $user->save();
 

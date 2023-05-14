@@ -5,26 +5,23 @@
 @endsection
 
 @section('content')
-<div class="container" id="play-container">
-  <div class="row justify-content-center">
-    <div class="row col-12">
-      <!-- Video Player -->
-      <div class="col-md-6 sm:mb-2">
-        <div class="bet-bg-head font-bold">x100 Exp.</div>
-        <video width="100%">
-          <source src="{{ asset('videos/e-sabong.mp4') }}" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </div>
-
-      <!-- Betting Vue Component -->
-      <div id="betting-component" class="col-md-6"></div>
+<div class="container p-0 flex flex-row flex-wrap" id="play-container">
+  <div class="col-md-6 ">
+    <div class="card mb-2">
+      <div class="bet-bg-head font-bold">x100 Exp.</div>
+      <video width="100%">
+        <source src="{{ asset('videos/e-sabong.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
     </div>
-
   </div>
+
+  <!-- Betting Vue Component -->
+  <div id="betting-component" class="col-md-6"></div>
+
+  <!-- Results -->
   <div class="card col-md-12 mt-3">
     <div class="card-header font-bold">RESULTS</div>
-
     <div class="results">
       <div class="bet-result-chart">
         <table id="tblBaccaratResultConsecutive" class="cell-border w-100 dataTable no-footer">
