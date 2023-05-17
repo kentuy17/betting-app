@@ -9,23 +9,19 @@
 <div class="container p-0 flex flex-row flex-wrap" id="play-container">
   <div class="col-md-6 ">
     <div class="card mb-2">
-      <div class="bet-bg-head font-bold">{{ $fight->name }}</div>
-      {{-- <video width="100%" autoplay>
-        <source src="{{ asset('videos/e-sabong.mp4') }}" type="video/mp4">
-        Your browser does not support the video tag.
-      </video> --}}
-      <video
-        id="my-video"
-        class="video-js"
-        controls
-        preload="auto"
-        width="1280"
-        height="720"
-        data-setup="{}"
-      >
-        <source src="https://172.104.46.120:8080/hls/mystream.m3u8" type="application/x-mpegURL" res="9999" label="auto" />
-        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
-      </video>
+      <div class="embed-responsive">
+        <div class="bet-bg-head font-bold">{{ $fight->name }}</div>
+        <video
+          id="my-video"
+          class="video-js"
+          controls
+          preload="auto"
+          data-setup="{}"
+        >
+          <source src="{{ asset('storage/hls/mystream.m3u8') }} " type="application/x-mpegURL" res="9999" label="auto" />
+          <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+        </video>
+      </div>
     </div>
   </div>
 
