@@ -23,7 +23,7 @@
         height="720"
         data-setup="{}"
       >
-        <source src="http://139.162.3.107:8080/hls/mystream.m3u8" type="application/x-mpegURL" res="9999" label="auto" />
+        <source src="https://172.104.46.120:8080/hls/mystream.m3u8" type="application/x-mpegURL" res="9999" label="auto" />
         <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
       </video>
     </div>
