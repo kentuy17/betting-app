@@ -60,5 +60,6 @@
 
 @section('additional-scripts')
 @vite('resources/js/fight-vue.js')
-<script src="{{ asset('js/fight.js') }}" defer></script>
+@vite('public/js/fight.js')
+{{-- <script src="{{ asset('js/fight.js') }}" defer></script> --}}
 @endsection
