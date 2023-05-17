@@ -94,7 +94,7 @@ export default {
       .then(resp => resp.json())
       .then(json => {
         this.fight = json.current
-        console.log(json, 'json');
+        // console.log(json, 'json');
         this.message = this.setFightStatus(json.current)
         this.player.points = json.points
         this.player.id = json.id

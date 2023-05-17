@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DerbyEvent;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,11 @@ class PlayerController extends Controller
     public function index(): View
     {
         $role = $this->getUserRole();
-        return view('player.play', compact('role'));
+        $fight = DerbyEvent::where('status','ACTIVE')
+            ->orderBy('id','desc')
+            ->first();
+
+        return view('player.play', compact('role','fight'));
     }
 
     public function bethistory()
