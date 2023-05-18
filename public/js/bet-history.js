@@ -7,8 +7,8 @@ $(document).ready(function () {
 
     const WINNER = {
       P: 'PENDING',
-      W: 'WALA',
-      M: 'MERON',
+      W: 'WIN',
+      L: 'LOSE',
       D: 'DRAW',
       C: 'CANCELLED'
     }
