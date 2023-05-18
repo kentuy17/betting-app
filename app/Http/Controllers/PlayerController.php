@@ -13,6 +13,7 @@ use App\Models\Transactions;
 use \Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Response as FacadeResponse;
 
 class PlayerController extends Controller
 {
@@ -207,5 +208,17 @@ class PlayerController extends Controller
         }
 
         return redirect('/withdrawform')->with('success', 'Submitted Successfully!');
+    }
+
+    public function video()
+    {
+        $video = Storage::disk('local')->get("hls/mystream.m3u8");
+        $response = FacadeResponse::make($video, 200);
+        $response->header('Content-Type', 'video/mp4');
+        $response->header('Access-Control-Allow-Origin', '*');
+        $response->header('Access-Control-Allow-Headers', 'Origin');
+        $response->header('Access-Control-Allow-Methods', '*');
+
+        return $response;
     }
 }

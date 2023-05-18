@@ -63,7 +63,7 @@
 </head>
 <body class="dark-mode">
   <header>
-    <nav class="flex flex-wrap items-center justify-between w-full py-2 md:py-0 px-4 text-lg text-gray-700 bg-white">
+    <nav class="flex flex-wrap items-center justify-between w-full py-1 md:py-0 px-4 text-lg text-gray-700 bg-white">
       <svg xmlns="http://www.w3.org/2000/svg" id="menu-button" class="h-6 w-6 cursor-pointer md:hidden block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
       </svg>
@@ -162,14 +162,15 @@
     </nav>
   </header>
   <div id="app">
-    <main class="py-2">
-      <div class="container">
+    <main>
+      @yield('content')
+      {{-- <div class="container">
         <div class="row justify-content-center">
           <div class="col-md-12">
-            @yield('content')
+            
           </div>
         </div>
-      </div>
+      </div> --}}
     </main>
 
   </div>

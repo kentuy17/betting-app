@@ -93,4 +93,6 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/fight/current', [FightController::class, 'getCurrentFight']);
     Route::get('/fight/results', [FightController::class, 'fightResults']);
 
+    Route::get('/video', [PlayerController::class, 'video']);
+
 });
