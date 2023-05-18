@@ -17,7 +17,7 @@
                 <th>WIN AMOUNT</th>
                 <th>PERCENT %</th>
                 <th>DATE</th>
-                <th>WINNER</th>
+                <th>STATUS</th>
               </tr>
             </thead>
           </table>

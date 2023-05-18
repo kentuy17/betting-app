@@ -1,60 +1,70 @@
 <template>
-  <div class="card bet-boxed-area">
-    <div class="bet-bg-head flex flex-nowrap justify-between items-center">
+  <div class="card bet-boxed-area mb-1">
+    <div class="bet-bg-head items-center grid grid-cols-3">
       <h6><b class="text-lg">FIGHT # </b> <b id="fight-no" class="text-lg">{{ fightNo }}</b></h6>
-      <div>POINTS: <a id="current-pts" href='/deposit' class="underline font-bold">{{formatMoney(player.points)}}</a></div>
+      <div class="text-center"><span class="btn btn-block btn-sm gradient-status-close btn-lg vue-components">{{ message
+      }}</span></div>
+      <div>POINTS: <a id="current-pts" href="/deposit" class="underline font-bold">{{ formatMoney(player.points) }}</a>
+      </div>
     </div>
-    <div class="text-center">
-      <span class="btn btn-block gradient-status-close btn-lg vue-components">{{message}}</span>
-    </div>
-    <!--  -->
-    <div class="row no-gutters">
-      <div class="col-md-6">
-        <div class="bet-buy-sell-form">
-          <!-- <p class="text-center text-xl"><b class="bet-meron">{{formatMoney(total.meron)}}</b></p> -->
-          <p class="text-center text-xl"><b class="bet-meron">{{ formatMoney(total.meron) }}</b></p>
-          <div class="bet-buy">
+    <div class="m-2">
+      <div class="grid grid-cols-2">
+        <div class="border justify-center items-center flex bg-meroncolor">
+          <h3 class="bet-button-red-full">MERON</h3></div>
+        <div class="border justify-center items-center flex bg-walacolor">
+          <h3 class="bet-button-blue-full">WALA</h3></div>
+      </div>
+      <div class="grid grid-cols-2 bg-os_bg">
+        <div class="px-2 py-1 border border-black">
+          <div>
+            <h3 class="font-bold text-center m-2 font-tally">{{ formatMoney(total.meron) }}</h3>
+            <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT = {{ formatMoney(meronPercentage) }}</h3>
             <div>
-              <p>PAYOUT: <span class="fright">{{ formatMoney(meronPercentage) }} = {{ formatMoney(meronWinAmount) }}</span></p>
+              <div class="flex justify-center items-center">
+                <h3 class="font-bold text-drawcolor text-center text-sm">{{ formatMoney(meronWinAmount) }}</h3>
+              </div>
             </div>
-            <div class="text-center mt-3 mb-3 bet-up">
+          </div>
+        </div>
+        <div class="px-2 py-1 border border-black">
+          <div>
+            <h3 class="font-bold text-center m-2 font-tally">{{ formatMoney(total.wala) }}</h3>
+            <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT = {{ formatMoney(walaPercentage) }}</h3>
+            <div>
+              <div class="flex justify-center items-center">
+                <h3 class="font-bold text-drawcolor text-center text-sm">{{ formatMoney(walaWinAmount) }}</h3>
+              </div>
             </div>
-            <div><button @click="addBet('M')" class="bet-button-red-full">MERON</button></div>
           </div>
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="bet-buy-sell-form">
-          <p class="text-center text-xl"><b class="bet-wala">{{ formatMoney(total.wala) }}</b></p>
-          <div class="bet-sell">
-            <div>
-              <p>PAYOUT: <span class="fright">{{ formatMoney(walaPercentage) }} = {{ formatMoney(walaWinAmount) }}</span></p>
-            </div>
-            <div class="text-center mt-3 mb-3 bet-down">
-            </div>
-            <div><button @click="addBet('W')" class="bet-button-green-full">WALA</button></div>
-          </div>
-        </div>
-      </div>
+    </div>
+    <div class="grid grid-cols-2 bg-os_bg">
+    <div class="px-1 py-1">
+      <button type="button" color="#00D7E7" @click="addBet('M')" class="button text-ellipsis overflow-clip uppercase bg-os_meron_btn text-sm font-bold is-info is-fullwidth">
+        <i class="fa-solid fa-circle-plus text-sm mr-1"></i> BET MERON</button>
+    </div>
+    <div class="px-1 py-1">
+      <button type="button" color="#00D7E7" @click="addBet('W')" class="button text-ellipsis overflow-clip uppercase bg-os_wala_btn text-sm font-bold is-info is-fullwidth">
+        <i class="fa-solid fa-circle-plus text-sm mr-1"></i> BET WALA</button>
+    </div>
     </div>
     <div class="col-md-12">
-      <div class="input-group px-4 py-2" style="">
-        <input type="number" class="form-control bet-amount" v-model="betAmount" min="0">
-        <div class="input-group-append"> <button @click="clear" class="input-group-text">CLEAR</button> </div>
+      <div class="input-group px-4 py-2"><input type="number" v-model='betAmount' class="form-control bet-amount" min="0">
+        <div class="input-group-append">
+          <button @click='clear' class="input-group-text">CLEAR</button></div>
       </div>
     </div>
     <div class="col-md-12">
       <div class="amounts-bet-btn py-2 flex-wrap">
-        <button 
-          v-for="(amnt, index) in amounts" 
+        <button v-for="(amnt, index) in amounts" 
           v-bind:key="index" 
-          @click="betManual(amnt)" 
+          @click="betManual(amnt)"
           class="btn btn-success btn-sm m-1">
           {{ amnt }}
         </button>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -99,11 +109,11 @@ export default {
         this.player.points = json.points
         this.player.id = json.id
         this.total = json.bets,
-        this.player.bets = json.player
+          this.player.bets = json.player
       })
       .then(() => {
-        window.Echo.private('user.'+this.player.id)
-          .listen('Result', async (e)=>{
+        window.Echo.private('user.' + this.player.id)
+          .listen('Result', async (e) => {
             console.log(e);
             alert('Congratulations! You win ' + e.bet.win_amount)
             this.player.points += e.bet.win_amount
@@ -111,32 +121,32 @@ export default {
       })
 
     window.Echo.channel('fight')
-      .listen('.fight', async (e)=>{
+      .listen('.fight', async (e) => {
         // console.log(e);
-        if(e == null) return
+        if (e == null) return
 
-        if(e.fight.curr) {
+        if (e.fight.curr) {
           this.fight = e.fight.curr
           this.total.meron = this.total.wala = 0
-        } 
+        }
         else {
-          this.fight = e.fight  
+          this.fight = e.fight
         }
 
         this.message = this.setFightStatus(this.fight)
       });
 
     window.Echo.channel('bet')
-      .listen('.bet', async (e)=>{
+      .listen('.bet', async (e) => {
         // console.log(e);
-        if(e.bet.side === 'M') {
+        if (e.bet.side === 'M') {
           this.total.meron = this.total.meron + e.bet.amount
         } else {
           this.total.wala = this.total.wala + e.bet.amount
         }
       });
 
-    
+
   },
   watch: {
     // 
@@ -145,7 +155,7 @@ export default {
   computed: {
     totalSum() {
       return this.total.meron + this.total.wala
-    }, 
+    },
 
     // GET FROM EACH SIDE
     meronComm() {
@@ -213,13 +223,13 @@ export default {
 
     setFightStatus(data) {
       this.fightNo = data.fight_no
-      if(data.status == null) {
+      if (data.status == null) {
         return '_____'
       }
-      if(data.status == 'O') {
+      if (data.status == 'O') {
         return 'OPEN'
       }
-      if(data.status == 'C') {
+      if (data.status == 'C') {
         return 'CLOSE'
       }
     },
@@ -235,10 +245,10 @@ export default {
     topUp() {
       window.location.href = 'add-credits'
     },
-    
-    async addBet (betSide) {
+
+    async addBet(betSide) {
       try {
-        if(this.message !== 'OPEN') {
+        if (this.message !== 'OPEN') {
           alert('Cannot Bet')
           return
         }
@@ -248,26 +258,26 @@ export default {
           return
         }
 
-        if(this.betAmount > this.player.points) {
+        if (this.betAmount > this.player.points) {
           alert('Insuficient Points')
           return
         }
 
-        if(!confirm(`Bet ${this.betAmount}?`)) {
+        if (!confirm(`Bet ${this.betAmount}?`)) {
           return
         }
 
         const { data } = await axios.post('/bet/add', {
-            fight_no: this.fightNo,
-            amount: this.betAmount,
-            side: betSide
-          });
+          fight_no: this.fightNo,
+          amount: this.betAmount,
+          side: betSide
+        });
 
-        if(data.status == 'OK') {
+        if (data.status == 'OK') {
           this.player.points -= this.betAmount
-          betSide == 'M' 
+          betSide == 'M'
             ? this.player.bets.meron += this.betAmount
-            : this.player.bets.wala += this.betAmount 
+            : this.player.bets.wala += this.betAmount
         }
 
       } catch (err) {

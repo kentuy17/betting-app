@@ -3,24 +3,37 @@
 @section('additional-styles')
   <link rel="stylesheet" href="{{ asset('css/play-sabong.css') }}" type="text/css">
   <link href="https://vjs.zencdn.net/7.8.2/video-js.css" rel="stylesheet" />
+  <style>
+    video {
+      width: 100%;
+      height: auto;
+    }
+  </style>
 @endsection
 
+
+
 @section('content')
-<div class="max-w-full min-w-full min-h-screen shadow-md bg-os_event_body_black row m-0" id="play-container">
-  <div class="col-md-6 ">
-    <div class="card mb-2">
+<div class="max-w-full min-w-full min-h-screen shadow-md bg-os_event_body_black row m-0 g-2" id="play-container">
+  <div class="col-md-7 my-1">
+    <div class="card mb-0">
       <div class="embed-responsive">
         <div class="bet-bg-head font-bold">{{ $fight->name }}</div>
         {{-- <video src="{{ asset('videos/e-sabong.mp4') }}" width="100%" autoplay></video> --}}
         <video
           id="my-video"
-          class="video-js"
+          class="video-js vjs-default-skin vjs-16-9"
           controls
           preload="auto"
           data-setup="{}"
-          style="width:100%;height:100%;"
+          autoplay
+          muted
+          {{-- style="width:100%" --}}
+          {{-- style="width:100%;height:100%;" --}}
         >
-          <source src="{{ asset('storage/hls/mystream.m3u8') }} " type="application/x-mpegURL" res="9999" label="auto" />
+          <source src="{{ asset('storage/hls/mystream.m3u8') }}" type="application/x-mpegURL" res="9999" label="auto" />
+          {{-- <source src="{{ asset('videos/e-sabong.mp4') }}" type="application/x-mpegURL" res="9999" label="auto" /> --}}
+          {{-- <source src="https://sabongaficionado.live/storage/hls/mystream.m3u8" type="application/x-mpegURL" res="9999" label="auto" /> --}}
           <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
         </video>
       </div>
@@ -28,10 +41,10 @@
   </div>
 
   <!-- Betting Vue Component -->
-  <div id="betting-component" class="col-md-6"></div>
+  <div id="betting-component" class="col-md-5 mt-0"></div>
 
   <!-- Results -->
-  <div class="card col-md-12 mt-3">
+  <div class="card col-md-12 mt-0">
     <div class="card-header font-bold">RESULTS</div>
     <div class="results">
       <div class="bet-result-chart">
@@ -52,6 +65,13 @@
 <script src="https://vjs.zencdn.net/7.8.2/video.js"></script>
 
 <script src="{{ asset('js/play.js') }}" defer></script>
+<script defer>
+  // options = {
+  //   autoplay: true,
+  //   muted: true,
+  // }
+  // video = videojs('my-video', options);
+</script>
 <script>
   const useState = (defaultValue) => {
     let value = defaultValue;

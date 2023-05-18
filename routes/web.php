@@ -25,13 +25,9 @@ use App\Htpp\Middleware\EnsureUserIsOperator;
 |
 */
 
-// Route::get('/', function () {
-//     // return view('welcome');
-//     return view('home');
-// });
-
 Route::get('/', function () {
-    return view('welcome');
+    // return view('welcome');
+    return redirect('/login');
 })->middleware('guest');
   
 Auth::routes();
@@ -43,7 +39,6 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
     Route::resource('transactions', UserController::class);
-
 
     // Player
     Route::group(['middleware' => ['player']], function () {
@@ -62,6 +57,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/withdraw', [PlayerController::class, 'withdrawSubmit'])->name('withdraw.submit');
       
         Route::get('/playertransaction', [PlayerController::class, 'playerTransaction'])->name('player.player-transaction');
+        Route::get('/player/transaction', [PlayerController::class, 'getTransactionByPlayerController']);
     });
 
     // Operator
@@ -75,19 +71,14 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/transaction/withdrawals', [OperatorController::class, 'getWithdrawTrans']);
         Route::post('/transaction/deposit', [OperatorController::class, 'processDeposit']);
         Route::post('/transaction/withdraw', [OperatorController::class, 'processWithdraw']);
+        Route::get('/fight', [OperatorController::class, 'fight'])->name('operator.fight');
+        Route::get('/transactions', [OperatorController::class, 'transactions'])->name('operator.transactions');
     });
-
-    Route::get('/fight', [OperatorController::class, 'fight'])->name('operator.fight');
-    Route::get('/transactions', [OperatorController::class, 'transactions'])->name('operator.transactions');
-    Route::get('/player/transaction', [PlayerController::class, 'getTransactionByPlayerController']);
-
 
     // Bets
     Route::get('/bet/total', [BetController::class, 'getTotalBetAmountPerFight']);
     Route::get('/bet/history', [BetController::class, 'getBetHistoryByUserController']);
     Route::get('/profile', [UserController::class, 'getProfileByUserID']);
-
-
 
     //Fight
     Route::get('/fight/current', [FightController::class, 'getCurrentFight']);
