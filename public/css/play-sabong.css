@@ -101,7 +101,7 @@ body.bet-dark .form-control {
 
 .bet-bg-head {
   background: #ecf4fe;
-  padding: 4px;
+  padding: 1px;
 }
 
 .bet-boxed-area {
@@ -147,13 +147,28 @@ body.bet-dark .bet-boxed-area {
   font-size: 20px;
   transition: all 0.4s ease;
 }
+.bet-button-blue-full {
+  background: #0d6efd;
+  color: #fff;
+  padding: 9px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  font-size: 20px;
+  transition: all 0.4s ease;
+}
 
 .bet-button-green-full:hover {
   background: blue;
   text-decoration: none;
   color: #fff;
 }
-
+/* .bet-button-blue-full {
+  background: blue;
+  text-decoration: none;
+  color: #fff;
+} */
 .bet-button-red-full {
   background: #eb6a61 !important;
   border: none !important;
@@ -240,4 +255,44 @@ body.bet-dark .bet-sell {
   width: 100%;
   padding: 0;
   overflow: hidden;
+}
+.bg-os_meron_btn {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(243 65 65 / var(--tw-bg-opacity)) !important;
+  border-color: black;
+}
+.bg-os_wala_btn {
+  --tw-bg-opacity: 1 !important;
+  background-color: blue !important;
+}
+.button.is-fullwidth {
+  display: flex;
+  width: 100%;
+}
+.overflow-clip {
+  overflow: clip !important;
+}
+.text-ellipsis {
+  text-overflow: ellipsis !important;
+}
+.button {
+  background-color: #fff;
+  border-color: #dbdbdb;
+  border-width: 1px;
+  color: #363636;
+  cursor: pointer;
+  justify-content: center;
+  padding: calc(.5em - 1px) 1em;
+  text-align: center;
+  white-space: nowrap;
+}
+.button.is-info {
+  background-color: #009deb;
+  border-color: transparent;
+  color: #fff;
+  border-radius: 4px;
+}
+.text-yellow {
+  --tw-text-opacity: 1 !important;
+  color: rgb(235 232 17 / var(--tw-text-opacity)) !important;
 }
