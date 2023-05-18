@@ -15,7 +15,7 @@
           <h3 class="bet-button-blue-full">WALA</h3></div>
       </div>
       <div class="grid grid-cols-2 bg-os_bg">
-        <div class="px-2 py-1">
+        <div class="px-2 py-1 border border-black">
           <div>
             <h3 class="font-bold text-center m-2 font-tally">{{ formatMoney(total.meron) }}</h3>
             <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT = {{ formatMoney(meronPercentage) }}</h3>
@@ -26,7 +26,7 @@
             </div>
           </div>
         </div>
-        <div class="px-2 py-1">
+        <div class="px-2 py-1 border border-black">
           <div>
             <h3 class="font-bold text-center m-2 font-tally">{{ formatMoney(total.wala) }}</h3>
             <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT = {{ formatMoney(walaPercentage) }}</h3>
