@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigIncrements('bethistory_no')->autoIncrement();
             $table->integer('user_id');
             $table->integer('fight_no');
-            $table->enum('status', ['P','W','L'])->default('P');
+            $table->enum('status', ['P','W','L','D','C'])->default('P');
             $table->enum('side', ['M','W']);
             $table->double('percent')->default(0);
             $table->double('winamount')->default(0);
