@@ -50,7 +50,6 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        \Log::channel('register')->info(json_encode($data,JSON_PRETTY_PRINT));
         return Validator::make($data, [
             'username' => ['required', 'string', 'max:255'],
             'phone_no' => ['string', 'string', 'max:255', 'unique:users'],
@@ -78,8 +77,11 @@ class RegisterController extends Controller
             'model_id' => $create->id,
         ]);
 
-        \Log::channel('register')->info($create);
-
         return $create;
+    }
+
+    public function showRegistrationForm()
+    {
+        return view('auth.dark-register');
     }
 }
