@@ -46,25 +46,29 @@ class PlayerController extends Controller
     {
         return view('player.bet-history');
     }
+
     public function playerTransaction()
     {
         return view('player.player-transaction');
     }
+
     public function deposit()
     {
         $user = Auth::user();
-        $op = Auth::user()
-                ->where('active', 1)
-                ->Orderby('points')
-                ->first();
+        $active_operators = ModelHasRoles::with('users')->has('active_operators')->get()
+            ->pluck('users')
+            ->sortBy('points')
+            ->first();
 
-        $operators = ModelHasRoles::with('users')
-                ->where('role_id',3)
-                ->where('model_id',$op->id)
-                ->first();
+        $low_pts = ModelHasRoles::with('users')->has('operators')->get()
+            ->pluck('users')
+            ->sortBy('points')
+            ->first();
 
+        $operators = $active_operators ?? $low_pts;
         return view('player.deposit', compact('user', 'operators'));
     }
+
     public function getTransactionByPlayerController()
     {
         $trans = Transactions::where('user_id', Auth::user()->id)
@@ -82,7 +86,6 @@ class PlayerController extends Controller
     {
         $user = Auth::user();
         return view('player.withdraw', compact('user'));
-        //return view('users.userprofile');
     }
 
     public function withdraw()

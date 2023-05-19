@@ -209,10 +209,10 @@
             <div class="rounded d-flex p-2 btn-gold">
               <div class="icn"><img src="img/operator-logo.png"></div>
               <div class="info flex flex-col justify-content-center">
-                <div class="name" style="text-transform: uppercase;">{{ $operators->users->name }}</div>
+                <div class="name" style="text-transform: uppercase;">{{ $operators->name }}</div>
                 <div class="name text-uppercase">
                   <div class="text-xl font-bold" >
-                    <span id="copyNumber">{{ $operators->users->phone_no }}</span>
+                    <span id="copyNumber">{{ $operators->phone_no }}</span>
                     <a data-toggle="popover" role="button" data-placement="top" data-trigger="focus" title="Copied!" id="copy-icon" 
                       class="fa-solid fa-copy ml-2"></a>  
                   </div>
@@ -229,7 +229,7 @@
       <form action="{{ route('deposit.upload.post') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mt-3">
-          <input type="hidden" name="operator_id" value="{{$operators->users->id}}">
+          <input type="hidden" name="operator_id" value="{{$operators->id}}">
           <div class="limit-width m-auto">
             <div class="text-center mb-2">GCash No:</div>
             <div class="m-auto align-center">
