@@ -9,6 +9,24 @@
       height: auto;
     }
   </style>
+  <style>
+    .hide { display:none; }
+
+    /* Optional: The following css just makes sure the twitch video stays responsive */
+    #twitch {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 */
+      padding-top: 25px;
+      height: 0;
+    }
+    #twitch object, #twitch iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
 @endsection
 
 
@@ -31,7 +49,8 @@
           <source src="{{ asset('storage/hls/mystream.m3u8') }}" type="application/x-mpegURL" res="9999" label="auto" />
           <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
         </video> --}}
-        <iframe src="https://clips.twitch.tv/embed?clip=PlayfulPiliableCattleMingLee-0eacIq7pgz6h3JV_&parent=sabongaficionado.live" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>
+        <div id="twitch" class="hide">
+        </div>      
       </div>
     </div>
   </div>
@@ -59,15 +78,40 @@
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
 <script src="https://vjs.zencdn.net/7.8.2/video.js"></script>
-
+<script src= "https://player.twitch.tv/js/embed/v1.js"></script>
 <script src="{{ asset('js/play.js') }}" defer></script>
-<script defer>
-  // options = {
-  //   autoplay: true,
-  //   muted: true,
-  // }
-  // video = videojs('my-video', options);
+<script type="text/javascript">
+  var options = {
+    channel: "kentuy17", // TODO: Change this to the streams username you want to embed
+    width: 640,
+    height: 360,
+  };
+  var player = new Twitch.Player("twitch", options);
+
+  player.addEventListener(Twitch.Player.READY, initiate)
+
+  function initiate() {
+    player.addEventListener(Twitch.Player.ONLINE, handleOnline);
+    player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
+    player.removeEventListener(Twitch.Player.READY, initiate);
+  }
+
+  function handleOnline() {
+    document.getElementById("twitch").classList.remove('hide');
+    player.removeEventListener(Twitch.Player.ONLINE, handleOnline);
+    player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
+    player.setMuted(false);
+  }
+
+  function handleOffline() {
+    document.getElementById("twitch").classList.add('hide');
+    player.removeEventListener(Twitch.Player.OFFLINE, handleOffline);
+    player.addEventListener(Twitch.Player.ONLINE, handleOnline);
+    player.setMuted(true);
+  }
 </script>
+
+
 <script>
   const useState = (defaultValue) => {
     let value = defaultValue;
