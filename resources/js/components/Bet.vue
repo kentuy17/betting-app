@@ -2,8 +2,7 @@
   <div class="card bet-boxed-area mb-1">
     <div class="bet-bg-head items-center grid grid-cols-3">
       <h6><b class="text-lg">FIGHT # </b> <b id="fight-no" class="text-lg">{{ fightNo }}</b></h6>
-      <div class="text-center"><span class="btn btn-block btn-sm gradient-status-close btn-lg vue-components">{{ message
-      }}</span></div>
+      <div class="text-center"><span class="btn btn-block btn-sm gradient-status-close btn-lg vue-components">{{ message }}</span></div>
       <div>POINTS: <a id="current-pts" href="/deposit" class="underline font-bold">{{ formatMoney(player.points) }}</a>
       </div>
     </div>
