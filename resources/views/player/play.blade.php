@@ -19,8 +19,7 @@
     <div class="card mb-0">
       <div class="embed-responsive">
         <div class="bet-bg-head font-bold">{{ $fight->name }}</div>
-        {{-- <video src="{{ asset('videos/e-sabong.mp4') }}" width="100%" autoplay></video> --}}
-        <video
+        {{-- <video
           id="my-video"
           class="video-js vjs-default-skin vjs-16-9"
           controls
@@ -28,14 +27,11 @@
           data-setup="{}"
           autoplay
           muted
-          {{-- style="width:100%" --}}
-          {{-- style="width:100%;height:100%;" --}}
         >
           <source src="{{ asset('storage/hls/mystream.m3u8') }}" type="application/x-mpegURL" res="9999" label="auto" />
-          {{-- <source src="{{ asset('videos/e-sabong.mp4') }}" type="application/x-mpegURL" res="9999" label="auto" /> --}}
-          {{-- <source src="https://sabongaficionado.live/storage/hls/mystream.m3u8" type="application/x-mpegURL" res="9999" label="auto" /> --}}
           <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
-        </video>
+        </video> --}}
+        <iframe src="https://clips.twitch.tv/embed?clip=PlayfulPiliableCattleMingLee-0eacIq7pgz6h3JV_&parent=sabongaficionado.live" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>
       </div>
     </div>
   </div>
