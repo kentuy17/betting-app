@@ -1,0 +1,50 @@
+.nav-credits-wr {
+  padding-top: .5rem;
+/*   padding-right: .5rem; */
+  text-align: right;
+  float: right;
+}
+.gp-credits {
+  text-decoration: none;
+}
+.gp-credits .add-btn {
+  padding: .2em .3em;
+  border-radius: 4px 0 0 4px;
+  cursor: pointer;
+}
+.bg-success {
+  background-color: #28a745 !important;
+}
+.gp-credits .credits-data {
+  background: #0e0f14;
+  padding: .4em .5em;
+  border-radius: 0 4px 4px 0;
+}
+svg:not(:root).svg-inline--fa {
+  overflow: visible;
+}
+.svg-inline--fa.fa-w-16 {
+  width: 1em;
+}
+.svg-inline--fa {
+  display: inline-block;
+  font-size: inherit;
+  height: 1em;
+  overflow: visible;
+  vertical-align: -.125em;
+}
+.gp-yellow-text {
+  color: #fdd835 !important;
+}
+.gp-credits .credits-data {
+  background: #0e0f14;
+  padding: .4em .5em;
+  border-radius: 0 4px 4px 0;
+}
+.gold-text {
+  color: #fff;
+}
+.credit-nav-item {
+  margin-left: auto;
+  float: right;
+}

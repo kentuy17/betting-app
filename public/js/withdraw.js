@@ -147,6 +147,7 @@ $('#withdraw-form').on('click', 'input[type="submit"]',function(e) {
       timer: 1500
     }).then(() =>  {
       $('#withdraw-modal').modal('hide')
+      $('#operator-pts').html(res.data.points)
       clearFields();
     });
 

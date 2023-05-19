@@ -85,6 +85,7 @@ class OperatorController extends Controller
         return response()->json([
             'msg' => 'Success!',
             'status' => 'OK',
+            'points' => $operator->points,
         ], 200);
     }
 
@@ -113,7 +114,7 @@ class OperatorController extends Controller
 
             if($request->action == 'approve') {
                 $operator = User::find(Auth::user()->id);
-                $operator->points +=  $trans->amount;
+                $operator->points += $trans->amount;
                 $operator->save();
             }
         } catch (\Exception $e) {
@@ -126,6 +127,7 @@ class OperatorController extends Controller
         return response()->json([
             'msg' => 'Success!',
             'status' => 'OK',
+            'points' => $operator->points,
         ], 200);
     }
 

@@ -152,7 +152,9 @@ $('#deposit-form').on('click', 'input[type="submit"]',function(e) {
       timer: 1500
     })
     .then(() =>  {
+      console.log(res);
       $('#modal-center').modal('hide')
+      $('#operator-pts').html(res.data.points)
       clearFields();
     });
 
