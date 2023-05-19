@@ -1,35 +1,31 @@
 @extends('layouts.app')
 
 @section('additional-styles')
-  <link rel="stylesheet" href="{{ asset('css/play-sabong.css') }}" type="text/css">
-  <link href="https://vjs.zencdn.net/7.8.2/video-js.css" rel="stylesheet" />
-  <style>
-    video {
-      width: 100%;
-      height: auto;
-    }
-  </style>
-  <style>
-    .hide { display:none; }
-
-    /* Optional: The following css just makes sure the twitch video stays responsive */
-    #twitch {
-      position: relative;
-      padding-bottom: 56.25%; /* 16:9 */
-      padding-top: 25px;
-      height: 0;
-    }
-    #twitch object, #twitch iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-  </style>
+<link rel="stylesheet" href="{{ asset('css/play-sabong.css') }}" type="text/css">
+<link href="https://vjs.zencdn.net/7.8.2/video-js.css" rel="stylesheet" />
+<style>
+  video {
+    width: 100%;
+    height: auto;
+  }
+  .hide {
+    display:none;
+  }
+  #twitch {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    padding-top: 25px;
+    height: 0;
+  }
+  #twitch object, #twitch iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
 @endsection
-
-
 
 @section('content')
 <div class="max-w-full min-w-full min-h-screen shadow-md bg-os_event_body_black row m-0 g-2" id="play-container">

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
@@ -10,9 +11,6 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BetController;
 use App\Http\Controllers\FightController;
-
-use App\Http\Middleware\EnsureUserIsPlayer;
-use App\Htpp\Middleware\EnsureUserIsOperator;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +37,10 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
     Route::resource('transactions', UserController::class);
+
+    Route::group(['middleware' => ['admin']], function () {
+        Route::get('/admin/share-alocation', [AdminController::class, 'shareHolders'])->name('admin.shares');
+    });
 
     // Player
     Route::group(['middleware' => ['player']], function () {

@@ -139,9 +139,13 @@
               {{ Auth::user()->username }}
             </a>
             <div class="dropdown-menu dropdown-menu-end" id="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="@if(Route::current()->getName() == 'users.profile') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" 
-              href="{{ route('users.profile') }}">My Profile</a>
+              @if (session('role') == 'Admin')
+              <a class="@if(Route::current()->getName() == 'admin.shares') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" 
+                href="{{ route('admin.shares') }}">Shares</a>
+              @endif
               @if (session('role') == 'Player')
+              <a class="@if(Route::current()->getName() == 'users.profile') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" 
+                href="{{ route('users.profile') }}">My Profile</a>
               <a class="@if(Route::current()->getName() == 'deposit') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" 
                 href="{{ route('deposit') }}">Deposit</a>
               <a class="@if(Route::current()->getName() == 'withdraw') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" 
