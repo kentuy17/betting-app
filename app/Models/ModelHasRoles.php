@@ -20,6 +20,8 @@ class ModelHasRoles extends Model
         'created_at'
     ];
 
+    protected $OPERATOR = 3;
+
     public function roles()
     {
         return $this->belongsTo(Roles::class, 'role_id', 'id');
@@ -28,6 +30,22 @@ class ModelHasRoles extends Model
     public function users()
     {
         return $this->belongsTo(User::class, 'model_id', 'id');
+    }
+
+    public function operators()
+    {
+        return $this->belongsTo(User::class, 'model_id')
+            ->where('role_id', $this->OPERATOR);
+    }
+
+    public function active_operators()
+    {
+        return $this->operators()->where('active', 1);
+    }
+
+    public function lowest_pts()
+    {
+        return $this->operators()->orderBy('points');
     }
 }
 
