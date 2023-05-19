@@ -85,6 +85,7 @@
     channel: "kentuy17", // TODO: Change this to the streams username you want to embed
     width: 640,
     height: 360,
+    controls: false,
   };
   var player = new Twitch.Player("twitch", options);
 
