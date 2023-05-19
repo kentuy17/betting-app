@@ -124,6 +124,7 @@ class PlayerController extends Controller
                 'filename' => $imageName,
                 'status' => 'pending',
                 'processedBy' => $request->operator_id,
+                'outlet' => $request->outlet
             ]);
 
         } catch (\Exception $e) {
@@ -203,7 +204,8 @@ class PlayerController extends Controller
                 'action' => 'withdraw',
                 'mobile_number' => $trimPhone,
                 'status' => 'pending',
-                'amount' => $request->amount
+                'amount' => $request->amount,
+                'outlet' => $request->outlet,
             ]);
 
         } catch (\Exception $e) {

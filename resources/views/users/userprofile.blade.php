@@ -169,7 +169,7 @@
                   <div class="col-12">
                     <label class="text-black form-label">Credit Points</label>
                     <div class="input-group">
-                      <input id="credit_points" class="form-control disabled" type="text" disabled="" value="{{ $user->points }}" >
+                      <input id="credit_points" class="form-control disabled" type="text" disabled="" value="{{number_format($user->points, 2, '.', ',');}}" >
                     </div>
                   </div>
                 </div>

@@ -160,7 +160,7 @@
         <div class="col-md-12" id="basic-info">
           <div class="card">
             <div class="card-header">
-              <h5>Profile Info</h5>
+              <h5>Withdraw Form</h5>
               @include('layouts.flash-message')
             </div>
             <div class="card-body pt-0">
@@ -169,7 +169,7 @@
                 <div class="col-12">
                   <label class="text-black form-label">Credit Points</label>
                   <div class="input-group">
-                    <input id="credit_points" class="form-control disabled" type="text" disabled="" value="{{ Auth::user()->points }}" >
+                    <input id="credit_points" class="form-control disabled" type="text" disabled="" value="{{number_format(Auth::user()->points, 2, '.', ',') }}" >
                   </div>
                 </div>
               </div>
