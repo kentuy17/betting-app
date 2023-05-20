@@ -124,7 +124,7 @@ class PlayerController extends Controller
                 'filename' => $imageName,
                 'status' => 'pending',
                 'processedBy' => $request->operator_id,
-                'outlet' => $request->outlet
+                'outlet' => $request->outlet ?? 'Gcash',
             ]);
 
         } catch (\Exception $e) {
