@@ -10,34 +10,34 @@ $(document).ready(function () {
     "ajax": '/player/transaction',
     "columns": [
       {
-        "data": "created_at"
-      },
-      {
         "data": null,
         render: (data) => {
-          return data.action.toUpperCase();
+          return data.status.toUpperCase();
         }
       },
       {
-        "data": "user.username"
-      },
-      {
-        "data": null,
-        render: (data) => {
-          return data.operator != null ? data.operator.username : "--";
-        }
+        "data": "outlet"
       },
       {
         "data": "mobile_number"
       },
       {
-        "data": "amount"
-      },
+        "data": "reference_code"
+      },      
       {
         "data": null,
         render: (data) => {
-          return data.status.toUpperCase();
+          return data.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
+      },
+      {
+        "data": "created_at"
+      },
+      {
+        "data": "completed_at"
+      },
+      {
+        "data": "note",
       }
     ]
   });

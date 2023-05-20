@@ -10,13 +10,13 @@
           <table class="table table-striped" style="width: 100%" id="player-transaction-table">
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Type</th>
-                <th>User</th>
-                <th>Operator</th>
-                <th>To</th>
-                <th>Amount</th>
                 <th>Status</th>
+                <th>Outlet</th>
+                <th>Receiver</th>
+                <th>Ref/Control #</th>
+                <th>Amount</th>
+                <th>Submitted</th>
+                <th>Completed</th>
               </tr>
             </thead>
           </table>

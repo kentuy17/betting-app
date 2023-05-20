@@ -54,7 +54,7 @@ $(document).ready(function () {
         {
           "data": null,
           render: (data, type, row, meta) => {
-            return `${row.percent}%`
+            return `${row.percent.toFixed(2)}%`
           }
         },
         {

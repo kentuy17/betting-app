@@ -23,7 +23,9 @@ class Transactions extends Model
         'filename',
         'note',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'outlet',
+        'completed_at'
     ];
 
     protected $casts = [
