@@ -24,7 +24,6 @@ use App\Http\Controllers\FightController;
 */
 
 Route::get('/', function () {
-    // return view('welcome');
     return redirect('/login');
 })->middleware('guest');
   
@@ -39,7 +38,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('transactions', UserController::class);
 
     Route::group(['middleware' => ['admin']], function () {
-        Route::get('/admin/share-alocation', [AdminController::class, 'shareHolders'])->name('admin.shares');
+        Route::get('/admin/share-allocation', [AdminController::class, 'shareHolders'])->name('admin.shares');
     });
 
     // Player

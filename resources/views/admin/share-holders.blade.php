@@ -28,7 +28,7 @@
         <div class="card-header">
           <h3 class="card-title">Share Holders</h3>
         </div>
-        <div class="card-body p-0">
+        <div class="card-body p-0 table-responsive">
           <table class="table table-sm">
             <thead>
               <tr>
@@ -43,30 +43,28 @@
             <tbody>
               @php $colors = ['primary', 'warning', 'danger', 'success', 'info']; @endphp
               @foreach ($share_holders as $key => $boss)
-                <tr>
-                  <td>{{ $key+1 }}</td>
-                  <td>{{ $boss->user->name }}</td>
-                  <td>{{ $boss->role_description }}</td>
-                  <td>
-                    <div class="progress progress-xs">
-                      <div class="progress-bar bg-{{$colors[$key]}}" style="width: {{ ($boss->percentage / 10) * 100 }}%"></div>
-                    </div>
-                  </td>
-                  <td class="text-center"><span class="badge bg-{{$colors[$key]}}">{{ $boss->percentage }}%</span></td>
-                  <td class="mr-2">
-                    <a href="javascript:void(0)" data-id="{{ $boss->id }}" class="btn btn-link text-info btn-icon btn-sm edit">
-                      <i class="fa-solid fa-pen"></i></a>
-                    <a href="javascript:void(0)" data-id="{{ $boss->id }}" class="btn btn-link text-danger btn-icon btn-sm delete mr-1">
-                      <i class="fa-solid fa-trash"></i></a>
-                  </td>
-                </tr>
+              <tr>
+                <td>{{ $key+1 }}</td>
+                <td>{{ $boss->user->name }}</td>
+                <td>{{ $boss->role_description }}</td>
+                <td>
+                  <div class="progress progress-xs">
+                    <div class="progress-bar bg-{{$colors[$key]}}" style="width: {{ ($boss->percentage / 10) * 100 }}%"></div>
+                  </div>
+                </td>
+                <td class="text-center"><span class="badge bg-{{$colors[$key]}}">{{ $boss->percentage }}%</span></td>
+                <td class="mr-2">
+                  <a href="javascript:void(0)" data-id="{{ $boss->id }}" class="btn btn-link text-info btn-icon btn-sm edit">
+                    <i class="fa-solid fa-pen"></i></a>
+                  <a href="javascript:void(0)" data-id="{{ $boss->id }}" class="btn btn-link text-danger btn-icon btn-sm delete mr-1">
+                    <i class="fa-solid fa-trash"></i></a>
+                </td>
+              </tr>
               @endforeach
             </tbody>
           </table>
         </div>
-
       </div>
-
     </div>
   </div>
 </div>

@@ -2,6 +2,7 @@
 
 @section('additional-styles')
 <link rel="stylesheet" href="{{ asset('css/play-sabong.css') }}" type="text/css">
+<link rel="stylesheet" href="{{ asset('css/operator.css') }}" type="text/css">
 <link href="https://vjs.zencdn.net/7.8.2/video-js.css" rel="stylesheet" />
 <style>
   video {
@@ -83,29 +84,32 @@
     height: 360,
     controls: false,
   };
-  var player = new Twitch.Player("twitch", options);
 
-  player.addEventListener(Twitch.Player.READY, initiate)
+  // DISABLED STREAMING TO AVOID BANNING
 
-  function initiate() {
-    player.addEventListener(Twitch.Player.ONLINE, handleOnline);
-    player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
-    player.removeEventListener(Twitch.Player.READY, initiate);
-  }
+  // var player = new Twitch.Player("twitch", options);
 
-  function handleOnline() {
-    document.getElementById("twitch").classList.remove('hide');
-    player.removeEventListener(Twitch.Player.ONLINE, handleOnline);
-    player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
-    player.setMuted(false);
-  }
+  // player.addEventListener(Twitch.Player.READY, initiate)
 
-  function handleOffline() {
-    document.getElementById("twitch").classList.add('hide');
-    player.removeEventListener(Twitch.Player.OFFLINE, handleOffline);
-    player.addEventListener(Twitch.Player.ONLINE, handleOnline);
-    player.setMuted(true);
-  }
+  // function initiate() {
+  //   player.addEventListener(Twitch.Player.ONLINE, handleOnline);
+  //   player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
+  //   player.removeEventListener(Twitch.Player.READY, initiate);
+  // }
+
+  // function handleOnline() {
+  //   document.getElementById("twitch").classList.remove('hide');
+  //   player.removeEventListener(Twitch.Player.ONLINE, handleOnline);
+  //   player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
+  //   player.setMuted(false);
+  // }
+
+  // function handleOffline() {
+  //   document.getElementById("twitch").classList.add('hide');
+  //   player.removeEventListener(Twitch.Player.OFFLINE, handleOffline);
+  //   player.addEventListener(Twitch.Player.ONLINE, handleOnline);
+  //   player.setMuted(true);
+  // }
 </script>
 
 

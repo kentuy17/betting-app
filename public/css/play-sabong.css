@@ -296,3 +296,9 @@ body.bet-dark .bet-sell {
   --tw-text-opacity: 1 !important;
   color: rgb(235 232 17 / var(--tw-text-opacity)) !important;
 }
+.text-player-bet {
+  color: #16a316;
+}
+.text-player-win {
+  color: #fe06ff;
+}

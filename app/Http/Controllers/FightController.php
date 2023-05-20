@@ -163,6 +163,7 @@ class FightController extends Controller
             foreach($user_bets as $bet) {
                 $update = Bet::find($bet->bet_no);
                 $update->win_amount = $bet->amount;
+                $update->status = 'X';
                 $update->save();
 
                 $user = User::find($bet->user_id);
@@ -175,11 +176,11 @@ class FightController extends Controller
                 }
                 
                 $betHist = BetHistory::where('fight_no',$bet->fight_no)
-                ->where('user_id', $bet->user_id)
-                ->where('status','P')
-                ->where('side',$bet->side)
-                ->where('betamount',$bet->amount)
-                ->get();
+                    ->where('user_id', $bet->user_id)
+                    ->where('status','P')
+                    ->where('side',$bet->side)
+                    ->where('betamount',$bet->amount)
+                    ->get();
 
                 foreach($betHist as $history) {
                      $hist = BetHistory::find($history->bethistory_no);
@@ -214,11 +215,11 @@ class FightController extends Controller
                 $user->save();
 
                 $betHist = BetHistory::where('fight_no',$bet->fight_no)
-                ->where('user_id', $bet->user_id)
-                ->where('status','P')
-                ->where('side',$bet->side)
-                ->where('betamount',$bet->amount)
-                ->get();
+                    ->where('user_id', $bet->user_id)
+                    ->where('status','P')
+                    ->where('side',$bet->side)
+                    ->where('betamount',$bet->amount)
+                    ->get();
 
                 foreach($betHist as $history) {
                     $hist = BetHistory::find($history->bethistory_no);
@@ -242,12 +243,12 @@ class FightController extends Controller
             foreach($lose_bet as $lb) 
             {
                 $betHistLB = BetHistory::where('fight_no',$lb->fight_no)
-                            ->where('user_id', $lb->user_id)
-                            ->where('status','P')
-                            ->where('side',$lb->side)
-                            ->where('betamount',$lb->amount)
-                            ->get();
-            
+                    ->where('user_id', $lb->user_id)
+                    ->where('status','P')
+                    ->where('side',$lb->side)
+                    ->where('betamount',$lb->amount)
+                    ->get();
+    
                 foreach($betHistLB as $historyLB) {
                     $histLB = BetHistory::find($historyLB->bethistory_no);
                     $histLB->percent = $percentagelb;
