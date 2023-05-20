@@ -3,8 +3,6 @@
     <div class="bet-bg-head items-center grid grid-cols-3">
       <h6><b class="text-lg">FIGHT # </b> <b id="fight-no" class="text-lg">{{ fightNo }}</b></h6>
       <div class="text-center"><span class="btn btn-block btn-sm gradient-status-close btn-lg vue-components">{{ message }}</span></div>
-      <!-- <div>POINTS: <a id="current-pts" href="/deposit" class="underline font-bold">{{ formatMoney(player.points) }}</a>
-      </div> -->
       <div class="nav-credits-wr w-25 w-sm-50 gold-text ml-auto">
         <a href="/deposit" class="d-flex align-items-center justify-content-end gp-credits">
           <div class="bg-success add-btn p-1">
@@ -91,7 +89,7 @@ export default {
       fight: [],
       fightNo: 0,
       betAmount: 0,
-      amounts: [20, 50, 100, 500, 1000, 2000, 5000],
+      amounts: [20, 50, 100, 500, 1000, 2000, 5000, 'ALL-IN'],
       total: {
         meron: 0,
         wala: 0,
@@ -258,7 +256,7 @@ export default {
     },
 
     betManual(amount) {
-      this.betAmount = amount
+      this.betAmount = amount == 'ALL-IN' ? this.player.points : amount
     },
 
     clear() {

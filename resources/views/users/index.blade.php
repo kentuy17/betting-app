@@ -10,7 +10,7 @@
 
 @section('content')
 
-<div class="row">
+<div class="row mt-2">
     <div class="col-lg-12 margin-tb">
         <div class="pull-right mb-3">
             <a class="btn btn-success" href="{{ route('users.create') }}"> Create New User</a>
@@ -28,17 +28,17 @@
 
 <table class="table table-bordered">
  <tr>
-   <th>No</th>
    <th>Username</th>
-   <th>Email</th>
+   <th>Name</th>
+   <th>Phone #</th>
    <th>Roles</th>
    <th width="280px">Action</th>
  </tr>
  @foreach ($data as $key => $user)
   <tr>
-    <td>{{ ++$i }}</td>
     <td>{{ $user->username }}</td>
-    <td>{{ $user->email }}</td>
+    <td>{{ $user->name }}</td>
+    <td>{{ $user->phone_no }}</td>
     <td>
       @if(!empty($user->getRoleNames()))
         @foreach($user->getRoleNames() as $v)
