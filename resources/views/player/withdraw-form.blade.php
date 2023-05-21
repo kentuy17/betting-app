@@ -156,7 +156,7 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-6">
-      <form method="POST" action="{{ url('/withdraw') }}">
+      <form method="POST" id="withdraw-form" action="{{ url('/withdraw') }}">
         <div class="col-md-12" id="basic-info">
           <div class="card">
             <div class="card-header">
@@ -196,11 +196,11 @@
                 </div>
               </div>
               @if (session('error'))
-                  <p class="text-xs pt-1 text-danger">{{ session('error') }}</p>
-                  @endif
-                  @error('curr_pass')
-                  <p class="text-xs pt-1 text-danger">{{ $message }}</p>
-                  @enderror
+              <p class="text-xs pt-1 text-danger">{{ session('error') }}</p>
+              @endif
+              @error('curr_pass')
+              <p class="text-xs pt-1 text-danger">{{ $message }}</p>
+              @enderror
               <button type="submit" class="btn bg-gradient-dark btn-sm float-end mt-4">Submit</button>
             </div>
           </div>
@@ -216,13 +216,19 @@
 @section('additional-scripts')
 <script>
   $(function() {
-    $('button[type="submit"]').on('click', function(e) {
+    $('#withdraw-form').on('submit', function(e) {
+      e.preventDefault();
       var points = $('#credit_points').val().replace(",", "");
       var amount = $('#amount').val();
       
       if(parseFloat(points) < parseFloat(amount)) {
         alert ("Insufficient Amount")
         return;
+      }
+
+      if(parseFloat(amount) < 100) {
+        alert ("Minimum Withdrawal is P100")
+        return
       }
     });
   })

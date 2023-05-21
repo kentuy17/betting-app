@@ -65,10 +65,21 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $validator = $this->validator($data);
+        
+        if($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $validated = $validator->validated();
+
         $create = User::create([
-            'username' => $data['username'],
-            'phone_no' => $data['phone'],
-            'password' => Hash::make($data['password']),
+            'username' => $validated['username'],
+            'phone_no' => $validated['phone_no'],
+            'password' => Hash::make($validated['password']),
+            'active' => true,
         ]);
 
         ModelHasRoles::create([

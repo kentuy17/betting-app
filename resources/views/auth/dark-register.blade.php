@@ -35,38 +35,27 @@
     <div class="application-main " data-commit-hovercards-enabled="" data-discussion-hovercards-enabled=""
       data-issue-and-pr-hovercards-enabled="">
       <main>
-        <div class="auth-form" id="login">
-          {{-- <div class="auth-form-header p-0"><h1>Login</h1></div> --}}
+        <div class="auth-form" id="register">
+          @if($errors->any())
           <div id="js-flash-container" data-turbo-replace="">
-            <template class="js-flash-template">
-              <div class="flash flash-full">
-                <div class="px-2">
-                  <button autofocus="" class="flash-close js-flash-close" type="button"
-                    aria-label="Dismiss this message">
-                    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16"
-                      data-view-component="true" class="octicon octicon-x">
-                      <path
-                        d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z">
-                      </path>
-                    </svg>
-                  </button>
-                  <div aria-atomic="true" role="alert" class="js-flash-alert">
-                    <div></div>
-                  </div>
+            <div class="flash flash-full flash-error">
+              <div class="px-2">
+                <button autofocus="" class="flash-close js-flash-close" type="button"
+                  aria-label="Dismiss this message">
+                  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16"
+                    data-view-component="true" class="octicon octicon-x">
+                    <path
+                      d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z">
+                    </path>
+                  </svg>
+                </button>
+                <div aria-atomic="true" role="alert" class="js-flash-alert">
+                  {!! implode('', $errors->all('<div>:message</div>')) !!}&nbsp;</div>
                 </div>
               </div>
-            </template>
+            </div>
           </div>
-          <div class="flash js-transform-notice" hidden="">
-            <button class="flash-close js-flash-close" type="button" aria-label="Dismiss this message">
-              <svg aria-label="Dismiss" role="img" height="16" viewBox="0 0 16 16" version="1.1" width="16"
-                data-view-component="true" class="octicon octicon-x">
-                <path
-                  d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z">
-                </path>
-              </svg>
-            </button>
-          </div>
+          @endif
           <div class="auth-form-body mt-3">
             <form action="{{ route('register') }}" accept-charset="UTF-8" method="post">
               @csrf
@@ -74,8 +63,8 @@
               <input type="text" name="username" id="username" class="form-control input-block js-login-field"
                 autocapitalize="none" autocorrect="off" autocomplete="username" autofocus="autofocus">
               <div class="position-relative">
-                <label for="phone">Cellphone no.</label>
-                <input type="text" name="phone" id="phone" class="form-control form-control input-block">
+                <label for="phone_no">Cellphone no.</label>
+                <input type="text" name="phone_no" id="phone_no" class="form-control form-control input-block">
               </div>
               <div class="position-relative">
                 <label for="password">Password</label>
@@ -205,3 +194,11 @@
   <div id="js-global-screen-reader-notice" class="sr-only" aria-live="polite"></div>
 </body>
 </html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+  $(function() {
+    $('.js-flash-close').on('click', function() {
+      $('#js-flash-container').hide()
+    }) 
+  })
+</script>

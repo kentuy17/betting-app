@@ -36,6 +36,7 @@
     object-fit: cover;
     background-size: cover;
     width: -webkit-fill-available;
+    width: -moz-available;
     height: fit-content;
   }
 </style>
