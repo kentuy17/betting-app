@@ -217,13 +217,14 @@
 <script>
   $(function() {
     $('button[type="submit"]').on('click', function(e) {
-      var points = $('#credit_points').val();
+      e.preventDefault();
+      var points = $('#credit_points').val().replace(",", "");
       var amount = $('#amount').val();
       
       if(parseFloat(points) < parseFloat(amount)) {
-        console.log([points, amount]);
         alert ("Insufficient Amount")
-        return;
+        console.log({points:parseFloat(points),amount:parseFloat(amount)});
+        // return;
       }
     });
   })
