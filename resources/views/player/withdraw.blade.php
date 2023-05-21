@@ -212,11 +212,11 @@
                   </div>
                 </div>
                 @if (session('error'))
-                    <p class="text-xs pt-1 text-danger">{{ session('error') }}</p>
-                    @endif
-                    @error('curr_pass')
-                    <p class="text-xs pt-1 text-danger">{{ $message }}</p>
-                    @enderror
+                <p class="text-xs pt-1 text-danger">{{ session('error') }}</p>
+                @endif
+                @error('curr_pass')
+                <p class="text-xs pt-1 text-danger">{{ $message }}</p>
+                @enderror
                 <button type="submit" class="btn bg-gradient-dark btn-sm float-end mt-4">Submit</button>
               </div>
             </div>
@@ -232,10 +232,11 @@
 <script>
   $(function() {
     $('button[type="submit"]').on('click', function(e) {
-      var points = $('#credit_points').val();
+      e.preventDefault();
+      var points = $('#credit_points').val().replace(",", "");
       var amount = $('#amount').val();
       
-      if(points < amount) {
+      if(parseFloat(points) < parseFloat(amount)) {
         alert ("Insufficient Amount")
         return;
       }
