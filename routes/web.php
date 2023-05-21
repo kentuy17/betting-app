@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BetController;
 use App\Http\Controllers\FightController;
+use App\Http\Controllers\AuditorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,6 +76,21 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/transaction/withdraw', [OperatorController::class, 'processWithdraw']);
         Route::get('/fight', [OperatorController::class, 'fight'])->name('operator.fight');
         Route::get('/transactions', [OperatorController::class, 'transactions'])->name('operator.transactions');
+
+        Route::get('/remitpoints', [OperatorController::class, 'remit'])->name('remit');
+        Route::post('/remitpoints', [OperatorController::class, 'remitSubmit']);
+
+        Route::get('/refillpoints', [OperatorController::class, 'refill'])->name('refill');
+        Route::post('/refillpoints', [OperatorController::class, 'refillSubmit'])->name('refill.upload.post');
+    });
+
+    Route::group(['middleware' => ['auditor']], function () {      
+        Route::get('/transaction/refill', [AuditorController::class, 'getRefillTrans']);
+        Route::get('/transaction/remit', [AuditorController::class, 'getRemitTrans']);
+        Route::post('/transaction/refill', [AuditorController::class, 'processRefill']);
+        Route::post('/transaction/remit', [AuditorController::class, 'processRemit']);
+        Route::get('/transactions', [AuditorController::class, 'transactions'])->name('auditor.transactions-operator');
+
     });
 
     // Bets

@@ -116,7 +116,10 @@
           @if (session('role') == 'Operator')
           <li><a class="md:pl-4 py-2 block" href="{{ route('operator.derby.event') }}">EVENT</a></li>
           <li><a class="md:pl-4 py-2 block" href="{{ route('operator.fight') }}">FIGHT</a></li>
-          <li><a class="md:pl-4 py-2 block" href="{{ route('operator.transactions') }}">TRANSACTIONS</a></li>
+          <li><a class="md:pl-4 py-2 block" href="{{ route('operator.transactions') }}">TRANSACTIONS</a></li> 
+          @endif
+          @if (session('role') == 'Auditor')
+          <li><a class="md:pl-4 py-2 block" href="{{ route('auditor.transactions-operator') }}">TRANSACTIONS</a></li>
           @endif
           @if (session('role') == 'Player')
           <li><a class="@if(Route::current()->getName() == 'play') {{ 'active-nav' }} @endif py-2 block" href="{{ route('play') }}">Play</a></li>
@@ -134,8 +137,14 @@
               <a class="@if(Route::current()->getName() == 'deposit') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('deposit') }}">Deposit</a>
               <a class="@if(Route::current()->getName() == 'withdraw') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('withdraw') }}">Withdraw</a>
               @endif
+              @if (session('role') == 'Operator')
+              <a class="@if(Route::current()->getName() == 'refill') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('refill') }}">Refill</a>
+              <a class="@if(Route::current()->getName() == 'remit') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('remit') }}">Remit</a>
+              @endif
               <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
-              <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+              </form>
             </div>
           </li>
           @endguest

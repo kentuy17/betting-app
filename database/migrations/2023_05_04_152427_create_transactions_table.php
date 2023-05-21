@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('processedBy')->default(1);
             $table->float('amount')->default('0.00');
             $table->string('mobile_number')->nullable();
-            $table->enum('action',['withdraw','deposit']);
+            $table->enum('action',['withdraw','deposit','refill', 'remit']);
             $table->enum('status',['pending','completed','failed'])->default('pending');
             $table->timestamps();
         });

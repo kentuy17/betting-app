@@ -164,4 +164,80 @@ class OperatorController extends Controller
             'message' => 'OK'
         ]);
     }
+
+    public function remit()
+    {
+        return view('operator.remit-points');
+    }
+
+    public function remitSubmit(Request $request)
+    {
+        try {
+            $this->validate($request, [
+                'phone_no' => 'required',
+                'amount' => 'required',
+            ]);  
+
+            $user = User::find(Auth::user()->id);
+            if($user->points < $request->amount) {
+                return redirect()->back()
+                    ->with('danger', 'Insuficient points!');
+            }
+            
+            $user->points -=  $request->amount;
+            $user->save();
+
+            Transactions::create([
+                'user_id' => $user->id,
+                'amount' => $request->amount,
+                'mobile_number' => $request->phone_no,
+                'action' => 'remit',
+                'status' => 'pending',
+                'processedBy' => null,
+            ]);
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'Remit Points Request Successful!');
+    }
+
+    public function refill()
+    {
+        $user = Auth::user();
+        $auditor = ModelHasRoles::with('users')->has('auditor')->get()
+            ->pluck('users')
+            ->first();
+
+        return view('operator.refill-points', compact('user', 'auditor'));
+    }
+
+    public function refillSubmit(Request $request)
+    {
+        try {
+            $this->validate($request, [
+                'formFile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);  
+             
+            $imageName = time().'.'.$request->formFile->extension();
+            $path = 'public/' . $imageName;
+            //Storage::disk('local')->put($path, file_get_contents($request->formFile));
+
+            Transactions::create([
+                'user_id' => Auth::user()->id,
+                'action' => 'refill',
+                'mobile_number' => Auth::user()->phone_no,
+                'filename' => $imageName,
+                'status' => 'pending',
+                'processedBy' => $request->auditor_id,
+                'outlet' => 'Gcash'
+            ]);
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'Submitted Successfully!');
+    }
 }

@@ -21,6 +21,8 @@ class ModelHasRoles extends Model
     ];
 
     protected $OPERATOR = 3;
+    protected $AUDITOR = 5;
+
 
     public function roles()
     {
@@ -46,6 +48,11 @@ class ModelHasRoles extends Model
     public function lowest_pts()
     {
         return $this->operators()->orderBy('points');
+    }
+    public function auditor()
+    {
+        return $this->belongsTo(User::class, 'model_id')
+            ->where('role_id', $this->AUDITOR);
     }
 }
 
