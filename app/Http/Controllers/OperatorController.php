@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
-use \Illuminate\Contracts\Support\Carbon;
 use App\Models\ModelHasRoles;
 use App\Models\Transactions;
 use App\Models\DerbyEvent;
@@ -65,7 +64,7 @@ class OperatorController extends Controller
             $trans->reference_code = $request->ref_code;
             $trans->amount = $request->amount;
             $trans->note = $request->note;
-            $trans->completed_at = Carbon::now();
+            $trans->completed_at = date('Y-m-d H:i:s');
             $trans->save();
 
             if($request->action == 'approve') {
@@ -112,7 +111,7 @@ class OperatorController extends Controller
             $trans->processedBy = Auth::user()->id;
             $trans->reference_code = $request->ref_code;
             $trans->note = $request->note;
-            $trans->completed_at = Carbon::now();
+            $trans->completed_at = date('Y-m-d H:i:s');
             $trans->save();
 
             if($request->action == 'approve') {
