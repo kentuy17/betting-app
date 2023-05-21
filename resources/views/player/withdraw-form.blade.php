@@ -217,7 +217,6 @@
 <script>
   $(function() {
     $('button[type="submit"]').on('click', function(e) {
-      e.preventDefault();
       var points = $('#credit_points').val().replace(",", "");
       var amount = $('#amount').val();
       
