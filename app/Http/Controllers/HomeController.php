@@ -41,6 +41,10 @@ class HomeController extends Controller
             $this->redirectTo = '/users';
         }
 
+        if($role->name == 'Auditor') {
+            $this->redirectTo = '/transactions-auditor';
+        }
+
         return redirect($this->redirectTo);
     }
 }

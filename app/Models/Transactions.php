@@ -61,4 +61,9 @@ class Transactions extends Model
     {
         return $this->belongsTo(User::class, 'processedBy');
     }
+
+    public function auditor()
+    {
+        return $this->belongsTo(User::class, 'processedBy');
+    }
 }

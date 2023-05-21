@@ -89,7 +89,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/transaction/remit', [AuditorController::class, 'getRemitTrans']);
         Route::post('/transaction/refill', [AuditorController::class, 'processRefill']);
         Route::post('/transaction/remit', [AuditorController::class, 'processRemit']);
-        Route::get('/transactions', [AuditorController::class, 'transactions'])->name('auditor.transactions-operator');
+        Route::get('/transactions-auditor', [AuditorController::class, 'transactions'])->name('auditor.transactions-operator');
 
     });
 
