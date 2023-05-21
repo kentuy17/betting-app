@@ -98,7 +98,6 @@
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
-
       </div>
       <div class="hidden w-full md:flex md:items-center md:w-auto" id="menu">
         <ul class="text-base md:flex md:justify-between md:pt-0 uppercase">
@@ -106,7 +105,6 @@
           @if (Route::has('login'))
           <li><a class="md:p-4 py-2 block" href="{{ route('login') }}">{{ __('Login') }}</a></li>
           @endif
-
           @if (Route::has('register'))
           <li><a class="md:p-4 py-2 block" href="{{ route('register') }}">{{ __('Register') }}</a></li>
           @endif
@@ -121,43 +119,23 @@
           <li><a class="md:pl-4 py-2 block" href="{{ route('operator.transactions') }}">TRANSACTIONS</a></li>
           @endif
           @if (session('role') == 'Player')
-          <li>
-            <a class="@if(Route::current()->getName() == 'play') {{ 'active-nav' }} @endif py-2 block" 
-              href="{{ route('play') }}">Play</a>
-          </li>
-          <li>
-            <a class="@if(Route::current()->getName() == 'player.bethistory') {{ 'active-nav' }} @endif md:pl-4 py-2 block" 
-              href="{{ route('player.bethistory') }}">Bet History</a>
-          </li>
-          <li>
-            <a class="@if(Route::current()->getName() == 'player.player-transaction') {{ 'active-nav' }} @endif md:pl-4 py-2 block" 
-              href="{{ route('player.player-transaction') }}">Transaction</a>
-          </li>
+          <li><a class="@if(Route::current()->getName() == 'play') {{ 'active-nav' }} @endif py-2 block" href="{{ route('play') }}">Play</a></li>
+          <li><a class="@if(Route::current()->getName() == 'player.bethistory') {{ 'active-nav' }} @endif md:pl-4 py-2 block" href="{{ route('player.bethistory') }}">Bet History</a></li>
+          <li><a class="@if(Route::current()->getName() == 'player.player-transaction') {{ 'active-nav' }} @endif md:pl-4 py-2 block" href="{{ route('player.player-transaction') }}">Transaction</a></li>
           @endif
           <li>
-            <a id="navbarDropdown" class="md:p-4 py-2 block dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-              {{ Auth::user()->username }}
-            </a>
+            <a id="navbarDropdown" class="md:p-4 py-2 block dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>{{ Auth::user()->username }}</a>
             <div class="dropdown-menu dropdown-menu-end" id="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="@if(Route::current()->getName() == 'users.profile') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" 
-                href="{{ route('users.profile') }}">My Profile</a>
+              <a class="@if(Route::current()->getName() == 'users.profile') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('users.profile') }}">My Profile</a>
               @if (session('role') == 'Admin')
-              <a class="@if(Route::current()->getName() == 'admin.shares') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" 
-                href="{{ route('admin.shares') }}">Shares</a>
+              <a class="@if(Route::current()->getName() == 'admin.shares') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('admin.shares') }}">Shares</a>
               @endif
               @if (session('role') == 'Player')
-              <a class="@if(Route::current()->getName() == 'deposit') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" 
-                href="{{ route('deposit') }}">Deposit</a>
-              <a class="@if(Route::current()->getName() == 'withdraw') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" 
-              href="{{ route('withdraw') }}">Withdraw</a>
+              <a class="@if(Route::current()->getName() == 'deposit') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('deposit') }}">Deposit</a>
+              <a class="@if(Route::current()->getName() == 'withdraw') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('withdraw') }}">Withdraw</a>
               @endif
-              <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); 
-                document.getElementById('logout-form').submit();">
-                {{ __('Logout') }}
-              </a>
-              <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                @csrf
-              </form>
+              <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
             </div>
           </li>
           @endguest

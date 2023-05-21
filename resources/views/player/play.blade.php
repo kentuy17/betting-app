@@ -35,6 +35,8 @@
     background-image: url("{{ asset('img/video-unavailable.webp') }}");
     object-fit: cover;
     background-size: cover;
+    width: -webkit-fill-available;
+    height: fit-content;
   }
 </style>
 @endsection
