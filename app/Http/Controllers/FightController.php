@@ -12,6 +12,8 @@ use App\Models\DerbyEvent;
 use App\Models\Bet;
 use App\Models\User;
 use App\Models\BetHistory;
+use App\Models\Commission;
+use App\Models\ShareHolder;
 use Illuminate\Support\Facades\DB;
 
 class FightController extends Controller
@@ -258,6 +260,38 @@ class FightController extends Controller
             }
             #endregion
 
+        }
+
+        if($last_fight->game_winner == 'M' || $last_fight->game_winner == 'W') {
+            $kusgan = ShareHolder::get();
+            $data = [];
+            $per = 10;
+            $total_percentage_owned = 0;
+            $total_win_amount = $last_fight->bets->sum('win_amount');
+
+            if($kusgan->sum('percentage') < $per) {
+                $kusgan->push([
+                    'id' => '-1',
+                    'user_id' => '-1',
+                    'percentage' => $per - $kusgan->sum('percentage')
+                ]);
+
+                $kusgan->all();
+            }
+
+            foreach ($kusgan as $key => $gwapo) {
+                $data[] = [
+                    'user_id' => $gwapo->user_id,
+                    'points' => $percentage / $per * $gwapo->percentage,
+                    'percentage' => $gwapo->percentage,
+                    'total_win_amount' => $total_win_amount,
+                    'fight_id' => $last_fight->id,
+                    'event_id' => $this->current_event->id,
+                    'active' => true,
+                ];
+            }
+
+            Commission::create($data);
         }
 
         return response()->json([

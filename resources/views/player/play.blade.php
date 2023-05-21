@@ -21,7 +21,7 @@
   #sabong-aficionado {
     position: relative;
     padding-bottom: 56.25%; /* 16:9 */
-    padding-top: 25px;
+    /* padding-top: 25px; */
     height: 0;
   }
   #sabong-aficionado object, #sabong-aficionado iframe {
@@ -30,6 +30,11 @@
     left: 0;
     width: 100%;
     height: 100%;
+  }
+  #video-unavailable {
+    background-image: url("{{ asset('img/video-unavailable.webp') }}");
+    object-fit: cover;
+    background-size: cover;
   }
 </style>
 @endsection
@@ -41,6 +46,7 @@
       <div id="video-stream-container" class="embed-responsive">
         <div class="bet-bg-head font-bold">{{ $fight->name }}</div>
         <div id="sabong-aficionado">
+          <img id="video-unavailable" src="{{ asset('img/video-unavailable.webp') }}">
         </div>      
       </div>
     </div>
@@ -72,42 +78,49 @@
 <script src= "https://player.twitch.tv/js/embed/v1.js"></script>
 <script src="{{ asset('js/play.js') }}" defer></script>
 <script type="text/javascript">
-  var options = {
-    channel: "kentuy17", // TODO: Change this to the streams username you want to embed
-    width: 640,
-    height: 360,
-    controls: false,
-    muted: false,
-    allowfullscreen: true,
-  };
 
   // DISABLED STREAMING TO AVOID BANNING
+  try {
+    var options = {
+      channel: "kentuy17", // TODO: Change this to the streams username you want to embed
+      width: 640,
+      height: 360,
+      controls: false,
+      muted: false,
+      allowfullscreen: true,
+    };
 
-  var player = new Twitch.Player("sabong-aficionado", options);
+    var player = new Twitch.Player("sabong-aficionado", options);
 
-  player.addEventListener(Twitch.Player.READY, initiate)
-  player.setVolume(0.5);
-  player.setMuted(false);
-
-  function initiate() {
-    player.addEventListener(Twitch.Player.ONLINE, handleOnline);
-    player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
-    player.removeEventListener(Twitch.Player.READY, initiate);
-  }
-
-  function handleOnline() {
-    document.getElementById("video-stream-container").classList.remove('hide');
-    player.removeEventListener(Twitch.Player.ONLINE, handleOnline);
-    player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
+    player.addEventListener(Twitch.Player.READY, initiate)
+    player.setVolume(0.5);
     player.setMuted(false);
-  }
 
-  function handleOffline() {
-    document.getElementById("video-stream-container").classList.add('hide');
-    player.removeEventListener(Twitch.Player.OFFLINE, handleOffline);
-    player.addEventListener(Twitch.Player.ONLINE, handleOnline);
-    player.setMuted(true);
+    function initiate() {
+      player.addEventListener(Twitch.Player.ONLINE, handleOnline);
+      player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
+      player.removeEventListener(Twitch.Player.READY, initiate);
+    }
+
+    function handleOnline() {
+      // document.getElementById("video-stream-container").classList.remove('hide');
+      $('#sabong-aficionado').find('iframe').css('z-index','1')
+      player.removeEventListener(Twitch.Player.ONLINE, handleOnline);
+      player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
+      player.setMuted(false);
+    }
+
+    function handleOffline() {
+      // document.getElementById("video-stream-container").classList.add('hide');
+      $('#sabong-aficionado').find('iframe').css('z-index','-100')
+      player.removeEventListener(Twitch.Player.OFFLINE, handleOffline);
+      player.addEventListener(Twitch.Player.ONLINE, handleOnline);
+      player.setMuted(true);
+    }
+  } catch (error) {
+    console.log(error);
   }
+  
 </script>
 
 
