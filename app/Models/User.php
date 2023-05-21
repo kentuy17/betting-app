@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Contracts\Role;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\ShareHolder;
 
 class User extends Authenticatable
 {
@@ -81,5 +82,15 @@ class User extends Authenticatable
     public function updateContactNumber(int $userID, array $aParameters) : int
     {
         return $this->where('id', $userID)->update($aParameters);
+    }
+
+    public function share_holder()
+    {
+        return $this->hasOne(ShareHolder::class, 'user_id');
+    }
+
+    public function active_commission()
+    {
+        return $this->hasMany(Commission::class, 'user_id')->where('active',true);
     }
 }

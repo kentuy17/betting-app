@@ -37,6 +37,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('products', ProductController::class);
     Route::resource('transactions', UserController::class);
 
+    Route::get('/user/profile', [UserController::class, 'profile'])->name('users.profile');
+    Route::post('/user/profile', [UserController::class, 'editprofile']);
+
     Route::group(['middleware' => ['admin']], function () {
         Route::get('/admin/share-allocation', [AdminController::class, 'shareHolders'])->name('admin.shares');
     });
@@ -47,8 +50,6 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/play/history', [PlayerController::class, 'bethistory'])->name('player.bethistory');
         Route::get('/reports', [PlayerController::class, 'reports'])->name('player.reports');
         Route::post('/bet/add', [BetController::class, 'addBet']);
-        Route::get('/user/profile', [UserController::class, 'profile'])->name('users.profile');
-        Route::post('/user/profile', [UserController::class, 'editprofile']);
         Route::get('/deposit', [PlayerController::class, 'deposit'])->name('deposit');
         Route::post('/deposit', [PlayerController::class, 'depositSubmit'])->name('deposit.upload.post');
         Route::get('/withdrawform', [PlayerController::class, 'profileWithdraw'])->name('player.withdraw');  

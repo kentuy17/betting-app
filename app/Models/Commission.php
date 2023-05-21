@@ -11,6 +11,8 @@ class Commission extends Model
 
     protected $table = 'commissions';
 
+    public $timestamps = true;
+
     protected $fillable = [
         'id',
         'user_id',

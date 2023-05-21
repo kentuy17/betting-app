@@ -156,7 +156,7 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-12">
-      <div class="card col-md-12">
+      <div class="card col-md-12 mt-3">
         <div class="card-body">
           <form method="POST" action="{{ url('/user/profile/') }}">
             <div class="col-md-8 card" id="basic-info">
@@ -173,6 +173,16 @@
                     </div>
                   </div>
                 </div>
+                @if(Auth::user()->share_holder)
+                <div class="row">
+                  <div class="col-12">
+                    <label class="text-black form-label mt-4">Current Commission ({{ Auth::user()->share_holder->percentage }}%)</label>
+                    <div class="input-group">
+                      <input id="current_commission" class="form-control disabled" type="text" disabled="" value="{{ number_format(Auth::user()->active_commission->sum('points'), 2, '.', ',') }}" >
+                    </div>
+                  </div>
+                </div>
+                @endif
                 <div class="row">
                   <div class="col-12">
                     <label class="text-black form-label mt-4">Username</label>
