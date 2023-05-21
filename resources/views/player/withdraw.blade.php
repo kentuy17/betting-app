@@ -238,7 +238,8 @@
       
       if(parseFloat(points) < parseFloat(amount)) {
         alert ("Insufficient Amount")
-        return;
+        console.log({points:parseFloat(points),amount:parseFloat(amount)});
+        // return;
       }
     });
   })
