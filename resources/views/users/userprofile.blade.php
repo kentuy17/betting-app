@@ -178,7 +178,7 @@
                   <div class="col-12">
                     <label class="text-black form-label mt-4">Current Commission ({{ Auth::user()->share_holder->percentage }}%)</label>
                     <div class="input-group">
-                      <input id="current_commission" class="form-control disabled" type="text" disabled="" value="{{number_format($user->points, 2, '.', ',');}}" >
+                      <input id="current_commission" class="form-control disabled" type="text" disabled="" value="{{ number_format(Auth::user()->active_commission->sum('points'), 2, '.', ',') }}" >
                     </div>
                   </div>
                 </div>

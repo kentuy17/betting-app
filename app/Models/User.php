@@ -88,4 +88,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(ShareHolder::class, 'user_id');
     }
+
+    public function active_commission()
+    {
+        return $this->hasMany(Commission::class, 'user_id')->where('active',true);
+    }
 }

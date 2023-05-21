@@ -266,20 +266,23 @@ class FightController extends Controller
             $kusgan = ShareHolder::get();
             $data = [];
             $per = 10;
-            $total_percentage_owned = 0;
-            $total_win_amount = $last_fight->bets->sum('win_amount');
+            $total_win_amount = Bet::where('fight_id',$last_fight->id)->sum('win_amount');
 
             if($kusgan->sum('percentage') < $per) {
-                $kusgan->push([
+                $unallocated = array(
                     'id' => '-1',
                     'user_id' => '-1',
                     'percentage' => $per - $kusgan->sum('percentage')
-                ]);
+                );
 
+                $kusgan->push($unallocated);
                 $kusgan->all();
             }
 
             foreach ($kusgan as $key => $gwapo) {
+                if(gettype($gwapo) == 'array') {
+                    $gwapo = (object) $gwapo;
+                }
                 $data[] = [
                     'user_id' => $gwapo->user_id,
                     'points' => $percentage / $per * $gwapo->percentage,
@@ -291,7 +294,7 @@ class FightController extends Controller
                 ];
             }
 
-            Commission::create($data);
+            Commission::insert($data);
         }
 
         return response()->json([
