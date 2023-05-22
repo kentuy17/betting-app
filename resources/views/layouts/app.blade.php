@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
 
-  @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
+  @vite(['resources/sass/app.scss', 'public/css/chat.scss', 'resources/js/app.js', 'resources/css/app.css'])
 
   <!-- Custom -->
   <link rel="stylesheet" href="{{ asset('css/dark-mode.css') }}" type="text/css">
@@ -147,7 +147,7 @@
     <main>
       @yield('content')
     </main>
-
+    @include('layouts.components.floating-chat')
   </div>
 </body>
 </html>
@@ -160,6 +160,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js" type="text/javascript"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js" type="text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" type="text/javascript"></script>
+<script src="{{ asset('js/floating-chat.js') }}"></script>
 @yield('additional-scripts')
 <script>
   const button = document.querySelector('#menu-button');
