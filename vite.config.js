@@ -8,6 +8,7 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/sass/app.scss',
+                'public/css/chat.scss',
                 'resources/css/app.css',
                 'resources/js/app.js',
                 'resources/js/play-vue.js',
