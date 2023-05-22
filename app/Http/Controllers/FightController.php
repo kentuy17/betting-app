@@ -291,6 +291,7 @@ class FightController extends Controller
                     'fight_id' => $last_fight->id,
                     'event_id' => $this->current_event->id,
                     'active' => true,
+                    'created_at' => now(),
                 ];
             }
 

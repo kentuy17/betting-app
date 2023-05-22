@@ -34,7 +34,11 @@ class OperatorController extends Controller
 
     public function fight(): View
     {
-        return view('operator.fight');
+        $role = $this->getUserRole();
+        $fight = DerbyEvent::where('status','ACTIVE')
+            ->orderBy('id','desc')
+            ->first();
+        return view('operator.fight',compact('role','fight'));
     }
 
     public function transactions()
