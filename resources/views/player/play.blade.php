@@ -3,7 +3,7 @@
 @section('additional-styles')
 <link rel="stylesheet" href="{{ asset('css/play-sabong.css') }}" type="text/css">
 <link rel="stylesheet" href="{{ asset('css/operator.css') }}" type="text/css">
-<link href="https://vjs.zencdn.net/7.8.2/video-js.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://vjs.zencdn.net/7.8.2/video-js.css"/>
 <style>
   .offline-embeds-channel-info-panel {
     background: rgba(0,0,0,.6);

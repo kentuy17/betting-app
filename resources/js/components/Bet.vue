@@ -63,7 +63,9 @@
     </div>
     </div>
     <div class="col-md-12">
-      <div class="input-group px-4 py-2"><input type="number" v-model='betAmount' class="form-control bet-amount" min="0">
+      <div class="input-group px-4 py-2">
+        <!-- <input type="number" v-model='betAmount' class="form-control bet-amount" min="0"> -->
+        <money3 class="form-control" :model-modifiers="{ number: true }" v-model="betAmount" v-bind="money"></money3>
         <div class="input-group-append">
           <button @click='clear' class="input-group-text">CLEAR</button></div>
       </div>
@@ -82,7 +84,12 @@
 </template>
 
 <script>
+import { Money3Component } from 'v-money3'
+
 export default {
+  components: { 
+    money3: Money3Component,
+  },
   data() {
     return {
       message: '_____',
@@ -109,7 +116,14 @@ export default {
           meron: 0,
           wala: 0,
         },
-      }
+      },
+      money: {
+        decimal: '.',
+        thousands: ',',
+        precision: 0,
+        masked: false,
+        shouldRound: false,
+      },
     }
   },
   mounted() {
@@ -170,7 +184,9 @@ export default {
 
   },
   watch: {
-    // 
+    // betAmount: function(newValue, oldValue) {
+    //   console.log(typeof newValue)
+    // }
   },
 
   computed: {
