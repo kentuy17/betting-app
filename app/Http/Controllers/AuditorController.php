@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
+use \Illuminate\Contracts\Support\Carbon;
 use App\Models\ModelHasRoles;
 use App\Models\Transactions;
 use App\Models\DerbyEvent;
 use App\Models\User;
 
-class OperatorController extends Controller
+class AuditorController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -32,21 +33,16 @@ class OperatorController extends Controller
         return view('home');
     }
 
-    public function fight(): View
-    {
-        return view('operator.fight');
-    }
-
     public function transactions()
     {
-        return view('operator.transactions');
+        return view('auditor.transactions-operator');
     }
 
-    public function getDepositTrans()
+    public function getRefillTrans()
     {
-        $trans = Transactions::where('action','deposit')
+        $trans = Transactions::where('action','refill')
             ->with('user')
-            ->with('operator')
+            ->with('auditor')
             ->orderBy('id','desc')
             ->get();
             
@@ -55,7 +51,7 @@ class OperatorController extends Controller
         ]);
     }
 
-    public function processDeposit(Request $request)
+    public function processRefill(Request $request)
     {
         try {
             $trans = Transactions::find($request->id);
@@ -68,13 +64,13 @@ class OperatorController extends Controller
             $trans->save();
 
             if($request->action == 'approve') {
-                $player = User::find($trans->user_id);
-                $player->points +=  $request->amount;
-                $player->save();
-
-                $operator = User::find(Auth::user()->id);
+                $operator = User::find($trans->user_id);
                 $operator->points +=  $request->amount;
-                $operator->save(); 
+                $operator->save();
+
+                $auditor = User::find(Auth::user()->id);
+                $auditor->points +=  $request->amount;
+                $auditor->save(); 
             }
         } catch (\Exception $e) {
             return response()->json([
@@ -86,15 +82,15 @@ class OperatorController extends Controller
         return response()->json([
             'msg' => 'Success!',
             'status' => 'OK',
-            'points' => $operator->points,
+            'points' => $auditor->points,
         ], 200);
     }
 
-    public function getWithdrawTrans()
+    public function getRemitTrans()
     {
-        $trans = Transactions::where('action','withdraw')
+        $trans = Transactions::where('action','remit')
             ->with('user')
-            ->with('operator')
+            ->with('auditor')
             ->orderBy('id','desc')
             ->get();
             
@@ -103,7 +99,7 @@ class OperatorController extends Controller
         ]);
     }
 
-    public function processWithdraw(Request $request)
+    public function processRemit(Request $request)
     {
         try {
             $trans = Transactions::find($request->id);
@@ -115,9 +111,9 @@ class OperatorController extends Controller
             $trans->save();
 
             if($request->action == 'approve') {
-                $operator = User::find(Auth::user()->id);
-                $operator->points += $trans->amount;
-                $operator->save();
+                $auditor = User::find(Auth::user()->id);
+                $auditor->points += $trans->amount;
+                $auditor->save();
             }
         } catch (\Exception $e) {
             return response()->json([
@@ -129,7 +125,7 @@ class OperatorController extends Controller
         return response()->json([
             'msg' => 'Success!',
             'status' => 'OK',
-            'points' => $operator->points,
+            'points' => $auditor->points,
         ], 200);
     }
 

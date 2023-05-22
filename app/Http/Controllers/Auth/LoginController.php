@@ -68,7 +68,10 @@ class LoginController extends Controller
         if($role->name == 'Admin') {
             $this->redirectTo = '/home';
         }
-
+        
+        if($role->name == 'Auditor') {
+            $this->redirectTo = '/home';
+        }
         return $this->redirectTo;
     }
 }
