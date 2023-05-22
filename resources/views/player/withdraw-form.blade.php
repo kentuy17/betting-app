@@ -217,7 +217,7 @@
 <script>
   $(function() {
     $('#withdraw-form').on('submit', function(e) {
-      e.preventDefault();
+      // e.preventDefault();
       var points = $('#credit_points').val().replace(",", "");
       var amount = $('#amount').val();
       
