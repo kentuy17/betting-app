@@ -193,7 +193,7 @@ $default-shadow-color: rgb(0, 0, 0);
         }
       }
 
-      li.other {
+      li.self {
         animation: show-chat-odd 0.15s 1 ease-in;
         -moz-animation: show-chat-odd 0.15s 1 ease-in;
         -webkit-animation: show-chat-odd 0.15s 1 ease-in;
@@ -202,18 +202,19 @@ $default-shadow-color: rgb(0, 0, 0);
         color: #0AD5C1;
       }
 
-      li.other:before {
+      li.self:before {
         right: -$chat-thread-offset;
         // Placeholder avatar 1
-        background-image: url(https://www.kindpng.com/picc/m/119-1199756_cleantek-contact-call-centre-girl-png-transparent-png.png);
+        // background-image: url(https://www.kindpng.com/picc/m/119-1199756_cleantek-contact-call-centre-girl-png-transparent-png.png);
+        background-image: url('../../public/img/operator-logo.png');
       }
 
-      li.other:after {
+      li.self:after {
         border-right: $chat-thread-msg-arrow-size solid transparent;
         right: -$chat-thread-msg-arrow-size;
       }
 
-      li.self {
+      li.other {
         animation: show-chat-even 0.15s 1 ease-in;
         -moz-animation: show-chat-even 0.15s 1 ease-in;
         -webkit-animation: show-chat-even 0.15s 1 ease-in;
@@ -222,13 +223,14 @@ $default-shadow-color: rgb(0, 0, 0);
         color: #0EC879;
       }
 
-      li.self:before {
+      li.other:before {
         left: -$chat-thread-offset;
         // Placeholder avatar 2
-        background-image: url('../../public/img/operator-logo.png');
+        // background-image: url('../../public/img/operator-logo.png');
+        background-image: url(https://www.kindpng.com/picc/m/119-1199756_cleantek-contact-call-centre-girl-png-transparent-png.png);
       }
 
-      li.self:after {
+      li.other:after {
         border-left: $chat-thread-msg-arrow-size solid transparent;
         left: -$chat-thread-msg-arrow-size;
       }

@@ -231,6 +231,17 @@
         return
       }
     });
+
+    redirectToTrans();
   })
+
+  function redirectToTrans() {
+    var success = $('.alert-success').length;
+    if(success) {
+      setTimeout(() => {
+        window.location.href = 'playertransaction';
+      }, 2000);
+    }
+  }
 </script>
 @endsection

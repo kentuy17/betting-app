@@ -1,6 +1,9 @@
 body.dark-mode nav {
-  background-color: #343a40 !important;
+  /*! background-color: #010101 !important; */
   color: aliceblue !important;
+  /*! background-color: rgba(13, 17, 23, 1) !important; */
+  background: #303134 !important;
+  box-shadow: 0 1px 6px 0 rgba(0,0,0,0.2);
 }
 
 body.dark-mode {

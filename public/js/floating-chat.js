@@ -71,12 +71,19 @@ $(function () {
     if (!newMessage) return;
 
     var messagesContainer = $('.messages');
+    var typing = $('.other-typing');
+    var reply = $('<li class="other">Thank you for messaging us! We are currently processing your request.</li>');
 
-    messagesContainer.append([
-      '<li class="self">',
-      newMessage,
-      '</li>'
-    ].join(''));
+    typing.before('<li class="self">'+newMessage+'</li>');
+
+    setTimeout(() => {
+      typing.show();
+      setTimeout(() => {
+        typing.hide().before(reply);
+      }, 3000);
+    }, 3000);
+
+    
 
     // clean out old message
     userInput.html('');

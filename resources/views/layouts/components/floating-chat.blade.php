@@ -13,6 +13,7 @@
     </div>
     <ul class="messages">
       <li class="other">👋 Hi! How may i help you today?</li>
+      <li class="other other-typing" style="display: none;"><i>typing...</i></li>
     </ul>
     <div class="footer">
       <div class="text-box" id="chat-box" contenteditable="true" disabled="true"></div>

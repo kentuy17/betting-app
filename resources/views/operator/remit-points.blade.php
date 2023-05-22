@@ -217,7 +217,7 @@
 <script>
   $(function() {
     $('button[type="submit"]').on('click', function(e) {
-      var points = $('#credit_points').val();
+      var points = $('#credit_points').val().replace(',', '');
       var amount = $('#amount').val();
       
       if(parseFloat(points) < parseFloat(amount)) {

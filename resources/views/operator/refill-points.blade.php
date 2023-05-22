@@ -171,10 +171,10 @@
             <div class="rounded d-flex p-2 btn-gold">
               <div class="icn"><img src="img/operator-logo.png"></div>
               <div class="info flex flex-col justify-content-center">
-                <div class="name" style="text-transform: uppercase;">{{ $auditor->name }}</div>
+                <div class="name" style="text-transform: uppercase;">{{ $auditor->name ?? 'Auditor' }}</div>
                 <div class="name text-uppercase">
                   <div class="text-xl font-bold" >
-                    <span id="copyNumber">{{ $auditor->phone_no }}</span>
+                    <span id="copyNumber">{{ $auditor->phone_no ?? '*****' }}</span>
                     <a data-toggle="popover" role="button" data-placement="top" data-trigger="focus" title="Copied!" id="copy-icon" 
                       class="fa-solid fa-copy ml-2"></a>  
                   </div>                  

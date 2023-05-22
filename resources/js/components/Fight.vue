@@ -60,7 +60,7 @@
           close: false,
           done: false,
           cancel: false,
-        }
+        },
       }
 
     },
@@ -71,6 +71,16 @@
           this.fight = json.current
           this.message = this.setFightStatus(json.current)
           this.total = json.bets
+        });
+
+      window.Echo.channel('bet')
+        .listen('.bet', async (e) => {
+          // console.log(e, 'bet');
+          if (e.bet.side === 'M') {
+            this.total.meron = this.total.meron + e.bet.amount
+          } else {
+            this.total.wala = this.total.wala + e.bet.amount
+          }
         });
     },
     methods: {
