@@ -7,15 +7,19 @@
   <div class="row justify-content-center">
     <div class="col-md-12">
       <ul class="nav nav-tabs" id="myTab" role="tablist">
+      @if (session('role') == 'Cash-in Operator')
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="deposit-tab" data-bs-toggle="tab" data-bs-target="#deposit-panel" type="button" role="tab" aria-controls="deposit" aria-selected="true">
             Deposits <span id="badge-deposit" style="display: none;" class="badge bg-danger">0</span></button>
         </li>
+      @endif
+      @if (session('role') == 'Cash-out Operator')
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="withdraw-tab" data-bs-toggle="tab" data-bs-target="#withdraw" type="button" role="tab" aria-controls="withdraw" aria-selected="false">
             Withdrawals <span id="badge-withdraw" style="display: none;" class="badge bg-danger">0</span> 
             <span id="badge-withdraw-unverified" data-bs-toggle="tooltip" title="Missing Ref-code" style="display: none;" class="badge bg-warning">4</span></button>
         </li>
+      @endif
         <li class="nav-item credit-nav-item">
           <div class="nav-credits-wr w-25 w-sm-50 gold-text">
             <a href="/platform/deposit" class="d-flex align-items-center justify-content-end gp-credits">
@@ -31,6 +35,7 @@
           </div>
         </li>
       </ul>
+      @if (session('role') == 'Cash-in Operator')
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="deposit-panel" role="tabpanel" aria-labelledby="deposit-tab">
           <table class="table dt-responsive table-striped nowrap w-100" id="deposit-trans-table">
@@ -49,6 +54,8 @@
             </thead>
           </table>
         </div>
+        @endif
+        @if (session('role') == 'Cash-out Operator')
         <div class="tab-pane fade" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
           <table class="table dt-responsive table-striped nowrap w-100" id="withdraw-trans-table">
             <thead>
@@ -66,6 +73,7 @@
             </thead>
           </table>
         </div>
+        @endif
       </div>
       
     </div>
@@ -115,7 +123,6 @@
     </div>
   </div>
 </div>
-
 <!-- Withdraw Modal -->
 <div class="modal fade" id="withdraw-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-top" role="document">

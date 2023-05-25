@@ -113,7 +113,7 @@
           <li><a class="md:p-4 py-2 block" href="{{ route('users.index') }}">Manage Users</a></li>
           <li><a class="md:p-4 py-2 block" href="{{ route('roles.index') }}">Manage Role</a></li>
           @endif
-          @if (session('role') == 'Operator')
+          @if (session('role') == 'Operator' || session('role') == 'Cash-out Operator' || session('role') == 'Cash-in Operator' )
           <li><a class="md:pl-4 py-2 block" href="{{ route('operator.derby.event') }}">EVENT</a></li>
           <li><a class="md:pl-4 py-2 block" href="{{ route('operator.fight') }}">FIGHT</a></li>
           <li><a class="md:pl-4 py-2 block" href="{{ route('operator.transactions') }}">TRANSACTIONS</a></li> 
@@ -137,8 +137,10 @@
               <a class="@if(Route::current()->getName() == 'deposit') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('deposit') }}">Deposit</a>
               <a class="@if(Route::current()->getName() == 'withdraw') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('withdraw') }}">Withdraw</a>
               @endif
-              @if (session('role') == 'Operator')
+              @if (session('role') == 'Cash-in Operator')
               <a class="@if(Route::current()->getName() == 'refill') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('refill') }}">Refill</a>
+              @endif
+              @if (session('role') == 'Cash-out Operator')
               <a class="@if(Route::current()->getName() == 'remit') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('remit') }}">Remit</a>
               @endif
               <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>

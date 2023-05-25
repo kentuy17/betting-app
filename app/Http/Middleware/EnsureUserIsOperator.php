@@ -15,7 +15,7 @@ class EnsureUserIsOperator
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(session('role') === 'Operator') {
+        if(session('role') === 'Operator' || session('role') == 'Cash-out Operator' || session('role') == 'Cash-in Operator') {
             return $next($request);
         }
 

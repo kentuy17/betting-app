@@ -22,6 +22,9 @@ class ModelHasRoles extends Model
 
     protected $OPERATOR = 3;
     protected $AUDITOR = 5;
+    protected $CASHOUT = 6;
+    protected $CASHIN = 7;
+
 
 
     public function roles()
@@ -53,6 +56,16 @@ class ModelHasRoles extends Model
     {
         return $this->belongsTo(User::class, 'model_id')
             ->where('role_id', $this->AUDITOR);
+    }
+    public function cashout()
+    {
+        return $this->belongsTo(User::class, 'model_id')
+            ->where('role_id', $this->CASHOUT);
+    }
+    public function cashin()
+    {
+        return $this->belongsTo(User::class, 'model_id')
+            ->where('role_id', $this->CASHIN);
     }
 }
 
