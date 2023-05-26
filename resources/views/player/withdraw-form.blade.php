@@ -175,7 +175,7 @@
               </div>
               <div class="row">
                 <div class="col-12">
-                  <label class="text-black form-label mt-4">Phone No.</label>
+                  <label class="text-black form-label mt-4">Gcash Number</label>
                   <div class="input-group">
                     <input id="phone_no" name="phone_no" class="form-control" type="text" value="{{ Auth::user()->phone_no }}" placeholder="09*********"  >
                   </div>
@@ -204,8 +204,8 @@
               <button type="submit" class="btn bg-gradient-dark btn-sm float-end mt-4">Submit</button>
             </div>
           </div>
-          
-          
+
+
         </div>
       </form>
     </div>
@@ -220,7 +220,7 @@
       // e.preventDefault();
       var points = $('#credit_points').val().replace(",", "");
       var amount = $('#amount').val();
-      
+
       if(parseFloat(points) < parseFloat(amount)) {
         alert ("Insufficient Amount")
         return;

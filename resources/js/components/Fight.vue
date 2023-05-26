@@ -40,17 +40,20 @@
     </div>
     <div class="flex flex-col gap-2 lg:flex-row justify-center my-3 px-5">
       <button @click="updateFight('O')" :disabled="isDisabled.open" class="btn btn-success btn-lg mx-2">
-        <span v-show='!isLoading.open'>OPEN</span><span v-show='isLoading.open'>Processing...</span></button>
+        <span v-show='!isLoading.open'>OPEN</span>
+        <span v-show='isLoading.open'>Processing...</span></button>
       <button @click="updateFight('C')" :disabled="isDisabled.close" class="btn btn-danger btn-lg mx-2">
-        <span v-show='!isLoading.close'>CLOSE</span><span v-show='isLoading.close'>Processing...</span></button>
+        <span v-show='!isLoading.close'>CLOSE</span>
+        <span v-show='isLoading.close'>Processing...</span></button>
       <button @click="doneFight()" :disabled="isDisabled.done" class="btn btn-secondary btn-lg mx-2">
-        <span v-show='!isLoading.done'>DONE</span><span v-show='isLoading.done'>Loading...</span></button>
-      <button 
-        @click="cancelFight()" 
-        :disabled='isLoading.cancel' 
+        <span v-show='!isLoading.done'>DONE</span>
+        <span v-show='isLoading.done'>Loading...</span></button>
+      <button
+        @click="cancelFight()"
+        :disabled='isLoading.cancel'
         class="btn btn-primary btn-lg mx-2"
         v-show='!isLoading.cancel'>
-        <span v-show='!isLoading.cancel'>Cancel Fight</span>
+        <span v-show='!isLoading.cancel'>CANCEL</span>
         <span v-show='isLoading.cancel'>Loading...</span>
       </button>
     </div>
@@ -106,7 +109,7 @@
 
       window.Echo.channel('bet')
         .listen('.bet', async (e) => {
-          e.bet.side === 'M' 
+          e.bet.side === 'M'
             ? this.total.meron += e.bet.amount
             : this.total.wala += e.bet.amount
         });
@@ -228,11 +231,11 @@
             status: status,
             result: result,
           })
-          
+
           this.message = status === 'D'
             ? this.setFightStatus(data.data)
             : this.setFightStatus(data)
-          
+
           if(status == 'O') this.isLoading.open = false
           if(status == 'C') this.isLoading.close = false
 
@@ -240,7 +243,7 @@
         } catch (error) {
           console.error(error);
         }
-        
+
       }
     }
   })
