@@ -82,22 +82,29 @@ withdrawTable.DataTable({
 
 function format(d) {
   // `d` is the original data object for the row
-  return (
-    `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
+  var operation = `<button onclick="operation(${d.id})" class="btn btn-link text-primary btn-icon operation" style="padding-left:0;">
+      <i class="fa-solid fa-circle-info"></i></button>`;
+  var btnCopy = `<button data-bs-toggle="tooltip" title="Copied!" data-bs-trigger="click" class="btn btn-link text-primary btn-icon copy-phone" id="copy-phone" data-phone-number="${d.mobile_number}"
+      onclick="copyPhone(this);"><i class="fa-solid fa-copy"></i></button>`;
+  var expandContent = `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
       <tr>
         <td>PLAYER:</td>
         <td>${d.user.username}</td>
       </tr>
       <tr>
         <td>MOBILE#:</td>
-        <td>${d.mobile_number}</td>
+        <td>${d.mobile_number} ${btnCopy}</td>
       </tr>
       <tr>
         <td>AMOUNT:</td>
         <td>${d.amount}</td>
       </tr>
-    </table>`
-  );
+      <tr>
+        <td>ACTION:</td>
+        <td>${operation}</td>
+      </tr>
+    </table>`;
+  return expandContent;
 }
 
 $('#withdraw-trans-table tbody').on('click', 'td.dt-control', function () {
@@ -107,10 +114,11 @@ $('#withdraw-trans-table tbody').on('click', 'td.dt-control', function () {
   if (row.child.isShown()) {
     row.child.hide();
     tr.removeClass('shown');
-  } 
+  }
   else {
     row.child(format(row.data())).show();
     tr.addClass('shown');
+    $('[data-bs-toggle="tooltip"]').tooltip({placement:"top"})
   }
 });
 
@@ -130,6 +138,30 @@ withdrawTable.on('click', 'tbody td .view', async function() {
       .removeClass('disabled');
   }
 })
+
+function copyPhone(e) {
+  const num = $(e).data('phone-number');
+  var $temp = $("<input>");
+  $("body").append($temp);
+  $temp.val(num).select();
+  document.execCommand("copy");
+  $temp.remove();
+  $(e).removeClass('text-primary').addClass('text-success')
+  $(e).find('i').removeClass('fa-copy').addClass('fa-check')
+  setTimeout(() => {
+    $(e).tooltip('hide')
+    $(e).removeClass('text-success').addClass('text-primary')
+    $(e).find('i').removeClass('fa-check').addClass('fa-copy')
+  }, 3000);
+
+}
+
+async function operation(id) {
+  $('#withdraw-modal').modal('show')
+  $('.modal-title').text('WITHDRAW')
+  $('input#withdraw-id').val(id);
+
+}
 
 $('#withdraw-form').on('click', 'input[type="submit"]',function(e) {
   e.preventDefault();
@@ -180,4 +212,3 @@ $('[data-dismiss="modal"]').on('click', function() {
 })
 
 $('#badge-withdraw-unverified').tooltip().show()
-

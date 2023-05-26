@@ -12,6 +12,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BetController;
 use App\Http\Controllers\FightController;
 use App\Http\Controllers\AuditorController;
+use App\Models\User;
+use App\Http\Controllers\Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,12 +29,17 @@ use App\Http\Controllers\AuditorController;
 Route::get('/', function () {
     return redirect('/login');
 })->middleware('guest');
-  
+
 Auth::routes();
-  
+
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-  
-Route::group(['middleware' => ['auth']], function() {
+
+Route::group(['middleware' => ['auth','visitor']], function() {
+    // TEST
+    // Route::get('/online-users', [Controller::class, 'getOnlineUsers'], function ($visitors) {
+    //     ddd($visitors);
+    // });
+
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
@@ -43,6 +50,7 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::group(['middleware' => ['admin']], function () {
         Route::get('/admin/share-allocation', [AdminController::class, 'shareHolders'])->name('admin.shares');
+        Route::get('/visitor', [AdminController::class, 'getOnlineUsers']);
     });
 
     // Player
@@ -53,12 +61,12 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/bet/add', [BetController::class, 'addBet']);
         Route::get('/deposit', [PlayerController::class, 'deposit'])->name('deposit');
         Route::post('/deposit', [PlayerController::class, 'depositSubmit'])->name('deposit.upload.post');
-        Route::get('/withdrawform', [PlayerController::class, 'profileWithdraw'])->name('player.withdraw');  
+        Route::get('/withdrawform', [PlayerController::class, 'profileWithdraw'])->name('player.withdraw');
         Route::post('/withdrawform', [PlayerController::class, 'submitWithdraw']);
 
         Route::get('/withdraw', [PlayerController::class, 'withdraw'])->name('withdraw');
         Route::post('/withdraw', [PlayerController::class, 'withdrawSubmit'])->name('withdraw.submit');
-      
+
         Route::get('/playertransaction', [PlayerController::class, 'playerTransaction'])->name('player.player-transaction');
         Route::get('/player/transaction', [PlayerController::class, 'getTransactionByPlayerController']);
     });
@@ -69,7 +77,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/event', [OperatorController::class, 'eventList'])->name('operator.derby.event');
         Route::get('/event/lists', [OperatorController::class, 'getEvents']);
         Route::post('/event/create', [OperatorController::class, 'addNewEvent']);
-        
+
         Route::get('/transaction/deposits', [OperatorController::class, 'getDepositTrans']);
         Route::get('/transaction/withdrawals', [OperatorController::class, 'getWithdrawTrans']);
         Route::post('/transaction/deposit', [OperatorController::class, 'processDeposit']);
@@ -84,7 +92,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/refillpoints', [OperatorController::class, 'refillSubmit'])->name('refill.upload.post');
     });
 
-    Route::group(['middleware' => ['auditor']], function () {      
+    Route::group(['middleware' => ['auditor']], function () {
         Route::get('/transaction/refill', [AuditorController::class, 'getRefillTrans']);
         Route::get('/transaction/remit', [AuditorController::class, 'getRemitTrans']);
         Route::post('/transaction/refill', [AuditorController::class, 'processRefill']);

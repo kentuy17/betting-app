@@ -9,13 +9,14 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Contracts\Role;
 use Spatie\Permission\Traits\HasRoles;
-use App\Models\ShareHolder;
+use App\Models\ShareHolder;;
+use Shetabit\Visitor\Traits\Visitor;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, Visitor;
 
-        /**
+    /**
      * @var string
      */
     protected $table = 'users';
@@ -73,7 +74,7 @@ class User extends Authenticatable
         return $this->where('id', $iUserId)->get()->toArray();
     }
 
-        /**
+    /**
      * updateProfile
      * @param int $userID
      * @param array $aParameters

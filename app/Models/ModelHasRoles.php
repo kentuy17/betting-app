@@ -45,7 +45,8 @@ class ModelHasRoles extends Model
 
     public function active_operators()
     {
-        return $this->operators()->where('active', 1);
+        // return $this->operators()->where('active', 1);
+        return $this->operators()->online();
     }
 
     public function lowest_pts()
