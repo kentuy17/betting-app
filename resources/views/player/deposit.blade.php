@@ -213,10 +213,10 @@
                 <div class="name text-uppercase">
                   <div class="text-xl font-bold" >
                     <span id="copyNumber">{{ $operators->phone_no }}</span>
-                    <a data-toggle="popover" role="button" data-placement="top" data-trigger="focus" title="Copied!" id="copy-icon" 
-                      class="fa-solid fa-copy ml-2"></a>  
+                    <button data-bs-toggle="tooltip" title="Copied!" data-bs-trigger="click" data-bs-placement="right" id="copy-icon"
+                      class="fa-solid fa-copy ml-2"></button>
                   </div>
-                  
+
                   <div class="d-none">Wait Time: 5 - 10min</div>
                 </div>
               </div>
@@ -251,7 +251,7 @@
             <button type="submit" class="btn bg-gradient-dark btn-sm mt-4 float-right">Submit <i class="fa fa-long-arrow-right"></i></button>
           </div>
         </div>
-      </form>     
+      </form>
     </div>
   </div>
 </div>
@@ -261,6 +261,8 @@
 @section('additional-scripts')
 <script>
   $(function() {
+    $('[data-bs-toggle="tooltip"]').tooltip()
+
     $('#g-cash-outlet').on('click', function(e) {
       if(!$(this).hasClass('active')) {
         $(this).addClass('active');
@@ -276,20 +278,18 @@
     })
 
     $('#copy-icon').on('click', function(e) {
+      $(this).toggleClass('text-success').removeClass('fa-copy').addClass('fa-check');
       var $temp = $("<input>");
       $("body").append($temp);
       $temp.val($('#copyNumber').text()).select();
       document.execCommand("copy");
       $temp.remove();
-
-      $(this).popover('toggle')
       setTimeout(() => {
-        $('.popover.bs-popover-auto').fadeOut(2000);
-      }, 2000);
+        $(this).toggleClass('text-success').removeClass('fa-check').addClass('fa-copy');
+        $(this).tooltip('hide')
+      }, 3000);
     })
   })
-</script>
-<script>
 
   function triggerClick(){
     document.querySelector('#formFile').click();
