@@ -1,7 +1,7 @@
 <?php
-    
+
 namespace App\Http\Controllers;
-    
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,7 +14,7 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use \Illuminate\Support\Str;
 use App\Models\Transactions;
-    
+
 class UserController extends Controller
 {
     function __construct()
@@ -37,7 +37,7 @@ class UserController extends Controller
         return view('users.index',compact('data','role'))
             ->with('i', ($request->input('page', 1) - 1) * 5);
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -62,17 +62,17 @@ class UserController extends Controller
             'password' => 'required|same:confirm-password',
             'roles' => 'required'
         ]);
-    
+
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
-    
+
         $user = User::create($input);
         $user->assignRole($request->input('roles'));
-    
+
         return redirect()->route('users.index')
                         ->with('success','User created successfully');
     }
-    
+
     /**
      * Display the specified resource.
      *
@@ -84,7 +84,7 @@ class UserController extends Controller
         $user = User::find($id);
         return view('users.show',compact('user'));
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -96,10 +96,10 @@ class UserController extends Controller
         $user = User::find($id);
         $roles = Role::pluck('name','name')->all();
         $userRole = $user->roles->pluck('name','name')->all();
-    
+
         return view('users.edit',compact('user','roles','userRole'));
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -110,28 +110,28 @@ class UserController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         $this->validate($request, [
-            'username' => 'required|unique:users'.$id,
+            'username' => 'required|unique:users',
             'password' => 'same:confirm-password',
             'roles' => 'required'
         ]);
-    
+
         $input = $request->all();
-        if(!empty($input['password'])){ 
+        if(!empty($input['password'])){
             $input['password'] = Hash::make($input['password']);
         }else{
-            $input = Arr::except($input,array('password'));    
+            $input = Arr::except($input,array('password'));
         }
-    
+
         $user = User::find($id);
         $user->update($input);
         DB::table('model_has_roles')->where('model_id',$id)->delete();
-    
+
         $user->assignRole($request->input('roles'));
-    
+
         return redirect()->route('users.index')
                         ->with('success','User updated successfully');
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *
@@ -162,12 +162,12 @@ class UserController extends Controller
         ]);
     }
 
-    public function editprofile(Request $request) 
+    public function editprofile(Request $request)
     {
         try {
             $this->validate($request, [
                 'phone_no' => 'required'
-            ]);   
+            ]);
             $trimPhone = $request->phone_no;
             if (Str::startsWith($request->phone_no, ['+63', '63']))
             {
@@ -176,28 +176,28 @@ class UserController extends Controller
             {
                 $trimPhone = '0' . $request->phone_no;
             }
-    
+
                 $this->validate($request, [
                'phone_no' => ['regex:/(0?9|\+?63)[0-9]{9}/'],
                 ]);
-            
-            if( User::where('phone_no', '=', $request->phone_no)->exists() 
+
+            if( User::where('phone_no', '=', $request->phone_no)->exists()
                 && $request->phone_no != Auth::user()->phone_no ) {
                 return Redirect()->back()->withInput()->with('error', 'This Number exist !');
             }
-    
+
             $user = User::find(Auth::user()->id);
             $user->phone_no = $trimPhone;
             $user->password = bcrypt($request->new_pass);
-    
+
             if(Auth::user()->password != bcrypt($request->new_pass)) {
                 if($request->new_pass != $request->confirm_pass) {
                     return redirect('/user/profile')->with('error', 'Password did not Match!');
                 }
-    
+
                 $user->password = bcrypt($request->new_pass);
             }
-    
+
             $userArray=$user->toArray();
             $user->updateContactNumber($user->id,$userArray);
         } catch (\Exception $e) {
@@ -210,13 +210,13 @@ class UserController extends Controller
     public function updatePoints($id)
     {
         try {
-    
+
             $trans = Transactions::find($id);
             $user = User::find($trans->user_id);
 
             $user->points += $trans->amount;
             $trans->status = "completed";
-    
+
             $user->save();
             $trans->save();
 

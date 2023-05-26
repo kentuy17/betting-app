@@ -69,6 +69,7 @@ class Kernel extends HttpKernel
         'operator' => \App\Http\Middleware\EnsureUserIsOperator::class,
         'player' => \App\Http\Middleware\EnsureUserIsPlayer::class,
         'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
-        'auditor' => \App\Http\Middleware\EnsureUserIsAuditor::class
+        'auditor' => \App\Http\Middleware\EnsureUserIsAuditor::class,
+        'visitor' => \Shetabit\Visitor\Middlewares\LogVisits::class,
     ];
 }
