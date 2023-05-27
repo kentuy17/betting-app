@@ -3,8 +3,7 @@
   <div class="chat">
     <div class="header">
       <span class="title">
-        {{-- Sabong Aficionado Agent --}}
-        Chix sa Banilad
+        Bicolana Agent
       </span>
       <button>
         <i class="fa fa-times" aria-hidden="true"></i>

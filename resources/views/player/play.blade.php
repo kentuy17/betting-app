@@ -50,7 +50,7 @@
         <div class="bet-bg-head font-bold">{{ $fight->name }}</div>
         <div id="sabong-aficionado">
           <img id="video-unavailable" src="{{ asset('img/video-unavailable.webp') }}">
-        </div>      
+        </div>
       </div>
     </div>
   </div>
@@ -85,7 +85,7 @@
   // DISABLED STREAMING TO AVOID BANNING
   try {
     var options = {
-      channel: "kentuy17", // TODO: Change this to the streams username you want to embed
+      channel: "sabongaficionado", // TODO: Change this to the streams username you want to embed
       width: 640,
       height: 360,
       controls: false,
@@ -123,7 +123,7 @@
   } catch (error) {
     console.log(error);
   }
-  
+
 </script>
 
 
@@ -135,7 +135,7 @@
     return [getValue, setValue];
   }
 
-  const copyValueManual = (amt) => $('.bet-amount').val(amt)  
+  const copyValueManual = (amt) => $('.bet-amount').val(amt)
 
   const [fightNo, setFightNo] = useState(0);
 
@@ -178,7 +178,7 @@
     //       stat = '____';
     //       statusDiv.addClass('gradient-status-close')
     //     }
-        
+
     //     await setFightStatus(stat);
     //     await setFightNo(e.fight.fight_no);
 
@@ -186,6 +186,6 @@
     //     fightNoDiv.html(fightNo());
     //   })
   })
-  
+
 </script>
 @endsection
