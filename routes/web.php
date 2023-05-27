@@ -12,8 +12,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BetController;
 use App\Http\Controllers\FightController;
 use App\Http\Controllers\AuditorController;
-use App\Models\User;
-use App\Http\Controllers\Controller;
+// use App\Http\Controllers\Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,6 +68,9 @@ Route::group(['middleware' => ['auth','visitor']], function() {
 
         Route::get('/playertransaction', [PlayerController::class, 'playerTransaction'])->name('player.player-transaction');
         Route::get('/player/transaction', [PlayerController::class, 'getTransactionByPlayerController']);
+
+        Route::get('/chat/messages', [PlayerController::class, 'getUserMsg']);
+        Route::post('/chat/send-message', [PlayerController::class, 'sendUserMsg']);
     });
 
     // Operator

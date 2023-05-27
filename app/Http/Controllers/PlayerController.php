@@ -14,6 +14,7 @@ use \Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response as FacadeResponse;
+use App\Models\Chat;
 
 class PlayerController extends Controller
 {
@@ -99,8 +100,8 @@ class PlayerController extends Controller
             $this->validate($request, [
                 'phone_no' => 'required',
                 'formFile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            ]);  
-             
+            ]);
+
             $trimPhone = $request->phone_no;
             if (Str::startsWith($request->phone_no, ['+63', '63'])) {
                  $trimPhone = preg_replace('/^\+?63/', '0', $trimPhone);
@@ -108,7 +109,7 @@ class PlayerController extends Controller
             else if (Str::startsWith($request->phone_no, ['9'])) {
                 $trimPhone = '0' . $request->phone_no;
             }
-    
+
             $this->validate($request, [
                 'phone_no' => ['regex:/(0?9|\+?63)[0-9]{9}/'],
             ]);
@@ -140,14 +141,14 @@ class PlayerController extends Controller
             $this->validate($request, [
                 'phone_no' => 'required',
                 'amount' => 'required',
-            ]);  
+            ]);
 
             $user = User::find(Auth::user()->id);
             if($user->points < $request->amount) {
                 return redirect()->back()
                     ->with('danger', 'Insuficient points!');
             }
-            
+
             $user->points -=  $request->amount;
             $user->save();
 
@@ -167,10 +168,10 @@ class PlayerController extends Controller
         return redirect()->back()->with('success', 'Withdraw Request Successful!');
     }
 
-    public function submitWithdraw(Request $request) 
+    public function submitWithdraw(Request $request)
     {
         try {
-            $user = User::find(Auth::user()->id); 
+            $user = User::find(Auth::user()->id);
             if (Hash::check($user->password, $request->curr_pass)) {
             //   if($user->password != bcrypt($request->curr_pass)) {
                   return redirect('/withdrawform')->with('error', 'Incorrect Password!');
@@ -180,7 +181,7 @@ class PlayerController extends Controller
                 'phone_no' => 'required',
                 'amount' => 'required',
                 'curr_pass' => 'required'
-            ]);  
+            ]);
 
             $trimPhone = $request->phone_no;
             if (Str::startsWith($request->phone_no, ['+63', '63']))
@@ -190,7 +191,7 @@ class PlayerController extends Controller
             {
                 $trimPhone = '0' . $request->phone_no;
             }
-    
+
                 $this->validate($request, [
                'phone_no' => ['regex:/(0?9|\+?63)[0-9]{9}/'],
                 ]);
@@ -225,5 +226,37 @@ class PlayerController extends Controller
         $response->header('Access-Control-Allow-Methods', '*');
 
         return $response;
+    }
+
+    public function getUserMsg()
+    {
+        $chat = Chat::where('user_id', Auth::user()->id)
+            ->where('role_id', 2)
+            ->get();
+
+        return response()->json([
+            'data' => $chat,
+            'status' => 'OK',
+        ], 200);
+    }
+
+    public function sendUserMsg(Request $request)
+    {
+        try {
+            Chat::create([
+                'user_id' => Auth::user()->id,
+                'message' => $request->message,
+                'sender' => $request->sender,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'Failed',
+                'message' => 'not sent',
+            ], 500);
+        }
+        return response()->json([
+            'status' => 'OK',
+            'message' => 'sent',
+        ], 200);
     }
 }
