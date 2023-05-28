@@ -143,18 +143,19 @@ class PlayerController extends Controller
                 'amount' => 'required',
             ]);
 
+            $amount = str_replace( ',', '', $request->amount );
             $user = User::find(Auth::user()->id);
-            if($user->points < $request->amount) {
+            if($user->points < $amount) {
                 return redirect()->back()
                     ->with('danger', 'Insuficient points!');
             }
 
-            $user->points -=  $request->amount;
+            $user->points -=  $amount;
             $user->save();
 
             Transactions::create([
                 'user_id' => $user->id,
-                'amount' => $request->amount,
+                'amount' => $amount,
                 'mobile_number' => $request->phone_no,
                 'action' => 'withdraw',
                 'status' => 'pending',

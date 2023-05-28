@@ -161,6 +161,47 @@
     </div>
   </div>
 </div>
+<!--revert points-->
+<div class="modal fade" id="modal-undo-points" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-top" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 id="exampleModalLongTitle">UNDO POINTS</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="deposit-undo-form" method="post">
+        <div class="modal-body">
+          <input type="hidden" name="undo-id" id="undo-id">
+          <div class="form-group align-center">
+            <img id="trans-receipt-undo" data-storage="{{ asset('storage/') }}" src="" alt="">
+          </div>
+          <div class="form-group mt-2">
+            <label for="ref-code-undo">Ref-code</label>
+            <input type="text" class="form-control disabled" id="ref-code-undo" >
+          </div>
+          <div class="form-group mt-2">
+            <label for="trans-pts-undo">Current Points</label>
+            <input type="text" class="form-control disabled" id="trans-pts-undo" >
+          </div>
+          <div class="form-group mt-2">
+            <label for="updated-trans-pts">Updated Points</label>
+            <input type="text" class="form-control" required id="updated-trans-pts" placeholder="Points" onkeyup = "javascript:this.value=Comma(this.value);" >
+          </div>
+          <div class="form-group mt-2" >
+            <label for="trans-note-undo">Note:</label>
+            <textarea name="trans-note" class="form-control" id="trans-note-undo" cols="30" rows="1"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</a>
+          <input type="submit" class="btn btn-primary bg-slate-900 btn-sm" value="Submit">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 @endsection
 @section('additional-scripts')
 <script>
