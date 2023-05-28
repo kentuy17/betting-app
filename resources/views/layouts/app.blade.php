@@ -158,7 +158,9 @@
     <main>
       @yield('content')
     </main>
+    @if((session('role') == 'Player'))
     @include('layouts.components.floating-chat')
+    @endif
   </div>
 </body>
 </html>

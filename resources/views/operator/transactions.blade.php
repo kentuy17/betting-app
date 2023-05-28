@@ -15,7 +15,7 @@
       @endif
       @if (session('role') == 'Cash-out Operator')
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="withdraw-tab" data-bs-toggle="tab" data-bs-target="#withdraw" type="button" role="tab" aria-controls="withdraw" aria-selected="false">
+          <button class="nav-link active" id="withdraw-tab" data-bs-toggle="tab" data-bs-target="#withdraw" type="button" role="tab" aria-controls="withdraw" aria-selected="false">
             Withdrawals <span id="badge-withdraw" style="display: none;" class="badge bg-danger">0</span> 
             <span id="badge-withdraw-unverified" data-bs-toggle="tooltip" title="Missing Ref-code" style="display: none;" class="badge bg-warning">4</span></button>
         </li>
@@ -56,7 +56,7 @@
         </div>
         @endif
         @if (session('role') == 'Cash-out Operator')
-        <div class="tab-pane fade" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
+        <div class="tab-pane fade show active" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
           <table class="table dt-responsive table-striped nowrap w-100" id="withdraw-trans-table">
             <thead>
               <tr>

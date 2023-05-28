@@ -10,7 +10,7 @@
 
 @section('content')
 
-<div class="row mt-2">
+<div class="mt-2">
     <div class="col-lg-12 margin-tb">
         <div class="pull-right mb-3">
             <a class="btn btn-success" href="{{ route('users.create') }}"> Create New User</a>

@@ -110,8 +110,7 @@ class UserController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         $this->validate($request, [
-            'username' => 'required|unique:users',
-            'password' => 'same:confirm-password',
+            'username' => 'required|unique:users,username,'.$id,
             'roles' => 'required'
         ]);
 
