@@ -185,7 +185,7 @@
                 <div class="col-12">
                   <label class="text-black form-label mt-4">Amount</label>
                   <div class="input-group">
-                    <input id="amount" name="amount" class="form-control" type="text" placeholder="Amount"  >
+                    <input id="amount" name="amount" class="form-control" type="text" placeholder="Amount"  onkeyup = "javascript:this.value=Comma(this.value);">
                   </div>
                   @if (session('error'))
                   <p class="text-xs pt-1 text-danger">{{ session('error') }}</p>
@@ -218,7 +218,7 @@
   $(function() {
     $('button[type="submit"]').on('click', function(e) {
       var points = $('#credit_points').val().replace(',', '');
-      var amount = $('#amount').val();
+      var amount = $('#amount').val().replace(',', '');
       
       if(parseFloat(points) < parseFloat(amount)) {
         console.log([points, amount]);
@@ -227,5 +227,19 @@
       }
     });
   })
+
+  
+  function Comma(Num) { //function to add commas to textboxes
+        Num += '';
+        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+        x = Num.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1))
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        return x1 + x2;
+    }
 </script>
 @endsection

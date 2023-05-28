@@ -92,6 +92,10 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::post('/refillpoints', [OperatorController::class, 'refillSubmit'])->name('refill.upload.post');
     });
 
+    Route::group(['middleware' => ['cashin-operator']], function () {
+
+        Route::post('/transaction/deposit/revert', [OperatorController::class, 'processDepositRevert']);
+    });
     Route::group(['middleware' => ['auditor']], function () {
         Route::get('/transaction/refill', [AuditorController::class, 'getRefillTrans']);
         Route::get('/transaction/remit', [AuditorController::class, 'getRemitTrans']);
@@ -100,6 +104,8 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::get('/transactions-auditor', [AuditorController::class, 'transactions'])->name('auditor.transactions-operator');
 
     });
+
+
 
     // Bets
     Route::get('/bet/total', [BetController::class, 'getTotalBetAmountPerFight']);

@@ -69,7 +69,7 @@ class AuditorController extends Controller
                 $operator->save();
 
                 $auditor = User::find(Auth::user()->id);
-                $auditor->points +=  $request->amount;
+                $auditor->points -=  $request->amount;
                 $auditor->save(); 
             }
         } catch (\Exception $e) {
@@ -111,9 +111,13 @@ class AuditorController extends Controller
             $trans->save();
 
             if($request->action == 'approve') {
+                $operator = User::find($trans->user_id);
+                $operator->points = 0;
+                $operator->save();
+
                 $auditor = User::find(Auth::user()->id);
                 $auditor->points += $trans->amount;
-                $auditor->save();
+                $auditor->save(); 
             }
         } catch (\Exception $e) {
             return response()->json([

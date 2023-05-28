@@ -55,7 +55,13 @@ transactionsTable.DataTable({
     {
       "data": null,
       render: (data) => {
-        return `<a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view">
+        if(data.status == "completed" && data.completed_at != null){
+              return `<a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view">
+              <i class="fa-solid fa-circle-info"></i></a>
+              <a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view-undo">
+              <i class="fa-solid fa-undo"></i></a>`;
+        }
+          return `<a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view">
           <i class="fa-solid fa-circle-info"></i></a>`;
       }
     },
@@ -190,3 +196,72 @@ $('[data-dismiss="modal"]').on('click', function() {
   $('#modal-center').modal('hide');
 })
 
+//Revert Points
+transactionsTable.on('click', 'tbody td .view-undo', async function() {
+  clearFields();
+  var tr = $(this).closest('tr');
+  var row = transactionsTable.DataTable().row(tr);
+  $('#modal-undo-points').modal('show')
+  $('input#undo-id').val($(this).data('id'));
+
+  let storage = $('#trans-receipt-und').data('storage');
+  if(row.data().filename) {
+    $('#trans-receipt-undo').attr('src', storage+'/'+row.data().filename);
+  }
+  if(row.data().amount) {
+    $('#trans-pts-undo').val(row.data().amount);
+  }
+  if(row.data().reference_code) {
+    $('#ref-code-undo').val(row.data().reference_code);
+  }
+
+  if(row.data().status != 'completed') {
+    $('input[type="submit"]').prop('disabled', true)
+      .addClass('disabled');
+  } else {
+    $('input[type="submit"]').prop('disabled', false)
+      .removeClass('disabled');
+  }
+})
+
+$('#deposit-undo-form').on('click', 'input[type="submit"]',function(e) {
+  e.preventDefault();
+  axios.post('/transaction/deposit/revert', {
+    id: $('#undo-id').val(),
+    curr_amount: $('#trans-pts-undo').val(),
+    amount: $('#updated-trans-pts').val(),
+    ref_code: $('#ref-code-undo').val(),
+    note: $('#trans-note-undo').val(),
+  })
+  .then((res) => {
+    Swal.fire({
+      icon: 'success',
+      confirmButtonColor: 'green',
+      title: res.data.msg,
+      timer: 1500
+    })
+    .then(() =>  {
+      console.log(res);
+      $('#modal-undo-points').modal('hide')
+      $('#operator-pts').html(res.data.points)
+      clearFields();
+    });
+
+    transactionsTable.DataTable().ajax.reload();
+    pendingCount = 0;
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+
+})
+
+function clearFields() {
+  $('#updated-trans-pts').val(''), $('#trans-note-undo').val(''),
+  $('#trans-note').parent().hide();
+}
+
+
+$('[data-dismiss="modal"]').on('click', function() {
+  $('#modal-undo-points').modal('hide');
+})

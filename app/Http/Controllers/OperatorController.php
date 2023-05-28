@@ -58,6 +58,36 @@ class OperatorController extends Controller
             'data' => $trans
         ]);
     }
+    public function processDepositRevert(Request $request)
+    {
+        try {
+            $trans = Transactions::find($request->id);
+            $trans->processedBy = Auth::user()->id;
+            $trans->amount = $request->amount;
+            $trans->note = $request->note;
+            $trans->completed_at = date('Y-m-d H:i:s');
+            $trans->save();
+
+            $player = User::find($trans->user_id);
+            $points = $player->points - $request->curr_amount;
+            $player->points = $points + $request->amount;
+            $player->save();
+
+            $operator = User::find(Auth::user()->id);
+            $points = $operator->points + $request->curr_amount;
+            $operator->points = $points - $request->amount;
+            $operator->save(); 
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'msg' => $e->getMessage(),
+                'status' => 'error',
+            ], 500);
+        }
+        
+        return redirect()->back()->with('success', 'Revert Points Request Successful!');
+
+    }
 
     public function processDeposit(Request $request)
     {
@@ -73,11 +103,11 @@ class OperatorController extends Controller
 
             if($request->action == 'approve') {
                 $player = User::find($trans->user_id);
-                $player->points +=  $request->amount;
+                $player->points +=  $trans->amount;
                 $player->save();
 
                 $operator = User::find(Auth::user()->id);
-                $operator->points +=  $request->amount;
+                $operator->points -=  $trans->amount;
                 $operator->save(); 
             }
         } catch (\Exception $e) {
@@ -182,18 +212,19 @@ class OperatorController extends Controller
                 'amount' => 'required',
             ]);  
 
+            $amount = str_replace( ',', '', $request->amount );
             $user = User::find(Auth::user()->id);
-            if($user->points < $request->amount) {
+            if($user->points < $amount) {
                 return redirect()->back()
                     ->with('danger', 'Insuficient points!');
             }
             
-            $user->points -=  $request->amount;
+            $user->points -=  $amount;
             $user->save();
 
             Transactions::create([
                 'user_id' => $user->id,
-                'amount' => $request->amount,
+                'amount' => $amount,
                 'mobile_number' => $request->phone_no,
                 'action' => 'remit',
                 'status' => 'pending',
