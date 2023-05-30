@@ -229,3 +229,11 @@ img {
   border-radius: 50%;
   margin-right: .375rem;
 }
+@media screen and (max-width: 767px) {
+  div.dataTables_wrapper div.dataTables_length {
+    text-align: left !important;
+  }
+  div.dataTables_wrapper div.dataTables_filter {
+    text-align: right !important;
+  }
+}

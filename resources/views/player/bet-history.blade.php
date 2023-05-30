@@ -10,6 +10,7 @@
           <table class="table table-striped" style="width: 100%" id="bethistory-table">
             <thead>
               <tr>
+                <th>#</th>
                 <th>EVENT</th>
                 <th>FIGHT #</th>
                 <th>SIDE</th>
