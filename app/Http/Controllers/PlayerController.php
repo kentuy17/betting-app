@@ -70,12 +70,13 @@ class PlayerController extends Controller
         return view('player.deposit', compact('user', 'operators'));
     }
 
-    public function getTransactionByPlayerController()
+    public function getTransactionByPlayerController($action=true)
     {
         $trans = Transactions::where('user_id', Auth::user()->id)
             ->with('user')
             ->with('operator')
             ->orderBy('id','desc')
+            ->where('action', $action)
             ->get();
 
         return response()->json([

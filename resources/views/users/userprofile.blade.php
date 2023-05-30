@@ -166,6 +166,16 @@
               </div>
               <div class="card-body pt-0">
                 @csrf
+                @if(session('role') != 'Player')
+                <div class="row mb-4">
+                  <div class="col-12">
+                    <label class="text-black form-label">User Role</label>
+                    <div class="input-group">
+                      <input id="user_role" class="form-control disabled" title="User Role" type="text" disabled="" value="{{ session('role') }}" >
+                    </div>
+                  </div>
+                </div>
+                @endif
                 <div class="row">
                   <div class="col-12">
                     <label class="text-black form-label">Credit Points</label>
@@ -179,14 +189,19 @@
                   <div class="col-12">
                     <label class="text-black form-label mt-4">Current Commission ({{ Auth::user()->share_holder->percentage }}%)</label>
                     <div class="input-group">
-                      <input id="current_commission" class="form-control disabled" type="text" disabled="" value="{{ number_format(Auth::user()->active_commission->sum('points'), 2, '.', ',') }}" >
+                      <input id="current_commission" class="form-control disabled" title="Current Commission" type="text" disabled="" value="{{ number_format(Auth::user()->active_commission->sum('points'), 2, '.', ',') }}" >
                     </div>
+                    <a class="float-right text-primary" href="#">
+                      <i class="fa-solid fa-money-bill-transfer"></i> Convert
+                    </a>
                   </div>
                 </div>
+                @else
+                <div class="mb-4"></div>
                 @endif
                 <div class="row">
                   <div class="col-12">
-                    <label class="text-black form-label mt-4">Username</label>
+                    <label class="text-black form-label">Username</label>
                     <div class="input-group">
                       <input id="username" name="username" class="form-control" type="text" value="{{ $user->username }}" placeholder="Username"  >
                     </div>
@@ -210,7 +225,7 @@
                   <div class="col-md-6">
                     <label class="text-black form-label mt-4">New Password</label>
                     <div class="input-group">
-                      <input id="new_pass" name="new_pass" class="form-control disabled" type="password" placeholder="******" >
+                      <input id="new_pass" name="new_pass" class="form-control disabled" type="password" placeholder="******" autocomplete="new-password" >
                     </div>
                   </div>
                   <div class="col-md-6">

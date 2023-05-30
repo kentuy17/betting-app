@@ -33,8 +33,12 @@ class HomeController extends Controller
             $this->redirectTo = '/play';
         }
 
-        if($role->name == 'Operator' || $role->name == 'Cash-out Operator' || $role->name == 'Cash-in Operator') {
+        if($role->name == 'Operator') {
             $this->redirectTo = '/fight';
+        }
+
+        if($role->name == 'Cash-out Operator' || $role->name == 'Cash-in Operator') {
+            $this->redirectTo = '/transactions';
         }
 
         if($role->name == 'Admin') {
