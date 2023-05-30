@@ -13,7 +13,7 @@ transactionsTable.DataTable({
   "bLengthChange": false,
   "bFilter": false,
   "bInfo": false,
-  "bAutoWidth": false,
+  "bAutoWidth": true,
   "scrollX": true,
   "columns": [
     {
