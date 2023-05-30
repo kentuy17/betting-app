@@ -54,7 +54,7 @@
         align-content: center;
       }
       #notif-nav {
-        display: block !important; 
+        display: block !important;
       }
 
     }
@@ -110,13 +110,13 @@
           @endif
           @else
           @if (session('role') == 'Admin')
-          <li><a class="md:p-4 py-2 block" href="{{ route('users.index') }}">Manage Users</a></li>
-          <li><a class="md:p-4 py-2 block" href="{{ route('roles.index') }}">Manage Role</a></li>
+          <li><a class="md:p-4 py-2 block" href="/admin">Manage Users</a></li>
+          <li><a class="md:p-4 py-2 block" href="{{ route('roles.index') }}">Roles</a></li>
           @endif
           @if (session('role') == 'Operator' || session('role') == 'Cash-out Operator' || session('role') == 'Cash-in Operator' )
           <li><a class="md:pl-4 py-2 block" href="{{ route('operator.derby.event') }}">EVENT</a></li>
           <li><a class="md:pl-4 py-2 block" href="{{ route('operator.fight') }}">FIGHT</a></li>
-          <li><a class="md:pl-4 py-2 block" href="{{ route('operator.transactions') }}">TRANSACTIONS</a></li> 
+          <li><a class="md:pl-4 py-2 block" href="{{ route('operator.transactions') }}">TRANSACTIONS</a></li>
           @endif
           @if (session('role') == 'Auditor')
           <li><a class="md:pl-4 py-2 block" href="{{ route('auditor.transactions-operator') }}">TRANSACTIONS</a></li>
