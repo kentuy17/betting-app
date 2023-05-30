@@ -145,7 +145,7 @@ $('#deposit-form').on('click', 'input[type="submit"]',function(e) {
   e.preventDefault();
   axios.post('/transaction/deposit', {
     id: $('#trans-id').val(),
-    amount: $('#trans-pts').val(),
+    amount: $('#trans-pts').val().replace(",", ""),
     ref_code: $('#ref-code').val(),
     action: $('#trans-action').val(),
     note: $('#trans-note').val(),
@@ -168,7 +168,12 @@ $('#deposit-form').on('click', 'input[type="submit"]',function(e) {
     pendingCount = 0;
   })
   .catch((err) => {
-    console.log(err);
+    Swal.fire({
+      icon: 'error',
+      confirmButtonColor: 'red',
+      title: err.response.data.msg,
+      timer: 1500
+    });
   })
 
 })

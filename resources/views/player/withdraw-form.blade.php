@@ -219,7 +219,7 @@
     $('#withdraw-form').on('submit', function(e) {
       // e.preventDefault();
       var points = $('#credit_points').val().replace(",", "");
-      var amount = $('#amount').val();
+      var amount = $('#amount').val().replace(",", "");
 
       if(parseFloat(points) < parseFloat(amount)) {
         alert ("Insufficient Amount")

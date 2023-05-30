@@ -145,6 +145,10 @@ class PlayerController extends Controller
 
             $amount = str_replace( ',', '', $request->amount );
             $user = User::find(Auth::user()->id);
+            if($amount < 100){
+                return redirect()->back()
+                ->with('danger', "Minimum Withdrawal is P100");
+            }
             if($user->points < $amount) {
                 return redirect()->back()
                     ->with('danger', 'Insuficient points!');

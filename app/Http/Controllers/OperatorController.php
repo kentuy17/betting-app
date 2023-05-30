@@ -92,6 +92,13 @@ class OperatorController extends Controller
     public function processDeposit(Request $request)
     {
         try {
+            $operator = User::find(Auth::user()->id);
+            if($operator->points <  $request->amount){
+                return response()->json([
+                    'msg' => 'Insuficient points!',
+                    'status' => 'error',
+                ], 500);
+            }
             $trans = Transactions::find($request->id);
             $trans->status = $request->action == 'approve' ? 'completed' : 'failed';
             $trans->processedBy = Auth::user()->id;
@@ -106,7 +113,6 @@ class OperatorController extends Controller
                 $player->points +=  $trans->amount;
                 $player->save();
 
-                $operator = User::find(Auth::user()->id);
                 $operator->points -=  $trans->amount;
                 $operator->save(); 
             }
