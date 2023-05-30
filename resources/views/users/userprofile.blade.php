@@ -162,6 +162,7 @@
             <div class="col-md-8 card" id="basic-info">
               <div class="card-header">
                 <h5>Profile Info</h5>
+                @include('layouts.flash-message')
               </div>
               <div class="card-body pt-0">
                 @csrf
@@ -237,7 +238,7 @@
     $('button[type="submit"]').on('click', function(e) {
       var pass = $('#new_pass').val();
       var confirm = $('#confirm_pass').val();
-      
+
       if(pass !== confirm) {
         alert ("Password Mismatch!")
         return;

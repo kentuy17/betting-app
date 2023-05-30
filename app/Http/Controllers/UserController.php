@@ -182,7 +182,7 @@ class UserController extends Controller
 
             if( User::where('phone_no', '=', $request->phone_no)->exists()
                 && $request->phone_no != Auth::user()->phone_no ) {
-                return Redirect()->back()->withInput()->with('error', 'This Number exist !');
+                return Redirect()->back()->withInput()->with('danger', 'This Number exist !');
             }
 
             $user = User::find(Auth::user()->id);
@@ -191,16 +191,17 @@ class UserController extends Controller
 
             if(Auth::user()->password != bcrypt($request->new_pass)) {
                 if($request->new_pass != $request->confirm_pass) {
-                    return redirect('/user/profile')->with('error', 'Password did not Match!');
+                    return redirect('/user/profile')->with('danger', 'Password did not Match!');
                 }
 
                 $user->password = bcrypt($request->new_pass);
             }
 
             $userArray=$user->toArray();
-            $user->updateContactNumber($user->id,$userArray);
+            // $user->updateContactNumber($user->id,$userArray);
+            $user->update($userArray);
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('danger', $e->getMessage());
         }
 
         return redirect('/user/profile')->with('success', 'Updated Successfully!');
@@ -218,13 +219,6 @@ class UserController extends Controller
 
             $user->save();
             $trans->save();
-
-            // return $user;
-            // $userArray=$user->toArray();
-            // $user->updateContactNumber($user->id,$userArray);
-
-            // $transArray=$trans->toArray();
-            // $trans->updateStatus($trans->id,$userArray);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
