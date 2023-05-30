@@ -134,9 +134,6 @@
           <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'refill') {{ 'active' }} @endif" href="{{ route('refill') }}">REFILL</a></li>
           @endif
 
-          @if (session('role') == 'Cash-out Operator')
-            <a class="@if(Route::current()->getName() == 'remit') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('remit') }}">Remit</a>
-          @endif
           @if (session('role') == 'Player')
           <li><a class="@if(Route::current()->getName() == 'play') {{ 'active-nav' }} @endif py-2 block" href="{{ route('play') }}">Play</a></li>
           <li><a class="@if(Route::current()->getName() == 'player.bethistory') {{ 'active-nav' }} @endif md:pl-4 py-2 block" href="{{ route('player.bethistory') }}">Bet History</a></li>
