@@ -18,6 +18,16 @@
         </li>
         <li class="nav-item credit-nav-item">
           <div class="nav-credits-wr w-25 w-sm-50 gold-text">
+              <div class="credits-data d-flex ">
+                <input type="submit" class="btn btn-primary bg-slate-900 btn-sm"id="exportremit" value="Export Remit" onclick="ExportRemit()">
+              </div>
+          </div>
+          <div class="nav-credits-wr w-25 w-sm-50 gold-text">
+              <div class="credits-data d-flex ">
+                <input type="submit" class="btn btn-primary bg-slate-900 btn-sm"id="exportrefill" value="Export Refill" onclick="ExportRefill()">
+              </div>
+          </div>
+          <div class="nav-credits-wr w-25 w-sm-50 gold-text">
             <a href="/platform/refill" class="d-flex align-items-center justify-content-end gp-credits">
               <div class="bg-success add-btn">
                 <svg class="svg-inline--fa fa-coins fa-w-16" data-prefix="fas" data-icon="coins" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
@@ -154,6 +164,27 @@
     </div>
   </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" integrity="sha512-r22gChDnGvBylk90+2e/ycr3RVrDi8DIOkIGNhJlKfuyQM4tIRAI062MaV8sfjQKYVGjOBaZBOA87z+IhZE9DA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+function ExportRemit() {
+  axios.get('/transaction/remit').then(resp => {
+                    ExportData(resp.data.data, "Remit_Report.xlsx");
+      });
+}
+function ExportRefill() {
+  axios.get('/transaction/refill').then(resp => {
+                    ExportData(resp.data.data,"Refill_Report.xlsx");
+      });
+}
+function ExportData(data, filename)
+    {
+          var ws = XLSX.utils.json_to_sheet(data);
+          var wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, "People");
+          XLSX.writeFile(wb,filename);
+    }
+</script>
 @endsection
 @section('additional-scripts')
 <script src="{{ asset('js/refill.js') }}" defer></script>
