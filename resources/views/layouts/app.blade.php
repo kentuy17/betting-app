@@ -99,7 +99,7 @@
             <span class="float-right text-muted text-sm">2 days</span>
           </a> --}}
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+          <a href="#" id="allow-notifications" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
       </div>
       <div class="hidden w-full md:flex md:items-center md:w-auto" id="menu">

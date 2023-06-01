@@ -17,7 +17,6 @@
   button:not(:disabled),[type=submit]:not(:disabled){cursor:pointer;}
   [hidden]{display:none!important;}
   .row{--bs-gutter-x:1.5rem;--bs-gutter-y:0;display:flex;flex-wrap:wrap;margin-top:calc(-1 * var(--bs-gutter-y));margin-right:calc(-0.5 * var(--bs-gutter-x));margin-left:calc(-0.5 * var(--bs-gutter-x));}
-  .row>*{flex-shrink:0;width:100%;max-width:100%;padding-right:calc(var(--bs-gutter-x) * 0.5);padding-left:calc(var(--bs-gutter-x) * 0.5);margin-top:var(--bs-gutter-y);}
   .col-3{flex:0 0 auto;width:25%;}
   .col-4{flex:0 0 auto;width:33.33333333%;}
   .col-5{flex:0 0 auto;width:41.66666667%;}
@@ -150,12 +149,59 @@
   .choices__list--dropdown:before{font-family:fontawesome;content:"\f0d8";position:absolute;top:0;left:28px;right:auto;font-size:22px;color:#fff;transition:top .35s ease;}
   .choices[data-type*=select-one] .choices__input{border-bottom-color:#f8f9fa;}
   .choices__list--dropdown .choices__item--selectable.is-highlighted{background:#e9ecef;color:#344767;}
+
+  @keyframes rotate {
+    0% {-webkit-transform: rotate(0deg); -moz-transform: rotate(0deg);}
+    100% {-webkit-transform: rotate(360deg); -moz-transform: rotate(360deg);}
+  }
+
 </style>
 @endsection
 @section('content')
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-12">
+      <div class="card card-body mb-0 mt-3" id="profile">
+        <div class="row justify-content-center">
+          <div class="col-sm-auto col-4">
+            <div class="avatar avatar-xl position-relative">
+              <div>
+                <label for="file-input" class="btn btn-sm btn-icon-only bg-gradient-light position-absolute bottom-0 end-0 mb-n2 me-n2">
+                  <i class="fa fa-pen top-0" data-bs-toggle="tooltip" data-bs-placement="top" title="" aria-hidden="true" data-bs-original-title="Edit Image" aria-label="Edit Image"></i>
+                  <span class="sr-only">Edit Image</span>
+                </label>
+                <span class="h-12 w-12 rounded-full overflow-hidden bg-gray-100">
+                  <img src="{{ asset('img/aficionado-logo.png') }}" alt="bruce" class="w-100 border-radius-lg shadow-sm">
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-auto col-8 my-auto">
+            <div class="h-100">
+              <h5 class="mb-1 font-weight-bolder">{{ Auth::user()->username }}</h5>
+              <p class="mb-0 font-weight-bold text-sm">
+                @if(Auth::user()->share_holder)
+                  BOSS / {{ Auth::user()->share_holder->role_description }}
+                @else
+                  {{ session('role')}}
+                @endif
+              </p>
+            </div>
+          </div>
+          <div class="col-sm-auto ms-sm-auto mt-sm-0 mt-3 d-flex">
+            <label class="form-check-label mb-0 col-4 text-right" style="line-height: 3;">
+              <span id="profileVisibility" class="commission-label mr-2">
+                {{ number_format(Auth::user()->active_commission()->sum('points'), 2, '.', ',') }}
+              </span>
+            </label>
+            <div class="form-check pl-0">
+              <a class="py-1 btn bg-gradient-dark btn-sm float-start" id="convert-com-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="" aria-hidden="true" data-bs-original-title="Convert Into Points" aria-label="Convert Into Points">
+                <svg width="28px" height="28px" id="svg-convert" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" stroke-width="3" stroke="#ffffff" fill="none"><path d="M55.47,31.14A23.51,23.51,0,0,1,12.69,45.6" stroke-linecap="round"/><path d="M8.46,32.74a24,24,0,0,1,.42-5,23.51,23.51,0,0,1,42.29-9.14" stroke-linecap="round"/><polyline points="40.6 17.6 51.45 18.87 52.53 8.69" stroke-linecap="round"/><polyline points="23.05 46.33 12.21 45.06 11.12 55.24" stroke-linecap="round"/><path d="M39,25.57a7.09,7.09,0,0,0-6.65-4.29c-6,0-6.21,4.29-6.21,4.29s-.9,5.28,6.43,5.85C40.18,32,39,37.26,39,37.26s-.78,4.58-6.43,4.87-7.41-5.65-7.41-5.65"/><line x1="32.33" y1="17.48" x2="32.33" y2="46.52"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="card col-md-12 mt-3">
         <div class="card-body">
           <form method="POST" action="{{ url('/user/profile/') }}">
@@ -184,24 +230,9 @@
                     </div>
                   </div>
                 </div>
-                @if(Auth::user()->share_holder)
                 <div class="row">
                   <div class="col-12">
-                    <label class="text-black form-label mt-4">Current Commission ({{ Auth::user()->share_holder->percentage }}%)</label>
-                    <div class="input-group">
-                      <input id="current_commission" class="form-control disabled" title="Current Commission" type="text" disabled="" value="{{ number_format(Auth::user()->active_commission->sum('points'), 2, '.', ',') }}" >
-                    </div>
-                    <a class="float-right text-primary" href="#">
-                      <i class="fa-solid fa-money-bill-transfer"></i> Convert
-                    </a>
-                  </div>
-                </div>
-                @else
-                <div class="mb-4"></div>
-                @endif
-                <div class="row">
-                  <div class="col-12">
-                    <label class="text-black form-label">Username</label>
+                    <label class="text-black form-label mt-4">Username</label>
                     <div class="input-group">
                       <input id="username" name="username" class="form-control" type="text" value="{{ $user->username }}" placeholder="Username"  >
                     </div>
@@ -259,7 +290,25 @@
         return;
       }
     });
+
+    $('[data-bs-toggle="tooltip"]').tooltip()
+
+    $('#convert-com-btn').on('click', function(e) {
+      $('#svg-convert').css({
+        'animation-name': 'rotate',
+        'animation-duration': '1s',
+        'animation-iteration-count': 3,
+      });
+
+      setTimeout(() => {
+        $('#svg-convert').removeAttr('style');
+        $('#profileVisibility').text('0.00');
+      }, 3000);
+
+
+    });
   })
+
 </script>
 <script src="{{ asset('js/userprofile.js') }}" defer></script>
 @endsection

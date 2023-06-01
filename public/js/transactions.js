@@ -112,7 +112,7 @@ $('#deposit-trans-table tbody').on('click', 'td.dt-control', function () {
   if (row.child.isShown()) {
     row.child.hide();
     tr.removeClass('shown');
-  } 
+  }
   else {
     row.child(formatDeposit(row.data())).show();
     tr.addClass('shown');
@@ -270,3 +270,32 @@ function clearFields() {
 $('[data-dismiss="modal"]').on('click', function() {
   $('#modal-undo-points').modal('hide');
 })
+
+function showNotification(message) {
+  const img = "img/sabong-aficionado-icon.png";
+  console.log(img);
+  const text = message;
+  new Notification("Sabong Aficionado", { body: text, icon: img });
+}
+
+$('#allow-notifications').on('click', () => {
+  if (!("Notification" in window)) {
+    // Check if the browser supports notifications
+    alert("This browser does not support desktop notification");
+  } else if (Notification.permission === "granted") {
+    // Check whether notification permissions have already been granted;
+    // if so, create a notification
+    const notification = new Notification("Hi there!");
+    // …
+  } else if (Notification.permission !== "denied") {
+    // We need to ask the user for permission
+    Notification.requestPermission().then((permission) => {
+      // If the user accepts, let's create a notification
+      if (permission === "granted") {
+        const notification = new Notification("Hi there!");
+        // …
+      }
+    });
+  }
+
+});
