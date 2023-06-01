@@ -222,7 +222,7 @@ class AuditorController extends Controller
              
             $imageName = time().'.'.$request->formFile->extension();
             $path = 'public/' . $imageName;
-            //Storage::disk('local')->put($path, file_get_contents($request->formFile));
+            Storage::disk('local')->put($path, file_get_contents($request->formFile));
 
             Transactions::create([
                 'user_id' => Auth::user()->id,
