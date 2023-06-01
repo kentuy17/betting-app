@@ -15,10 +15,10 @@ class EnsureUserIsOperator
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(session('role') === 'Operator' || session('role') == 'Cash-out Operator' || session('role') == 'Cash-in Operator') {
+        if(session('role') == 'Operator') {
             return $next($request);
         }
 
-        return redirect('/play');
+        return redirect('/home');
     }
 }

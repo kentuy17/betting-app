@@ -1,72 +1,175 @@
-$(document).ready(function () {
-    const SIDE = {
-      M: 'MERON',
-      W: 'WALA',
-      D: 'DRAW'
+const SIDE = {
+  M: 'MERON',
+  W: 'WALA',
+  D: 'DRAW'
+}
+
+const WINNER = {
+  P: 'PENDING',
+  W: 'WIN',
+  L: 'LOSE',
+  D: 'DRAW',
+  C: 'CANCELLED'
+}
+
+var betHistoryTable = $('#bethistory-table');
+
+betHistoryTable.DataTable({
+  "bPaginate": true,
+  "bLengthChange": true,
+  "bFilter": true,
+  "bInfo": false,
+  "bAutoWidth": true,
+  "scrollX": true,
+  "ajax": '/bet/history',
+  "pagingType": 'numbers',
+  "language": {
+    "search": '',
+    "lengthMenu": "_MENU_",
+  },
+  "order": [[8, 'desc'],[2, 'desc']],
+  "dom": "<'row'<'col-4'l><'col-8'f>>" +
+    "<'row'<'col-sm-12'tr>>" +
+    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+  "columnDefs": [
+    {
+        "targets": [3, 4, 5, 6, 7],
+        className: 'dt-body-center'
+    }
+  ],
+  "columns": [
+    {
+      className: 'dt-control',
+      orderable: false,
+      data: null,
+      defaultContent: '',
+    },
+    {
+      "data": null,
+      render: (data, type, row, meta) => {
+        let fightName = row.fight ? row.fight.event.name : 'N/A';
+        return fightName;
+      }
+    },
+    {
+      "data": "fight_no"
+    },
+    {
+      "data": null,
+      render: (data, type, row, meta) => {
+        return SIDE[row.side]
+      }
+    },
+    {
+      "data": null,
+      render: function(data, type, row, meta) {
+        return row.betamount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+      }
+    },
+    {
+      "data": null,
+      render: (data, type, row, meta) => {
+        return `${row.percent.toFixed(2)}%`
+      }
+    },
+    {
+      "data": null,
+      render: (data, type, row, meta) => {
+        return row.status != '' ? WINNER[row.status] : "PENDING";
+      }
+    },
+    {
+      "data": null,
+      render: function(data, type, row, meta) {
+        return row.winamount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+      }
+    },
+    {
+      "data": "created_at"
+    }
+  ],
+  "createdRow": function( row, data, dataIndex){
+    if( data.status ==  `W`) {
+      $(row).find('td').eq(6).attr('style', 'color: green !important');
+      $(row).find('td').eq(7).attr('style', 'color: yellow !important');
     }
 
-    const WINNER = {
-      P: 'PENDING',
-      W: 'WIN',
-      L: 'LOSE',
-      D: 'DRAW',
-      C: 'CANCELLED'
+    if( data.status ==  `L` ) {
+      $(row).find('td').eq(6).attr('style', 'color: red !important');
     }
 
-    $('#bethistory-table').DataTable({
-      "bPaginate": true,
-      "bLengthChange": false,
-      "bFilter": false,
-      "bInfo": false,
-      "bAutoWidth": false,
-      "scrollX": true,
-      "ajax": '/bet/history',
-      "columns": [
-        {
-          // "data": "fight.event.name"
-          "data": null,
-          render: (data, type, row, meta) => {
-            let fightName = row.fight ? row.fight.event.name : 'N/A';
-            return fightName;
-          }
-        },
-        {
-          "data": "fight_no"
-        },
-        {
-          "data": null,
-          render: (data, type, row, meta) => {
-            return SIDE[row.side]
-          }
-        },
-        {
-          "data": null,
-          render: function(data, type, row, meta) {
-            return row.betamount.toFixed(2);
-          }
-        },
-        {
-          "data": null,
-          render: function(data, type, row, meta) {
-            return row.winamount.toFixed(2);
-          }
-        },
-        {
-          "data": null,
-          render: (data, type, row, meta) => {
-            return `${row.percent.toFixed(2)}%`
-          }
-        },
-        {
-          "data": "created_at"
-        },
-        {
-          "data": null,
-          render: (data, type, row, meta) => {
-            return row.status != '' ? WINNER[row.status] : "PENDING";
-          }
-        }
-      ]
-    });
-  });
-  
+    if( data.side == 'M' ) {
+      $(row).find('td').eq(3).attr('style', 'color: red !important');
+    }
+
+    if( data.side == 'W' ) {
+      $(row).find('td').eq(3).attr('style', 'color: blue !important');
+    }
+  }
+})
+
+function formatBetHistory(d) {
+  let win = '', status = '', side = '';
+  if(d.status == 'W') {
+    win = 'style="color:yellow"';
+    status = 'style="color:green"';
+  }
+
+  if(d.status == 'L') {
+    status = 'style="color:red"';
+  }
+
+  if(d.side == 'M') {
+    side = 'style="color:red"'
+  }
+
+  if(d.side == 'W') {
+    side = 'style="color:blue"';
+  }
+
+  return (
+    `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
+      <tr>
+        <td>FIGHT#:</td>
+        <td>${d.fight_no}</td>
+      </tr>
+      <tr>
+        <td>SIDE:</td>
+        <td ${side}>${SIDE[d.side]}</td>
+      </tr>
+      <tr>
+        <td>BET AMOUNT:</td>
+        <td>${d.betamount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+      </tr>
+      <tr>
+        <td>PERCENT:</td>
+        <td>${d.percent.toFixed(2)}%</td>
+      </tr>
+      <tr>
+        <td>STATUS:</td>
+        <td ${status}>${WINNER[d.status]}</td>
+      </tr>
+      <tr>
+        <td>WIN:</td>
+        <td ${win}>${d.winamount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+      </tr>
+    </table>`
+  );
+}
+
+$('#bethistory-table tbody').on('click', 'td.dt-control', function () {
+  var tr = $(this).closest('tr');
+  var row = betHistoryTable.DataTable().row(tr);
+
+  if (row.child.isShown()) {
+    row.child.hide();
+    tr.removeClass('shown');
+  }
+  else {
+    row.child(formatBetHistory(row.data())).show();
+    tr.addClass('shown');
+  }
+});
+
+
+

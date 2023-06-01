@@ -1,6 +1,7 @@
 $(function () {
   var element = $('.floating-chat');
   var myStorage = localStorage;
+  var visited = false;
 
   if (!myStorage.getItem('chatID')) {
     myStorage.setItem('chatID', createUUID());
@@ -23,7 +24,6 @@ $(function () {
   });
 
   function openElement() {
-    var messages = element.find('.messages');
     var textInput = element.find('.text-box');
     element.find('>i').hide();
     element.addClass('expand');
@@ -33,7 +33,23 @@ $(function () {
     element.off('click', openElement);
     element.find('.header button').click(closeElement);
     element.find('#sendMessage').click(sendNewMessage);
-    messages.scrollTop(messages.prop("scrollHeight"));
+    getUserMsg().then(userMsg => {
+      if(userMsg.data.length == 0 || visited) return;
+      var typing = $('.other-typing');
+      var reply = '<li class="other">Thank you for messaging us! We are currently processing your request.</li>';
+      var msg = '';
+      for (let i = 0; i < userMsg.data.length; i++) {
+        const element = userMsg.data[i];
+        if(i == 0) {
+          msg += reply;
+        }
+        msg += `<li class="${element.sender}">${element.message}</i>`;
+      }
+      var msgEl = $(msg);
+      typing.before(msgEl);
+      scrollDown(0);
+      visited = true;
+    })
   }
 
   function closeElement() {
@@ -67,38 +83,62 @@ $(function () {
   function sendNewMessage() {
     var userInput = $('.text-box');
     var newMessage = userInput.html().replace(/\<div\>|\<br.*?\>/ig, '\n').replace(/\<\/div\>/g, '').trim().replace(/\n/g, '<br>');
-
     if (!newMessage) return;
-
-    var messagesContainer = $('.messages');
+    sendMsg(newMessage);
+    visited = true;
     var typing = $('.other-typing');
-    var reply = $('<li class="other">Thank you for messaging us! We are currently processing your request.</li>');
-
+    var autoReply = 'Thank you for messaging us! We are currently processing your request.';
+    var reply = $(`<li class="other">${autoReply}</li>`);
     typing.before('<li class="self">'+newMessage+'</li>');
-
     setTimeout(() => {
       typing.show();
+      scrollDown();
       setTimeout(() => {
         typing.hide().before(reply);
+        sendMsg(autoReply,'other')
+        scrollDown();
       }, 3000);
     }, 3000);
+    userInput.html(''); // clean out old message
+    userInput.focus(); // focus on input
+    scrollDown();
+  }
 
-    
-
-    // clean out old message
-    userInput.html('');
-    // focus on input
-    userInput.focus();
-
+  function scrollDown(sex=250) {
+    var messagesContainer = $('.messages');
     messagesContainer.finish().animate({
       scrollTop: messagesContainer.prop("scrollHeight")
-    }, 250);
+    }, sex);
   }
 
   function onMetaAndEnter(event) {
     if ((event.metaKey || event.ctrlKey) && event.keyCode == 13) {
       console.log(event.keyCode);
       sendNewMessage();
+    }
+  }
+
+  async function getUserMsg() {
+    try {
+      const response = await fetch('/chat/messages')
+      const messages = await response.json()
+      return messages
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function sendMsg(msg='',sender='self') {
+    try {
+      const { playerMessage } = axios.post('/chat/send-message', {
+        message: msg,
+        sender: sender,
+      });
+      // console.log(playerMessage);
+    }
+    catch (error) {
+      console.log(error);
     }
   }
 })

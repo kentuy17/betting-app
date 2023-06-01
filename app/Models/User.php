@@ -57,6 +57,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'created_at' => 'datetime:m/d/y h:s',
     ];
 
     public function bet()

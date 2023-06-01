@@ -10,19 +10,20 @@
           <table class="table table-striped" style="width: 100%" id="bethistory-table">
             <thead>
               <tr>
+                <th>#</th>
                 <th>EVENT</th>
                 <th>FIGHT #</th>
                 <th>SIDE</th>
                 <th>BET AMOUNT</th>
-                <th>WIN AMOUNT</th>
                 <th>PERCENT %</th>
-                <th>DATE</th>
                 <th>STATUS</th>
+                <th>WIN AMOUNT</th>
+                <th>DATE</th>
               </tr>
             </thead>
           </table>
         </div>
-          
+
       </div>
     </div>
   </div>

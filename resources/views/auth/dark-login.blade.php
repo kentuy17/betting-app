@@ -36,7 +36,7 @@
       data-issue-and-pr-hovercards-enabled="">
       <main>
         <div class="auth-form" id="login">
-          @if($errors->any()) 
+          @if($errors->any())
           <div id="js-flash-container" data-turbo-replace="">
             <div class="flash flash-full flash-error  ">
               <div class="px-2">
@@ -46,7 +46,7 @@
                   </svg>
                 </button>
                 <div aria-atomic="true" role="alert" class="js-flash-alert">
-                  {!! implode('', $errors->all('<div>:message</div>')) !!}&nbsp;</div>
+                  {!! implode('', $errors->all('<div>:message</div>')) !!}</div>
               </div>
             </div>
           </div>
@@ -82,7 +82,7 @@
           <a href="/security">Security</a>
         </li>
         <li>
-          <a class="Link--secondary" href="/contact">Contact Admin</a>
+          <a class="Link--secondary" href="http://m.me/100093200857033" target="_blank">Contact Admin</a>
         </li>
       </ul>
     </div>
@@ -187,6 +187,6 @@
   $(function() {
     $('.js-flash-close').on('click', function() {
       $('#js-flash-container').hide()
-    }) 
+    })
   })
 </script>

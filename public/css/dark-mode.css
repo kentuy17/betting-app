@@ -214,3 +214,26 @@ img {
   min-width: 280px;
   padding: 0;
 }
+.badge-dot {
+  padding-right: 0;
+  background: transparent;
+  font-weight: 400;
+  font-size: .875rem;
+  text-transform: none;
+}
+.badge-dot i {
+  display: inline-block;
+  vertical-align: middle;
+  width: .375rem;
+  height: .375rem;
+  border-radius: 50%;
+  margin-right: .375rem;
+}
+@media screen and (max-width: 767px) {
+  div.dataTables_wrapper div.dataTables_length {
+    text-align: left !important;
+  }
+  div.dataTables_wrapper div.dataTables_filter {
+    text-align: right !important;
+  }
+}

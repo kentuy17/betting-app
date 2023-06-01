@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnsureUserIsAuditor
+class EnsureUserIsCsr
 {
     /**
      * Handle an incoming request.
@@ -15,11 +15,10 @@ class EnsureUserIsAuditor
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(session('role') === 'Auditor') {
+        if(session('role') == 'Cash-out Operator' || session('role') == 'Cash-in Operator') {
             return $next($request);
         }
 
-        return redirect('/');
+        return redirect('/home');
     }
 }
-

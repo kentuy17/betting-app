@@ -12,8 +12,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BetController;
 use App\Http\Controllers\FightController;
 use App\Http\Controllers\AuditorController;
-use App\Models\User;
-use App\Http\Controllers\Controller;
+// use App\Http\Controllers\Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,9 +40,9 @@ Route::group(['middleware' => ['auth','visitor']], function() {
     // });
 
     Route::resource('roles', RoleController::class);
-    Route::resource('users', UserController::class);
+    // Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
-    Route::resource('transactions', UserController::class);
+    // Route::resource('transactions', UserController::class);
 
     Route::get('/user/profile', [UserController::class, 'profile'])->name('users.profile');
     Route::post('/user/profile', [UserController::class, 'editprofile']);
@@ -51,6 +50,9 @@ Route::group(['middleware' => ['auth','visitor']], function() {
     Route::group(['middleware' => ['admin']], function () {
         Route::get('/admin/share-allocation', [AdminController::class, 'shareHolders'])->name('admin.shares');
         Route::get('/visitor', [AdminController::class, 'getOnlineUsers']);
+        Route::get('/admin/users', [AdminController::class, 'getUsers']);
+        Route::get('/admin', [AdminController::class, 'index']);
+        Route::post('/admin/users-create', [AdminController::class, 'createUser']);
     });
 
     // Player
@@ -68,7 +70,10 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::post('/withdraw', [PlayerController::class, 'withdrawSubmit'])->name('withdraw.submit');
 
         Route::get('/playertransaction', [PlayerController::class, 'playerTransaction'])->name('player.player-transaction');
-        Route::get('/player/transaction', [PlayerController::class, 'getTransactionByPlayerController']);
+        Route::get('/player/transaction/{action}', [PlayerController::class, 'getTransactionByPlayerController']);
+
+        Route::get('/chat/messages', [PlayerController::class, 'getUserMsg']);
+        Route::post('/chat/send-message', [PlayerController::class, 'sendUserMsg']);
     });
 
     // Operator
@@ -78,13 +83,19 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::get('/event/lists', [OperatorController::class, 'getEvents']);
         Route::post('/event/create', [OperatorController::class, 'addNewEvent']);
 
-        Route::get('/transaction/deposits', [OperatorController::class, 'getDepositTrans']);
-        Route::get('/transaction/withdrawals', [OperatorController::class, 'getWithdrawTrans']);
-        Route::post('/transaction/deposit', [OperatorController::class, 'processDeposit']);
-        Route::post('/transaction/withdraw', [OperatorController::class, 'processWithdraw']);
         Route::get('/fight', [OperatorController::class, 'fight'])->name('operator.fight');
-        Route::get('/transactions', [OperatorController::class, 'transactions'])->name('operator.transactions');
 
+    });
+
+    Route::group(['middleware' => ['auditor']], function () {
+        Route::get('/transaction/refill', [AuditorController::class, 'getRefillTrans']);
+        Route::post('/transaction/refill', [AuditorController::class, 'processRefill']);
+        Route::get('/transaction/remit', [AuditorController::class, 'getRemitTrans']);
+        Route::post('/transaction/remit', [AuditorController::class, 'processRemit']);
+        Route::get('/transactions-auditor', [AuditorController::class, 'transactions'])->name('auditor.transactions-operator');
+    });
+
+    Route::group(['middleware' => ['csr']], function () {
         Route::get('/remitpoints', [OperatorController::class, 'remit'])->name('remit');
         Route::post('/remitpoints', [OperatorController::class, 'remitSubmit']);
 
@@ -92,20 +103,15 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::post('/refillpoints', [OperatorController::class, 'refillSubmit'])->name('refill.upload.post');
     });
 
-    Route::group(['middleware' => ['cashin-operator']], function () {
-
+    Route::group(['middleware' => ['auditor_csr']], function () {
+        Route::get('/transactions', [OperatorController::class, 'transactions'])->name('operator.transactions');
+        Route::get('/transaction/deposits', [OperatorController::class, 'getDepositTrans']);
         Route::post('/transaction/deposit/revert', [OperatorController::class, 'processDepositRevert']);
+
+        Route::get('/transaction/withdrawals', [OperatorController::class, 'getWithdrawTrans']);
+        Route::post('/transaction/deposit', [OperatorController::class, 'processDeposit']);
+        Route::post('/transaction/withdraw', [OperatorController::class, 'processWithdraw']);
     });
-    Route::group(['middleware' => ['auditor']], function () {
-        Route::get('/transaction/refill', [AuditorController::class, 'getRefillTrans']);
-        Route::get('/transaction/remit', [AuditorController::class, 'getRemitTrans']);
-        Route::post('/transaction/refill', [AuditorController::class, 'processRefill']);
-        Route::post('/transaction/remit', [AuditorController::class, 'processRemit']);
-        Route::get('/transactions-auditor', [AuditorController::class, 'transactions'])->name('auditor.transactions-operator');
-
-    });
-
-
 
     // Bets
     Route::get('/bet/total', [BetController::class, 'getTotalBetAmountPerFight']);

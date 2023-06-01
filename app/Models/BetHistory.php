@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Fight;
+use DateTimeInterface;
 
 class BetHistory extends Model
 {
@@ -25,9 +26,14 @@ class BetHistory extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'datetime:M d, Y h:s A',
-        'updated_at' => 'datetime:M d, Y h:s A',
+        // 'created_at' => 'datetime:M d, Y h:s A',
+        'updated_at' => 'datetime:M d, Y h:i A',
     ];
+
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->timezone('Asia/Singapore')->format('M d, Y H:i:s');
+    }
 
     public function user()
     {

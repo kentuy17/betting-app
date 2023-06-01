@@ -6,9 +6,9 @@ remitTable.DataTable({
   "ajax": '/transaction/remit',
   "bPaginate": true,
   "bLengthChange": false,
-  "bFilter": false,
+  "bFilter": true,
   "bInfo": false,
-  "bAutoWidth": false,
+  "bAutoWidth": true,
   "scrollX": true,
   "columns": [
     {
@@ -107,7 +107,7 @@ $('#remit-trans-table tbody').on('click', 'td.dt-control', function () {
   if (row.child.isShown()) {
     row.child.hide();
     tr.removeClass('shown');
-  } 
+  }
   else {
     row.child(format(row.data())).show();
     tr.addClass('shown');
@@ -181,3 +181,7 @@ $('[data-dismiss="modal"]').on('click', function() {
 
 $('#badge-remit-unverified').tooltip().show()
 
+$('[data-bs-toggle="tab"]').on('shown.bs.tab', function(e){
+  $($.fn.dataTable.tables(true)).DataTable()
+     .columns.adjust();
+});

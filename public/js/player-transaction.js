@@ -8,7 +8,7 @@ $(document).ready(function () {
     "bAutoWidth": false,
     "scrollX": true,
     "order": [[0, 'desc']],
-    "ajax": '/player/transaction',
+    "ajax": '/player/transaction/deposit',
     "columns": [
       {
         "data": null,
@@ -24,7 +24,7 @@ $(document).ready(function () {
       },
       {
         "data": "reference_code"
-      },      
+      },
       {
         "data": null,
         render: (data) => {
@@ -40,7 +40,7 @@ $(document).ready(function () {
       {
         "data": "note",
       }
-    ]
+    ],
   });
 
   // WITHDRAW TABLE
@@ -52,7 +52,7 @@ $(document).ready(function () {
     "bAutoWidth": false,
     "scrollX": true,
     "order": [[0, 'desc']],
-    "ajax": '/player/transaction',
+    "ajax": '/player/transaction/withdraw',
     "columns": [
       {
         "data": null,
@@ -68,7 +68,7 @@ $(document).ready(function () {
       },
       {
         "data": "reference_code"
-      },      
+      },
       {
         "data": null,
         render: (data) => {
@@ -87,4 +87,8 @@ $(document).ready(function () {
     ]
   });
 });
-  
+
+$('[data-bs-toggle="tab"]').on('shown.bs.tab', function(e){
+  $($.fn.dataTable.tables(true)).DataTable()
+     .columns.adjust();
+});

@@ -31,14 +31,18 @@ class HomeController extends Controller
         $role = $this->getUserRole();
         if($role->name == 'Player') {
             $this->redirectTo = '/play';
-        } 
-        
-        if($role->name == 'Operator' || $role->name == 'Cash-out Operator' || $role->name == 'Cash-in Operator') {
+        }
+
+        if($role->name == 'Operator') {
             $this->redirectTo = '/fight';
         }
 
+        if($role->name == 'Cash-out Operator' || $role->name == 'Cash-in Operator') {
+            $this->redirectTo = '/transactions';
+        }
+
         if($role->name == 'Admin') {
-            $this->redirectTo = '/users';
+            $this->redirectTo = '/admin';
         }
 
         if($role->name == 'Auditor') {
