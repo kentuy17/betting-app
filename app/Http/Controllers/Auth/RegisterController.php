@@ -80,6 +80,7 @@ class RegisterController extends Controller
             'phone_no' => $validated['phone_no'],
             'password' => Hash::make($validated['password']),
             'active' => true,
+            'name' => $validated['username'],
         ]);
 
         ModelHasRoles::create([

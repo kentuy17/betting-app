@@ -11,6 +11,7 @@
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="deposit-tab" data-bs-toggle="tab" data-bs-target="#deposit-panel" type="button" role="tab" aria-controls="deposit" aria-selected="true">
             Deposits <span id="badge-deposit" style="display: none;" class="badge bg-danger">0</span></button>
+            {{-- <button onclick="showNotification('fuck yeah!')">Show Notif</button> --}}
         </li>
       @endif
       @if (session('role') == 'Cash-out Operator')

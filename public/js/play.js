@@ -5,7 +5,7 @@ $(function() {
     const setValue = newValue => value = newValue
     return [getValue, setValue];
   }
-  
+
   const [fightNo, setFightNo] = useState(0);
 
   const [fightStatus, setFightStatus] = useState('____');
@@ -50,14 +50,14 @@ $(function() {
     .then((json) => {
       for (var j = 1; j <= 7; j++) {
         var tr = $('<tr>');
-        for (var i = 1; i <= 200; i++) {
+        for (var i = 1; i <= 150; i++) {
           tr.append('<td> <div id="tdBaccaratAllConsecutive-' + j + i + '"></div></td>');
         }
         tr.append("</tr>");
         $('#tblBaccaratResultConsecutive').append(tr);
 
       }
-      var dataArr = Object.values(json); 
+      var dataArr = Object.values(json);
       var y = 1;
       var c = 1;
       for (var x = 1; x < dataArr.length; x++) {
@@ -110,7 +110,7 @@ $(function() {
 
     if(dataArr[dataArr.length-2][0] == 'Cancelled') {
       setLastWinner('C');
-    }    
+    }
   }
 
   window.Echo.channel('fight')
@@ -130,7 +130,7 @@ $(function() {
 
       if(e.fight.prev.game_winner == 'M') {
         pos.addClass('circleRedAll')
-      } 
+      }
       else if(e.fight.prev.game_winner == 'W') {
         pos.addClass('circleBlueAll')
       }
@@ -145,7 +145,7 @@ $(function() {
       setLastPosition(p)
     }
   })
- 
+
 
 });
 
