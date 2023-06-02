@@ -40,7 +40,7 @@ class ModelHasRoles extends Model
     public function operators()
     {
         return $this->belongsTo(User::class, 'model_id')
-            ->where('role_id', $this->OPERATOR);
+            ->where('role_id', $this->CASHIN);
     }
 
     public function active_operators()
