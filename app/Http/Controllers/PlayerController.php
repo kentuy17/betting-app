@@ -10,6 +10,7 @@ use App\Models\ModelHasRoles;
 use App\Models\Roles;
 use App\Models\User;
 use App\Models\Transactions;
+use App\Models\BetHistory;
 use \Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
@@ -263,6 +264,26 @@ class PlayerController extends Controller
         return response()->json([
             'status' => 'OK',
             'message' => 'sent',
+        ], 200);
+    }
+
+    public function getBetsByUserId($id)
+    {
+        try {
+            //code...
+            $bets = BetHistory::where('user_id', $id)
+                ->orderBy('bethistory_no','desc')->get();
+
+        } catch (\Exception $e) {
+            //throw $th;
+            return response()->json([
+                'status' => 'Failed',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+
+        return response()->json([
+            'data' => $bets,
         ], 200);
     }
 }

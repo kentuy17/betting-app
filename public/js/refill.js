@@ -3,10 +3,10 @@ const TYPE = {
     completed: 'COMPLETED',
     failed: 'FAILED'
   }
-  
+
   var transactionsTable = $('#refill-trans-table');
   var pendingCount = 0;
-  
+
   transactionsTable.DataTable({
     "ajax": '/transaction/refill',
     "bPaginate": true,
@@ -65,7 +65,7 @@ const TYPE = {
         $(row).css({"background-color":"var(--bs-red)"});
         pendingCount++;
       }
-  
+
       if(pendingCount > 0) {
         $('#badge-deposit').show().text(pendingCount);
       } else {
@@ -73,7 +73,7 @@ const TYPE = {
       }
     }
   });
-  
+
   function formatRefill(d) {
     return (
       `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
@@ -96,23 +96,23 @@ const TYPE = {
       </table>`
     );
   }
-  
-  
-  
+
+
+
   $('#refill-trans-table tbody').on('click', 'td.dt-control', function () {
     var tr = $(this).closest('tr');
     var row = transactionsTable.DataTable().row(tr);
-  
+
     if (row.child.isShown()) {
       row.child.hide();
       tr.removeClass('shown');
-    } 
+    }
     else {
       row.child(formatRefill(row.data())).show();
       tr.addClass('shown');
     }
   });
-  
+
   transactionsTable.on('click', 'tbody td .view', async function() {
     clearFields();
     var tr = $(this).closest('tr');
@@ -120,12 +120,12 @@ const TYPE = {
     $('#modal-center').modal('show')
     $('.modal-title').text(row.data().action.toUpperCase())
     $('input#trans-id').val($(this).data('id'));
-  
+
     let storage = $('#trans-receipt').data('storage');
     if(row.data().filename) {
       $('#trans-receipt').attr('src', storage+'/'+row.data().filename);
     }
-  
+
     if(row.data().status != 'pending') {
       $('input[type="submit"]').prop('disabled', true)
         .addClass('disabled');
@@ -134,7 +134,7 @@ const TYPE = {
         .removeClass('disabled');
     }
   })
-  
+
   $('#refill-form').on('click', 'input[type="submit"]',function(e) {
     e.preventDefault();
     axios.post('/transaction/refill', {
@@ -157,16 +157,16 @@ const TYPE = {
         $('#operator-pts').html(res.data.points)
         clearFields();
       });
-  
+
       transactionsTable.DataTable().ajax.reload();
       pendingCount = 0;
     })
     .catch((err) => {
       console.log(err);
     })
-  
+
   })
-  
+
   $('#trans-action').on('change', function(e) {
     e.preventDefault();
     let action = $(this).val();
@@ -179,15 +179,14 @@ const TYPE = {
       $('#trans-note').parent().hide()
     }
   });
-  
+
   function clearFields() {
     $('#trans-pts').val(''), $('#ref-code').val(''), $('#trans-note').val(''),
       $('#trans-action').val('approve'), $('#trans-note').parent().hide();
   }
-  
-  
+
+
   $('[data-dismiss="modal"]').on('click', function() {
     $('#modal-center').modal('hide');
   })
-  
-  
+

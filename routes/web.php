@@ -111,6 +111,8 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::get('/transaction/withdrawals', [OperatorController::class, 'getWithdrawTrans']);
         Route::post('/transaction/deposit', [OperatorController::class, 'processDeposit']);
         Route::post('/transaction/withdraw', [OperatorController::class, 'processWithdraw']);
+
+        Route::get('/player/bets/{id}', [PlayerController::class, 'getBetsByUserId']);
     });
 
     // Bets

@@ -86,6 +86,8 @@ function format(d) {
       <i class="fa-solid fa-circle-info"></i></button>`;
   var btnCopy = `<button data-bs-toggle="tooltip" title="Copied!" data-bs-trigger="click" class="btn btn-link text-primary btn-icon copy-phone" id="copy-phone" data-phone-number="${d.mobile_number}"
       onclick="copyPhone(this);"><i class="fa-solid fa-copy"></i></button>`;
+  let betHistory = `<a href="javascript:void(0)" data-id="${d.id}" class="btn btn-link text-primary btn-icon pl-0 show">view
+      <i class="fa-solid fa-eye"></i></a>`;
   var expandContent = `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
       <tr>
         <td>PLAYER:</td>
@@ -102,6 +104,10 @@ function format(d) {
       <tr>
         <td>ACTION:</td>
         <td>${operation}</td>
+      </tr>
+      <tr>
+        <td>BETS:</td>
+        <td>${betHistory}</td>
       </tr>
     </table>`;
   return expandContent;
