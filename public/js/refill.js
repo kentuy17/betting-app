@@ -139,7 +139,7 @@ const TYPE = {
     e.preventDefault();
     axios.post('/transaction/refill', {
       id: $('#trans-id').val(),
-      amount: $('#trans-pts').val(),
+      amount: $('#trans-pts').val().replace(",", ""),
       ref_code: $('#ref-code').val(),
       action: $('#trans-action').val(),
       note: $('#trans-note').val(),
@@ -162,8 +162,12 @@ const TYPE = {
       pendingCount = 0;
     })
     .catch((err) => {
-      console.log(err);
-    })
+      Swal.fire({
+        icon: 'error',
+        confirmButtonColor: 'red',
+        title: err.response.data.msg,
+        timer: 1500
+      });    })
   
   })
   

@@ -103,7 +103,7 @@
           </div>
           <div class="form-group mt-2">
             <label for="trans-pts">Points</label>
-            <input type="number" class="form-control" required id="trans-pts" placeholder="Points">
+            <input type="text" class="form-control" required id="trans-pts" placeholder="Points" onkeyup = "javascript:this.value=Comma(this.value);">
           </div>
           <div class="form-group mt-2">
             <label for="trans-action">Action</label>
@@ -184,6 +184,30 @@ function ExportData(data, filename)
           XLSX.utils.book_append_sheet(wb, ws, "People");
           XLSX.writeFile(wb,filename);
     }
+    function Comma(Num) { //function to add commas to textboxes
+        Num += '';
+        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+        x = Num.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1))
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        return x1 + x2;
+    }
+    // $(function() {
+    // $('button[type="submit"]').on('click', function(e) {
+    //   var points = $('#operator-pts').val().replace(',', '');
+    //   var amount = $('#trans-pts').val().replace(',', '');
+      
+    //   if(parseFloat(points) < parseFloat(amount)) {
+    //     console.log([points, amount]);
+    //     alert ("Insufficient Amount")
+    //     return;
+    //   }
+    // });
+  //})
 </script>
 @endsection
 @section('additional-scripts')

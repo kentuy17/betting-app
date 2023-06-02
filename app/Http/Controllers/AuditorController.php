@@ -54,6 +54,14 @@ class AuditorController extends Controller
     public function processRefill(Request $request)
     {
         try {
+            $auditor = User::find(Auth::user()->id);
+            if($auditor->points <  $request->amount){
+                return response()->json([
+                    'msg' => 'Insuficient points!',
+                    'status' => 'error',
+                ], 500);
+            }
+
             $trans = Transactions::find($request->id);
             $trans->status = $request->action == 'approve' ? 'completed' : 'failed';
             $trans->processedBy = Auth::user()->id;
@@ -68,7 +76,6 @@ class AuditorController extends Controller
                 $operator->points +=  $request->amount;
                 $operator->save();
 
-                $auditor = User::find(Auth::user()->id);
                 $auditor->points -=  $request->amount;
                 $auditor->save(); 
             }
