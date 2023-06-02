@@ -161,6 +161,7 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-12">
+      @if(Auth::user()->share_holder)
       <div class="card card-body mb-0 mt-3" id="profile">
         <div class="row justify-content-center">
           <div class="col-sm-auto col-4">
@@ -202,6 +203,7 @@
           </div>
         </div>
       </div>
+      @endif
       <div class="card col-md-12 mt-3">
         <div class="card-body">
           <form method="POST" action="{{ url('/user/profile/') }}">
