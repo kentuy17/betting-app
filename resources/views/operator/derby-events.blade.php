@@ -28,13 +28,10 @@
                 <input type="time" class="form-control" id="time-start">
               </div>
             </div>
-           
-
           </div>
           <div class="card-footer">
             <button id="add-derby" class="btn btn-primary float-right mb-2">Add</button>
           </div>
-
         </form>
       </div>
     </div>
@@ -56,10 +53,6 @@
         </table>
       </div>
     </div>
-    
-    {{-- <div class="card-header font-bold">DERBY EVENTS LIST</div> --}}
-      
-    
   </div>
 </div>
 @endsection

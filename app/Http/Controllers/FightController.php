@@ -21,7 +21,7 @@ class FightController extends Controller
     public $current_event;
     public $prev_match;
     public $fight;
-    private $percent = 5;
+    private $percent = 10;
     /**
      * Create a new controller instance.
      *
@@ -105,12 +105,20 @@ class FightController extends Controller
     {
         $bets = $this->getTotalBets();
         $total_bets = $bets['meron'] + $bets['wala'];
-        $commision = $this->percent * $total_bets / 100;
-        $win = $total_bets - $commision;
+
+        $meron_comm = $bets['meron'] * $this->percent / 100;
+        $win_meron = $total_bets - $meron_comm;
+        $meron_percentage = $win_meron / $bets['meron'] * 100;
+
+        $wala_comm = $bets['wala'] * $this->percent / 100;
+        $win_wala = $total_bets - $wala_comm;
+        $wala_percentage = $win_wala / $bets['meron'] * 100;
 
         return [
-            'meron' => $bets['meron'] > 0 ? $win / $bets['meron'] * 100 : 0,
-            'wala' => $bets['wala'] > 0 ? $win / $bets['wala'] * 100 : 0,
+            // 'meron' => $bets['meron'] > 0 ? $win / $bets['meron'] * 100 : 0,
+            // 'wala' => $bets['wala'] > 0 ? $win / $bets['wala'] * 100 : 0,
+            'meron' => $meron_percentage,
+            'wala' => $wala_percentage,
         ];
     }
 
@@ -339,5 +347,50 @@ class FightController extends Controller
         }
 
         return $data;
+    }
+
+    public function setGameEvent(Request $request)
+    {
+        try {
+            $event = DerbyEvent::find($request->id);
+
+            if($event->status == 'DONE') {
+                return response()->json([
+                    'message' => 'Can\'t Activate DONE Event!',
+                    'success' => false,
+                ], 403);
+            }
+
+            if($event->status == 'ACTIVE') {
+                // set current event as done
+                $event->status = 'DONE';
+                $event->save();
+
+                // set next event as active
+                $next = $event->next();
+                $next->status = 'ACTIVE';
+                $next->save();
+            }
+
+            if($event->status == 'WAITING') {
+                // dont active event
+                DerbyEvent::where('status','ACTIVE')
+                    ->update(['status' => 'DONE']);
+
+                // activate selected event
+                $event->status = 'ACTIVE';
+                $event->save();
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'success' => false,
+            ], 500);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Success',
+        ]);
     }
 }

@@ -82,9 +82,8 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::get('/event', [OperatorController::class, 'eventList'])->name('operator.derby.event');
         Route::get('/event/lists', [OperatorController::class, 'getEvents']);
         Route::post('/event/create', [OperatorController::class, 'addNewEvent']);
-
         Route::get('/fight', [OperatorController::class, 'fight'])->name('operator.fight');
-
+        Route::post('/event/activate', [FightController::class, 'setGameEvent']);
     });
 
     Route::group(['middleware' => ['auditor']], function () {

@@ -189,7 +189,7 @@
             </div>
           </div>
           <div class="col-sm-auto ms-sm-auto mt-sm-0 mt-3 d-flex">
-            <label class="form-check-label mb-0 col-4 text-right" style="line-height: 3;">
+            <label class="form-check-label mb-0 col-6 text-right" style="line-height: 3;">
               <span id="profileVisibility" class="commission-label mr-2">
                 {{ number_format(Auth::user()->active_commission()->sum('points'), 2, '.', ',') }}
               </span>
