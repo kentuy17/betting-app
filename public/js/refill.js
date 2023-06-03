@@ -15,6 +15,12 @@ transactionsTable.DataTable({
   "bInfo": false,
   "bAutoWidth": false,
   "scrollX": true,
+  "columnDefs": [
+    {
+      "targets": [4],
+      "className": 'dt-body-right',
+    },
+  ],
   "columns": [
     {
       className: 'dt-control',
@@ -38,7 +44,10 @@ transactionsTable.DataTable({
       }
     },
     {
-      "data": "amount"
+      "data": null,
+      render: (data) => {
+        return data.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+      },
     },
     {
       "data": "mobile_number"
@@ -189,9 +198,10 @@ transactionsTable.on('click', 'tbody td .view', async function() {
 
 $('#refill-form').on('click', 'input[type="submit"]',function(e) {
   e.preventDefault();
+  let amount = $('#trans-pts').val();
   axios.post('/transaction/refill', {
     id: $('#trans-id').val(),
-    amount: $('#trans-pts').val(),
+    amount: amount.replaceAll(",", ""),
     ref_code: $('#ref-code').val(),
     action: $('#trans-action').val(),
     note: $('#trans-note').val(),
