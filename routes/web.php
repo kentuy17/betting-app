@@ -47,6 +47,10 @@ Route::group(['middleware' => ['auth','visitor']], function() {
     Route::get('/user/profile', [UserController::class, 'profile'])->name('users.profile');
     Route::post('/user/profile', [UserController::class, 'editprofile']);
 
+    Route::group(['middleware' => ['bossing']], function () {
+        Route::post('/commission/convert', [UserController::class, 'convertCommission']);
+    });
+
     Route::group(['middleware' => ['admin']], function () {
         Route::get('/admin/share-allocation', [AdminController::class, 'shareHolders'])->name('admin.shares');
         Route::get('/visitor', [AdminController::class, 'getOnlineUsers']);
@@ -100,6 +104,9 @@ Route::group(['middleware' => ['auth','visitor']], function() {
 
         Route::get('/refillpoints', [OperatorController::class, 'refill'])->name('refill');
         Route::post('/refillpoints', [OperatorController::class, 'refillSubmit'])->name('refill.upload.post');
+        Route::get('/requests', [OperatorController::class, 'viewRequests'])->name('requests');
+        Route::get('/requests/data', [OperatorController::class, 'getRequests'])->name('requests.data');
+
     });
 
     Route::group(['middleware' => ['auditor_csr']], function () {

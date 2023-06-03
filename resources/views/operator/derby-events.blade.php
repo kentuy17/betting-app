@@ -25,7 +25,7 @@
             <div class="form-group row my-2">
               <label for="inputPassword3" class="col-sm-2 col-form-label">Time Start</label>
               <div class="col-sm-10">
-                <input type="time" class="form-control" id="time-start">
+                <input type="time" class="form-control" id="time-start" value="09:00:00">
               </div>
             </div>
           </div>

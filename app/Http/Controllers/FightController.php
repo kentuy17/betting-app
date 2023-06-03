@@ -34,36 +34,39 @@ class FightController extends Controller
 
     private function getTotalBets()
     {
-        $meron = Bet::where(['fight_id' => $this->fight->id, 'side' => 'M'])
-            ->sum('amount');
+        $total_bets = array('meron' => 0, 'wala' => 0);
 
-        $wala = Bet::where(['fight_id' => $this->fight->id, 'side' => 'W'])
-            ->sum('amount');
+        if(!$this->fight) {
+            return $total_bets;
+        }
 
-        return [
-            'meron' => $meron,
-            'wala' => $wala,
-        ];
+        $total_bets['meron'] = Bet::where(['fight_id' => $this->fight->id, 'side' => 'M'])->sum('amount');
+        $total_bets['wala'] = Bet::where(['fight_id' => $this->fight->id, 'side' => 'W'])->sum('amount');
+
+        return $total_bets;
     }
 
     private function getTotalPlayerBet()
     {
-        $bet_meron = Bet::where([
+        $player_bet = array('meron' => 0, 'wala' => 0);
+
+        if(!$this->fight) {
+            return $player_bet;
+        }
+
+        $player_bet['meron'] = Bet::where([
                 'fight_id' => $this->fight->id,
                 'side' => 'M',
                 'user_id' => Auth::user()->id,
             ])->sum('amount');
 
-        $bet_wala = Bet::where([
+        $player_bet['wala'] = Bet::where([
             'fight_id' => $this->fight->id,
             'side' => 'W',
             'user_id' => Auth::user()->id,
         ])->sum('amount');
 
-        return [
-            'meron' => $bet_meron,
-            'wala' => $bet_wala,
-        ];
+        return $player_bet;
     }
 
     public function getCurrentFight()
@@ -80,9 +83,20 @@ class FightController extends Controller
             ->orderBy('id', 'desc')
             ->first();
 
+        if(!$this->fight) {
+            $last_fight = Fight::orderBy('id', 'desc')->first();
+            $dummy_fight = [
+                'id' =>  + $last_fight->id + 1,
+                'event_id' => $this->current_event->id,
+                'fight_no' => 1,
+                'user_id' => 1,
+                'status' => 'O',
+                'game_winner' => null,
+            ];
+        }
 
         return response()->json([
-            'current' => $this->fight,
+            'current' => $this->fight ?? $dummy_fight,
             'points' => Auth::user()->points,
             'event' => $this->current_event,
             'bets' => $this->getTotalBets(),
@@ -112,7 +126,7 @@ class FightController extends Controller
 
         $wala_comm = $bets['wala'] * $this->percent / 100;
         $win_wala = $total_bets - $wala_comm;
-        $wala_percentage = $win_wala / $bets['meron'] * 100;
+        $wala_percentage = $win_wala / $bets['wala'] * 100;
 
         return [
             // 'meron' => $bets['meron'] > 0 ? $win / $bets['meron'] * 100 : 0,
@@ -275,6 +289,8 @@ class FightController extends Controller
             $data = [];
             $per = 10;
             $total_win_amount = Bet::where('fight_id',$last_fight->id)->sum('win_amount');
+            $_total_bets = Bet::where('fight_id',$last_fight->id)->sum('amount');
+            $commission = $_total_bets - $total_win_amount;
 
             if($kusgan->sum('percentage') < $per) {
                 $unallocated = array(
@@ -291,9 +307,12 @@ class FightController extends Controller
                 if(gettype($gwapo) == 'array') {
                     $gwapo = (object) $gwapo;
                 }
+
+                $additional_pts = $commission / $per * $gwapo->percentage;
+
                 $data[] = [
                     'user_id' => $gwapo->user_id,
-                    'points' => $percentage / $per * $gwapo->percentage,
+                    'points' => $additional_pts,
                     'percentage' => $gwapo->percentage,
                     'total_win_amount' => $total_win_amount,
                     'fight_id' => $last_fight->id,
@@ -301,6 +320,12 @@ class FightController extends Controller
                     'active' => true,
                     'created_at' => now(),
                 ];
+
+                if($gwapo->id > 0) {
+                    $share_holder = ShareHolder::find($gwapo->id);
+                    $share_holder->current_commission += $additional_pts;
+                    $share_holder->save();
+                }
             }
 
             Commission::insert($data);
@@ -380,6 +405,21 @@ class FightController extends Controller
                 // activate selected event
                 $event->status = 'ACTIVE';
                 $event->save();
+            }
+
+            $activated_event = DerbyEvent::where('status','ACTIVE')->first();
+            $fights_count = Fight::where('event_id',$activated_event->id)->count();
+            $last_fight = Fight::orderBy('id', 'desc')->first();
+
+            if($fights_count == 0) {
+                Fight::create([
+                    'id' => $last_fight->id + 1,
+                    'event_id' => $activated_event->id,
+                    'fight_no' => 1,
+                    'user_id' => 1,
+                    'status' => null,
+                    'game_winner' => null,
+                ]);
             }
         } catch (\Exception $e) {
             return response()->json([
