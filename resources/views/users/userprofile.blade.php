@@ -190,9 +190,9 @@
             </div>
           </div>
           <div class="col-sm-auto ms-sm-auto mt-sm-0 mt-3 d-flex">
-            <label class="form-check-label mb-0 col-4 text-right" style="line-height: 3;">
+            <label class="form-check-label mb-0 col-6 text-right" style="line-height: 3;">
               <span id="profileVisibility" class="commission-label mr-2">
-                {{ number_format(Auth::user()->active_commission()->sum('points'), 2, '.', ',') }}
+                {{ number_format(Auth::user()->share_holder->current_commission,2) }}
               </span>
             </label>
             <div class="form-check pl-0">
@@ -226,7 +226,7 @@
                 @endif
                 <div class="row">
                   <div class="col-12">
-                    <label class="text-black form-label">Credit Points</label>
+                    <label class="text-black form-label">Points</label>
                     <div class="input-group">
                       <input id="credit_points" class="form-control disabled" type="text" disabled="" value="{{number_format($user->points, 2, '.', ',');}}" >
                     </div>
@@ -295,7 +295,16 @@
 
     $('[data-bs-toggle="tooltip"]').tooltip()
 
-    $('#convert-com-btn').on('click', function(e) {
+    $('#convert-com-btn').on('click', async function(e) {
+      e.preventDefault();
+
+      let pointsToConvert = prompt('Enter points to convert:', 0);
+      let convert = await axios.post('/commission/convert', {
+        points: pointsToConvert
+      })
+
+      console.log(convert);
+
       $('#svg-convert').css({
         'animation-name': 'rotate',
         'animation-duration': '1s',
@@ -304,7 +313,8 @@
 
       setTimeout(() => {
         $('#svg-convert').removeAttr('style');
-        $('#profileVisibility').text('0.00');
+        $('#profileVisibility').text(convert.data.current_commission);
+        $('#credit_points').val(convert.data.points)
       }, 3000);
 
 

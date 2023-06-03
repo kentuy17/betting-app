@@ -10,14 +10,14 @@
       @if (session('role') == 'Cash-in Operator')
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="deposit-tab" data-bs-toggle="tab" data-bs-target="#deposit-panel" type="button" role="tab" aria-controls="deposit" aria-selected="true">
-            Deposits <span id="badge-deposit" style="display: none;" class="badge bg-danger">0</span></button>
+            DEPOSIT <span id="badge-deposit" style="display: none;" class="badge bg-danger">0</span></button>
             {{-- <button onclick="showNotification('fuck yeah!')">Show Notif</button> --}}
         </li>
       @endif
       @if (session('role') == 'Cash-out Operator')
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="withdraw-tab" data-bs-toggle="tab" data-bs-target="#withdraw" type="button" role="tab" aria-controls="withdraw" aria-selected="false">
-            Withdrawals <span id="badge-withdraw" style="display: none;" class="badge bg-danger">0</span>
+            WITHDRAW <span id="badge-withdraw" style="display: none;" class="badge bg-danger">0</span>
             <span id="badge-withdraw-unverified" data-bs-toggle="tooltip" title="Missing Ref-code" style="display: none;" class="badge bg-warning">4</span></button>
         </li>
       @endif

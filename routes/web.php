@@ -47,6 +47,10 @@ Route::group(['middleware' => ['auth','visitor']], function() {
     Route::get('/user/profile', [UserController::class, 'profile'])->name('users.profile');
     Route::post('/user/profile', [UserController::class, 'editprofile']);
 
+    Route::group(['middleware' => ['bossing']], function () {
+        Route::post('/commission/convert', [UserController::class, 'convertCommission']);
+    });
+
     Route::group(['middleware' => ['admin']], function () {
         Route::get('/admin/share-allocation', [AdminController::class, 'shareHolders'])->name('admin.shares');
         Route::get('/visitor', [AdminController::class, 'getOnlineUsers']);
@@ -82,9 +86,8 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::get('/event', [OperatorController::class, 'eventList'])->name('operator.derby.event');
         Route::get('/event/lists', [OperatorController::class, 'getEvents']);
         Route::post('/event/create', [OperatorController::class, 'addNewEvent']);
-
         Route::get('/fight', [OperatorController::class, 'fight'])->name('operator.fight');
-
+        Route::post('/event/activate', [FightController::class, 'setGameEvent']);
     });
 
     Route::group(['middleware' => ['auditor']], function () {
@@ -101,6 +104,9 @@ Route::group(['middleware' => ['auth','visitor']], function() {
 
         Route::get('/refillpoints', [OperatorController::class, 'refill'])->name('refill');
         Route::post('/refillpoints', [OperatorController::class, 'refillSubmit'])->name('refill.upload.post');
+        Route::get('/requests', [OperatorController::class, 'viewRequests'])->name('requests');
+        Route::get('/requests/data', [OperatorController::class, 'getRequests'])->name('requests.data');
+
     });
 
     Route::group(['middleware' => ['auditor_csr']], function () {
@@ -111,6 +117,8 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::get('/transaction/withdrawals', [OperatorController::class, 'getWithdrawTrans']);
         Route::post('/transaction/deposit', [OperatorController::class, 'processDeposit']);
         Route::post('/transaction/withdraw', [OperatorController::class, 'processWithdraw']);
+
+        Route::get('/player/bets/{id}', [PlayerController::class, 'getBetsByUserId']);
     });
 
     // Bets

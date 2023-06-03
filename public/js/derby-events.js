@@ -1,5 +1,7 @@
 $(document).ready(function () {
-  const eventsTable = $('#events-table').DataTable({
+  const eventsTable = $('#events-table');
+
+  eventsTable.DataTable({
     "bPaginate": true,
     "bLengthChange": false,
     "bFilter": false,
@@ -50,7 +52,7 @@ $(document).ready(function () {
     }
   });
 
-  $('#time-start').val(moment().format('HH:mm'));
+  $('#time-start').val('09:00');
   $('#sched-date').val(moment().format('YYYY-MM-DD'));
 
   $('#add-derby').on('click', function(e) {
@@ -68,21 +70,39 @@ $(document).ready(function () {
     }
 
     $.ajax({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      },
+      headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
       type:'POST',
       data: data,
       url: '/event/create',
       success: function(resp) {
-        console.log(resp);
-        eventsTable.ajax.reload();
+        eventsTable.DataTable().ajax.reload();
         alert('Event Fight Created!');
+        $('#event-name').val('')
       },
       error: function(err) {
         console.log(err);
       }
     })
   })
-  
+
+  eventsTable.on('click', 'tbody td .play', async function() {
+    try {
+      var id  = $(this).data('id');
+      response = await axios.post('/event/activate', { id: id });
+      Swal.fire({
+        icon: 'success',
+        confirmButtonColor: 'green',
+        title: response.data.message,
+      }).then(() =>  {
+        eventsTable.DataTable().ajax.reload();
+      });
+    }
+    catch (error) {
+      Swal.fire({
+        icon: 'error',
+        confirmButtonColor: 'red',
+        title: error.response.data.message,
+      })
+    }
+  });
 });

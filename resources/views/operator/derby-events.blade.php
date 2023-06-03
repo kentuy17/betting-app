@@ -25,16 +25,13 @@
             <div class="form-group row my-2">
               <label for="inputPassword3" class="col-sm-2 col-form-label">Time Start</label>
               <div class="col-sm-10">
-                <input type="time" class="form-control" id="time-start">
+                <input type="time" class="form-control" id="time-start" value="09:00:00">
               </div>
             </div>
-           
-
           </div>
           <div class="card-footer">
             <button id="add-derby" class="btn btn-primary float-right mb-2">Add</button>
           </div>
-
         </form>
       </div>
     </div>
@@ -56,10 +53,6 @@
         </table>
       </div>
     </div>
-    
-    {{-- <div class="card-header font-bold">DERBY EVENTS LIST</div> --}}
-      
-    
   </div>
 </div>
 @endsection

@@ -28,4 +28,15 @@ class DerbyEvent extends Model
     {
         $this->hasMany(Fight::class, 'event_id', 'id');
     }
+
+    public function next()
+    {
+        return $this->where('id', '>', $this->id)->orderBy('id','asc')->first();
+
+    }
+
+    public  function previous()
+    {
+        return $this->where('id', '<', $this->id)->orderBy('id','desc')->first();
+    }
 }

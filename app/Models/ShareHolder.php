@@ -17,8 +17,14 @@ class ShareHolder extends Model
         'user_id',
         'percentage',
         'role_description',
+        'current_commission',
         'created_at',
         'updated_at',
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime:m/d/y h:s',
+        'updated_at' => 'datetime:M d, Y h:s A',
     ];
 
     public function user()

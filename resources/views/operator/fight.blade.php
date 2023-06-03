@@ -50,7 +50,7 @@
         <div class="bet-bg-head font-bold">{{ $fight->name }}</div>
         <div id="sabong-aficionado">
           <img id="video-unavailable" src="{{ asset('img/video-unavailable.webp') }}">
-        </div>      
+        </div>
       </div>
     </div>
   </div>
@@ -99,5 +99,48 @@
 @section('additional-scripts')
 @vite('resources/js/fight-vue.js')
 @vite('public/js/fight.js')
-{{-- <script src="{{ asset('js/fight.js') }}" defer></script> --}}
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+<script src="https://vjs.zencdn.net/7.8.2/video.js"></script>
+<script src= "https://player.twitch.tv/js/embed/v1.js"></script>
+<script>
+  try {
+    var options = {
+      channel: "sabongaficionado", // TODO: Change this to the streams username you want to embed
+      width: 640,
+      height: 360,
+      controls: false,
+      muted: false,
+      allowfullscreen: true,
+    };
+
+    var player = new Twitch.Player("sabong-aficionado", options);
+
+    player.addEventListener(Twitch.Player.READY, initiate)
+    player.setVolume(0.5);
+    player.setMuted(false);
+
+    function initiate() {
+      player.addEventListener(Twitch.Player.ONLINE, handleOnline);
+      player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
+      player.removeEventListener(Twitch.Player.READY, initiate);
+    }
+
+    function handleOnline() {
+      $('#sabong-aficionado').find('iframe').css('z-index','1')
+      player.removeEventListener(Twitch.Player.ONLINE, handleOnline);
+      player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
+      player.setMuted(false);
+    }
+
+    function handleOffline() {
+      $('#sabong-aficionado').find('iframe').css('z-index','-100')
+      player.removeEventListener(Twitch.Player.OFFLINE, handleOffline);
+      player.addEventListener(Twitch.Player.ONLINE, handleOnline);
+      player.setMuted(true);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+</script>
 @endsection

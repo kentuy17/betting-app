@@ -9,6 +9,7 @@ use App\Models\ModelHasRoles;
 use App\Models\Transactions;
 use App\Models\DerbyEvent;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class OperatorController extends Controller
 {
@@ -53,7 +54,7 @@ class OperatorController extends Controller
             ->with('operator')
             ->orderBy('id','desc')
             ->get();
-            
+
         return response()->json([
             'data' => $trans
         ]);
@@ -76,7 +77,7 @@ class OperatorController extends Controller
             $operator = User::find(Auth::user()->id);
             $points = $operator->points + $request->curr_amount;
             $operator->points = $points - $request->amount;
-            $operator->save(); 
+            $operator->save();
 
         } catch (\Exception $e) {
             return response()->json([
@@ -84,7 +85,7 @@ class OperatorController extends Controller
                 'status' => 'error',
             ], 500);
         }
-        
+
         return redirect()->back()->with('success', 'Revert Points Request Successful!');
 
     }
@@ -114,7 +115,7 @@ class OperatorController extends Controller
                 $player->save();
 
                 $operator->points -=  $trans->amount;
-                $operator->save(); 
+                $operator->save();
             }
         } catch (\Exception $e) {
             return response()->json([
@@ -122,7 +123,7 @@ class OperatorController extends Controller
                 'status' => 'error',
             ], 500);
         }
-        
+
         return response()->json([
             'msg' => 'Success!',
             'status' => 'OK',
@@ -137,7 +138,7 @@ class OperatorController extends Controller
             ->with('operator')
             ->orderBy('id','desc')
             ->get();
-            
+
         return response()->json([
             'data' => $trans
         ]);
@@ -187,7 +188,7 @@ class OperatorController extends Controller
     }
 
     public function addNewEvent(Request $request)
-    {   
+    {
         try {
             $event = DerbyEvent::create($request->all());
 
@@ -197,7 +198,7 @@ class OperatorController extends Controller
                 'message' => $e->getMessage()
             ]);
         }
-        
+
         return response()->json([
             'status' => 200,
             'data' => $event,
@@ -216,7 +217,7 @@ class OperatorController extends Controller
             $this->validate($request, [
                 'phone_no' => 'required',
                 'amount' => 'required',
-            ]);  
+            ]);
 
             $amount = str_replace( ',', '', $request->amount );
             $user = User::find(Auth::user()->id);
@@ -224,7 +225,7 @@ class OperatorController extends Controller
                 return redirect()->back()
                     ->with('danger', 'Insuficient points!');
             }
-            
+
             $user->points -=  $amount;
             $user->save();
 
@@ -259,11 +260,11 @@ class OperatorController extends Controller
         try {
             $this->validate($request, [
                 'formFile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            ]);  
-             
+            ]);
+
             $imageName = time().'.'.$request->formFile->extension();
             $path = 'public/' . $imageName;
-            //Storage::disk('local')->put($path, file_get_contents($request->formFile));
+            Storage::disk('local')->put($path, file_get_contents($request->formFile));
 
             Transactions::create([
                 'user_id' => Auth::user()->id,
@@ -280,5 +281,25 @@ class OperatorController extends Controller
         }
 
         return redirect()->back()->with('success', 'Submitted Successfully!');
+    }
+
+    public function getRequests()
+    {
+        $trans = Transactions::with('user')
+            ->where('user_id', Auth::user()->id)
+            ->whereIn('action', ['remit','refill'])
+            ->with('operator')
+            ->orderBy('id','desc')
+            ->get();
+
+        return response()->json([
+            'data' => $trans,
+            'status' => 'OK',
+        ], 200);
+    }
+
+    public function viewRequests()
+    {
+        return view('operator.requests');
     }
 }

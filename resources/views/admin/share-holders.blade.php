@@ -41,7 +41,7 @@
               </tr>
             </thead>
             <tbody>
-              @php $colors = ['primary', 'warning', 'danger', 'success', 'info']; @endphp
+              @php $colors = ['primary', 'warning', 'danger', 'success', 'info','dark']; @endphp
               @foreach ($share_holders as $key => $boss)
               <tr>
                 <td>{{ $key+1 }}</td>

@@ -6,14 +6,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Transactions;
+use App\Models\ShareHolder;
 use Spatie\Permission\Models\Role;
-use DB;
-use Hash;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use \Illuminate\Support\Str;
-use App\Models\Transactions;
+
+use DB;
+use Hash;
 
 class UserController extends Controller
 {
@@ -210,7 +212,6 @@ class UserController extends Controller
     public function updatePoints($id)
     {
         try {
-
             $trans = Transactions::find($id);
             $user = User::find($trans->user_id);
 
@@ -224,5 +225,30 @@ class UserController extends Controller
         }
 
         return redirect()->back()->with('success', 'Updated Successfully!');
+    }
+
+    public function convertCommission(Request $request)
+    {
+        $user = User::find(Auth::user()->id);
+        $boss = ShareHolder::where('user_id', $user->id)->first();
+
+        if($request->points > $boss->current_commission) {
+            return response()->json([
+                'current_commission' => $boss->current_commission,
+                'points' => $user->points,
+                'message' => 'Insuficient Commission Points!',
+            ], 403);
+        }
+
+        $user->points += $request->points;
+        $user->save();
+
+        $boss->current_commission -= $request->points;
+        $boss->save();
+
+        return response()->json([
+            'current_commission' => number_format($boss->current_commission, 2),
+            'points' => number_format($user->points, 2),
+        ], 200);
     }
 }

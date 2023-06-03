@@ -79,25 +79,9 @@
       <div class="nav-item dropdown" id="notif-nav" style="display: none">
         <a class="nav-link" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
           <i class="far fa-bell"></i>
-          {{-- <span class="badge bg-danger navbar-badge">15</span> --}}
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right hide" style="left: inherit; right: 0px;">
           <span class="dropdown-item dropdown-header">0 Notifications</span>
-          {{-- <div class="dropdown-divider"></div> --}}
-          {{-- <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i> 8 friend requests
-            <span class="float-right text-muted text-sm">12 hours</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a> --}}
           <div class="dropdown-divider"></div>
           <a href="#" id="allow-notifications" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
@@ -108,30 +92,37 @@
           @if (Route::has('login'))
           <li><a class="md:p-4 py-2 block" href="{{ route('login') }}">{{ __('Login') }}</a></li>
           @endif
+
           @if (Route::has('register'))
           <li><a class="md:p-4 py-2 block" href="{{ route('register') }}">{{ __('Register') }}</a></li>
           @endif
+
           @else
           @if (session('role') == 'Admin')
           <li><a class="md:p-4 py-2 block" href="/admin">Manage Users</a></li>
           <li><a class="md:p-4 py-2 block" href="{{ route('roles.index') }}">Roles</a></li>
           @endif
+
           @if (session('role') == 'Operator')
-            <li><a class="md:pl-4 py-2 block" href="{{ route('operator.derby.event') }}">EVENT</a></li>
-            <li><a class="md:pl-4 py-2 block" href="{{ route('operator.fight') }}">FIGHT</a></li>
-            {{-- <li><a class="md:pl-4 py-2 block" href="{{ route('operator.transactions') }}">TRANSACTIONS</a></li> --}}
-          @endif
-          @if (session('role') == 'Auditor')
-            <li><a class="md:pl-4 py-2 block" href="{{ route('auditor.transactions-operator') }}">TRANSACTIONS</a></li>
+          <li><a class="md:pl-4 py-2 block" href="{{ route('operator.fight') }}">FIGHT</a></li>
+          <li><a class="md:pl-4 py-2 block" href="{{ route('operator.derby.event') }}">EVENT</a></li>
           @endif
 
-          @if (session('role') == 'Cash-in Operator' || session('role') == 'Cash-out Operator')
-          <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'operator.transactions') {{ 'active' }} @endif" href="{{ route('operator.transactions') }}">TRANSACTIONS</a></li>
-          <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'remit') {{ 'active' }} @endif" href="{{ route('remit') }}">REMIT</a></li>
+          @if (session('role') == 'Auditor')
+          <li><a class="md:pl-4 py-2 block" href="{{ route('auditor.transactions-operator') }}">TRANSACTIONS</a></li>
           @endif
 
           @if (session('role') == 'Cash-in Operator')
+          <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'operator.transactions') {{ 'active' }} @endif" href="{{ route('operator.transactions') }}">TRANSACTIONS</a></li>
           <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'refill') {{ 'active' }} @endif" href="{{ route('refill') }}">REFILL</a></li>
+          <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'remit') {{ 'active' }} @endif" href="{{ route('remit') }}">REMIT</a></li>
+          <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'requests') {{ 'active' }} @endif" href="{{ route('requests') }}">REQUESTS</a></li>
+          @endif
+
+          @if (session('role') == 'Cash-out Operator')
+          <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'operator.transactions') {{ 'active' }} @endif" href="{{ route('operator.transactions') }}">TRANSACTIONS</a></li>
+          <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'remit') {{ 'active' }} @endif" href="{{ route('remit') }}">REMIT</a></li>
+          <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'requests') {{ 'active' }} @endif" href="{{ route('requests') }}">REQUESTS</a></li>
           @endif
 
           @if (session('role') == 'Player')
@@ -139,6 +130,7 @@
           <li><a class="@if(Route::current()->getName() == 'player.bethistory') {{ 'active-nav' }} @endif md:pl-4 py-2 block" href="{{ route('player.bethistory') }}">Bet History</a></li>
           <li><a class="@if(Route::current()->getName() == 'player.player-transaction') {{ 'active-nav' }} @endif md:pl-4 py-2 block" href="{{ route('player.player-transaction') }}">Transaction</a></li>
           @endif
+
           <li class="nav-item dropdown" id="profile-nav">
             <a id="navbarDropdown" class="md:p-4 py-2 block dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>{{ Auth::user()->username }}</a>
             <div class="dropdown-menu dropdown-menu-right hide" style="left: inherit; right: 0px;">

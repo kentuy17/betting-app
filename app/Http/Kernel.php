@@ -73,5 +73,6 @@ class Kernel extends HttpKernel
         'csr' => \App\Http\Middleware\EnsureUserIsCsr::class,
         'visitor' => \Shetabit\Visitor\Middlewares\LogVisits::class,
         'auditor_csr' => \App\Http\Middleware\EnsureUserIsEitherAuditOrCsr::class,
+        'bossing' => \App\Http\Middleware\EnsureTheBossing::class,
     ];
 }
