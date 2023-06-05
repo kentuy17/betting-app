@@ -32,7 +32,8 @@
     height: 100%;
   }
   #video-unavailable {
-    background-image: url("{{ asset('img/video-unavailable.webp') }}");
+    /* background-image: url("{{ asset('img/video-unavailable.webp') }}"); */
+    background-image: url("{{ asset('img/10-streak-win-promo-poster.png') }}");
     object-fit: cover;
     background-size: cover;
     width: -webkit-fill-available;
@@ -49,7 +50,7 @@
       <div id="video-stream-container" class="embed-responsive">
         <div class="bet-bg-head font-bold">{{ $fight->name }}</div>
         <div id="sabong-aficionado">
-          <img id="video-unavailable" src="{{ asset('img/video-unavailable.webp') }}">
+          <img id="video-unavailable" src="{{ asset('img/10-streak-win-promo-poster.png') }}">
         </div>
       </div>
     </div>
@@ -93,7 +94,7 @@
       allowfullscreen: true,
     };
 
-    var player = new Twitch.Player("sabong-aficionado", options);
+    // var player = new Twitch.Player("sabong-aficionado", options);
 
     player.addEventListener(Twitch.Player.READY, initiate)
     player.setVolume(0.5);
