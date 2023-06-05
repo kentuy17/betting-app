@@ -56,8 +56,37 @@
         <span v-show='!isLoading.cancel'>CANCEL</span>
         <span v-show='isLoading.cancel'>Loading...</span>
       </button>
+       <button @click="revertWinFight()"  class="btn btn-default btn-lg mx-2">
+        <span>REVERT WIN</span>
+      </button> 
     </div>
   </div>
+   <div class="modal fade" id="modal-undo-win" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-top">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 id="exampleModalLongTitle">Revert Fight Winner</h5>
+      </div>
+      <form id="undo-win">
+        <div class="modal-body">
+          <div class="form-group mt-2">
+            <label>Fight #</label>
+            <input type="number" class="form-control disabled" id="fight_no" >
+          </div>
+          <div class="form-group mt-2">
+            <input @click="revertFight('M')" type="submit" class="btn btn-danger bg-slate-900 btn-sm" value="MERON">
+          </div>
+          <div class="form-group mt-2">
+            <input @click="revertFight('W')" type="submit" class="btn btn-primary bg-slate-900 btn-sm" value="WALA">
+          </div>
+          <div class="form-group mt-2" >
+            <input @click="revertFight('D')" type="submit" class="btn btn-warning bg-slate-900 btn-sm" value="DRAW">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div> 
 </template>
 
 <script>
@@ -243,6 +272,25 @@
         } catch (error) {
           console.error(error);
         }
+      },
+
+      
+      revertWinFight() { 
+        $('#modal-undo-win').modal('show')
+      },
+
+  
+      revertFight(result) {
+      try {
+
+        const {data} = axios.post('/fight/revertresult', {
+            fight_no:$('#fight_no').val(),
+            result: result,
+          })
+          $('#modal-undo-win').modal('hide');
+      } catch (error) {
+          console.error(error);
+      }
 
       }
     }

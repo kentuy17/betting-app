@@ -15,6 +15,7 @@ class BetHistory extends Model
     protected $primaryKey = 'bethistory_no';
     protected $fillable = [
         'user_id',
+        'fight_id',
         'fight_no',
         'status',
         'side',
