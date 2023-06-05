@@ -9,6 +9,9 @@ $(document).ready(function () {
     "scrollX": true,
     "order": [[0, 'desc']],
     "ajax": '/player/transaction/deposit',
+    "columnDefs": [
+      {"className": "dt-center", "targets": "_all"}
+    ],
     "columns": [
       {
         "data": null,
@@ -28,7 +31,7 @@ $(document).ready(function () {
       {
         "data": null,
         render: (data) => {
-          return data.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          return data.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         }
       },
       {
@@ -72,7 +75,7 @@ $(document).ready(function () {
       {
         "data": null,
         render: (data) => {
-          return data.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          return data.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         }
       },
       {
