@@ -94,7 +94,7 @@
       allowfullscreen: true,
     };
 
-    // var player = new Twitch.Player("sabong-aficionado", options);
+    var player = new Twitch.Player("sabong-aficionado", options);
 
     player.addEventListener(Twitch.Player.READY, initiate)
     player.setVolume(0.5);
