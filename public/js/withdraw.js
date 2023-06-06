@@ -108,7 +108,7 @@ function format(d) {
       </tr>
       <tr>
         <td>AMOUNT:</td>
-        <td>${d.amount}</td>
+        <td>${d.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
       </tr>
       <tr>
         <td>ACTION:</td>
