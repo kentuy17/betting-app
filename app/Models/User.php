@@ -9,7 +9,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Contracts\Role;
 use Spatie\Permission\Traits\HasRoles;
-use App\Models\ShareHolder;;
+use App\Models\ShareHolder;
+use App\Models\ModelHasRoles;
+use App\Models\Roles;
 use Shetabit\Visitor\Traits\Visitor;
 
 class User extends Authenticatable
@@ -94,5 +96,20 @@ class User extends Authenticatable
     public function active_commission()
     {
         return $this->hasMany(Commission::class, 'user_id')->where('active',true);
+    }
+
+    public function model_has_roles()
+    {
+        return $this->hasMany(ModelHasRoles::class, 'model_id', 'id')->with('roles');
+    }
+
+    public function _user_has()
+    {
+        return $this->model_has_roles()->get()->pluck('roles');
+    }
+
+    public function _user_permissions()
+    {
+        return $this->_user_has()->pluck('name');
     }
 }

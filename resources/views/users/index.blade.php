@@ -39,7 +39,6 @@
           </table>
         </div>
       </div>
-
     </div>
   </div>
 </div>
@@ -48,31 +47,43 @@
   <div class="modal-dialog modal-dialog-top" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <h5 class="modal-title text-white" id="exampleModalLongTitle">Modal title</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form id="deposit-form" method="post">
-        <div class="modal-body">
-          <input type="hidden" name="trans-id" id="trans-id">
-          <div class="form-group align-center">
-            <img id="trans-receipt" data-storage="{{ asset('storage/') }}" src="" alt="">
+      <form id="user-form" method="post">
+        @csrf
+        <div class="modal-body row">
+          <input type="hidden" id="user_id" name="user_id">
+          <div class="form-group mt-2 col-md-6">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" required id="username" placeholder="Username">
           </div>
-          <div class="form-group mt-2">
-            <label for="ref-code">Ref-code</label>
-            <input type="text" class="form-control" required id="ref-code" placeholder="Ref-code">
+          <div class="form-group mt-2 col-md-6">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Name" disabled name="name" >
           </div>
-          <div class="form-group mt-2">
-            <label for="trans-pts">Points</label>
-            <input type="text" class="form-control" required id="trans-pts" placeholder="Points" onkeyup = "javascript:this.value=Comma(this.value);" >
+          <div class="form-group mt-2 col-md-6">
+            <label for="trans-pts">Phone#</label>
+            <input type="text" class="form-control" required id="phone_no" placeholder="Phone #" name="phone_no" >
           </div>
-          <div class="form-group mt-2">
-            <label for="trans-action">Action</label>
-            <select name="trans-action" class="form-control" id="trans-action">
-              <option value="approve">APPROVE</option>
-              <option value="reject">REJECT</option>
+          <div class="form-group mt-2 col-md-6">
+            <label for="role">Role</label>
+            <select name="role" id="role" class="form-control">
+              @foreach ($roles as $role)
+              <option value="{{ $role->id }}">{{ $role->name }}</option>
+              @endforeach
             </select>
+          </div>
+          <div class="form-group mt-2">
+            <label for="trans-action">Page Access</label>
+            @foreach ($roles as $role)
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input page-access" name="page_access[]" type="checkbox" id="page_access_{{ $role->id }}" value="{{ $role->id }}">
+              <label for="page_access_{{ $role->id }}" class="custom-control-label">{{ $role->name }}</label>
+            </div>
+            @endforeach
           </div>
           <div class="form-group mt-2" style="display: none">
             <label for="trans-note">Note:</label>

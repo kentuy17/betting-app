@@ -135,7 +135,7 @@
             <a id="navbarDropdown" class="md:p-4 py-2 block dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>{{ Auth::user()->username }}</a>
             <div class="dropdown-menu dropdown-menu-right hide" style="left: inherit; right: 0px;">
               <a class="@if(Route::current()->getName() == 'users.profile') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('users.profile') }}">My Profile</a>
-              @if (session('role') == 'Admin')
+              @if (Auth::user()->share_holder)
               <a class="@if(Route::current()->getName() == 'admin.shares') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('admin.shares') }}">Shares</a>
               @endif
               @if (session('role') == 'Player')

@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnsureUserIsOperator
+class EnsureUserIsCashIn
 {
     /**
      * Handle an incoming request.
@@ -15,7 +15,7 @@ class EnsureUserIsOperator
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(hasAccess('Operator')) {
+        if(hasAccess('Cash-in Operator')) {
             return $next($request);
         }
 

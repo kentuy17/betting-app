@@ -32,27 +32,28 @@
           <table class="table table-sm">
             <thead>
               <tr>
-                <th style="width: 10px">#</th>
+                <th style="width: 10px">%</th>
                 <th>NAME</th>
                 <th>ROLE</th>
-                <th>PROJECTION</th>
-                <th class="text-center">PERCENTAGE</th>
+                <th class="float-right" style="color:yellow !important;">COMMISSION</th>
+                <th>POINTS</th>
                 <th class="mr-2">ACTION</th>
               </tr>
             </thead>
             <tbody>
-              @php $colors = ['primary', 'warning', 'danger', 'success', 'info','dark']; @endphp
+              @php $colors = [
+                '4' => 'primary',
+                '2' => 'danger',
+                '1.5' => 'success',
+                '0.5' => 'info'
+              ]; @endphp
               @foreach ($share_holders as $key => $boss)
               <tr>
-                <td>{{ $key+1 }}</td>
+                <td class="text-center"><span class="badge bg-{{$colors[$boss->percentage]}}">{{ $boss->percentage }}%</span></td>
                 <td>{{ $boss->user->name }}</td>
                 <td>{{ $boss->role_description }}</td>
-                <td>
-                  <div class="progress progress-xs">
-                    <div class="progress-bar bg-{{$colors[$key]}}" style="width: {{ ($boss->percentage / 10) * 100 }}%"></div>
-                  </div>
-                </td>
-                <td class="text-center"><span class="badge bg-{{$colors[$key]}}">{{ $boss->percentage }}%</span></td>
+                <td class="text-right" style="color:yellow !important;">{{ number_format($boss->current_commission,2) }}</td>
+                <td class="text-right">{{ number_format($boss->user->points,2) }}</td>
                 <td class="mr-2">
                   <a href="javascript:void(0)" data-id="{{ $boss->id }}" class="btn btn-link text-info btn-icon btn-sm edit">
                     <i class="fa-solid fa-pen"></i></a>

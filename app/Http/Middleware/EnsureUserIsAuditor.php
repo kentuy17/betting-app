@@ -15,7 +15,7 @@ class EnsureUserIsAuditor
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(session('role') === 'Auditor') {
+        if(hasAccess('Auditor')) {
             return $next($request);
         }
 

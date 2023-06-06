@@ -105,33 +105,49 @@ $('#admin-users-table tbody').on('click', 'td.dt-control', function () {
   }
 });
 
-// usersTable.on('click', 'tbody td .view', async function() {
-//   clearFields();
-//   var tr = $(this).closest('tr');
-//   var row = usersTable.DataTable().row(tr);
-//   $('#modal-center').modal('show')
-//   $('.modal-title').text(row.data().action.toUpperCase())
-//   $('input#trans-id').val($(this).data('id'));
+usersTable.on('click', 'tbody td .view', async function() {
+  clearFields();
+  var tr = $(this).closest('tr');
+  var row = usersTable.DataTable().row(tr);
+  var id = $(this).data('id');
+  $('#modal-center').modal('show')
+  $('.modal-title').text(row.data().username)
+  $('input#user_id').val($(this).data('id'));
+  $('input#username').val(row.data().username);
+  $('input#phone_no').val(row.data().phone_no);
+  $('.page-access').each((index, el) => $(el).prop('checked',false))
 
-//   let storage = $('#trans-receipt').data('storage');
-//   if(row.data().filename) {
-//     $('#trans-receipt').attr('src', storage+'/'+row.data().filename);
-//   }
+  getUserPermissions(id).then((permissions) => {
+    let perms = [];
+    permissions.data.forEach((p) => {
+      perms.push(p.role_id);
+    })
+    return perms;
+  }).then((perms) => {
+    for (let i = 0; i < perms.length; i++) {
+      const el = perms[i];
+      $('#page_access_'+el).prop('checked',true);
+    }
+  })
 
-//   if(row.data().status != 'pending') {
-//     $('input[type="submit"]').prop('disabled', true)
-//       .addClass('disabled');
-//   } else {
-//     $('input[type="submit"]').prop('disabled', false)
-//       .removeClass('disabled');
-//   }
-// })
+  let storage = $('#trans-receipt').data('storage');
+  if(row.data().filename) {
+    $('#trans-receipt').attr('src', storage+'/'+row.data().filename);
+  }
+
+  if(row.data().status != 'pending') {
+    $('input[type="submit"]').prop('disabled', true)
+      .addClass('disabled');
+  } else {
+    $('input[type="submit"]').prop('disabled', false)
+      .removeClass('disabled');
+  }
+})
 
 function clearFields() {
   $('#trans-pts').val(''), $('#ref-code').val(''), $('#trans-note').val(''),
     $('#trans-action').val('approve'), $('#trans-note').parent().hide();
 }
-
 
 $('[data-dismiss="modal"]').on('click', function() {
   $('#modal-center').modal('hide');
@@ -142,7 +158,11 @@ function clearFields() {
   $('#trans-note').parent().hide();
 }
 
-
 $('[data-dismiss="modal"]').on('click', function() {
   $('#modal-undo-points').modal('hide');
 })
+
+async function getUserPermissions(userId) {
+  const response = await axios.get(`/admin/user-permissions/${userId}`);
+  return response.data;
+}

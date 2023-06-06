@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ModelHasRoles;
 use Illuminate\Http\Request;
 use App\Models\ShareHolder;
 use App\Models\User;
+use App\Models\Roles;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
     public function index()
     {
-        return view('users.index');
+        $roles = Roles::get();
+        return view('users.index', compact('roles'));
     }
 
     public function shareHolders()
@@ -60,5 +63,14 @@ class AdminController extends Controller
     public function createUser(Request $request)
     {
         return $request->all();
+    }
+
+    public function getUserPagePermissions($user_id)
+    {
+        $permissions = ModelHasRoles::where('model_id', $user_id)->get();
+        return response()->json([
+            'data' => $permissions,
+            'message' => 'OK',
+        ], 200);
     }
 }

@@ -19,5 +19,6 @@ class EnsureTheBossing
         if(Auth::user()->share_holder) {
             return $next($request);
         }
+        return redirect('/home');
     }
 }
