@@ -152,6 +152,166 @@ class FightController extends Controller
         return $fight;
     }
 
+    private function calculatePrevFight($fight)
+    {
+        //TotalBats
+        $bets = array('meron' => 0, 'wala' => 0);
+
+        if(!$fight) {
+            return $bets;
+        }
+
+        $bets['meron'] = Bet::where(['fight_id' => $fight->id, 'side' => 'M'])->sum('amount');
+        $bets['wala'] = Bet::where(['fight_id' => $fight->id, 'side' => 'W'])->sum('amount');
+        //TotalBets
+        //Calculation
+        $total_bets = $bets['meron'] + $bets['wala'];
+
+        $meron_comm = $bets['meron'] * $this->percent / 100;
+        $win_meron = $total_bets - $meron_comm;
+        $meron_percentage = $win_meron / $bets['meron'] * 100;
+
+        $wala_comm = $bets['wala'] * $this->percent / 100;
+        $win_wala = $total_bets - $wala_comm;
+        $wala_percentage = $win_wala / $bets['wala'] * 100;
+
+        return [
+            // 'meron' => $bets['meron'] > 0 ? $win / $bets['meron'] * 100 : 0,
+            // 'wala' => $bets['wala'] > 0 ? $win / $bets['wala'] * 100 : 0,
+            'meron' => $meron_percentage,
+            'wala' => $wala_percentage,
+        ];
+    }
+    public function revertResult(Request $request)
+    {
+        //Get Fight Detail
+        $fight = $this->currenctMatch();
+        $this->current_event = DerbyEvent::where('status', 'ACTIVE')->first();
+
+        $fightDetail = Fight::where('fight_no',$request->fight_no)
+        ->where('event_id', $this->current_event->id)
+        ->first();
+        $faultWinner = $fightDetail->game_winner;
+
+        //Get revert win amount 
+        if($faultWinner == 'M' || $faultWinner == 'W')
+        {
+            $user_bets = Bet::where('fight_id',$fightDetail->id)
+            ->where('side', $faultWinner)
+            ->get();
+
+            foreach($user_bets as $bet)
+            {   
+                $user = User::find($bet->user_id);
+                $user->points -= $bet->win_amount;
+                $user->save();
+
+                $betHist = BetHistory::where('fight_no',$bet->fight_no)
+                ->where('fight_id', $bet->fight_id)
+                ->where('user_id', $bet->user_id)
+                ->where('side',$bet->side)
+                ->where('betamount',$bet->amount)
+                ->where('winamount', $bet->win_amount)
+                ->get();
+
+                foreach($betHist as $history) {
+                $hist = BetHistory::find($history->bethistory_no);
+                $hist->winamount = 0;
+                $hist->status = 'L';
+                $hist->save();
+                }
+            
+                $update = Bet::find($bet->bet_no);
+                $update->win_amount = 0;
+                $update->save();
+            }
+        }
+
+        //Update Fight
+        $fightDetail->game_winner = $request->result;
+        $fightDetail->save();
+        
+        //update winner    
+        $winner = $request->result;
+        if($winner == 'M' || $winner == 'W')
+        {
+            $calc = $this->calculatePrevFight($fightDetail);
+            $percentage = $winner == 'M' ? $calc['meron'] : $calc['wala'];
+
+            $user_bets = Bet::where([
+                    'side' => $winner,
+                    'fight_id' => $fightDetail->id
+                ])->get();
+
+            foreach($user_bets as $bet)
+            {
+                $update = Bet::find($bet->bet_no);
+                $update->win_amount = $bet->amount * $percentage / 100;
+                $update->save();
+
+                $user = User::find($bet->user_id);
+                $user->points += $bet->amount * $percentage / 100;
+                $user->save();
+
+                $betHist = BetHistory::where('fight_no',$bet->fight_no)
+                    ->where('fight_id', $bet->fight_id)
+                    ->where('user_id', $bet->user_id)
+                    ->where('side',$bet->side)
+                    ->where('betamount',$bet->amount)
+                    ->get();
+
+                foreach($betHist as $history) {
+                    $hist = BetHistory::find($history->bethistory_no);
+                    $hist->winamount = $update->win_amount;
+                    $hist->status = 'W';
+                    $hist->save();
+                }
+
+                event(new Result($update));
+            }
+        }    
+
+        if($winner == 'C' || $winner == 'D'){
+            $calc = $this->calculatePrevFight($fightDetail);
+
+            $user_bets = Bet::where([
+                'fight_id' => $fightDetail->id
+            ])->get();
+
+            $percentage = 0;
+            foreach($user_bets as $bet) {
+                $update = Bet::find($bet->bet_no);
+                $update->win_amount = $bet->amount;
+                $update->status = 'X';
+                $update->save();
+
+                $user = User::find($bet->user_id);
+                $user->points += $bet->amount;
+                $user->save();
+
+                if($winner == 'D')
+                {
+                    $percentage = $bet->side == 'M' ? $calc['meron'] : $calc['wala'];
+                }
+
+                $betHist = BetHistory::where('fight_no',$bet->fight_no)
+                    ->where('fight_id', $bet->fight_id)
+                    ->where('user_id', $bet->user_id)
+                    ->where('side',$bet->side)
+                    ->where('betamount',$bet->amount)
+                    ->get();
+
+                foreach($betHist as $history) {
+                     $hist = BetHistory::find($history->bethistory_no);
+                     $hist->percent = $percentage;
+                     $hist->winamount = $bet->amount;
+                     $hist->status = $winner;
+                     $hist->save();
+                }
+            }
+        }
+        return $fight;
+    }
     private function fightDone($last_fight, $winner)
     {
         $last_fight->update([
@@ -200,6 +360,7 @@ class FightController extends Controller
                 }
 
                 $betHist = BetHistory::where('fight_no',$bet->fight_no)
+                    ->where('fight_id', $bet->fight_id)
                     ->where('user_id', $bet->user_id)
                     ->where('status','P')
                     ->where('side',$bet->side)
@@ -239,6 +400,7 @@ class FightController extends Controller
                 $user->save();
 
                 $betHist = BetHistory::where('fight_no',$bet->fight_no)
+                    ->where('fight_id', $bet->fight_id)
                     ->where('user_id', $bet->user_id)
                     ->where('status','P')
                     ->where('side',$bet->side)
@@ -267,6 +429,7 @@ class FightController extends Controller
             foreach($lose_bet as $lb)
             {
                 $betHistLB = BetHistory::where('fight_no',$lb->fight_no)
+                    ->where('fight_id', $bet->fight_id)
                     ->where('user_id', $lb->user_id)
                     ->where('status','P')
                     ->where('side',$lb->side)

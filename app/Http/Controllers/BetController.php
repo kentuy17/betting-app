@@ -37,6 +37,7 @@ class BetController extends Controller
     {
         $history = BetHistory::where('user_id', Auth::user()->id)
             ->with('fight.event')
+            ->orderBy('bethistory_no','desc')
             ->get();
 
         return response()->json([
@@ -82,6 +83,7 @@ class BetController extends Controller
         //Add in Bet History
         BetHistory::create([
             'user_id' => Auth::user()->id,
+            'fight_id' => $bet['fight_id'],
             'fight_no' => $bet['fight_no'],
             'status' => 'P',
             'side' => $bet['side'],

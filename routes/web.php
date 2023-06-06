@@ -83,6 +83,7 @@ Route::group(['middleware' => ['auth','visitor']], function() {
     // Operator
     Route::group(['middleware' => ['operator']], function () {
         Route::post('/fight/update-status', [FightController::class, 'updateFight']);
+        Route::post('/fight/revertresult', [FightController::class, 'revertResult']);
         Route::get('/event', [OperatorController::class, 'eventList'])->name('operator.derby.event');
         Route::get('/event/lists', [OperatorController::class, 'getEvents']);
         Route::post('/event/create', [OperatorController::class, 'addNewEvent']);

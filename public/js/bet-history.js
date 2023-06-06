@@ -27,7 +27,6 @@ betHistoryTable.DataTable({
     "search": '',
     "lengthMenu": "_MENU_",
   },
-  "order": [[8, 'desc'],[2, 'desc']],
   "dom": "<'row'<'col-4'l><'col-8'f>>" +
     "<'row'<'col-sm-12'tr>>" +
     "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
