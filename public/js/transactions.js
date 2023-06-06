@@ -15,6 +15,12 @@ transactionsTable.DataTable({
   "bInfo": false,
   "bAutoWidth": true,
   "scrollX": true,
+  "columnDefs": [
+    {
+      "targets": [4],
+      "className": 'dt-body-right',
+    },
+  ],
   "columns": [
     {
       className: 'dt-control',
@@ -38,7 +44,10 @@ transactionsTable.DataTable({
       }
     },
     {
-      "data": "amount"
+      "data": null,
+      render: (data) => {
+        return data.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+      }
     },
     {
       "data": "mobile_number"
