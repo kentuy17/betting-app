@@ -122,11 +122,11 @@ class FightController extends Controller
 
         $meron_comm = $bets['meron'] * $this->percent / 100;
         $win_meron = $total_bets - $meron_comm;
-        $meron_percentage = $win_meron / $bets['meron'] * 100;
+        $meron_percentage = $win_meron > 0 ? $win_meron / $bets['meron'] * 100 : 0;
 
         $wala_comm = $bets['wala'] * $this->percent / 100;
         $win_wala = $total_bets - $wala_comm;
-        $wala_percentage = $win_wala / $bets['wala'] * 100;
+        $wala_percentage = $win_wala > 0 ? $win_wala / $bets['wala'] * 100 : 0;
 
         return [
             // 'meron' => $bets['meron'] > 0 ? $win / $bets['meron'] * 100 : 0,
@@ -193,7 +193,7 @@ class FightController extends Controller
         ->first();
         $faultWinner = $fightDetail->game_winner;
 
-        //Get revert win amount 
+        //Get revert win amount
         if($faultWinner == 'M' || $faultWinner == 'W')
         {
             $user_bets = Bet::where('fight_id',$fightDetail->id)
@@ -201,7 +201,7 @@ class FightController extends Controller
             ->get();
 
             foreach($user_bets as $bet)
-            {   
+            {
                 $user = User::find($bet->user_id);
                 $user->points -= $bet->win_amount;
                 $user->save();
@@ -220,7 +220,7 @@ class FightController extends Controller
                 $hist->status = 'L';
                 $hist->save();
                 }
-            
+
                 $update = Bet::find($bet->bet_no);
                 $update->win_amount = 0;
                 $update->save();
@@ -230,8 +230,8 @@ class FightController extends Controller
         //Update Fight
         $fightDetail->game_winner = $request->result;
         $fightDetail->save();
-        
-        //update winner    
+
+        //update winner
         $winner = $request->result;
         if($winner == 'M' || $winner == 'W')
         {
@@ -269,7 +269,7 @@ class FightController extends Controller
 
                 event(new Result($update));
             }
-        }    
+        }
 
         if($winner == 'C' || $winner == 'D'){
             $calc = $this->calculatePrevFight($fightDetail);
