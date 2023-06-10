@@ -175,9 +175,16 @@ $('[data-dismiss="modal"]').on('click', function() {
 $('form#user-form').on('submit', function(e) {
   e.preventDefault();
   let serialized = $(this).serialize();
-  console.log(serialized, 'serialized');
   updateUser(serialized).then((user) => {
-    console.log(user);
+    Swal.fire({
+      icon: 'success',
+      confirmButtonColor: 'green',
+      title: user.data.message,
+      timer: 1500
+    }).then(() =>  {
+      $('#modal-center').modal('hide');
+      usersTable.DataTable().ajax.reload();
+    });
   });
 });
 
