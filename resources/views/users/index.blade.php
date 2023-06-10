@@ -58,11 +58,11 @@
           <input type="hidden" id="user_id" name="user_id">
           <div class="form-group mt-2 col-md-6">
             <label for="username">Username</label>
-            <input type="text" class="form-control" required id="username" placeholder="Username">
+            <input type="text" class="form-control" name="username" required id="username" placeholder="Username">
           </div>
           <div class="form-group mt-2 col-md-6">
             <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" placeholder="Name" disabled name="name" >
+            <input type="text" class="form-control" id="name" placeholder="Name" id="name" name="name" >
           </div>
           <div class="form-group mt-2 col-md-6">
             <label for="trans-pts">Phone#</label>
@@ -84,10 +84,6 @@
               <label for="page_access_{{ $role->id }}" class="custom-control-label">{{ $role->name }}</label>
             </div>
             @endforeach
-          </div>
-          <div class="form-group mt-2" style="display: none">
-            <label for="trans-note">Note:</label>
-            <textarea name="trans-note" class="form-control" id="trans-note" cols="30" rows="1"></textarea>
           </div>
         </div>
         <div class="modal-footer">

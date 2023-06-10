@@ -58,6 +58,7 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::get('/admin', [AdminController::class, 'index']);
         Route::post('/admin/users-create', [AdminController::class, 'createUser']);
         Route::get('/admin/user-permissions/{id}', [AdminController::class, 'getUserPagePermissions']);
+        Route::post('/admin/user', [AdminController::class, 'updateUser']);
     });
 
     // Player

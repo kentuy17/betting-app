@@ -64,6 +64,11 @@ usersTable.DataTable({
       onlineCount++;
     }
 
+    if(data.roles.length > 1) {
+      let rolesCol = $(row).find('td').eq(3);
+      rolesCol.addClass('flex flex-wrap gap-1');
+    }
+
     if(onlineCount > 0) {
       $('#badge-online-users').show().text(onlineCount);
     } else {
@@ -117,31 +122,36 @@ usersTable.on('click', 'tbody td .view', async function() {
   $('input#phone_no').val(row.data().phone_no);
   $('.page-access').each((index, el) => $(el).prop('checked',false))
 
-  getUserPermissions(id).then((permissions) => {
-    let perms = [];
-    permissions.data.forEach((p) => {
-      perms.push(p.role_id);
+  getUserPermissions(id)
+    .then((permissions) => {
+      let perms = [];
+      let user = permissions.data.user;
+      permissions.data.data.forEach((p) => {
+        perms.push(p.role_id);
+      })
+      $('input#name').val(user.name);
+      $('select#role').val(user.role_id);
+      return perms;
     })
-    return perms;
-  }).then((perms) => {
-    for (let i = 0; i < perms.length; i++) {
-      const el = perms[i];
-      $('#page_access_'+el).prop('checked',true);
-    }
-  })
+    .then((perms) => {
+      for (let i = 0; i < perms.length; i++) {
+        const el = perms[i];
+        $('#page_access_'+el).prop('checked',true);
+      }
+    })
 
   let storage = $('#trans-receipt').data('storage');
   if(row.data().filename) {
     $('#trans-receipt').attr('src', storage+'/'+row.data().filename);
   }
 
-  if(row.data().status != 'pending') {
-    $('input[type="submit"]').prop('disabled', true)
-      .addClass('disabled');
-  } else {
-    $('input[type="submit"]').prop('disabled', false)
-      .removeClass('disabled');
-  }
+  // if(row.data().status != 'pending') {
+  //   $('input[type="submit"]').prop('disabled', true)
+  //     .addClass('disabled');
+  // } else {
+  //   $('input[type="submit"]').prop('disabled', false)
+  //     .removeClass('disabled');
+  // }
 })
 
 function clearFields() {
@@ -162,7 +172,33 @@ $('[data-dismiss="modal"]').on('click', function() {
   $('#modal-undo-points').modal('hide');
 })
 
+$('form#user-form').on('submit', function(e) {
+  e.preventDefault();
+  let serialized = $(this).serialize();
+  console.log(serialized, 'serialized');
+  updateUser(serialized).then((user) => {
+    console.log(user);
+  });
+});
+
 async function getUserPermissions(userId) {
-  const response = await axios.get(`/admin/user-permissions/${userId}`);
-  return response.data;
+  try {
+    const response = await axios.get(`/admin/user-permissions/${userId}`);
+    return response;
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+
+async function updateUser(data) {
+  try {
+    const user = await axios.post('/admin/user', data);
+    // console.log(user);
+    return user;
+  }
+  catch (error) {
+    console.log(error.message);
+  }
+
 }
