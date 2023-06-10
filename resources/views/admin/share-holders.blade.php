@@ -49,7 +49,7 @@
               ]; @endphp
               @foreach ($share_holders as $key => $boss)
               <tr>
-                <td class="text-center"><span class="badge bg-{{$colors[$boss->percentage]}}">{{ $boss->percentage }}%</span></td>
+                <td class="text-center"><span class="badge bg-primary">{{ $boss->percentage }}%</span></td>
                 <td>{{ $boss->user->name }}</td>
                 <td>{{ $boss->role_description }}</td>
                 <td class="text-right" style="color:yellow !important;">{{ number_format($boss->current_commission,2) }}</td>

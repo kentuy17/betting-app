@@ -15,6 +15,12 @@ usersTable.DataTable({
   "bInfo": false,
   "bAutoWidth": true,
   "scrollX": true,
+  "columnDefs": [
+    {
+      "targets": [4],
+      "className": 'dt-body-right',
+    },
+  ],
   "columns": [
     {
       className: 'dt-control',
@@ -39,7 +45,10 @@ usersTable.DataTable({
       }
     },
     {
-      "data": "points"
+      "data": null,
+      render: (data) => {
+        return data.points.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+      },
     },
     {
       "data": null,
@@ -78,6 +87,7 @@ usersTable.DataTable({
 });
 
 function formatDeposit(d) {
+  let points = d.points.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
   return (
     `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
       <tr>
@@ -90,7 +100,7 @@ function formatDeposit(d) {
       </tr>
       <tr>
         <td>POINTS:</td>
-        <td>${d.points}</td>
+        <td>${points}</td>
       </tr>
     </table>`
   );
