@@ -12,6 +12,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BetController;
 use App\Http\Controllers\FightController;
 use App\Http\Controllers\AuditorController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+
 // use App\Http\Controllers\Controller;
 
 /*
@@ -30,6 +32,8 @@ Route::get('/', function () {
 })->middleware('guest');
 
 Auth::routes();
+Route::get('/password_reset', [ResetPasswordController::class, 'showresetpasswordview'])->name('auth.dark-reset');
+Route::post('/password_reset', [ResetPasswordController::class, 'submitresetpassword']);
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
@@ -107,6 +111,9 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::post('/refillpoints', [OperatorController::class, 'refillSubmit'])->name('refill.upload.post');
         Route::get('/requests', [OperatorController::class, 'viewRequests'])->name('requests');
         Route::get('/requests/data', [OperatorController::class, 'getRequests'])->name('requests.data');
+        Route::get('/passwordreset-request/data', [OperatorController::class, 'getresetpassword']);
+        Route::get('/passwordreset-request', [OperatorController::class, 'viewResetPassword'])->name('operator.password-reset');
+
 
     });
 

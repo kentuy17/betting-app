@@ -7,6 +7,7 @@ use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ModelHasRoles;
 use App\Models\Transactions;
+use App\Models\UserPasswordReset;
 use App\Models\DerbyEvent;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
@@ -301,5 +302,22 @@ class OperatorController extends Controller
     public function viewRequests()
     {
         return view('operator.requests');
+    }
+
+    public function getresetpassword()
+    {
+        $trans = UserPasswordReset::with('user')
+            ->orderBy('id','desc')
+            ->get();
+
+        return response()->json([
+            'data' => $trans,
+            'status' => 'OK',
+        ], 200);
+    }
+
+    public function viewResetPassword()
+    {
+        return view('operator.password-reset');
     }
 }
