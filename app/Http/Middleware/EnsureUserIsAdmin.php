@@ -15,10 +15,10 @@ class EnsureUserIsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(session('role') === 'Admin') {
+        if(hasAccess('Admin')) {
             return $next($request);
         }
 
-        return redirect('/users');
+        return redirect('/home');
     }
 }
