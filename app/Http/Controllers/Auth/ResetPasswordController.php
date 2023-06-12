@@ -10,6 +10,8 @@ use App\Models\UserPasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
 
 class ResetPasswordController extends Controller
 {
@@ -64,14 +66,21 @@ class ResetPasswordController extends Controller
                     return redirect('/password_reset')->with('error', 'Account not found!');
                 }
     
-            $user = User::where('phone_no', '=', $request->phone_no)
+            $users = User::where('phone_no', '=', $request->phone_no)
             ->where('username', '=', $request->username)
             ->first();
-    
+
+
+             $user = User::find($users->id);
+             $user->password =  Hash::make('000000');
+             $user->defaultpassword = true;
+             $user->save();
+
             UserPasswordReset::create([
                 'userid' => $user->id,
                 'username' => $user->username,
                 'phone_no' => $user->phone_no,
+                'password' => '000000',
                 'status' => 'pending'
             ]);       
     

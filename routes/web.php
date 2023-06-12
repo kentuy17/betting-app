@@ -43,6 +43,9 @@ Route::group(['middleware' => ['auth','visitor']], function() {
     //     ddd($visitors);
     // });
 
+    Route::get('/changepassword', [App\Http\Controllers\HomeController::class, 'showChangePasswordGet'])->name('auth.change-password');
+    Route::post('/changepassword', [App\Http\Controllers\HomeController::class, 'changePasswordPost'])->name('changePasswordPost');
+
     Route::resource('roles', RoleController::class);
     // Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
