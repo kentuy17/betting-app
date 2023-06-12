@@ -98,7 +98,7 @@ class OperatorController extends Controller
                 return response()->json([
                     'msg' => 'Insuficient points!',
                     'status' => 'error',
-                ], 500);
+                ], 400);
             }
             $trans = Transactions::find($request->id);
             $trans->status = $request->action == 'approve' ? 'completed' : 'failed';
@@ -170,7 +170,7 @@ class OperatorController extends Controller
         return response()->json([
             'msg' => 'Success!',
             'status' => 'OK',
-            'points' => $operator->points,
+            'points' => $operator->points ?? Auth::user()->points,
         ], 200);
     }
 

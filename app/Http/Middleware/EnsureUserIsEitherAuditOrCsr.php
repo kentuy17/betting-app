@@ -16,7 +16,7 @@ class EnsureUserIsEitherAuditOrCsr
     public function handle(Request $request, Closure $next): Response
     {
         $allowed_roles = ['Auditor', 'Cash-out Operator', 'Cash-in Operator'];
-        if(in_array(session('role'), $allowed_roles)) {
+        if(in_array(session('role'), $allowed_roles) || hasAccess('Auditor')) {
             return $next($request);
         }
 

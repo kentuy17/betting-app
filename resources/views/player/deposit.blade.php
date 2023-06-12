@@ -187,10 +187,10 @@
           <!---->
           <div id="uni-ticket-outlet" class="dep-tile-2">
             <div class="btn-gold rounded gp-shadow-sm d-flex p-2 clickable">
-              <div class="icn"><img src="{{ asset('img/uniticket-2.jpg') }}"></div>
+              <div class="icn"><img src="{{ asset('img/maya-bird.png') }}"></div>
               <div class="info">
                 <div class="name" style="text-transform: uppercase;">
-                  UNI-TICKET (MAYA/CREDIT CARD)
+                  MAYA
                 </div>
                 <div class="desc">
                   <div>Minimum Cash-in: ₱100.00</div>
@@ -230,6 +230,7 @@
         @csrf
         <div class="mt-3">
           <input type="hidden" name="operator_id" value="{{$operators->id}}">
+          <input type="hidden" name="payment_mode" id="payment_mode" value="Gcash">
           <div class="limit-width m-auto">
             <div class="text-center mb-2">GCash No:</div>
             <div class="m-auto align-center">
@@ -267,6 +268,7 @@
       if(!$(this).hasClass('active')) {
         $(this).addClass('active');
         $('#uni-ticket-outlet').removeClass('active');
+        $('#payment_mode').val('Gcash');
       }
     })
 
@@ -274,6 +276,7 @@
       if(!$(this).hasClass('active')) {
         $(this).addClass('active');
         $('#g-cash-outlet').removeClass('active');
+        $('#payment_mode').val('Maya');
       }
     })
 

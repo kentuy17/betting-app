@@ -17,7 +17,7 @@ transactionsTable.DataTable({
   "scrollX": true,
   "columnDefs": [
     {
-      "targets": [4],
+      "targets": [3],
       "className": 'dt-body-right',
     },
   ],
@@ -29,19 +29,10 @@ transactionsTable.DataTable({
       defaultContent: '',
     },
     {
-      "data": null,
-      render: (data) => {
-        return data.action.toUpperCase();
-      }
-    },
-    {
       "data": "user.username"
     },
     {
-      "data": null,
-      render: (data) => {
-        return data.operator != null ? data.operator.username : "--";
-      }
+      "data": "outlet"
     },
     {
       "data": null,
@@ -52,6 +43,17 @@ transactionsTable.DataTable({
     {
       "data": "mobile_number"
     },
+
+    {
+      "data": null,
+      render: (data) => {
+        return data.operator != null ? data.operator.username : "--";
+      }
+    },
+    {
+      "data": "reference_code"
+    },
+
     {
       "data": "created_at"
     },

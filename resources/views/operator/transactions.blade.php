@@ -7,16 +7,16 @@
   <div class="row justify-content-center">
     <div class="col-md-12">
       <ul class="nav nav-tabs" id="myTab" role="tablist">
-      @if (session('role') == 'Cash-in Operator')
+      @if (session('role') == 'Cash-in Operator' || hasAccess('Cash-in Operator'))
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="deposit-tab" data-bs-toggle="tab" data-bs-target="#deposit-panel" type="button" role="tab" aria-controls="deposit" aria-selected="true">
             DEPOSIT <span id="badge-deposit" style="display: none;" class="badge bg-danger">0</span></button>
             {{-- <button onclick="showNotification('fuck yeah!')">Show Notif</button> --}}
         </li>
       @endif
-      @if (session('role') == 'Cash-out Operator')
+      @if (session('role') == 'Cash-out Operator' || hasAccess('Cash-out Operator'))
         <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="withdraw-tab" data-bs-toggle="tab" data-bs-target="#withdraw" type="button" role="tab" aria-controls="withdraw" aria-selected="false">
+          <button class="nav-link" id="withdraw-tab" data-bs-toggle="tab" data-bs-target="#withdraw" type="button" role="tab" aria-controls="withdraw" aria-selected="false">
             WITHDRAW <span id="badge-withdraw" style="display: none;" class="badge bg-danger">0</span>
             <span id="badge-withdraw-unverified" data-bs-toggle="tooltip" title="Missing Ref-code" style="display: none;" class="badge bg-warning">4</span></button>
         </li>
@@ -36,18 +36,19 @@
           </div>
         </li>
       </ul>
-      @if (session('role') == 'Cash-in Operator')
+      @if (session('role') == 'Cash-in Operator' || hasAccess('Cash-in Operator'))
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="deposit-panel" role="tabpanel" aria-labelledby="deposit-tab">
           <table class="table dt-responsive table-striped nowrap w-100" id="deposit-trans-table">
             <thead>
               <tr>
                 <th>#</th>
-                <th>Type</th>
                 <th>Player</th>
-                <th>Operator</th>
+                <th>Outlet</th>
                 <th>Amount</th>
                 <th>Mobile#</th>
+                <th>Operator</th>
+                <th>Ref Code</th>
                 <th>Date</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -56,16 +57,17 @@
           </table>
         </div>
         @endif
-        @if (session('role') == 'Cash-out Operator')
-        <div class="tab-pane fade show active" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
+        @if (session('role') == 'Cash-out Operator' || hasAccess('Cash-out Operator'))
+        <div class="tab-pane fade show" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
           <table class="table dt-responsive table-striped nowrap w-100" id="withdraw-trans-table">
             <thead>
               <tr>
                 <th>#</th>
-                <th>Type</th>
                 <th>Player</th>
-                <th>Processed By</th>
+                <th>Outlet</th>
                 <th>Amount</th>
+                <th>Mobile#</th>
+                <th>Processed By</th>
                 <th>Ref Code</th>
                 <th>Date</th>
                 <th>Status</th>

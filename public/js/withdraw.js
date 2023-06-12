@@ -8,11 +8,11 @@ withdrawTable.DataTable({
   "bLengthChange": false,
   "bFilter": false,
   "bInfo": false,
-  "bAutoWidth": false,
+  "bAutoWidth": true,
   "scrollX": true,
   "columnDefs": [
     {
-      "targets": [4],
+      "targets": [3],
       "className": 'dt-body-right',
     },
   ],
@@ -24,19 +24,10 @@ withdrawTable.DataTable({
       defaultContent: '',
     },
     {
-      "data": null,
-      render: (data) => {
-        return data.action.toUpperCase();
-      }
-    },
-    {
       "data": "user.username"
     },
     {
-      "data": null,
-      render: (data) => {
-        return data.operator != null ? data.operator.username : "--";
-      }
+      "data": "outlet"
     },
     {
       "data": null,
@@ -45,8 +36,19 @@ withdrawTable.DataTable({
       }
     },
     {
+      "data": "mobile_number"
+    },
+
+    {
+      "data": null,
+      render: (data) => {
+        return data.operator != null ? data.operator.username : "--";
+      }
+    },
+    {
       "data": "reference_code"
     },
+
     {
       "data": "created_at"
     },
@@ -74,6 +76,7 @@ withdrawTable.DataTable({
       $(row).addClass('bg-warning');
       unverified++;
     }
+    console.log(wPending);
 
     if(wPending > 0) {
       $('#badge-withdraw').show().text(wPending);
@@ -227,3 +230,8 @@ $('[data-dismiss="modal"]').on('click', function() {
 })
 
 $('#badge-withdraw-unverified').tooltip().show()
+
+$('button[data-bs-toggle="tab"]').on('shown.bs.tab', function(e){
+  $($.fn.dataTable.tables(true)).DataTable()
+     .columns.adjust();
+});
