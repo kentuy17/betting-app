@@ -36,7 +36,7 @@ class ResetPasswordController extends Controller
     protected $redirectTo = RouteServiceProvider::HOME;
 
 
-        /**
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -53,40 +53,40 @@ class ResetPasswordController extends Controller
 
     public function submitresetpassword(Request $request)
     {
-        try{
+        try {
             $this->validate($request, [
                 'username' => 'required',
                 'phone_no' => 'required',
                 'phone_no' => ['regex:/(0?9|\+?63)[0-9]{9}/'],
             ]);
-    
-            if( !User::where('phone_no', '=', $request->phone_no)
-                    ->where('username', '=', $request->username)
-                    ->exists()) {
-                    return redirect('/password_reset')->with('error', 'Account not found!');
-                }
-    
+
+            if (!User::where('phone_no', '=', $request->phone_no)
+                ->where('username', '=', $request->username)
+                ->exists()) {
+                return redirect('/password_reset')->with('danger', 'Account not found!');
+            }
+
             $users = User::where('phone_no', '=', $request->phone_no)
-            ->where('username', '=', $request->username)
-            ->first();
+                ->where('username', '=', $request->username)
+                ->first();
 
 
-             $user = User::find($users->id);
-             $user->password =  Hash::make('000000');
-             $user->defaultpassword = true;
-             $user->save();
+            $user = User::find($users->id);
+            $user->password =  Hash::make('aficionado');
+            $user->defaultpassword = true;
+            $user->save();
 
             UserPasswordReset::create([
                 'userid' => $user->id,
                 'username' => $user->username,
                 'phone_no' => $user->phone_no,
-                'password' => '000000',
+                'password' => 'aficionado',
                 'status' => 'pending'
-            ]);       
-    
-        }catch (\Exception $e) {
-            return redirect()->back()->with('Error', $e->getMessage());
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', $e->getMessage());
         }
+
         return redirect('/password_reset')->with('success', 'Wait for new password via text');
     }
 }
