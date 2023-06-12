@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -58,8 +59,12 @@ class LoginController extends Controller
         $user->update(['active' => true]);
         $user->save();     
         if($role->name == 'Player') {
-            $this->redirectTo = '/play';
-        } 
+            if(Auth::user()->defaultpassword){
+                $this->redirectTo = '/changepassword';
+            } else{
+                $this->redirectTo = '/play';
+            }
+        }
         
         if($role->name == 'Operator' || $role->name == 'Cash-out Operator' || $role->name == 'Cash-in Operator') {
             $this->redirectTo = '/home';
