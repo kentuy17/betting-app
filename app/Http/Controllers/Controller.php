@@ -19,15 +19,15 @@ class Controller extends BaseController
 
     public function getUserRole()
     {
-        $roles = Auth::user()->user_roles();
-        if(!$roles) {
+        if(!Auth::user()->role_id) {
             $modelRole = ModelHasRoles::where('model_id',Auth::user()->id)->first();
             $roles = Roles::where('id',$modelRole->role_id)->first();
             $user = User::find(Auth::user()->id);
-            $user->role_id = $roles->id;
+            $user->role_id = $roles->id ?? 2;
             $user->save();
         }
 
+        $roles = Auth::user()->user_role;
         session(['role' => $roles->name]);
         return $roles;
     }

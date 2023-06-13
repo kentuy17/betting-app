@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use App\Models\ModelHasRoles;
+use App\Models\Referral;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -66,7 +68,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $validator = $this->validator($data);
-        
+
         if($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
@@ -83,6 +85,15 @@ class RegisterController extends Controller
             'name' => $validated['username'],
         ]);
 
+        if($data['rid']) {
+            $referrer = User::where('rid', $data['rid'])->first();
+            Referral::create([
+                'rid' => $data['rid'],
+                'referrer_id' => $referrer->referrer_id,
+                'user_id' => $create->id,
+            ]);
+        }
+
         ModelHasRoles::create([
             'role_id' => '2',
             'model_type' => "App\Models\User",
@@ -92,7 +103,7 @@ class RegisterController extends Controller
         return $create;
     }
 
-    public function showRegistrationForm()
+    public function showRegistrationForm(Request $request)
     {
         return view('auth.dark-register');
     }

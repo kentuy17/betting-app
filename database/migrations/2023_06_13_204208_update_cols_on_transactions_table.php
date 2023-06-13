@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('transactions', function (Blueprint $transactions) {
-            $transactions->enum('outlet', ['Gcash', 'Bank', 'Palawan', 'MLhuilier', 'Maya'])->default('Gcash');
+            $transactions->enum('outlet', ['Gcash', 'Bank', 'Palawan', 'MLhuilier', 'Maya'])->default('Gcash')->change();
         });
 
         Schema::table('users', function (Blueprint $users) {
-            $users->integer('role_id')->default('2');
+            $users->integer('role_id')->default('2')->change();
         });
     }
 

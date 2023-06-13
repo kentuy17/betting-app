@@ -55,6 +55,9 @@
         <div class="auth-form-body mt-3">
           <form action="{{ route('register') }}" accept-charset="UTF-8" method="post">
             @csrf
+            @if(isset($_GET['rid']))
+            <input type="hidden" name="rid" value="{{ $_GET['rid'] }}">
+            @endif
             <label for="username">Username</label>
             <input type="text" name="username" id="username" class="form-control input-block js-login-field" autocapitalize="none" autocorrect="off" autocomplete="username" autofocus="autofocus">
             <div class="position-relative">
