@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\ModelHasRoles;
 use App\Models\Roles;
 use App\Models\Hacking;
+use App\Models\User;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -18,8 +19,15 @@ class Controller extends BaseController
 
     public function getUserRole()
     {
-        $modelRole = ModelHasRoles::where('model_id',Auth::user()->id)->first();
-        $roles = Roles::where('id',$modelRole->role_id)->first();
+        $roles = Auth::user()->user_roles();
+        if(!$roles) {
+            $modelRole = ModelHasRoles::where('model_id',Auth::user()->id)->first();
+            $roles = Roles::where('id',$modelRole->role_id)->first();
+            $user = User::find(Auth::user()->id);
+            $user->role_id = $roles->id;
+            $user->save();
+        }
+
         session(['role' => $roles->name]);
         return $roles;
     }

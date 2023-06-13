@@ -184,7 +184,7 @@
                 @if(Auth::user()->share_holder)
                   BOSS / {{ Auth::user()->share_holder->role_description }}
                 @else
-                  {{ session('role')}}
+                  {{ Auth::user()->user_role->name}}
                 @endif
               </p>
             </div>
@@ -214,12 +214,12 @@
               </div>
               <div class="card-body pt-0">
                 @csrf
-                @if(session('role') != 'Player')
+                @if(Auth::user()->user_role->name != 'Player')
                 <div class="row mb-4">
                   <div class="col-12">
                     <label class="text-black form-label">User Role</label>
                     <div class="input-group">
-                      <input id="user_role" class="form-control disabled" title="User Role" type="text" disabled="" value="{{ session('role') }}" >
+                      <input id="user_role" class="form-control disabled" title="User Role" type="text" disabled="" value="{{ Auth::user()->user_role->name }}" >
                     </div>
                   </div>
                 </div>

@@ -25,7 +25,7 @@ requestsTable.DataTable({
     },
     {
         "data": 'username',
-    },    
+    },
     {
         "data": "phone_no"
     },
@@ -37,9 +37,9 @@ requestsTable.DataTable({
     },
     {
         "data": null,
-        // render: (data) => {
-        //   return data.action.toUpperCase();
-        // }
+        render: (data) => {
+          return data.action.toUpperCase();
+        }
     }
   ],
   "createdRow": function( row, data, dataIndex){

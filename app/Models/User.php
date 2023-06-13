@@ -113,4 +113,9 @@ class User extends Authenticatable
     {
         return $this->_user_has()->pluck('name');
     }
+
+    public function user_role()
+    {
+        return $this->hasOne(Roles::class, 'id', 'role_id');
+    }
 }

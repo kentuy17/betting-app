@@ -98,35 +98,35 @@
           @endif
 
           @else
-          @if (session('role') == 'Admin')
+          @if (Auth::user()->user_role->name == 'Admin')
           <li><a class="md:p-4 py-2 block" href="/admin">Manage Users</a></li>
           <li><a class="md:p-4 py-2 block" href="{{ route('roles.index') }}">Roles</a></li>
           @endif
 
-          @if (session('role') == 'Operator')
+          @if (Auth::user()->user_role->name == 'Operator')
           <li><a class="md:pl-4 py-2 block" href="{{ route('operator.fight') }}">FIGHT</a></li>
           <li><a class="md:pl-4 py-2 block" href="{{ route('operator.derby.event') }}">EVENT</a></li>
           @endif
 
-          @if (session('role') == 'Auditor')
+          @if (Auth::user()->user_role->name == 'Auditor')
           <li><a class="md:pl-4 py-2 block" href="{{ route('auditor.transactions-operator') }}">TRANSACTIONS</a></li>
           @endif
 
-          @if (session('role') == 'Cash-in Operator')
+          @if (Auth::user()->user_role->name == 'Cash-in Operator')
           <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'operator.transactions') {{ 'active' }} @endif" href="{{ route('operator.transactions') }}">TRANSACTIONS</a></li>
           <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'refill') {{ 'active' }} @endif" href="{{ route('refill') }}">REFILL</a></li>
           <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'remit') {{ 'active' }} @endif" href="{{ route('remit') }}">REMIT</a></li>
           <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'requests') {{ 'active' }} @endif" href="{{ route('requests') }}">REQUESTS</a></li>
           @endif
 
-          @if (session('role') == 'Cash-out Operator')
+          @if (Auth::user()->user_role->name == 'Cash-out Operator')
           <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'operator.transactions') {{ 'active' }} @endif" href="{{ route('operator.transactions') }}">TRANSACTIONS</a></li>
           <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'remit') {{ 'active' }} @endif" href="{{ route('remit') }}">REMIT</a></li>
           <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'requests') {{ 'active' }} @endif" href="{{ route('requests') }}">REQUESTS</a></li>
-          <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'operator.password-reset') {{ 'active' }} @endif" href="{{ route('operator.password-reset') }}">PASSWORD REQUEST</a></li>
+          <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'operator.password-reset') {{ 'active' }} @endif" href="{{ route('operator.password-reset') }}">PASSWORD RESET</a></li>
           @endif
 
-          @if (session('role') == 'Player')
+          @if (Auth::user()->user_role->name == 'Player')
           <li><a class="@if(Route::current()->getName() == 'play') {{ 'active-nav' }} @endif py-2 block" href="{{ route('play') }}">Play</a></li>
           <li><a class="@if(Route::current()->getName() == 'player.bethistory') {{ 'active-nav' }} @endif md:pl-4 py-2 block" href="{{ route('player.bethistory') }}">Bet History</a></li>
           <li><a class="@if(Route::current()->getName() == 'player.player-transaction') {{ 'active-nav' }} @endif md:pl-4 py-2 block" href="{{ route('player.player-transaction') }}">Transaction</a></li>
@@ -136,10 +136,10 @@
             <a id="navbarDropdown" class="md:p-4 py-2 block dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>{{ Auth::user()->username }}</a>
             <div class="dropdown-menu dropdown-menu-right hide" style="left: inherit; right: 0px;">
               <a class="@if(Route::current()->getName() == 'users.profile') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('users.profile') }}">My Profile</a>
-              @if (session('role') == 'Admin')
+              @if (Auth::user()->user_role->name == 'Admin')
               <a class="@if(Route::current()->getName() == 'admin.shares') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('admin.shares') }}">Shares</a>
               @endif
-              @if (session('role') == 'Player')
+              @if (Auth::user()->user_role->name == 'Player')
               <a class="@if(Route::current()->getName() == 'deposit') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('deposit') }}">Deposit</a>
               <a class="@if(Route::current()->getName() == 'withdraw') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('withdraw') }}">Withdraw</a>
               @endif
@@ -158,7 +158,7 @@
     <main>
       @yield('content')
     </main>
-    @if((session('role') == 'Player'))
+    @if((Auth::user()->user_role->name == 'Player'))
     @include('layouts.components.floating-chat')
     @endif
   </div>

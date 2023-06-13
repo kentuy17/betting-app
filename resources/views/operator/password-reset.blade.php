@@ -9,7 +9,7 @@
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="requests-tab" data-bs-toggle="tab" data-bs-target="#requests" type="button" role="tab" aria-controls="requests" aria-selected="false">
-            RESET PASSWORD REQUEST</button>
+            PASSWORD RESET</button>
         </li>
         <li class="nav-item credit-nav-item">
           <div class="nav-credits-wr w-25 w-sm-50 gold-text">

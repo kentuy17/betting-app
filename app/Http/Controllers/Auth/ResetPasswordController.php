@@ -57,7 +57,7 @@ class ResetPasswordController extends Controller
             $this->validate($request, [
                 'username' => 'required',
                 'phone_no' => 'required',
-                'phone_no' => ['regex:/(0?9|\+?63)[0-9]{9}/'],
+                'phone_no' => ['regex:/(0?9|\+?639)[0-9]{9}/'],
             ]);
 
             if (!User::where('phone_no', '=', $request->phone_no)

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('userid');
             $table->string('username');
             $table->string('phone_no');
-            $table->enum('status',['pending','completed'])->default('pending');    
+            $table->enum('status',['pending','completed'])->default('pending');
             $table->string('password')->nullable();
             $table->timestamps();
         });

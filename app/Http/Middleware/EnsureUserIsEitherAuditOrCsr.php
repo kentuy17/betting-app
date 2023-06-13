@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
 class EnsureUserIsEitherAuditOrCsr
 {
@@ -16,7 +17,7 @@ class EnsureUserIsEitherAuditOrCsr
     public function handle(Request $request, Closure $next): Response
     {
         $allowed_roles = ['Auditor', 'Cash-out Operator', 'Cash-in Operator'];
-        if(in_array(session('role'), $allowed_roles) || hasAccess('Auditor')) {
+        if(in_array(Auth::user()->user_role->name, $allowed_roles) || hasAccess('Auditor')) {
             return $next($request);
         }
 
