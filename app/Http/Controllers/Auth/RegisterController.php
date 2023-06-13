@@ -85,11 +85,11 @@ class RegisterController extends Controller
             'name' => $validated['username'],
         ]);
 
-        if($data['rid']) {
+        if(isset($data['rid'])) {
             $referrer = User::where('rid', $data['rid'])->first();
             Referral::create([
                 'rid' => $data['rid'],
-                'referrer_id' => $referrer->referrer_id,
+                'referrer_id' => $referrer->id,
                 'user_id' => $create->id,
             ]);
         }

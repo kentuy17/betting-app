@@ -35,7 +35,7 @@ class Fight extends Model
 
     public function bet()
     {
-        return $this->hasMany(Bet::class, 'fight_no');
+        return $this->hasMany(Bet::class, 'fight_id');
     }
 
     public function event()

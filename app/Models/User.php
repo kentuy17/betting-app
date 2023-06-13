@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Contracts\Role;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\ShareHolder;
 use App\Models\ModelHasRoles;
 use App\Models\Roles;
+use App\Models\Referral;
 use Shetabit\Visitor\Traits\Visitor;
 
 class User extends Authenticatable
@@ -117,5 +117,15 @@ class User extends Authenticatable
     public function user_role()
     {
         return $this->hasOne(Roles::class, 'id', 'role_id');
+    }
+
+    public function referred_players()
+    {
+        return $this->hasMany(Referral::class, 'user_id')->with('user');
+    }
+
+    public function referral()
+    {
+        return $this->hasOne(Referral::class, 'user_id')->with('user');
     }
 }

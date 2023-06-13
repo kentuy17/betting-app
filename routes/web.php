@@ -39,9 +39,9 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => ['auth','visitor']], function() {
     // TEST
-    // Route::get('/online-users', [Controller::class, 'getOnlineUsers'], function ($visitors) {
-    //     ddd($visitors);
-    // });
+    Route::get('/players/referred', [FightController::class, 'calcRefCommission'], function ($players) {
+        ddd($players);
+    });
 
     Route::get('/changepassword', [App\Http\Controllers\HomeController::class, 'showChangePasswordGet'])->name('auth.change-password');
     Route::post('/changepassword', [App\Http\Controllers\HomeController::class, 'changePasswordPost'])->name('changePasswordPost');

@@ -10,7 +10,7 @@ class Referral extends Model
 {
     use HasFactory;
 
-    protected $table = 'hacking';
+    protected $table = 'referrals';
     protected $fillable = [
         'id',
         'rid',
@@ -22,6 +22,6 @@ class Referral extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class, 'referrer_id');
+        return $this->belongsTo(User::class, 'referrer_id');
     }
 }

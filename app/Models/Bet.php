@@ -39,4 +39,9 @@ class Bet extends Model
     {
         return $this->belongsTo(Fight::class, 'fight_id', 'id');
     }
+
+    public function referral()
+    {
+        return $this->hasOne(Referral::class, 'user_id', 'user_id');
+    }
 }
