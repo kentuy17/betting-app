@@ -15,7 +15,7 @@ class EnsureUserIsCsr
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user()->user_role->name == 'Cash-out Operator' || Auth::user()->user_role->name == 'Cash-in Operator') {
+        if(hasAccess('Cash-out Operator') || hasAccess('Cash-in Operator')) {
             return $next($request);
         }
 

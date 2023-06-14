@@ -504,6 +504,7 @@ class FightController extends Controller
         $bets = Bet::where('fight_id', $fight_id)->with('referral')->has('referral')->get();
         $unique_referrers = $referred_players->groupBy('referral.referrer_id');
 
+        $referral_commission = [];
         foreach($unique_referrers as $key => $referral) {
             $referral_commission[$key] = 0;
         }
