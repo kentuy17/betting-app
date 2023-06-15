@@ -556,6 +556,7 @@ class FightController extends Controller
     {
         $this->current_event = DerbyEvent::where('status', 'ACTIVE')->first();
         $fights = Fight::where('event_id', $this->current_event->id)
+            ->orderBy('fight_no', 'ASC')
             ->get();
 
         $data = [];

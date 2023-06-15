@@ -158,9 +158,11 @@
     <main>
       @yield('content')
     </main>
+    @auth
     @if((Auth::user()->user_role->name == 'Player'))
     @include('layouts.components.floating-chat')
     @endif
+    @endauth
   </div>
 </body>
 </html>

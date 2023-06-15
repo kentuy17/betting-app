@@ -6,7 +6,7 @@ withdrawTable.DataTable({
   "ajax": '/transaction/withdrawals',
   "bPaginate": true,
   "bLengthChange": false,
-  "bFilter": false,
+  "bFilter": true,
   "bInfo": false,
   "bAutoWidth": true,
   "scrollX": true,

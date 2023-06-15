@@ -11,7 +11,7 @@ transactionsTable.DataTable({
   "ajax": '/transaction/deposits',
   "bPaginate": true,
   "bLengthChange": false,
-  "bFilter": false,
+  "bFilter": true,
   "bInfo": false,
   "bAutoWidth": true,
   "scrollX": true,

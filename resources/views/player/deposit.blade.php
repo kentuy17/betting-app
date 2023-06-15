@@ -185,7 +185,7 @@
             </div>
           </div>
           <!---->
-          <div id="uni-ticket-outlet" class="dep-tile-2">
+          <div id="uni-ticket-outlet" class="dep-tile-2 d-none">
             <div class="btn-gold rounded gp-shadow-sm d-flex p-2 clickable">
               <div class="icn"><img src="{{ asset('img/maya-bird.png') }}"></div>
               <div class="info">
