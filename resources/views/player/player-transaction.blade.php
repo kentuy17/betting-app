@@ -45,10 +45,10 @@
                 <th>Status</th>
                 <th>Outlet</th>
                 <th>Receiver</th>
-                <th>Ref/Control #</th>
                 <th>Amount</th>
                 <th>Submitted</th>
-                <th>Completed</th>
+                <th>Ref-Code #</th>
+                <th>Note</th>
               </tr>
             </thead>
           </table>
@@ -60,10 +60,10 @@
                 <th>Status</th>
                 <th>Outlet</th>
                 <th>Receiver</th>
-                <th>Ref/Control #</th>
                 <th>Amount</th>
                 <th>Submitted</th>
-                <th>Completed</th>
+                <th>Ref-Code #</th>
+                <th>Note</th>
               </tr>
             </thead>
           </table>

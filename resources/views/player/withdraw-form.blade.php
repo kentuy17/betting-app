@@ -161,6 +161,7 @@
           <div class="card">
             <div class="card-header">
               <h5>Withdraw Form</h5>
+              <span class="italic text-danger" style="font-style: italic;">Withdrawal processing time 1-5 hours</span>
               @include('layouts.flash-message')
             </div>
             <div class="card-body pt-0">
