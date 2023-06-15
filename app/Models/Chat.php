@@ -17,6 +17,7 @@ class Chat extends Model
         'message',
         'role_id',
         'sender',
+        'seen',
         'created_at',
         'updated_at',
     ];

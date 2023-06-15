@@ -45,7 +45,7 @@ class AuditorController extends Controller
             ->with('auditor')
             ->orderBy('id','desc')
             ->get();
-            
+
         return response()->json([
             'data' => $trans
         ]);
@@ -73,11 +73,11 @@ class AuditorController extends Controller
 
             if($request->action == 'approve') {
                 $operator = User::find($trans->user_id);
-                $operator->points +=  $request->amount;
+                $operator->points += $request->amount;
                 $operator->save();
 
                 $auditor->points -=  $request->amount;
-                $auditor->save(); 
+                $auditor->save();
             }
         } catch (\Exception $e) {
             return response()->json([
@@ -85,7 +85,7 @@ class AuditorController extends Controller
                 'status' => 'error',
             ], 500);
         }
-        
+
         return response()->json([
             'msg' => 'Success!',
             'status' => 'OK',
@@ -100,7 +100,7 @@ class AuditorController extends Controller
             ->with('auditor')
             ->orderBy('id','desc')
             ->get();
-            
+
         return response()->json([
             'data' => $trans
         ]);
@@ -124,7 +124,7 @@ class AuditorController extends Controller
 
                 $auditor = User::find(Auth::user()->id);
                 $auditor->points += $trans->amount;
-                $auditor->save(); 
+                $auditor->save();
             }
         } catch (\Exception $e) {
             return response()->json([
@@ -154,7 +154,7 @@ class AuditorController extends Controller
     }
 
     public function addNewEvent(Request $request)
-    {   
+    {
         try {
             $event = DerbyEvent::create($request->all());
 
@@ -164,7 +164,7 @@ class AuditorController extends Controller
                 'message' => $e->getMessage()
             ]);
         }
-        
+
         return response()->json([
             'status' => 200,
             'data' => $event,
@@ -183,14 +183,14 @@ class AuditorController extends Controller
             $this->validate($request, [
                 'phone_no' => 'required',
                 'amount' => 'required',
-            ]);  
+            ]);
 
             $user = User::find(Auth::user()->id);
             if($user->points < $request->amount) {
                 return redirect()->back()
                     ->with('danger', 'Insuficient points!');
             }
-            
+
             $user->points -=  $request->amount;
             $user->save();
 
@@ -225,8 +225,8 @@ class AuditorController extends Controller
         try {
             $this->validate($request, [
                 'formFile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            ]);  
-             
+            ]);
+
             $imageName = time().'.'.$request->formFile->extension();
             $path = 'public/' . $imageName;
             Storage::disk('local')->put($path, file_get_contents($request->formFile));

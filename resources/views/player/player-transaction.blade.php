@@ -16,7 +16,7 @@
           </li>
           <li class="nav-item" role="presentation">
             <button class="nav-link" id="withdraw-tab" data-bs-toggle="tab" data-bs-target="#withdraw" type="button" role="tab" aria-controls="withdraw" aria-selected="false">
-              Withdrawals <span id="badge-withdraw" style="display: none;" class="badge bg-danger">0</span> 
+              Withdrawals <span id="badge-withdraw" style="display: none;" class="badge bg-danger">0</span>
               <span id="badge-withdraw-unverified" data-bs-toggle="tooltip" title="Missing Ref-code" style="display: none;" class="badge bg-warning">4</span></button>
           </li>
           <li class="nav-item credit-nav-item">
@@ -35,7 +35,7 @@
           </li>
         </ul> <!-- END NAV -->
       </div>
-      
+
       <!-- TABLE START -->
       <div class="tab-content card-body" id="myTabContent">
         <div class="tab-pane fade show active" id="deposit-panel" role="tabpanel" aria-labelledby="deposit-tab">

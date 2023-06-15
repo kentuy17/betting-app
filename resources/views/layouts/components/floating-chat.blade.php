@@ -1,4 +1,5 @@
 <div class="floating-chat enter">
+  <span id="badge-chat" style="display: none;z-index: 1000;position: absolute;top: -5px;right: -5px;font-size: 14px;" class="badge bg-danger">1</span>
   <i class="fa fa-comments text-xl" aria-hidden="true"></i>
   <div class="chat">
     <div class="header">

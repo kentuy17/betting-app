@@ -2,14 +2,11 @@ $(function () {
   var element = $('.floating-chat');
   var myStorage = localStorage;
   var visited = false;
+  var autoReply = 'Thank you for messaging us! We are currently processing your request.';
 
   if (!myStorage.getItem('chatID')) {
     myStorage.setItem('chatID', createUUID());
   }
-
-  // setTimeout(function () {
-  //   element.addClass('enter');
-  // }, 1000);
 
   element.click(openElement);
 
@@ -23,6 +20,25 @@ $(function () {
     }
   });
 
+  getUserMsg().then((msg) => {
+    let unseen = 0;
+    for (let i = 0; i < msg.data.length; i++) {
+      const chat = msg.data[i];
+      if(!chat.seen && chat.sender == 'other' && chat.message != autoReply) {
+        unseen++;
+      }
+    }
+    return unseen;
+  }).then(unseen => {
+    if(unseen > 0) {
+      $('.floating-chat.enter').css('opacity','1');
+      $('#badge-chat').show().text(unseen);
+    } else {
+      $('.floating-chat.enter').css('opacity','0.6');
+      $('#badge-chat').hide().text(unseen);
+    }
+  })
+
   function openElement() {
     var textInput = element.find('.text-box');
     element.find('>i').hide();
@@ -33,23 +49,30 @@ $(function () {
     element.off('click', openElement);
     element.find('.header button').click(closeElement);
     element.find('#sendMessage').click(sendNewMessage);
-    getUserMsg().then(userMsg => {
-      if(userMsg.data.length == 0 || visited) return;
-      var typing = $('.other-typing');
-      var reply = '<li class="other">Thank you for messaging us! We are currently processing your request.</li>';
-      var msg = '';
-      for (let i = 0; i < userMsg.data.length; i++) {
-        const element = userMsg.data[i];
-        if(i == 0) {
-          msg += reply;
+    scrollDown();
+    $('.floating-chat.enter').css('opacity','1');
+    $('#badge-chat').hide();
+    getUserMsg()
+      .then(userMsg => {
+        if(userMsg.data.length == 0 || visited) return;
+        var typing = $('.other-typing');
+        var reply = '<li class="other">Thank you for messaging us! We are currently processing your request.</li>';
+        var msg = '';
+        for (let i = 0; i < userMsg.data.length; i++) {
+          const element = userMsg.data[i];
+          if(i == 0) {
+            msg += reply;
+          }
+          msg += `<li class="${element.sender}">${element.message}</i>`;
         }
-        msg += `<li class="${element.sender}">${element.message}</i>`;
-      }
-      var msgEl = $(msg);
-      typing.before(msgEl);
-      scrollDown(0);
-      visited = true;
-    })
+        if(userMsg.data.length > 0) {
+          seenMessage();
+        }
+        var msgEl = $(msg);
+        typing.before(msgEl);
+        scrollDown(0);
+        visited = true;
+      })
   }
 
   function closeElement() {
@@ -59,6 +82,7 @@ $(function () {
     element.find('.header button').off('click', closeElement);
     element.find('#sendMessage').off('click', sendNewMessage);
     element.find('.text-box').off('keydown', onMetaAndEnter).prop("disabled", true).blur();
+    $('.floating-chat.enter').css('opacity','0.6');
     setTimeout(function () {
       element.find('.chat').removeClass('enter').show()
       element.click(openElement);
@@ -66,14 +90,13 @@ $(function () {
   }
 
   function createUUID() {
-    // http://www.ietf.org/rfc/rfc4122.txt
     var s = [];
     var hexDigits = "0123456789abcdef";
     for (var i = 0; i < 36; i++) {
       s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
     }
-    s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
-    s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+    s[14] = "4";
+    s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
     s[8] = s[13] = s[18] = s[23] = "-";
 
     var uuid = s.join("");
@@ -86,21 +109,26 @@ $(function () {
     if (!newMessage) return;
     sendMsg(newMessage);
     visited = true;
-    var typing = $('.other-typing');
-    var autoReply = 'Thank you for messaging us! We are currently processing your request.';
-    var reply = $(`<li class="other">${autoReply}</li>`);
-    typing.before('<li class="self">'+newMessage+'</li>');
-    setTimeout(() => {
-      typing.show();
-      scrollDown();
-      setTimeout(() => {
-        typing.hide().before(reply);
-        sendMsg(autoReply,'other')
-        scrollDown();
-      }, 3000);
-    }, 3000);
-    userInput.html(''); // clean out old message
-    userInput.focus(); // focus on input
+
+    getUserMsg().then((msg) => {
+      var typing = $('.other-typing');
+      var reply = $(`<li class="other">${autoReply}</li>`);
+      typing.before('<li class="self">'+newMessage+'</li>');
+      if(msg.data.length == 0) {
+        setTimeout(() => {
+          typing.show();
+          scrollDown();
+          setTimeout(() => {
+            typing.hide().before(reply);
+              sendMsg(autoReply,'other')
+              scrollDown();
+          }, 3000);
+        }, 3000);
+      }
+    })
+
+    userInput.html('');
+    userInput.focus();
     scrollDown();
   }
 
@@ -135,10 +163,27 @@ $(function () {
         message: msg,
         sender: sender,
       });
-      // console.log(playerMessage);
     }
     catch (error) {
       console.log(error);
     }
   }
+
+  async function seenMessage() {
+    try {
+      axios.post('/chat/seen-message',[]);
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
+  window.Echo.private('user.' + _user_id)
+    .listen('Chat', async (e) => {
+      console.log(e);
+      var audio = new Audio('../music/message-notif.mp3');
+      audio.play();
+    })
 })
+
+

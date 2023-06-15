@@ -56,12 +56,9 @@ $(document).ready(function () {
         $(row).find('td').eq(0).attr('style', 'color: red !important');
       }
 
-      console.log(data.status);
       if( data.status ==  `completed` ) {
         $(row).find('td').eq(0).attr('style', 'color: green !important');
       }
-  
-     
     }
   });
 
@@ -122,12 +119,11 @@ $(document).ready(function () {
         $(row).find('td').eq(0).attr('style', 'color: red !important');
       }
 
-      console.log(data.status);
       if( data.status ==  `completed` ) {
         $(row).find('td').eq(0).attr('style', 'color: green !important');
       }
-  
-     
+
+
     }
   });
 });

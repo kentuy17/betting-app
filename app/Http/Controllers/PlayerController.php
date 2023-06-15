@@ -267,6 +267,26 @@ class PlayerController extends Controller
         ], 200);
     }
 
+    public function seenMessage(Request $request)
+    {
+        try {
+            Chat::where('user_id', Auth::user()->id)
+                ->where('seen', false)
+                ->update([
+                    'seen' => true,
+                ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'Failed',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+        return response()->json([
+            'status' => 'OK',
+            'message' => 'seen',
+        ], 200);
+    }
+
     public function getBetsByUserId($id)
     {
         try {

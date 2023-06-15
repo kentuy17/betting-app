@@ -27,6 +27,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 |
 */
 
+
 Route::get('/', function () {
     return redirect('/login');
 })->middleware('guest');
@@ -87,6 +88,7 @@ Route::group(['middleware' => ['auth','visitor']], function() {
 
         Route::get('/chat/messages', [PlayerController::class, 'getUserMsg']);
         Route::post('/chat/send-message', [PlayerController::class, 'sendUserMsg']);
+        Route::post('/chat/seen-message', [PlayerController::class, 'seenMessage']);
     });
 
     // Operator

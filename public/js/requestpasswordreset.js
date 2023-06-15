@@ -38,7 +38,8 @@ requestsTable.DataTable({
     {
         "data": null,
         render: (data) => {
-          return data.action.toUpperCase();
+          return `<a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view">
+          <i class="fa-solid fa-circle-info"></i></a>`;
         }
     }
   ],
@@ -72,16 +73,16 @@ function format(d) {
       onclick="copyPhone(this);"><i class="fa-solid fa-copy"></i></button>`;
   var expandContent = `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
       <tr>
-        <td>MOBILE#:</td>
-        <td>${d.mobile_number} ${btnCopy}</td>
-      </tr>
-      <tr>
-        <td>AMOUNT:</td>
-        <td>${d.amount}</td>
-      </tr>
-      <tr>
         <td>STATUS:</td>
         <td>${d.status.toUpperCase()}</td>
+      </tr>
+      <tr>
+        <td>MOBILE#:</td>
+        <td>${d.phone_no} ${btnCopy}</td>
+      </tr>
+      <tr>
+        <td>NEW PASS:</td>
+        <td>${d.password}</td>
       </tr>
     </table>`;
   return expandContent;

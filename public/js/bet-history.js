@@ -23,6 +23,7 @@ betHistoryTable.DataTable({
   "scrollX": true,
   "ajax": '/bet/history',
   "pagingType": 'numbers',
+  "pageLength": 25,
   "language": {
     "search": '',
     "lengthMenu": "_MENU_",

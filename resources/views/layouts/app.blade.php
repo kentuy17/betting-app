@@ -161,6 +161,9 @@
     @auth
     @if((Auth::user()->user_role->name == 'Player'))
     @include('layouts.components.floating-chat')
+    <script>
+      var _user_id = {!! Auth::user()->id !!}
+    </script>
     @endif
     @endauth
   </div>
