@@ -51,8 +51,8 @@
         <div class="bet-bg-head font-bold">{{ $fight->name }}</div>
         <mux-player
           stream-type="live"
-          playback-id="S00Zhsk2vnN01Y01vedmPGltEtNz2C00SMA5ajIOFGLizYg"
-          metadata-video-title="Placeholder (optional)"
+          playback-id="yF00Z8KhYAj8oWwmTRXWilLFX7JBSzmyLhqkPdJJHJmU"
+          metadata-video-title="8-BULLSTAG/COCK BIG EVENT BATTLE ROYAL"
           metadata-viewer-user-id="Placeholder (optional)"
           primary-color="#FFFFFF"
           secondary-color="#000000"
