@@ -14,7 +14,7 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $roles = Roles::orderBy('active','desc')->get();
+        $roles = Roles::get();
         return view('users.index', compact('roles'));
     }
 
@@ -43,7 +43,7 @@ class AdminController extends Controller
     public function getUsers()
     {
         try {
-            $users = User::get();
+            $users = Usero::orderBy('active','desc')->get();
             $users_with_roles = [];
             foreach ($users as $user) {
                 $users_with_roles[] = $user->getRoleNames();
