@@ -47,12 +47,13 @@
 <div class="max-w-full min-w-full min-h-screen shadow-md bg-os_event_body_black row m-0 g-2" id="play-container">
   <div class="col-md-7 my-1">
     <div class="card mb-0">
-      <div id="video-stream-container" class="embed-responsive">
+      {{-- <div id="video-stream-container" class="embed-responsive">
         <div class="bet-bg-head font-bold">{{ $fight->name }}</div>
         <div id="sabong-aficionado">
           <img id="video-unavailable" src="{{ asset('img/10-streak-win-promo-poster.png') }}">
         </div>
-      </div>
+      </div> --}}
+      <div style="position:relative;padding-bottom:56.25%;overflow:hidden;height:0;max-width:100%;"><iframe id="03f74a45-649f-b48b-6d9d-cc2191c8dcbf" src="https://iframe.dacast.com/live/a3e4275e-c022-b1b4-c231-3bef437168da/03f74a45-649f-b48b-6d9d-cc2191c8dcbf" width="100%" height="100%" frameborder="0" scrolling="no" allow="autoplay;encrypted-media" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen style="position:absolute;top:0;left:0;"></iframe></div>
     </div>
   </div>
 
@@ -79,9 +80,9 @@
 <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
 <script src="https://vjs.zencdn.net/7.8.2/video.js"></script>
-<script src= "https://player.twitch.tv/js/embed/v1.js"></script>
+{{-- <script src= "https://player.twitch.tv/js/embed/v1.js"></script> --}}
 <script src="{{ asset('js/play.js') }}" defer></script>
-<script type="text/javascript">
+{{-- <script type="text/javascript">
 
   // DISABLED STREAMING TO AVOID BANNING
   try {
@@ -125,8 +126,7 @@
     console.log(error);
   }
 
-</script>
-
+</script> --}}
 
 <script>
   const useState = (defaultValue) => {

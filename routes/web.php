@@ -142,6 +142,14 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::get('/player/bets/{id}', [PlayerController::class, 'getBetsByUserId']);
     });
 
+
+    Route::group(['middleware' => ['agent']], function () {
+        Route::post('/agent/commission-convert', [AgentController::class, 'commissionConvert']);
+        Route::get('/agent/players', [AgentController::class, 'playersUnder'])->name('agent.players');
+        Route::get('/agent/players-list', [AgentController::class, 'playerLists']);
+
+    });
+
     // Bets
     Route::get('/bet/total', [BetController::class, 'getTotalBetAmountPerFight']);
     Route::get('/bet/history', [BetController::class, 'getBetHistoryByUserController']);
@@ -152,7 +160,5 @@ Route::group(['middleware' => ['auth','visitor']], function() {
     Route::get('/fight/results', [FightController::class, 'fightResults']);
 
     Route::get('/video', [PlayerController::class, 'video']);
-
-    Route::post('/agent/commission-convert', [AgentController::class, 'commissionConvert']);
 
 });

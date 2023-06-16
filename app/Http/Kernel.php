@@ -76,5 +76,6 @@ class Kernel extends HttpKernel
         'cash_out' => \App\Http\Middleware\EnsureUserIsCashOut::class,
         'auditor_csr' => \App\Http\Middleware\EnsureUserIsEitherAuditOrCsr::class,
         'bossing' => \App\Http\Middleware\EnsureTheBossing::class,
+        'agent' => \App\Http\Middleware\EnsurePlayerIsAgent::class,
     ];
 }

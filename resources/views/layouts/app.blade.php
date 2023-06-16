@@ -136,6 +136,10 @@
           <li><a class="@if(Route::current()->getName() == 'withdraw') {{ 'active-nav' }} @endif py-2 block" href="{{ route('withdraw') }}">Withdraw</a></li>
           @endif
 
+          @if(Auth::user()->agent)
+          <li><a class="@if(Route::current()->getName() == 'agent.players') {{ 'active-nav' }} @endif py-2 block" href="{{ route('agent.players') }}">REFERRALS</a></li>
+          @endif
+
           <li class="nav-item dropdown" id="profile-nav">
             <a id="navbarDropdown" class="md:p-4 py-2 block dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>{{ Auth::user()->username }}</a>
             <div class="dropdown-menu dropdown-menu-right hide" style="left: inherit; right: 0px;">
@@ -145,8 +149,6 @@
               <a class="@if(Route::current()->getName() == 'admin.agents') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('admin.agents') }}">Agents</a>
               @endif
               @if (Auth::user()->user_role->name == 'Player')
-              {{-- <a class="@if(Route::current()->getName() == 'deposit') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('deposit') }}">Deposit</a>
-              <a class="@if(Route::current()->getName() == 'withdraw') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('withdraw') }}">Withdraw</a> --}}
               <a class="@if(Route::current()->getName() == 'player.bethistory') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('player.bethistory') }}">Bet History</a>
               <a class="@if(Route::current()->getName() == 'player.player-transaction') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('player.player-transaction') }}">Transaction</a>
               @endif

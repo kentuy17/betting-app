@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Agent;
 use App\Models\User;
+use App\Models\Referral;
 use Illuminate\Http\Request;
 
 class AgentController extends Controller
@@ -46,6 +47,22 @@ class AgentController extends Controller
                 'current_commission' => $agent->current_commission,
                 'points' => $user->points,
             ],
+            'status' => 'success',
+        ], 200);
+    }
+
+    public function playersUnder()
+    {
+        return view('agents.index');
+    }
+
+    public function playerLists()
+    {
+        $players = Referral::with('user')
+            ->where('referrer_id', Auth::user()->id)->get();
+
+        return response()->json([
+            'data' => $players,
             'status' => 'success',
         ], 200);
     }

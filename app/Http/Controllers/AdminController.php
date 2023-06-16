@@ -43,7 +43,7 @@ class AdminController extends Controller
     public function getUsers()
     {
         try {
-            $users = Usero::orderBy('active','desc')->get();
+            $users = User::orderBy('active','desc')->get();
             $users_with_roles = [];
             foreach ($users as $user) {
                 $users_with_roles[] = $user->getRoleNames();
