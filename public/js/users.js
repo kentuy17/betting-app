@@ -15,6 +15,7 @@ usersTable.DataTable({
   "bInfo": false,
   "bAutoWidth": true,
   "scrollX": true,
+  "order": [[5, 'desc']],
   "columnDefs": [
     {
       "targets": [4],

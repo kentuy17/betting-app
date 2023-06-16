@@ -14,7 +14,7 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $roles = Roles::get();
+        $roles = Roles::orderBy('active','desc')->get();
         return view('users.index', compact('roles'));
     }
 

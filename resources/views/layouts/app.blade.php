@@ -131,7 +131,7 @@
           @endif
 
           @if (Auth::user()->user_role->name == 'Player')
-          {{-- <li><a class="@if(Route::current()->getName() == 'play') {{ 'active-nav' }} @endif py-2 block" href="{{ route('play') }}">Play</a></li> --}}
+          <li><a class="@if(Route::current()->getName() == 'play') {{ 'active-nav' }} @endif py-2 block" href="{{ route('play') }}">Play</a></li>
           <li><a class="@if(Route::current()->getName() == 'deposit') {{ 'active-nav' }} @endif py-2 block" href="{{ route('deposit') }}">Deposit</a></li>
           <li><a class="@if(Route::current()->getName() == 'withdraw') {{ 'active-nav' }} @endif py-2 block" href="{{ route('withdraw') }}">Withdraw</a></li>
           @endif
