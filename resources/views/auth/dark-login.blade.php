@@ -79,10 +79,10 @@
           <a href="/site/privacy">Privacy</a>
         </li>
         <li class="mr-3">
-          <a href="/security">Security</a>
+          <a href="https://media.philstar.com/photos/2021/11/07/ss2021-03-3022-42-09_2021-11-07_21-59-48.jpg">Security</a>
         </li>
         <li>
-          <a class="Link--secondary" href="http://m.me/100093200857033" target="_blank">Contact Admin</a>
+          <a class="Link--secondary" href="#" target="_blank">Contact Admin</a>
         </li>
       </ul>
     </div>
