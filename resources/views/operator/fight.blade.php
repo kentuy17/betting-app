@@ -48,12 +48,14 @@
     <div class="card mb-0">
       <div id="video-stream-container" class="embed-responsive">
         <div class="bet-bg-head font-bold">{{ $fight->name }}</div>
-        <div style="position:relative;padding-bottom:56.25%;overflow:hidden;height:0;max-width:100%;">
-          <iframe id="03f74a45-649f-b48b-6d9d-cc2191c8dcbf" src="https://iframe.dacast.com/live/a3e4275e-c022-b1b4-c231-3bef437168da/03f74a45-649f-b48b-6d9d-cc2191c8dcbf"
-          width="100%" height="100%" frameborder="0" scrolling="no" allow="autoplay;encrypted-media"
-          allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen
-          style="position:absolute;top:0;left:0;"></iframe>
-        </div>
+        <mux-player
+          stream-type="live"
+          playback-id="S00Zhsk2vnN01Y01vedmPGltEtNz2C00SMA5ajIOFGLizYg"
+          metadata-video-title="Placeholder (optional)"
+          metadata-viewer-user-id="Placeholder (optional)"
+          primary-color="#FFFFFF"
+          secondary-color="#000000"
+        ></mux-player>
       </div>
     </div>
   </div>
@@ -105,45 +107,4 @@
 <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
 <script src="https://vjs.zencdn.net/7.8.2/video.js"></script>
-{{-- <script src= "https://player.twitch.tv/js/embed/v1.js"></script> --}}
-{{-- <script>
-  try {
-    var options = {
-      channel: "sabongaficionado", // TODO: Change this to the streams username you want to embed
-      width: 640,
-      height: 360,
-      controls: false,
-      muted: false,
-      allowfullscreen: true,
-    };
-
-    var player = new Twitch.Player("sabong-aficionado", options);
-
-    player.addEventListener(Twitch.Player.READY, initiate)
-    player.setVolume(0.5);
-    player.setMuted(false);
-
-    function initiate() {
-      player.addEventListener(Twitch.Player.ONLINE, handleOnline);
-      player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
-      player.removeEventListener(Twitch.Player.READY, initiate);
-    }
-
-    function handleOnline() {
-      $('#sabong-aficionado').find('iframe').css('z-index','1')
-      player.removeEventListener(Twitch.Player.ONLINE, handleOnline);
-      player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
-      player.setMuted(false);
-    }
-
-    function handleOffline() {
-      $('#sabong-aficionado').find('iframe').css('z-index','-100')
-      player.removeEventListener(Twitch.Player.OFFLINE, handleOffline);
-      player.addEventListener(Twitch.Player.ONLINE, handleOnline);
-      player.setMuted(true);
-    }
-  } catch (error) {
-    console.log(error);
-  }
-</script> --}}
 @endsection
