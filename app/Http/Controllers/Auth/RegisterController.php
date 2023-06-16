@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use App\Models\ModelHasRoles;
 use App\Models\Referral;
+use App\Models\Agent;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -87,6 +88,10 @@ class RegisterController extends Controller
 
         if(isset($data['rid'])) {
             $referrer = User::where('rid', $data['rid'])->first();
+            $agent = Agent::where('user_id', $referrer->id)->first();
+            $agent->player_count += 1;
+            $agent->save();
+
             Referral::create([
                 'rid' => $data['rid'],
                 'referrer_id' => $referrer->id,

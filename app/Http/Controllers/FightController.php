@@ -15,6 +15,7 @@ use App\Models\BetHistory;
 use App\Models\Commission;
 use App\Models\ShareHolder;
 use App\Models\Referral;
+use App\Models\Agent;
 use Illuminate\Support\Facades\DB;
 
 class FightController extends Controller
@@ -501,7 +502,13 @@ class FightController extends Controller
         }
 
         $referred_players = User::has('referred_players')->with('referral')->get();
-        $bets = Bet::where('fight_id', $fight_id)->with('referral')->has('referral')->get();
+
+        $bets = Bet::where('fight_id', $fight_id)
+            ->where('win_amount', '>', '0')
+            ->with('referral')
+            ->has('referral')
+            ->get();
+
         $unique_referrers = $referred_players->groupBy('referral.referrer_id');
 
         $referral_commission = [];
@@ -511,12 +518,12 @@ class FightController extends Controller
 
         $total = 0;
         foreach ($bets as $bet) {
-            $total += $bet->amount * 0.05;
-            $referral_commission[$bet->referral->referrer_id] += $bet->amount * 0.05;
+            $total += ($bet->win_amount - $bet->amount) * 0.04;
+            $referral_commission[$bet->referral->referrer_id] += ($bet->win_amount - $bet->amount) * 0.04;
 
             if($bet->referral->referrer_id != $this->botchok_id) {
-                $user_referrer = User::find($key);
-                $user_referrer->points += $bet->amount * 0.05;
+                $user_referrer = Agent::where('user_id', $bet->referral->referrer_id)->first();
+                $user_referrer->current_commission += ($bet->win_amount - $bet->amount) * 0.04;
                 $user_referrer->save();
             }
         }

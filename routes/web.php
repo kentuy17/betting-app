@@ -12,6 +12,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BetController;
 use App\Http\Controllers\FightController;
 use App\Http\Controllers\AuditorController;
+use App\Http\Controllers\AgentController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 
 // use App\Http\Controllers\Controller;
@@ -67,6 +68,9 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::post('/admin/users-create', [AdminController::class, 'createUser']);
         Route::get('/admin/user-permissions/{id}', [AdminController::class, 'getUserPagePermissions']);
         Route::post('/admin/user', [AdminController::class, 'updateUser']);
+        Route::get('/admin/agents', [AdminController::class, 'getAgents'])->name('admin.agents');
+        Route::get('/admin/agent-list', [AdminController::class, 'agentList']);
+        Route::post('/admin/add-agent', [AdminController::class, 'addAgent']);
     });
 
     // Player
@@ -89,6 +93,8 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::get('/chat/messages', [PlayerController::class, 'getUserMsg']);
         Route::post('/chat/send-message', [PlayerController::class, 'sendUserMsg']);
         Route::post('/chat/seen-message', [PlayerController::class, 'seenMessage']);
+
+
     });
 
     // Operator
@@ -146,5 +152,7 @@ Route::group(['middleware' => ['auth','visitor']], function() {
     Route::get('/fight/results', [FightController::class, 'fightResults']);
 
     Route::get('/video', [PlayerController::class, 'video']);
+
+    Route::post('/agent/commission-convert', [AgentController::class, 'commissionConvert']);
 
 });

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\ShareHolder;
 use App\Models\User;
 use App\Models\Roles;
+use App\Models\Agent;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
@@ -118,5 +119,49 @@ class AdminController extends Controller
             'message' => 'Update Success',
             'data' => $insert,
         ], 200);
+    }
+
+    public function getAgents()
+    {
+        return view('admin.agents');
+    }
+
+    public function agentList()
+    {
+        $agents = Agent::with('user')->orderBy('id','desc')->get();
+        return response()->json([
+            'data' => $agents
+        ]);
+    }
+
+    private function generateRandomString($length = 10) {
+        return substr(str_shuffle(str_repeat($x='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+    }
+
+    public function addAgent(Request $request)
+    {
+        try {
+            //code...
+            $rid = 'REF'.$this->generateRandomString(8);
+            Agent::create([
+                'user_id' => $request->user_id,
+                'rid' => $rid,
+            ]);
+
+            $user = User::find($request->user_id);
+            $user->rid = $rid;
+            $user->save();
+        }
+        catch (\Exception $e) {
+            //throw $th;
+            return response()->json([
+                'message' => $e->getMessage(),
+                'status' => 'error',
+            ], 500);
+        }
+
+        return response()->json([
+            'data' => 'OK'
+        ]);
     }
 }

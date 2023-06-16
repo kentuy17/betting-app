@@ -154,14 +154,19 @@
     0% {-webkit-transform: rotate(0deg); -moz-transform: rotate(0deg);}
     100% {-webkit-transform: rotate(360deg); -moz-transform: rotate(360deg);}
   }
-
+  .btn-flat {
+    border-radius: 0;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-width: 1px;
+  }
 </style>
 @endsection
 @section('content')
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-12">
-      @if(Auth::user()->share_holder)
+      @if(Auth::user()->share_holder || Auth::user()->agent)
       <div class="card card-body mb-0 mt-3" id="profile">
         <div class="row justify-content-center">
           <div class="col-sm-auto col-4">
@@ -180,9 +185,11 @@
           <div class="col-sm-auto col-8 my-auto">
             <div class="h-100">
               <h5 class="mb-1 font-weight-bolder">{{ Auth::user()->username }}</h5>
-              <p class="mb-0 font-weight-bold text-sm">
+              <p class="mb-0 font-weight-bold text-sm font-bold">
                 @if(Auth::user()->share_holder)
                   BOSS / {{ Auth::user()->share_holder->role_description }}
+                @elseif(Auth::user()->agent)
+                  AGENT<span class="text-black">(4%)</span> WIN COMMISSION
                 @else
                   {{ Auth::user()->user_role->name}}
                 @endif
@@ -191,14 +198,29 @@
           </div>
           <div class="col-sm-auto ms-sm-auto mt-sm-0 mt-3 d-flex">
             <label class="form-check-label mb-0 col-6 text-right" style="line-height: 3;">
-              <span id="profileVisibility" class="commission-label mr-2">
+              <span id="profileVisibility" class="commission-label mr-2">₱
+                @if(Auth::user()->share_holder)
                 {{ number_format(Auth::user()->share_holder->current_commission,2) }}
+                @else
+                {{ number_format(Auth::user()->agent->current_commission,2) }}
+                @endif
+
               </span>
+              @if (Auth::user()->agent)
+
+              @endif
             </label>
-            <div class="form-check pl-0">
+            <div class="form-check pl-0 mr-5">
+              @if(Auth::user()->share_holder)
               <a class="py-1 btn bg-gradient-dark btn-sm float-start" id="convert-com-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="" aria-hidden="true" data-bs-original-title="Convert Into Points" aria-label="Convert Into Points">
                 <svg width="28px" height="28px" id="svg-convert" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" stroke-width="3" stroke="#ffffff" fill="none"><path d="M55.47,31.14A23.51,23.51,0,0,1,12.69,45.6" stroke-linecap="round"/><path d="M8.46,32.74a24,24,0,0,1,.42-5,23.51,23.51,0,0,1,42.29-9.14" stroke-linecap="round"/><polyline points="40.6 17.6 51.45 18.87 52.53 8.69" stroke-linecap="round"/><polyline points="23.05 46.33 12.21 45.06 11.12 55.24" stroke-linecap="round"/><path d="M39,25.57a7.09,7.09,0,0,0-6.65-4.29c-6,0-6.21,4.29-6.21,4.29s-.9,5.28,6.43,5.85C40.18,32,39,37.26,39,37.26s-.78,4.58-6.43,4.87-7.41-5.65-7.41-5.65"/><line x1="32.33" y1="17.48" x2="32.33" y2="46.52"/></svg>
               </a>
+              @else
+              <a class="py-1 btn bg-gradient-dark btn-sm float-start" id="convert-agent-comm" data-bs-toggle="tooltip" data-bs-placement="top" title="" aria-hidden="true" data-bs-original-title="Convert Into Points" aria-label="Convert Into Points">
+                <svg width="28px" height="28px" id="svg-convert" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" stroke-width="3" stroke="#ffffff" fill="none"><path d="M55.47,31.14A23.51,23.51,0,0,1,12.69,45.6" stroke-linecap="round"/><path d="M8.46,32.74a24,24,0,0,1,.42-5,23.51,23.51,0,0,1,42.29-9.14" stroke-linecap="round"/><polyline points="40.6 17.6 51.45 18.87 52.53 8.69" stroke-linecap="round"/><polyline points="23.05 46.33 12.21 45.06 11.12 55.24" stroke-linecap="round"/><path d="M39,25.57a7.09,7.09,0,0,0-6.65-4.29c-6,0-6.21,4.29-6.21,4.29s-.9,5.28,6.43,5.85C40.18,32,39,37.26,39,37.26s-.78,4.58-6.43,4.87-7.41-5.65-7.41-5.65"/><line x1="32.33" y1="17.48" x2="32.33" y2="46.52"/></svg>
+              </a>
+              @endif
+
             </div>
           </div>
         </div>
@@ -232,6 +254,28 @@
                     </div>
                   </div>
                 </div>
+                @if(Auth::user()->agent)
+                <div class="row mt-4">
+                  <div class="col-12">
+                    <label for="referral-link" class="text-black form-label">Referral Link</label>
+                    <div class="input-group">
+                      <?php
+                        if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+                          $http = "https://";
+                        } else {
+                          $http = "http://";
+                        }
+                      ?>
+                      <input id="referral-link" class="form-control disabled text-xs italic" type="text" disabled="" value="{{ $http.$_SERVER['HTTP_HOST'].'/register?rid='.Auth::user()->agent->rid }}" >
+                      <span class="input-group-append">
+                        <button id="copy-icon" data-bs-toggle="tooltip" title="Copied!" data-bs-trigger="click" type="button" style="margin-bottom:0;" class="px-2 py-2.5 btn btn-primary btn-flat">
+                          <i class="fa-solid fa-copy"></i>
+                        </button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                @endif
                 <div class="row">
                   <div class="col-12">
                     <label class="text-black form-label mt-4">Username</label>
@@ -319,6 +363,46 @@
 
 
     });
+
+    $('#convert-agent-comm').on('click', async function(e) {
+      e.preventDefault();
+
+      try {
+        let pointsToConvert = prompt('Enter points to convert:', 0);
+        let convert = await axios.post('/agent/commission-convert', {
+          points: pointsToConvert
+        })
+
+        $('#svg-convert').css({
+          'animation-name': 'rotate',
+          'animation-duration': '1s',
+          'animation-iteration-count': 3,
+        });
+
+        setTimeout(() => {
+          $('#svg-convert').removeAttr('style');
+          $('#profileVisibility').text(`₱ ${convert.data.data.current_commission}`);
+          $('#credit_points').val(convert.data.data.points)
+          alert('Successfully converted points')
+        }, 3000);
+      }
+      catch (error) {
+        // console.log(error.response.data.message);
+        alert(error.response.data.message);
+      }
+    });
+
+    $('#copy-icon').on('click', function(e) {
+      var $temp = $("<input>");
+      $("body").append($temp);
+      $temp.val($('#referral-link').val()).select();
+      document.execCommand("copy");
+      $temp.remove();
+      setTimeout(() => {
+        $(this).tooltip('hide')
+      }, 3000);
+    })
+
   })
 
 </script>

@@ -12,6 +12,7 @@ use App\Models\ShareHolder;
 use App\Models\ModelHasRoles;
 use App\Models\Roles;
 use App\Models\Referral;
+use App\Models\Agent;
 use Shetabit\Visitor\Traits\Visitor;
 
 class User extends Authenticatable
@@ -127,5 +128,10 @@ class User extends Authenticatable
     public function referral()
     {
         return $this->hasOne(Referral::class, 'user_id')->with('user');
+    }
+
+    public function agent()
+    {
+        return $this->hasOne(Agent::class);
     }
 }

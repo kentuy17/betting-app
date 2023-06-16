@@ -14,6 +14,7 @@
   <link href="{{ asset('css/fonts.css') }}" rel="stylesheet">
 
   <!-- Scripts -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" type="text/css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" type="text/css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css"/>
@@ -60,6 +61,9 @@
         display: block !important;
       }
 
+    }
+    .select2-results > ul > li{
+      color: black !important;
     }
   </style>
 
@@ -138,6 +142,7 @@
               <a class="@if(Route::current()->getName() == 'users.profile') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('users.profile') }}">My Profile</a>
               @if (Auth::user()->user_role->name == 'Admin')
               <a class="@if(Route::current()->getName() == 'admin.shares') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('admin.shares') }}">Shares</a>
+              <a class="@if(Route::current()->getName() == 'admin.agents') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('admin.agents') }}">Agents</a>
               @endif
               @if (Auth::user()->user_role->name == 'Player')
               <a class="@if(Route::current()->getName() == 'deposit') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('deposit') }}">Deposit</a>
@@ -178,7 +183,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js" type="text/javascript"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js" type="text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" type="text/javascript"></script>
+@auth
+@if(Auth::user()->user_role->name == 'Player')
 <script src="{{ asset('js/floating-chat.js') }}"></script>
+@endif
+@endauth
 @yield('additional-scripts')
 <script>
   const button = document.querySelector('#menu-button');
