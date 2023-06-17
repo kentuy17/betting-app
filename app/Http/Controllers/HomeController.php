@@ -30,46 +30,48 @@ class HomeController extends Controller
     public function index()
     {
         $role = $this->getUserRole();
-        if($role->name == 'Player') {
-            if(Auth::user()->defaultpassword){
+        if ($role->name == 'Player') {
+            if (Auth::user()->defaultpassword) {
                 $this->redirectTo = '/changepassword';
-            } else{
+            } else {
                 $this->redirectTo = '/play';
             }
         }
 
-        if($role->name == 'Operator') {
+        if ($role->name == 'Operator') {
             $this->redirectTo = '/fight';
         }
 
-        if($role->name == 'Cash-out Operator' || $role->name == 'Cash-in Operator') {
+        if ($role->name == 'Cash-out Operator' || $role->name == 'Cash-in Operator') {
             $this->redirectTo = '/transactions';
         }
 
-        if($role->name == 'Admin') {
+        if ($role->name == 'Admin') {
             $this->redirectTo = '/admin';
         }
 
-        if($role->name == 'Auditor') {
+        if ($role->name == 'Auditor') {
             $this->redirectTo = '/transactions-auditor';
         }
 
         return redirect($this->redirectTo);
     }
 
-    public function showChangePasswordGet() {
+    public function showChangePasswordGet()
+    {
         return view('auth.change-password');
     }
 
-    public function changePasswordPost(Request $request) {
+    public function changePasswordPost(Request $request)
+    {
         // if (!(Hash::check($request->get('current-password'), Auth::user()->password))) {
         //     // The passwords matches
         //     return redirect()->back()->with("error","Your current password does not matches with the password.");
         // }
 
-        if(strcmp($request->get('current-password'), $request->get('new-password')) == 0){
+        if (strcmp($request->get('current-password'), $request->get('new-password')) == 0) {
             // Current password and new password same
-            return redirect()->back()->with("error","New Password cannot be same as your current password.");
+            return redirect()->back()->with("error", "New Password cannot be same as your current password.");
         }
 
         $validatedData = $request->validate([
@@ -84,5 +86,4 @@ class HomeController extends Controller
 
         return redirect('/play');
     }
-
 }

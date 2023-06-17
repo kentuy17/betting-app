@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
+use \Illuminate\Support\Str;
 
 class ResetPasswordController extends Controller
 {
@@ -65,14 +65,14 @@ class ResetPasswordController extends Controller
                 ->exists()) {
                 return redirect('/password_reset')->with('danger', 'Account not found!');
             }
-
+            $password = Str::random(6);
             $users = User::where('phone_no', '=', $request->phone_no)
                 ->where('username', '=', $request->username)
                 ->first();
 
 
             $user = User::find($users->id);
-            $user->password =  Hash::make('aficionado');
+            $user->password =  Hash::make($password);
             $user->defaultpassword = true;
             $user->save();
 
@@ -80,7 +80,7 @@ class ResetPasswordController extends Controller
                 'userid' => $user->id,
                 'username' => $user->username,
                 'phone_no' => $user->phone_no,
-                'password' => 'aficionado',
+                'password' => $password,
                 'status' => 'pending'
             ]);
         } catch (\Exception $e) {

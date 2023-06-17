@@ -38,8 +38,11 @@ requestsTable.DataTable({
     {
         "data": null,
         render: (data) => {
+          if(data.status == "completed"){
+            return `<i class="fa-solid fa-check"></i></a>`;
+          }
           return `<a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view">
-          <i class="fa-solid fa-circle-info"></i></a>`;
+          <i class="fa-solid fa-thumbs-up"></i></a>`;
         }
     }
   ],
@@ -47,11 +50,6 @@ requestsTable.DataTable({
     if( data.status ==  `pending`){
       $(row).css({"background-color":"var(--bs-red)"});
       wPending++;
-    }
-
-    if( data.reference_code == null && data.status == 'completed') {
-      $(row).addClass('bg-warning');
-      unverified++;
     }
 
     if(wPending > 0) {
@@ -119,3 +117,18 @@ function copyPhone(e) {
   }, 3000);
 
 }
+
+requestsTable.on('click', 'tbody td .view', async function() {
+  var tr = $(this).closest('tr');
+
+  axios.post('/passwordreset-approve', {
+    id: $(this).data('id')
+  })
+  .then((res) =>{
+    requestsTable.DataTable().ajax.reload();
+  })
+  .catch((err) => {
+
+  })
+
+})

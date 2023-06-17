@@ -45,8 +45,8 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         ddd($players);
     });
 
-    Route::get('/changepassword', [App\Http\Controllers\HomeController::class, 'showChangePasswordGet'])->name('auth.change-password');
-    Route::post('/changepassword', [App\Http\Controllers\HomeController::class, 'changePasswordPost'])->name('changePasswordPost');
+    Route::get('/changepassword', [HomeController::class, 'showChangePasswordGet'])->name('auth.change-password');
+    Route::post('/changepassword', [HomeController::class, 'changePasswordPost'])->name('changePasswordPost');
 
     Route::resource('roles', RoleController::class);
     // Route::resource('users', UserController::class);
@@ -126,6 +126,7 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::get('/requests/data', [OperatorController::class, 'getRequests'])->name('requests.data');
         Route::get('/passwordreset-request/data', [OperatorController::class, 'getresetpassword']);
         Route::get('/passwordreset-request', [OperatorController::class, 'viewResetPassword'])->name('operator.password-reset');
+        Route::post('/passwordreset-approve', [OperatorController::class, 'changePasswordApprove'])->name('changePasswordApprove');
 
 
     });
