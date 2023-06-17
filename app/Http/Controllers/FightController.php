@@ -244,7 +244,7 @@ class FightController extends Controller
             ])->get();
 
             foreach ($user_bets as $bet) {
-                $update = Bet::find($bet->bet_no);
+                $update = Bet::with('user')->where('bet_no',$bet->bet_no)->first();
                 $update->win_amount = $bet->amount * $percentage / 100;
                 $update->save();
 
@@ -344,7 +344,7 @@ class FightController extends Controller
 
             $percentage = 0;
             foreach ($user_bets as $bet) {
-                $update = Bet::find($bet->bet_no);
+                $update = Bet::with('user')->where('bet_no',$bet->bet_no)->first();
                 $update->win_amount = $bet->amount;
                 $update->status = 'X';
                 $update->save();
@@ -387,7 +387,7 @@ class FightController extends Controller
             ])->get();
 
             foreach ($user_bets as $bet) {
-                $update = Bet::find($bet->bet_no);
+                $update = Bet::with('user')->where('bet_no',$bet->bet_no)->first();
                 $update->win_amount = $bet->amount * $percentage / 100;
                 $update->save();
 

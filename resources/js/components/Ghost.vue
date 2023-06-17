@@ -128,7 +128,7 @@ export default {
       fight: [],
       fightNo: 0,
       betAmount: 0,
-      amounts: [20, 50, 100, 500, 1000, 5000, 1000, 'ALL-IN'],
+      amounts: [20, 50, 100, 500, 1000, 5000, 10000, 'ALL-IN'],
       total: {
         meron: 0,
         wala: 0,
