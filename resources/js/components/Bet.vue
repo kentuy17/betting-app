@@ -172,7 +172,6 @@ export default {
 
     window.Echo.channel('bet')
       .listen('.bet', async (e) => {
-        this.player.points -= this.betAmount
         if (e.bet.side === 'M') {
           this.total.meron = this.total.meron + e.bet.amount
         } else {
@@ -316,6 +315,7 @@ export default {
         });
 
         if (data.status == 'OK') {
+          this.player.points -= this.betAmount
           this.clear()
         }
 
