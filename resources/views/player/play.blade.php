@@ -40,8 +40,8 @@
     width: -moz-available;
     height: fit-content;
   }
-  #clappr{ width: 100%;height: 100%;position: relative; min-height: 320px; margin-bottom: 25px;}
-  #clappr > div{ width:100%;height:100%;position: absolute;}
+  /* #clappr{ width: 100%;height: 100%;position: relative; min-height: 320px; margin-bottom: 25px;}
+  #clappr > div{ width:100%;height:100%;position: absolute;} */
 </style>
 @endsection
 
@@ -51,7 +51,14 @@
     <div class="card mb-0">
       <div id="video-stream-container" class="embed-responsive">
         <div class="bet-bg-head font-bold">{{ $fight->name }}</div>
-        <div id="clappr"></div>
+        <mux-player
+          stream-type="live"
+          playback-id="MOj400Q02mTPiMOtfP64s4HCwmYkzCXdNF00HsregJ41fo"
+          metadata-video-title="Placeholder (optional)"
+          metadata-viewer-user-id="Placeholder (optional)"
+          primary-color="#FFFFFF"
+          secondary-color="#000000"
+        ></mux-player>
       </div>
     </div>
   </div>
@@ -79,21 +86,8 @@
 <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
 <script src="https://vjs.zencdn.net/7.8.2/video.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
 <script src="{{ asset('js/play.js') }}" defer></script>
-<script>
-  var player = new Clappr.Player({
-   source:
-        "https://5caf24a595d94.streamlock.net:1937/hyneqwnkfk/hyneqwnkfk/playlist.m3u8"
-    ,
-     parentId: "#clappr",
-   width: '100%',
-   height: '100%',
-   autoPlay: false,
-     //gaAccount: 'UA-44332211-1',
-   //gaTrackerName: 'MyPlayerInstance'
-   });
- </script>
+<script src="https://cdn.jsdelivr.net/npm/@mux/mux-player"></script>
 <script>
   const useState = (defaultValue) => {
     let value = defaultValue;
