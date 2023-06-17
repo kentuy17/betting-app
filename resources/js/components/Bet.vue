@@ -31,7 +31,7 @@
             <div>
               <div class="flex justify-center items-center">
                 <h3 class="font-bold text-drawcolor text-center text-sm">
-                  <span class='text-player-bet'>{{ formatMoney(player.bets.meron) }}</span> = 
+                  <span class='text-player-bet'>{{ formatMoney(player.bets.meron) }}</span> =
                   <span class='text-player-win'>{{ formatMoney(meronWinAmount) }}</span></h3>
               </div>
             </div>
@@ -44,7 +44,7 @@
             <div>
               <div class="flex justify-center items-center">
                 <h3 class="font-bold text-drawcolor text-center text-sm">
-                  <span class="text-player-bet">{{ formatMoney(player.bets.wala) }}</span> = 
+                  <span class="text-player-bet">{{ formatMoney(player.bets.wala) }}</span> =
                   <span class='text-player-win'>{{ formatMoney(walaWinAmount) }}</span></h3>
               </div>
             </div>
@@ -72,8 +72,8 @@
     </div>
     <div class="col-md-12">
       <div class="amounts-bet-btn py-2 flex-wrap">
-        <button v-for="(amnt, index) in amounts" 
-          v-bind:key="index" 
+        <button v-for="(amnt, index) in amounts"
+          v-bind:key="index"
           @click="betManual(amnt)"
           class="btn btn-success btn-sm m-1">
           {{ amnt }}
@@ -87,7 +87,7 @@
 import { Money3Component } from 'v-money3'
 
 export default {
-  components: { 
+  components: {
     money3: Money3Component,
   },
   data() {
@@ -141,14 +141,15 @@ export default {
       .then(() => {
         window.Echo.private('user.' + this.player.id)
           .listen('Result', async (e) => {
-            // console.log(e, 'result');
-            if(e.bet.status == 'X') {
-              alert(`Returened ${e.bet.amount} points!`);
+            if(e.bet.user_id == this.player.id) {
+              if(e.bet.status == 'X') {
+                alert(`Returened ${e.bet.amount} points!`);
+              }
+              else {
+                alert('Congratulations! You win ' + e.bet.win_amount)
+              }
             }
-            else {
-              alert('Congratulations! You win ' + e.bet.win_amount)
-            }
-            
+
             this.player.points += e.bet.win_amount
             this.clear
           });
@@ -156,9 +157,7 @@ export default {
 
     window.Echo.channel('fight')
       .listen('.fight', async (e) => {
-        // console.log(e, 'fight');
         if (e == null) return
-
         if (e.fight.curr) {
           this.fight = e.fight.curr
           this.total.meron = this.total.wala = 0
@@ -173,14 +172,20 @@ export default {
 
     window.Echo.channel('bet')
       .listen('.bet', async (e) => {
-        // console.log(e, 'bet');
+        this.player.points -= this.betAmount
         if (e.bet.side === 'M') {
           this.total.meron = this.total.meron + e.bet.amount
         } else {
           this.total.wala = this.total.wala + e.bet.amount
         }
-      });
 
+        if(e.bet.user_id == this.player.id) {
+          this.betAmount = e.bet.amount
+          e.bet.side == 'M'
+            ? this.player.bets.meron += this.betAmount
+            : this.player.bets.wala += this.betAmount
+        }
+      });
 
   },
   watch: {
@@ -311,11 +316,6 @@ export default {
         });
 
         if (data.status == 'OK') {
-          this.player.points -= this.betAmount
-          betSide == 'M'
-            ? this.player.bets.meron += this.betAmount
-            : this.player.bets.wala += this.betAmount
-
           this.clear()
         }
 

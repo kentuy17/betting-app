@@ -13,6 +13,7 @@ use App\Http\Controllers\BetController;
 use App\Http\Controllers\FightController;
 use App\Http\Controllers\AuditorController;
 use App\Http\Controllers\AgentController;
+use App\Http\Controllers\GhostController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 
 // use App\Http\Controllers\Controller;
@@ -45,8 +46,8 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         ddd($players);
     });
 
-    Route::get('/changepassword', [App\Http\Controllers\HomeController::class, 'showChangePasswordGet'])->name('auth.change-password');
-    Route::post('/changepassword', [App\Http\Controllers\HomeController::class, 'changePasswordPost'])->name('changePasswordPost');
+    Route::get('/changepassword', [HomeController::class, 'showChangePasswordGet'])->name('auth.change-password');
+    Route::post('/changepassword', [HomeController::class, 'changePasswordPost'])->name('changePasswordPost');
 
     Route::resource('roles', RoleController::class);
     // Route::resource('users', UserController::class);
@@ -147,7 +148,10 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::post('/agent/commission-convert', [AgentController::class, 'commissionConvert']);
         Route::get('/agent/players', [AgentController::class, 'playersUnder'])->name('agent.players');
         Route::get('/agent/players-list', [AgentController::class, 'playerLists']);
+    });
 
+    Route::group(['middleware' => ['ghost']], function () {
+        Route::get('/ghost', [GhostController::class, 'index'])->name('ghost');
     });
 
     // Bets
