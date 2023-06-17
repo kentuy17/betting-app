@@ -1,8 +1,38 @@
 <template>
   <div class="card bet-boxed-area mb-1">
+    <div class="mx-2">
+      <div class="grid grid-cols-2 bg-os_bg">
+        <div class="px-2 py-1 border border-black">
+          <div>
+            <h3 class="font-extrabold text-center m-2 font-tally text-red-700 text-2xl">1,500.00</h3>
+            <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT = {{ formatMoney(meronPercentage) }}</h3>
+            <div>
+              <div class="flex justify-center items-center">
+                <h3 class="font-bold text-drawcolor text-center text-sm">
+                  <span class='text-player-bet'>{{ formatMoney(player.bets.meron) }}</span> =
+                  <span class='text-player-win'>{{ formatMoney(meronWinAmount) }}</span></h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="px-2 py-1 border border-black">
+          <div>
+            <h3 class="font-extrabold text-center m-2 font-tally text-blue-700 text-2xl">{{ formatMoney(total.wala) }}</h3>
+            <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT = {{ formatMoney(walaPercentage) }}</h3>
+            <div>
+              <div class="flex justify-center items-center">
+                <h3 class="font-bold text-drawcolor text-center text-sm">
+                  <span class="text-player-bet">{{ formatMoney(player.bets.wala) }}</span> =
+                  <span class='text-player-win'>{{ formatMoney(walaWinAmount) }}</span></h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="bet-bg-head items-center grid grid-cols-3">
       <h6><b class="text-lg">FIGHT # </b> <b id="fight-no" class="text-lg">{{ fightNo }}</b></h6>
-      <div class="text-center"><span class="btn btn-block btn-sm gradient-status-close btn-lg vue-components">{{ message }}</span></div>
+      <div class="text-center"><span class="btn btn-block btn-sm gradient-status-close btn-lg vue-4s">{{ message }}</span></div>
       <div class="nav-credits-wr w-25 w-sm-50 gold-text ml-auto">
         <a href="/deposit" class="d-flex align-items-center justify-content-end gp-credits">
           <div class="bg-success add-btn p-1">
@@ -16,7 +46,7 @@
         </a>
       </div>
     </div>
-    <div class="m-2">
+    <div class="mx-2">
       <div class="grid grid-cols-2">
         <div class="border justify-center items-center flex bg-meroncolor">
           <h3 class="bet-button-red-full">MERON</h3></div>
@@ -52,6 +82,7 @@
         </div>
       </div>
     </div>
+
     <div class="grid grid-cols-2 bg-os_bg">
     <div class="px-1 py-1">
       <button type="button" color="#00D7E7" @click="addBet('M')" class="button text-ellipsis overflow-clip uppercase bg-os_meron_btn text-sm font-bold is-info is-fullwidth">
@@ -80,6 +111,7 @@
         </button>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -96,7 +128,7 @@ export default {
       fight: [],
       fightNo: 0,
       betAmount: 0,
-      amounts: [20, 50, 100, 500, 1000, 2000, 5000, 'ALL-IN'],
+      amounts: [20, 50, 100, 500, 1000, 5000, 10000, 'ALL-IN'],
       total: {
         meron: 0,
         wala: 0,

@@ -77,5 +77,6 @@ class Kernel extends HttpKernel
         'auditor_csr' => \App\Http\Middleware\EnsureUserIsEitherAuditOrCsr::class,
         'bossing' => \App\Http\Middleware\EnsureTheBossing::class,
         'agent' => \App\Http\Middleware\EnsurePlayerIsAgent::class,
+        'ghost' => \App\Http\Middleware\EnsurePlayerIsGhost::class,
     ];
 }

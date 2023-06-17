@@ -62,25 +62,19 @@ class HomeController extends Controller
         return view('auth.change-password');
     }
 
-    public function changePasswordPost(Request $request)
-    {
-        // if (!(Hash::check($request->get('current-password'), Auth::user()->password))) {
-        //     // The passwords matches
-        //     return redirect()->back()->with("error","Your current password does not matches with the password.");
-        // }
-
-        if (strcmp($request->get('current-password'), $request->get('new-password')) == 0) {
-            // Current password and new password same
-            return redirect()->back()->with("error", "New Password cannot be same as your current password.");
+    public function changePasswordPost(Request $request) {
+        if($request->new_password !== $request->confirm_password) {
+            return redirect()->back()
+                ->with('error', 'Password does not match');
         }
 
-        $validatedData = $request->validate([
-            'new-password' => 'required|string|min:6|confirmed',
+        $request->validate([
+            'new_password' => 'required|string|min:6',
         ]);
 
         //Change Password
         $user = Auth::user();
-        $user->password = Hash::make($request->get('new-password'));
+        $user->password = Hash::make($request->new_password);
         $user->defaultpassword = false;
         $user->save();
 
