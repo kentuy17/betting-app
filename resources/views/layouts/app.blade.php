@@ -137,7 +137,7 @@
           @endif
 
           @if(Auth::user()->agent)
-          <li><a class="@if(Route::current()->getName() == 'agent.players') {{ 'active-nav' }} @endif py-2 block" href="{{ route('agent.players') }}">REFERRALS</a></li>
+          <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'agent.players') {{ 'active-nav' }} @endif py-2 block" href="{{ route('agent.players') }}">REFERRALS</a></li>
           @endif
 
           <li class="nav-item dropdown" id="profile-nav">
