@@ -156,6 +156,10 @@ export default {
         masked: false,
         shouldRound: false,
       },
+      ghost: {
+        meron: 0,
+        wala: 0,
+      },
     }
   },
   mounted() {
@@ -173,12 +177,12 @@ export default {
       .then(() => {
         window.Echo.private('user.' + this.player.id)
           .listen('Result', async (e) => {
-            if(e.bet.user_id == this.player.id) {
+            if(e.bet.user.legit) {
               if(e.bet.status == 'X') {
-                alert(`Returened ${e.bet.amount} points!`);
+                alert(`Returened ${this.formatMoney(e.bet.amount)} points!`);
               }
               else {
-                alert('Congratulations! You win ' + e.bet.win_amount)
+                alert(`Congratulations! You win ${this.formatMoney(e.bet.win_amount)}`)
               }
             }
 
@@ -212,7 +216,7 @@ export default {
         }
 
         if(e.bet.user_id == this.player.id) {
-          this.betAmount = e.bet.amount
+          // this.betAmount = e.bet.amount
           e.bet.side == 'M'
             ? this.player.bets.meron += this.betAmount
             : this.player.bets.wala += this.betAmount

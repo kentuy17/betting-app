@@ -179,7 +179,7 @@ export default {
         }
 
         if(e.bet.user_id == this.player.id) {
-          this.betAmount = e.bet.amount
+          this.player.points -= e.bet.amount
           e.bet.side == 'M'
             ? this.player.bets.meron += this.betAmount
             : this.player.bets.wala += this.betAmount

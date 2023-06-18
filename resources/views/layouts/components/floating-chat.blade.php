@@ -9,12 +9,9 @@
       <button>
         <i class="fa fa-times" aria-hidden="true"></i>
       </button>
-
     </div>
     <ul class="messages">
-      <li class="other">👋 Magandang araw kasabong! kung gusto mo maging agent sa ating site, mag-iwan lang po ng mensahe sa ating official fb page. 👇👇👇<br><br>
-        <a style="color:var(--bs-blue);text-decoration: underline;" href="https://www.facebook.com/profile.php?id=100093200857033"
-          target="_blank">https://www.facebook.com/profile.php?id=100093200857033</a></li>
+      <li class="other">👋 Hi! How may i help you today?</li>
       <li class="other other-typing" style="display: none;"><i>typing...</i></li>
     </ul>
     <div class="footer">
