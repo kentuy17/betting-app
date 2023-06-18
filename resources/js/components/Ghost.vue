@@ -190,7 +190,10 @@ export default {
           this.fight = e.fight
         }
 
-        this.ghost.meron = this.ghost.wala = 0
+        if(this.fight.status == 'D') {
+          this.ghost.meron = this.ghost.wala = 0
+        }
+
         this.message = this.setFightStatus(this.fight)
       });
 
