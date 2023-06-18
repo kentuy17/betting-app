@@ -12,7 +12,7 @@
 
     </div>
     <ul class="messages">
-      <li class="other">👋 Hi! How may i help you today?</li>
+      <li class="other">👋 Magandang araw kasabong! kung gusto mo maging isang agent, mag-iwan lamang ng mensahe sa ating official facebook page. <a href="https://www.facebook.com/profile.php?id=100093200857033" target="_BLANK">Sabong Aficionado</a></a></li>
       <li class="other other-typing" style="display: none;"><i>typing...</i></li>
     </ul>
     <div class="footer">
