@@ -5,27 +5,11 @@
         <div class="px-2 py-1 border border-black">
           <div>
             <h3 class="font-extrabold text-center m-2 font-tally text-red-700 text-2xl">{{ formatMoney(ghost.meron) }}</h3>
-            <!-- <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT = {{ formatMoney(meronPercentage) }}</h3> -->
-            <!-- <div>
-              <div class="flex justify-center items-center">
-                <h3 class="font-bold text-drawcolor text-center text-sm">
-                  <span class='text-player-bet'>{{ formatMoney(player.bets.meron) }}</span> =
-                  <span class='text-player-win'>{{ formatMoney(meronWinAmount) }}</span></h3>
-              </div>
-            </div> -->
           </div>
         </div>
         <div class="px-2 py-1 border border-black">
           <div>
             <h3 class="font-extrabold text-center m-2 font-tally text-blue-700 text-2xl">{{ formatMoney(ghost.wala) }}</h3>
-            <!-- <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT = {{ formatMoney(walaPercentage) }}</h3> -->
-            <!-- <div>
-              <div class="flex justify-center items-center">
-                <h3 class="font-bold text-drawcolor text-center text-sm">
-                  <span class="text-player-bet">{{ formatMoney(player.bets.wala) }}</span> =
-                  <span class='text-player-win'>{{ formatMoney(walaWinAmount) }}</span></h3>
-              </div>
-            </div> -->
           </div>
         </div>
       </div>
@@ -95,7 +79,6 @@
     </div>
     <div class="col-md-12">
       <div class="input-group px-4 py-2">
-        <!-- <input type="number" v-model='betAmount' class="form-control bet-amount" min="0"> -->
         <money3 class="form-control" :model-modifiers="{ number: true }" v-model="betAmount" v-bind="money"></money3>
         <div class="input-group-append">
           <button @click='clear' class="input-group-text">CLEAR</button></div>
@@ -207,6 +190,7 @@ export default {
           this.fight = e.fight
         }
 
+        this.ghost.meron = this.ghost.wala = 0
         this.message = this.setFightStatus(this.fight)
       });
 
