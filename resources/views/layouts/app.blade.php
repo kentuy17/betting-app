@@ -123,10 +123,13 @@
           <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'requests') {{ 'active' }} @endif" href="{{ route('requests') }}">REQUESTS</a></li>
           @endif
 
-          @if (hasAccess('Cash-out Operator') || hasAccess('Cash-in Operator'))
+          @if(Auth::user()->user_role->name == 'Cash-out Operator')
           <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'operator.transactions') {{ 'active' }} @endif" href="{{ route('operator.transactions') }}">TRANSACTIONS</a></li>
           <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'remit') {{ 'active' }} @endif" href="{{ route('remit') }}">REMIT</a></li>
           <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'requests') {{ 'active' }} @endif" href="{{ route('requests') }}">REQUESTS</a></li>
+          @endif
+
+          @if (hasAccess('Cash-out Operator') || hasAccess('Cash-in Operator'))
           <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'operator.password-reset') {{ 'active' }} @endif" href="{{ route('operator.password-reset') }}">PASSWORD RESET</a></li>
           @endif
 
