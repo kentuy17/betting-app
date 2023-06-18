@@ -4,28 +4,28 @@
       <div class="grid grid-cols-2 bg-os_bg">
         <div class="px-2 py-1 border border-black">
           <div>
-            <h3 class="font-extrabold text-center m-2 font-tally text-red-700 text-2xl">1,500.00</h3>
-            <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT = {{ formatMoney(meronPercentage) }}</h3>
-            <div>
+            <h3 class="font-extrabold text-center m-2 font-tally text-red-700 text-2xl">{{ formatMoney(ghost.meron) }}</h3>
+            <!-- <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT = {{ formatMoney(meronPercentage) }}</h3> -->
+            <!-- <div>
               <div class="flex justify-center items-center">
                 <h3 class="font-bold text-drawcolor text-center text-sm">
                   <span class='text-player-bet'>{{ formatMoney(player.bets.meron) }}</span> =
                   <span class='text-player-win'>{{ formatMoney(meronWinAmount) }}</span></h3>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
         <div class="px-2 py-1 border border-black">
           <div>
-            <h3 class="font-extrabold text-center m-2 font-tally text-blue-700 text-2xl">{{ formatMoney(total.wala) }}</h3>
-            <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT = {{ formatMoney(walaPercentage) }}</h3>
-            <div>
+            <h3 class="font-extrabold text-center m-2 font-tally text-blue-700 text-2xl">{{ formatMoney(ghost.wala) }}</h3>
+            <!-- <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT = {{ formatMoney(walaPercentage) }}</h3> -->
+            <!-- <div>
               <div class="flex justify-center items-center">
                 <h3 class="font-bold text-drawcolor text-center text-sm">
                   <span class="text-player-bet">{{ formatMoney(player.bets.wala) }}</span> =
                   <span class='text-player-win'>{{ formatMoney(walaWinAmount) }}</span></h3>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -160,6 +160,10 @@ export default {
         meron: 0,
         wala: 0,
       },
+      autobots: {
+        meron: 0,
+        wala: 0,
+      }
     }
   },
   mounted() {
@@ -208,7 +212,6 @@ export default {
 
     window.Echo.channel('bet')
       .listen('.bet', async (e) => {
-        this.player.points -= this.betAmount
         if (e.bet.side === 'M') {
           this.total.meron = this.total.meron + e.bet.amount
         } else {
@@ -216,10 +219,15 @@ export default {
         }
 
         if(e.bet.user_id == this.player.id) {
-          // this.betAmount = e.bet.amount
+          this.player.points -= e.bet.amount
+          this.betAmount = e.bet.amount
           e.bet.side == 'M'
             ? this.player.bets.meron += this.betAmount
             : this.player.bets.wala += this.betAmount
+        } else {
+          e.bet.side == 'M'
+            ? this.ghost.meron += e.bet.amount
+            : this.ghost.wala += e.bet.amount
         }
       });
 
