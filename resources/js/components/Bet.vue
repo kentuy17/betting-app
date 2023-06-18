@@ -96,7 +96,7 @@ export default {
       fight: [],
       fightNo: 0,
       betAmount: 0,
-      amounts: [20, 50, 100, 500, 1000, 2000, 5000, 'ALL-IN'],
+      amounts: [20, 50, 100, 500, 1000, 5000, 10000, 'ALL-IN'],
       total: {
         meron: 0,
         wala: 0,
@@ -141,12 +141,12 @@ export default {
       .then(() => {
         window.Echo.private('user.' + this.player.id)
           .listen('Result', async (e) => {
-            if(e.bet.user_id == this.player.id) {
+            if(e.bet.user.legit) {
               if(e.bet.status == 'X') {
-                alert(`Returened ${e.bet.amount} points!`);
+                alert(`Returened ${this.formatMoney(e.bet.amount)} points!`);
               }
               else {
-                alert('Congratulations! You win ' + e.bet.win_amount)
+                alert(`Congratulations! You win ${this.formatMoney(e.bet.win_amount)}`)
               }
             }
 
@@ -172,7 +172,6 @@ export default {
 
     window.Echo.channel('bet')
       .listen('.bet', async (e) => {
-        this.player.points -= this.betAmount
         if (e.bet.side === 'M') {
           this.total.meron = this.total.meron + e.bet.amount
         } else {
@@ -316,6 +315,7 @@ export default {
         });
 
         if (data.status == 'OK') {
+          this.player.points -= this.betAmount
           this.clear()
         }
 
