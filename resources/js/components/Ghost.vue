@@ -190,7 +190,7 @@ export default {
           this.fight = e.fight
         }
 
-        if(this.fight.status == 'D') {
+        if(this.fight.status == null) {
           this.ghost.meron = this.ghost.wala = 0
         }
 
