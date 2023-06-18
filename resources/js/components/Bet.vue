@@ -112,6 +112,7 @@ export default {
       player: {
         points: 0,
         id: '',
+        legit: true,
         bets: {
           meron: 0,
           wala: 0,
@@ -135,6 +136,7 @@ export default {
         this.message = this.setFightStatus(json.current)
         this.player.points = json.points
         this.player.id = json.id
+        this.player.legit = json.legit
         this.total = json.bets,
           this.player.bets = json.player
       })
@@ -305,8 +307,10 @@ export default {
           return
         }
 
-        if (!confirm(`Bet ${this.betAmount}?`)) {
-          return
+        if(this.player.legit) {
+          if (!confirm(`Bet ${this.betAmount}?`)) {
+            return
+          }
         }
 
         const { data } = await axios.post('/bet/add', {

@@ -105,6 +105,7 @@ class FightController extends Controller
             'bets' => $this->getTotalBets(),
             'player' => $this->getTotalPlayerBet(),
             'id' => Auth::user()->id,
+            'legit' => Auth::user()->legit,
         ]);
     }
 
