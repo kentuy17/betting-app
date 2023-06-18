@@ -180,7 +180,7 @@ export default {
           this.total.wala = this.total.wala + e.bet.amount
         }
 
-        if(e.bet.user_id == this.player.id) {
+        if(e.bet.user_id == this.player.id && !this.player.legit) {
           this.player.points -= e.bet.amount
           this.betAmount = e.bet.amount
           e.bet.side == 'M'
@@ -319,8 +319,11 @@ export default {
           side: betSide
         });
 
-        if (data.status == 'OK') {
+        if (data.status == 'OK' && this.player.legit) {
           this.player.points -= this.betAmount
+          betSide == 'M'
+            ? this.player.bets.meron += this.betAmount
+            : this.player.bets.wala += this.betAmount
           this.clear()
         }
 
