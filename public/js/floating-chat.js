@@ -21,6 +21,7 @@ $(function () {
   });
 
   getUserMsg().then((msg) => {
+    if(!msg) return 0;
     let unseen = 0;
     for (let i = 0; i < msg.data.length; i++) {
       const chat = msg.data[i];
