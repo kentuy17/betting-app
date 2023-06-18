@@ -30,34 +30,35 @@ class HomeController extends Controller
     public function index()
     {
         $role = $this->getUserRole();
-        if($role->name == 'Player') {
-            if(Auth::user()->defaultpassword){
+        if ($role->name == 'Player') {
+            if (Auth::user()->defaultpassword) {
                 $this->redirectTo = '/changepassword';
-            } else{
+            } else {
                 $this->redirectTo = '/play';
             }
         }
 
-        if($role->name == 'Operator') {
+        if ($role->name == 'Operator') {
             $this->redirectTo = '/fight';
         }
 
-        if($role->name == 'Cash-out Operator' || $role->name == 'Cash-in Operator') {
+        if ($role->name == 'Cash-out Operator' || $role->name == 'Cash-in Operator') {
             $this->redirectTo = '/transactions';
         }
 
-        if($role->name == 'Admin') {
+        if ($role->name == 'Admin') {
             $this->redirectTo = '/admin';
         }
 
-        if($role->name == 'Auditor') {
+        if ($role->name == 'Auditor') {
             $this->redirectTo = '/transactions-auditor';
         }
 
         return redirect($this->redirectTo);
     }
 
-    public function showChangePasswordGet() {
+    public function showChangePasswordGet()
+    {
         return view('auth.change-password');
     }
 
@@ -79,5 +80,4 @@ class HomeController extends Controller
 
         return redirect('/play');
     }
-
 }

@@ -320,4 +320,22 @@ class OperatorController extends Controller
     {
         return view('operator.password-reset');
     }
+
+    public function changePasswordApprove(Request $request)
+    {
+        //Change Passwor
+
+        $upr = UserPasswordReset::find($request->id);
+        $upr->status = 'completed';
+        $upr->save();
+
+        $trans = UserPasswordReset::with('user')
+        ->orderBy('id','desc')
+        ->get();
+
+        return response()->json([
+            'data' => $trans,
+            'status' => 'OK',
+        ], 200);
+    }
 }

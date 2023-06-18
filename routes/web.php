@@ -127,6 +127,7 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::get('/requests/data', [OperatorController::class, 'getRequests'])->name('requests.data');
         Route::get('/passwordreset-request/data', [OperatorController::class, 'getresetpassword']);
         Route::get('/passwordreset-request', [OperatorController::class, 'viewResetPassword'])->name('operator.password-reset');
+        Route::post('/passwordreset-approve', [OperatorController::class, 'changePasswordApprove'])->name('changePasswordApprove');
 
 
     });
