@@ -21,6 +21,7 @@ class Bet extends Model
         'side',
         'status',
         'win_amount',
+        'agent_commission',
         'created_at',
         'updated_at'
     ];

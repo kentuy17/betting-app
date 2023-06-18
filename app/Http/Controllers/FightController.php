@@ -518,13 +518,18 @@ class FightController extends Controller
         }
 
         $total = 0;
+        $this->logger($bets, 'bets');
         foreach ($bets as $bet) {
-            $total += ($bet->win_amount - $bet->amount) * 0.04;
-            $referral_commission[$bet->referral->referrer_id] += ($bet->win_amount - $bet->amount) * 0.04;
+            $agent_commission_add = ($bet->win_amount - $bet->amount) * 0.04;
+            $total += $agent_commission_add;
+            $referral_commission[$bet->referral->referrer_id] += $agent_commission_add;
+            $this->logger($bet, 'bet');
+            Bet::where('bet_no', $bet->bet_no)
+                ->update(['agent_commission' => $agent_commission_add]);
 
             if($bet->referral->referrer_id != $this->botchok_id) {
                 $user_referrer = Agent::where('user_id', $bet->referral->referrer_id)->first();
-                $user_referrer->current_commission += ($bet->win_amount - $bet->amount) * 0.04;
+                $user_referrer->current_commission += $agent_commission_add;
                 $user_referrer->save();
             }
         }

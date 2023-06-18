@@ -59,6 +59,7 @@ class AgentController extends Controller
     public function playerLists()
     {
         $players = Referral::with('user')
+            ->with('bet')
             ->where('referrer_id', Auth::user()->id)->get();
 
         return response()->json([

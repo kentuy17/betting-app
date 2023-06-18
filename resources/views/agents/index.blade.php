@@ -12,7 +12,7 @@
               <tr>
                 <th>#</th>
                 <th>USERNAME</th>
-                <th>TOTAL COMMISSION</th>
+                <th>COMMISSION</th>
                 <th>DATE JOINED</th>
                 <th>PLAYER PTS</th>
                 <th>STATUS</th>

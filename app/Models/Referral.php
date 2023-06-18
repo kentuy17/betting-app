@@ -20,8 +20,18 @@ class Referral extends Model
         'updated_at',
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime:M d, Y h:s A',
+        'updated_at' => 'datetime:M d, Y h:s A',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function bet()
+    {
+        return $this->hasMany(Bet::class, 'user_id', 'user_id');
     }
 }

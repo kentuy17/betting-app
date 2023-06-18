@@ -47,32 +47,30 @@ agentPlayersTable.DataTable({
     {
       "data": null,
       render: (data, type, row, meta) => {
-        return data.user.username;
+        return data.user ? data.user.username : "---";
       }
     },
     {
-      // "data": null,
-      // render: (data, type, row, meta) => {
-      //   return SIDE[row.side]
-      // }
       "data": null,
       render: (data, type, row, meta) => {
-        return "0.00";
+        let agentCommission = 0;
+        if(data.bet) {
+          for (let i = 0; i < data.bet.length; i++) {
+            const bet = data.bet[i];
+            agentCommission += bet.agent_commission;
+          }
+        }
+        return agentCommission.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
       }
     },
     {
-      // "data": null,
-      // render: function(data, type, row, meta) {
-      //   return row.betamount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-      // }
       "data": "created_at"
     },
     {
-      // "data": null,
-      // render: (data, type, row, meta) => {
-      //   return `${row.percent.toFixed(2)}%`
-      // }
-      "data": "user.points"
+      "data": null,
+      render: (data, type, row, meta) => {
+        return data.user ? data.user.points.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : "---";
+      }
     },
     {
       "data": null,
@@ -81,30 +79,17 @@ agentPlayersTable.DataTable({
       }
     },
     {
-      // "data": null,
-      // render: function(data, type, row, meta) {
-      //   return row.winamount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-      // }
-      "data": "id",
+      "data": null,
+      render: (data, type, row, meta) => {
+        return `<a href="javascript:void(0)" data-id="${row.id}" class="btn btn-link text-primary btn-icon btn-sm play"><i class="fa-solid fa-eye"></i></a>
+          <a href="javascript:void(0)" data-id="${row.id}" class="btn btn-link text-secondary btn-icon btn-sm edit"><i class="fa-solid fa-pencil"></i></a>
+          <a href="javascript:void(0)" data-id="${row.id}" class="btn btn-link text-danger btn-icon btn-sm remove"><i class="fa-solid fa-xmark"></i></a>
+          </td>`
+      }
     },
   ],
   "createdRow": function( row, data, dataIndex){
-    // if( data.status ==  `W`) {
-    //   $(row).find('td').eq(6).attr('style', 'color: green !important');
-    //   $(row).find('td').eq(7).attr('style', 'color: yellow !important');
-    // }
 
-    // if( data.status ==  `L` ) {
-    //   $(row).find('td').eq(6).attr('style', 'color: red !important');
-    // }
-
-    // if( data.side == 'M' ) {
-    //   $(row).find('td').eq(3).attr('style', 'color: red !important');
-    // }
-
-    // if( data.side == 'W' ) {
-    //   $(row).find('td').eq(3).attr('style', 'color: blue !important');
-    // }
   }
 })
 

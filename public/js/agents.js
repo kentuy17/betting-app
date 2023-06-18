@@ -10,8 +10,7 @@ $(document).ready(function () {
     "ajax": '/admin/agent-list',
     "scrollX": true,
     "pageLength": 25,
-    "columnDefs": [
-      {
+    "columnDefs": [{
         "targets": [3],
         "className": 'dt-body-right',
       },
@@ -20,33 +19,30 @@ $(document).ready(function () {
         "className": 'dt-body-center',
       },
     ],
-    "columns": [
-      {
-        "data": "user_id"
-      }, {
-        "data": "user.username"
-      }, {
-        "data": "rid",
-      }, {
-        "data": null,
-        render: ((row) => {
-          return row.current_commission.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-          //
-        })
-      }, {
-        "data": "player_count",
-      },{
-        "data": "created_at",
-      },{
-        "data": null,
-        render: (data, type, row, meta) => {
-          let act = data.status == 'ACTIVE' ? `<i class="fa-solid fa-stop"></i>` : `<i class="fa-solid fa-eye"></i>`;
-          return `<a href="javascript:void(0)" data-id="${row.id}" class="btn btn-link text-primary btn-icon btn-sm info">${act}</a>
+    "columns": [{
+      "data": "user_id"
+    }, {
+      "data": "user.username"
+    }, {
+      "data": "rid",
+    }, {
+      "data": null,
+      render: ((row) => {
+        return row.current_commission.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+      })
+    }, {
+      "data": "player_count",
+    }, {
+      "data": "created_at",
+    }, {
+      "data": null,
+      render: (data, type, row, meta) => {
+        let act = data.status == 'ACTIVE' ? `<i class="fa-solid fa-stop"></i>` : `<i class="fa-solid fa-eye"></i>`;
+        return `<a href="javascript:void(0)" data-id="${row.id}" class="btn btn-link text-primary btn-icon btn-sm info">${act}</a>
             <a href="javascript:void(0)" data-id="${row.id}" class="btn btn-link text-secondary btn-icon btn-sm edit"><i class="fa-solid fa-pencil"></i></a>
             <a href="javascript:void(0)" data-id="${row.id}" class="btn btn-link text-danger btn-icon btn-sm remove"><i class="fa-solid fa-xmark"></i></a>`;
-        }
       }
-    ],
+    }],
     "createdRow": function (row, data, dataIndex) {
       $(row).find('td').eq(3).attr('style', 'color: yellow !important');
     }
@@ -68,7 +64,9 @@ $(document).ready(function () {
     }
 
     $.ajax({
-      headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
       type: 'POST',
       data: data,
       url: '/admin/add-agent',
@@ -86,7 +84,9 @@ $(document).ready(function () {
   eventsTable.on('click', 'tbody td .play', async function () {
     try {
       var id = $(this).data('id');
-      response = await axios.post('/event/activate', { id: id });
+      response = await axios.post('/event/activate', {
+        id: id
+      });
       Swal.fire({
         icon: 'success',
         confirmButtonColor: 'green',
@@ -94,8 +94,7 @@ $(document).ready(function () {
       }).then(() => {
         eventsTable.DataTable().ajax.reload();
       });
-    }
-    catch (error) {
+    } catch (error) {
       Swal.fire({
         icon: 'error',
         confirmButtonColor: 'red',
