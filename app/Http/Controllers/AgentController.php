@@ -60,6 +60,7 @@ class AgentController extends Controller
     {
         $players = Referral::with('user')
             ->with('bet')
+            ->withSum('bet','agent_commission')
             ->where('referrer_id', Auth::user()->id)->get();
 
         return response()->json([

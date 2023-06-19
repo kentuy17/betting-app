@@ -28,6 +28,7 @@ agentPlayersTable.DataTable({
     "search": '',
     "lengthMenu": "_MENU_",
   },
+  "order": [[2, 'desc'], [4, 'desc']],
   "dom": "<'row'<'col-4'l><'col-8'f>>" +
     "<'row'<'col-sm-12'tr>>" +
     "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
@@ -53,14 +54,10 @@ agentPlayersTable.DataTable({
     {
       "data": null,
       render: (data, type, row, meta) => {
-        let agentCommission = 0;
-        if(data.bet) {
-          for (let i = 0; i < data.bet.length; i++) {
-            const bet = data.bet[i];
-            agentCommission += bet.agent_commission;
-          }
-        }
-        return agentCommission.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        if(!data.user) return "---";
+        return data.bet_sum_agent_commission 
+          ? data.bet_sum_agent_commission.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') 
+          : "0.00";
       }
     },
     {
@@ -75,7 +72,9 @@ agentPlayersTable.DataTable({
     {
       "data": null,
       render: (data, type, row, meta) => {
-        return row.status ? "ONLINE" : "OFFLINE";
+        console.log(data);
+        if(!data.user) return "---";
+        return data.user.active ? "ONLINE" : "OFFLINE";
       }
     },
     {
