@@ -5,7 +5,7 @@ $(function() {
     const setValue = newValue => value = newValue
     return [getValue, setValue];
   }
-  
+
   const [fightNo, setFightNo] = useState(0);
 
   const [fightStatus, setFightStatus] = useState('____');
@@ -13,6 +13,34 @@ $(function() {
   const [lastWinner, setLastWinner] = useState('');
 
   const [lastPostion, setLastPosition] = useState('');
+
+  $('#settings-btn').on('click', function (e) {
+    // $('#modal-settings').modal('show')
+    Swal.fire({
+      title: 'SHOW VIDEO?',
+      showCloseButton: false,
+      showDenyButton: true,
+      allowOutsideClick: false,
+      confirmButtonText: 'YES',
+      denyButtonText: 'NO',
+      denyButtonColor: 'secondary',
+      allowEscapeKey: false
+    })
+    .then((result) => {
+      if (result.isConfirmed) {
+        $('#header-fight').show();
+        $('#header-closed').hide();
+        $('#poster-img').hide();
+        $('mux-player').show();
+      } else {
+        $('#header-fight').hide();
+        $('#header-closed').show();
+        $('#poster-img').show();
+        $('mux-player').hide();
+      }
+    })
+
+  })
 
   fetch('/fight/results') // change to ajax later
     .then((response) => response.json())
@@ -26,7 +54,7 @@ $(function() {
         $('#tblBaccaratResultConsecutive').append(tr);
 
       }
-      var dataArr = Object.values(json); 
+      var dataArr = Object.values(json);
       var y = 1;
       var c = 1;
       for (var x = 1; x < dataArr.length; x++) {
@@ -54,7 +82,7 @@ $(function() {
           setLastPosition({y:y,c:c});
         }
         if(dataArr[x - 1][0] == dataArr[x][0]){
-          if (y == 7){ 
+          if (y == 7){
             y = 1;
             c++;
           } else {
@@ -83,7 +111,7 @@ $(function() {
 
     if(dataArr[dataArr.length-2][0] == 'Cancelled') {
       setLastWinner('C');
-    }    
+    }
   }
 
   window.Echo.channel('fight')

@@ -49,8 +49,11 @@
   <div class="col-md-7 my-1">
     <div class="card mb-0">
       <div id="video-stream-container" class="embed-responsive">
-        <div class="bet-bg-head font-bold">{{ $fight->name }}</div>
+        <div id="header-fight" class="bet-bg-head font-bold" style="display: none;">{{ $fight->name }}</div>
+        <div id="header-closed" class="bet-bg-head font-bold" style="display: block;">EVENT CLOSED</div>
+        <img id="poster-img" style="display: block;" src="{{ asset('img/10-streak-win-promo-poster.png') }}" alt="10-streak-win-promo">
         <mux-player
+          style="display: none;"
           stream-type="live"
           playback-id="MOj400Q02mTPiMOtfP64s4HCwmYkzCXdNF00HsregJ41fo"
           metadata-video-title="Placeholder (optional)"
@@ -72,6 +75,51 @@
           </table>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Deposit Modal -->
+<div class="modal fade" id="modal-settings" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-top" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="deposit-form" method="post">
+        <div class="modal-body">
+          <input type="hidden" name="trans-id" id="trans-id">
+          <div class="form-group align-center">
+            <img id="trans-receipt" data-storage="{{ asset('storage/') }}" src="" alt="">
+          </div>
+          <div class="form-group mt-2">
+            <label for="ref-code">Ref-code</label>
+            <input type="text" class="form-control" required id="ref-code" placeholder="Ref-code">
+          </div>
+          <div class="form-group mt-2">
+            <label for="trans-pts">Points</label>
+            <input type="text" class="form-control" required id="trans-pts" placeholder="Points" onkeyup = "javascript:this.value=Comma(this.value);" >
+          </div>
+          <div class="form-group mt-2">
+            <label for="trans-action">Action</label>
+            <select name="trans-action" class="form-control" id="trans-action">
+              <option value="approve">APPROVE</option>
+              <option value="reject">REJECT</option>
+            </select>
+          </div>
+          <div class="form-group mt-2" style="display: none">
+            <label for="trans-note">Note:</label>
+            <textarea name="trans-note" class="form-control" id="trans-note" cols="30" rows="1"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</a>
+          <input type="submit" class="btn btn-primary bg-slate-900 btn-sm" value="Submit">
+        </div>
+      </form>
     </div>
   </div>
 </div>
