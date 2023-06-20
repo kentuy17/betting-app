@@ -18,5 +18,8 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 Broadcast::channel('user.{id}', function($user, $betUserId) {
-    return $user->id == $betUserId;
+    if($user->isOnline()) {
+        return $user->id == $betUserId;
+    }
+    return false;
 });

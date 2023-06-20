@@ -81,7 +81,7 @@ $(document).ready(function () {
     })
   })
 
-  eventsTable.on('click', 'tbody td .play', async function () {
+  eventsTable.on('click', 'tbody td .view', async function () {
     try {
       var id = $(this).data('id');
       response = await axios.post('/event/activate', {

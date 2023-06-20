@@ -512,6 +512,7 @@ class FightController extends Controller
         $referred_players = User::has('referred_players')->with('referral')->get();
         $ghost_bettors = User::where('legit',false)->get()->pluck('id');
         $bets = Bet::where('fight_id', $fight_id)
+            ->whereNotIn('user_id', $ghost_bettors)
             ->where('win_amount', '>', '0')
             ->whereNotIn('user_id', [9])
             ->with('referral')
