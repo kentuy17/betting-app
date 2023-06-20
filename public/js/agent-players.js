@@ -72,7 +72,6 @@ agentPlayersTable.DataTable({
     {
       "data": null,
       render: (data, type, row, meta) => {
-        console.log(data);
         if(!data.user) return "---";
         return data.user.active ? "ONLINE" : "OFFLINE";
       }

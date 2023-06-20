@@ -51,6 +51,8 @@
     <div class="card mb-0">
       <div id="video-stream-container" class="embed-responsive">
         <div class="bet-bg-head font-bold">{{ $fight->name }}</div>
+        {{-- <div class="bet-bg-head font-bold">EVENT CLOSED</div> --}}
+        {{-- <img src="{{ asset('img/10-streak-win-promo-poster.png') }}" alt="10-streak-win-promo"> --}}
         <mux-player
           stream-type="live"
           playback-id="MOj400Q02mTPiMOtfP64s4HCwmYkzCXdNF00HsregJ41fo"
