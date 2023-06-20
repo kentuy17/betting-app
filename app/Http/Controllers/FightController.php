@@ -447,8 +447,13 @@ class FightController extends Controller
             $kusgan = ShareHolder::get();
             $data = [];
             $per = 10;
-            $total_win_amount = Bet::where('fight_id', $last_fight->id)->sum('win_amount');
-            $_total_bets = Bet::where('fight_id', $last_fight->id)->sum('amount');
+            $ghost_bettors = User::where('legit',false)->get()->pluck('id');
+            $total_win_amount = Bet::where('fight_id', $last_fight->id)
+                ->whereNotIn('user_id', $ghost_bettors)
+                ->sum('win_amount');
+            $_total_bets = Bet::where('fight_id', $last_fight->id)
+                ->whereNotIn('user_id', $ghost_bettors)
+                ->sum('amount');
             $referral_commission = $this->calcRefCommission($last_fight->id);
             $commission = ($_total_bets - $total_win_amount) - $referral_commission;
 
@@ -503,12 +508,15 @@ class FightController extends Controller
         }
 
         $referred_players = User::has('referred_players')->with('referral')->get();
-
+        $ghost_bettors = User::where('legit',false)->get()->pluck('id');
         $bets = Bet::where('fight_id', $fight_id)
             ->where('win_amount', '>', '0')
+            ->whereNotIn('user_id', [9])
             ->with('referral')
             ->has('referral')
             ->get();
+
+        $this->logger($bets, 'bets');
 
         $unique_referrers = $referred_players->groupBy('referral.referrer_id');
 

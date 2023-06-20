@@ -50,17 +50,17 @@
   <div class="col-md-7 my-1">
     <div class="card mb-0">
       <div id="video-stream-container" class="embed-responsive">
-        <div class="bet-bg-head font-bold">{{ $fight->name }}</div>
-        {{-- <div class="bet-bg-head font-bold">EVENT CLOSED</div> --}}
-        {{-- <img src="{{ asset('img/10-streak-win-promo-poster.png') }}" alt="10-streak-win-promo"> --}}
-        <mux-player
+        {{-- <div class="bet-bg-head font-bold">{{ $fight->name }}</div> --}}
+        <div class="bet-bg-head font-bold">EVENT CLOSED</div>
+        <img src="{{ asset('img/10-streak-win-promo-poster.png') }}" alt="10-streak-win-promo">
+        {{-- <mux-player
           stream-type="live"
           playback-id="MOj400Q02mTPiMOtfP64s4HCwmYkzCXdNF00HsregJ41fo"
           metadata-video-title="Placeholder (optional)"
           metadata-viewer-user-id="Placeholder (optional)"
           primary-color="#FFFFFF"
           secondary-color="#000000"
-        ></mux-player>
+        ></mux-player> --}}
       </div>
     </div>
   </div>

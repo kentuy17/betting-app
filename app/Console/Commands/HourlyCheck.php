@@ -38,7 +38,7 @@ class HourlyCheck extends Command
         $users = User::get();
         foreach ($users as $key => $user) {
             # code...
-            if($user->isOnline()) {
+            if(!$user->isOnline()) {
                 $pusher->terminateUserConnections($user->id);
                 $user->update([
                     'active' => false
