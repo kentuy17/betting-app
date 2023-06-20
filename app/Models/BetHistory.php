@@ -22,6 +22,7 @@ class BetHistory extends Model
         'percent',
         'betamount',
         'winamount',
+        'current_points',
         'created_at',
         'updated_at',
     ];
@@ -45,7 +46,7 @@ class BetHistory extends Model
     {
         return $this->belongsTo(Fight::class, 'fight_no', 'fight_no');
     }
-    
+
     /**
      * @var array
      */

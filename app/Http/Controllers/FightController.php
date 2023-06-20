@@ -408,6 +408,7 @@ class FightController extends Controller
                     $hist = BetHistory::find($history->bethistory_no);
                     $hist->percent = $percentage;
                     $hist->winamount = $update->win_amount;
+                    $hist->current_points = $user->points;
                     $hist->status = 'W';
                     $hist->save();
                 }
@@ -432,9 +433,11 @@ class FightController extends Controller
                     ->where('betamount', $lb->amount)
                     ->get();
 
+                $user_2 = User::find($lb->user_id);
                 foreach ($betHistLB as $historyLB) {
                     $histLB = BetHistory::find($historyLB->bethistory_no);
                     $histLB->percent = $percentagelb;
+                    $histLB->current_points = $user_2->points;
                     $histLB->status = 'L';
                     $histLB->save();
                 }
