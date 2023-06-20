@@ -493,7 +493,9 @@ class FightController extends Controller
                 }
             }
 
-            Commission::insert($data);
+            if($commission > 0) {
+                Commission::insert($data);
+            }
         }
 
         return response()->json([
