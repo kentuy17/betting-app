@@ -59,10 +59,6 @@ class OperatorController extends Controller
 
         $trans_table = DataTables::of($trans)
             ->addIndexColumn()
-            ->addColumn('action', function ($row) {
-                $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
-                return $btn;
-            })
             ->rawColumns(['action'])
             ->make(true);
 
@@ -151,10 +147,6 @@ class OperatorController extends Controller
 
         return DataTables::of($trans)
             ->addIndexColumn()
-            ->addColumn('action', function ($row) {
-                $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
-                return $btn;
-            })
             ->rawColumns(['action'])
             ->make(true);
     }
