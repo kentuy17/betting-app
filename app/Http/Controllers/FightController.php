@@ -489,7 +489,7 @@ class FightController extends Controller
                     'created_at' => now(),
                 ];
 
-                if ($gwapo->id > 0) {
+                if ($gwapo->id > 0 && $commission > 0) {
                     $share_holder = ShareHolder::find($gwapo->id);
                     $share_holder->current_commission += $additional_pts;
                     $share_holder->save();
