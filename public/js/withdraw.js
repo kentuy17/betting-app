@@ -10,6 +10,8 @@ withdrawTable.DataTable({
   "bInfo": false,
   "bAutoWidth": true,
   "scrollX": true,
+  "processing": true,
+  "serverSide": true,
   "columnDefs": [
     {
       "targets": [3],
@@ -22,6 +24,7 @@ withdrawTable.DataTable({
       orderable: false,
       data: null,
       defaultContent: '',
+      data: "user_id",
     },
     {
       "data": "user.username"
@@ -67,6 +70,8 @@ withdrawTable.DataTable({
     },
   ],
   "createdRow": function( row, data, dataIndex){
+    $(row).find('td').eq(0).attr('style', 'color: transparent !important');
+
     if( data.status ==  `pending`){
       $(row).css({"background-color":"var(--bs-red)"});
       wPending++;
@@ -76,7 +81,6 @@ withdrawTable.DataTable({
       $(row).addClass('bg-warning');
       unverified++;
     }
-    console.log(wPending);
 
     if(wPending > 0) {
       $('#badge-withdraw').show().text(wPending);
@@ -101,6 +105,10 @@ function format(d) {
   let betHistory = `<a href="javascript:void(0)" data-id="${d.id}" class="btn btn-link text-primary btn-icon pl-0 show">view
       <i class="fa-solid fa-eye"></i></a>`;
   var expandContent = `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
+      <tr>
+        <td>ID:</td>
+        <td>#${d.user_id}</td>
+      </tr>
       <tr>
         <td>PLAYER:</td>
         <td>${d.user.username}</td>

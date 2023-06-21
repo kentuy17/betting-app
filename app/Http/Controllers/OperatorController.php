@@ -11,6 +11,7 @@ use App\Models\UserPasswordReset;
 use App\Models\DerbyEvent;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\DataTables;
 
 class OperatorController extends Controller
 {
@@ -56,10 +57,18 @@ class OperatorController extends Controller
             ->orderBy('id','desc')
             ->get();
 
-        return response()->json([
-            'data' => $trans
-        ]);
+        $trans_table = DataTables::of($trans)
+            ->addIndexColumn()
+            ->addColumn('action', function ($row) {
+                $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+
+        return $trans_table;
     }
+
     public function processDepositRevert(Request $request)
     {
         try {
@@ -140,9 +149,14 @@ class OperatorController extends Controller
             ->orderBy('id','desc')
             ->get();
 
-        return response()->json([
-            'data' => $trans
-        ]);
+        return DataTables::of($trans)
+            ->addIndexColumn()
+            ->addColumn('action', function ($row) {
+                $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     public function processWithdraw(Request $request)

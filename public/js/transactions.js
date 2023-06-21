@@ -15,6 +15,8 @@ transactionsTable.DataTable({
   "bInfo": false,
   "bAutoWidth": true,
   "scrollX": true,
+  "processing": true,
+  "serverSide": true,
   "columnDefs": [
     {
       "targets": [3],
@@ -25,6 +27,7 @@ transactionsTable.DataTable({
       orderable: false,
       data: null,
       defaultContent: '',
+      data: "user_id",
     },
     {
       "data": "user.username"
@@ -83,6 +86,8 @@ transactionsTable.DataTable({
       pendingCount++;
     }
 
+    $(row).find('td').eq(0).attr('style', 'color: transparent !important');
+
     if (pendingCount > 0) {
       $('#badge-deposit').show().text(pendingCount);
     } else {
@@ -92,8 +97,16 @@ transactionsTable.DataTable({
 });
 
 function formatDeposit(d) {
+  let copyRefCode = `<button data-bs-toggle="tooltip" title="Copied!" data-bs-trigger="click" class="btn btn-link text-primary btn-icon copy-ref-code py-0" id="copy-ref-code" data-ref-code="${d.reference_code}"
+      onclick="copyRefCode(this);"><i class="fa-solid fa-copy"></i></button>`;
+  let note = d.note ? `<tr><td>NOTE:</td><td>${d.note}</td></tr>` : '';
+  let refCode = d.reference_code && d.reference_code != null ? `<tr><td>REFCODE:</td><td>${d.reference_code} ${copyRefCode}</td></tr>` : '';
   return (
     `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
+      <tr>
+        <td>ID:</td>
+        <td>#${d.user_id}</td>
+      </tr>
       <tr>
         <td>PLAYER:</td>
         <td>${d.user.username}</td>
@@ -106,10 +119,8 @@ function formatDeposit(d) {
         <td>AMOUNT:</td>
         <td>${d.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
       </tr>
-      <tr>
-        <td>NOTE:</td>
-        <td>${d.note}</td>
-      </tr>
+      ${note}
+      ${refCode}
     </table>`
   );
 }
@@ -273,6 +284,23 @@ $('#deposit-undo-form').on('click', 'input[type="submit"]', function (e) {
 function clearFields() {
   $('#updated-trans-pts').val(''), $('#trans-note-undo').val(''),
     $('#trans-note').parent().hide();
+}
+
+function copyRefCode(e) {
+  const num = $(e).data('ref-code');
+  var $temp = $("<input>");
+  $("body").append($temp);
+  $temp.val(num).select();
+  document.execCommand("copy");
+  $temp.remove();
+  $(e).removeClass('text-primary').addClass('text-success')
+  $(e).find('i').removeClass('fa-copy').addClass('fa-check')
+  setTimeout(() => {
+    $(e).tooltip('hide')
+    $(e).removeClass('text-success').addClass('text-primary')
+    $(e).find('i').removeClass('fa-check').addClass('fa-copy')
+  }, 3000);
+
 }
 
 
