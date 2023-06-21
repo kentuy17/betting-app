@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Roles;
 use App\Models\Agent;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\DataTables;
 
 class AdminController extends Controller
 {
@@ -55,10 +56,10 @@ class AdminController extends Controller
             return response($e, 500);
         }
 
-        return response()->json([
-            'data' => $users,
-            'message' => 'OK',
-        ], 200);
+        return DataTables::of($users)
+            ->addIndexColumn()
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     public function createUser(Request $request)

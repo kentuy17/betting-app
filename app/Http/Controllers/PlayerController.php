@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response as FacadeResponse;
 use App\Models\Chat;
+use Yajra\DataTables\DataTables;
 
 class PlayerController extends Controller
 {
@@ -80,9 +81,10 @@ class PlayerController extends Controller
             ->where('action', $action)
             ->get();
 
-        return response()->json([
-              'data' => $trans,
-        ]);
+        return DataTables::of($trans)
+            ->addIndexColumn()
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     public function profileWithdraw()

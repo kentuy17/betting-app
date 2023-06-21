@@ -11,6 +11,7 @@ use App\Models\BetHistory;
 use App\Models\User;
 use App\Models\DerbyEvent;
 use App\Models\Fight;
+use Yajra\DataTables\DataTables;
 
 class BetController extends Controller
 {
@@ -40,9 +41,10 @@ class BetController extends Controller
             ->orderBy('bethistory_no','desc')
             ->get();
 
-        return response()->json([
-              'data' => $history,
-        ]);
+        return DataTables::of($history)
+            ->addIndexColumn()
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     private function getCurrentFight($fight_no)

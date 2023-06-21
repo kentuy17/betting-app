@@ -7,6 +7,8 @@ $(document).ready(function () {
     "bInfo": false,
     "bAutoWidth": false,
     "scrollX": true,
+    "processing": true,
+    "serverSide": true,
     "order": [[0, 'desc']],
     "ajax": '/player/transaction/deposit',
     "pageLength": 25,
@@ -73,6 +75,8 @@ $(document).ready(function () {
     "order": [[0, 'desc']],
     "ajax": '/player/transaction/withdraw',
     "pageLength": 25,
+    "processing": true,
+    "serverSide": true,
     "columnDefs": [
       {
         "targets": [3],
