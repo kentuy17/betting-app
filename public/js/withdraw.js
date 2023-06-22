@@ -281,7 +281,7 @@ async function betHistory(id) {
     "pagingType": 'numbers',
     "processing": true,
     "serverSide": true,
-    "pageLength": 25,
+    // "pageLength": 25,
     "language": {
       "search": '',
       "lengthMenu": "_MENU_",
