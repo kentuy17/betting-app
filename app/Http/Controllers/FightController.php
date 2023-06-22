@@ -370,6 +370,7 @@ class FightController extends Controller
                     $hist = BetHistory::find($history->bethistory_no);
                     $hist->percent = $percentage;
                     $hist->winamount = $bet->amount;
+                    $hist->current_points = $user->points;
                     $hist->status = $winner;
                     $hist->save();
                 }

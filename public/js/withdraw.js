@@ -251,7 +251,7 @@ $('[data-dismiss="modal"]').on('click', function() {
   $('#bethistory-modal').modal('hide');
 })
 
-$('#badge-withdraw-unverified').tooltip().show()
+// $('#badge-withdraw-unverified').tooltip().show()
 
 $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function(e){
   $($.fn.dataTable.tables(true)).DataTable()
@@ -281,7 +281,7 @@ async function betHistory(id) {
     "pagingType": 'numbers',
     "processing": true,
     "serverSide": true,
-    "order": [[0, 'desc']],
+    "order": [[6, 'desc']],
     // "pageLength": 25,
     "language": {
       "search": '',

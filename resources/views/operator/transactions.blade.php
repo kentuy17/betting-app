@@ -3,22 +3,36 @@
   <link rel="stylesheet" href="{{ asset('css/operator.css') }}">
 @endsection
 @section('content')
+  @php
+    $cashin = $cashout = '';
+    switch (Auth::user()->user_role->name) {
+      case 'Cash-in Operator':
+        $cashin = 'active';
+        break;
+      case 'Cash-out Operator':
+        $cashout = 'active';
+        break;
+      default:
+        $cashin = 'active';
+        break;
+    }
+  @endphp
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-12">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
-          @if (Auth::user()->user_role->name == 'Cash-in Operator' || hasAccess('Cash-in Operator'))
+          @if (hasAccess('Cash-in Operator'))
             <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="deposit-tab" data-bs-toggle="tab" data-bs-target="#deposit-panel" type="button" role="tab" aria-controls="deposit" aria-selected="true">
+              <button class="nav-link {{ $cashin }}" id="deposit-tab" data-bs-toggle="tab" data-bs-target="#deposit-panel" type="button" role="tab" aria-controls="deposit" aria-selected="true">
                 DEPOSIT <span id="badge-deposit" style="display: none;" class="badge bg-danger">0</span></button>
               {{-- <button onclick="showNotification('fuck yeah!')">Show Notif</button> --}}
             </li>
           @endif
-          @if (Auth::user()->user_role->name == 'Cash-out Operator' || hasAccess('Cash-out Operator'))
+          @if (hasAccess('Cash-out Operator'))
             <li class="nav-item" role="presentation">
-              <button class="nav-link" id="withdraw-tab" data-bs-toggle="tab" data-bs-target="#withdraw" type="button" role="tab" aria-controls="withdraw" aria-selected="false">
+              <button class="nav-link {{ $cashout }}" id="withdraw-tab" data-bs-toggle="tab" data-bs-target="#withdraw" type="button" role="tab" aria-controls="withdraw" aria-selected="false">
                 WITHDRAW <span id="badge-withdraw" style="display: none;" class="badge bg-danger">0</span>
-                <span id="badge-withdraw-unverified" data-bs-toggle="tooltip" title="Missing Ref-code" style="display: none;" class="badge bg-warning">4</span></button>
+                <span id="badge-withdraw-unverified" data-bs-toggle="tooltip" title="Missing Ref-code" style="display: none;" class="badge bg-warning">0</span></button>
             </li>
           @endif
           <li class="nav-item credit-nav-item">
@@ -40,7 +54,7 @@
         </ul>
         @if (Auth::user()->user_role->name == 'Cash-in Operator' || hasAccess('Cash-in Operator'))
           <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="deposit-panel" role="tabpanel" aria-labelledby="deposit-tab">
+            <div class="tab-pane fade show {{ $cashin }}" id="deposit-panel" role="tabpanel" aria-labelledby="deposit-tab">
               <table class="table dt-responsive table-striped nowrap w-100" id="deposit-trans-table">
                 <thead>
                   <tr>
@@ -60,7 +74,7 @@
             </div>
         @endif
         @if (Auth::user()->user_role->name == 'Cash-out Operator' || hasAccess('Cash-out Operator'))
-          <div class="tab-pane fade show" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
+          <div class="tab-pane fade show {{ $cashout }}" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
             <table class="table dt-responsive table-striped nowrap w-100" id="withdraw-trans-table">
               <thead>
                 <tr>
