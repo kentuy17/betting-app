@@ -116,7 +116,7 @@ function format(d) {
       <i class="fa-solid fa-circle-info"></i></button>`;
   var btnCopy = `<button data-bs-toggle="tooltip" title="Copied!" data-bs-trigger="click" class="btn btn-link text-primary btn-icon copy-phone" id="copy-phone" data-phone-number="${d.mobile_number}"
       onclick="copyPhone(this);"><i class="fa-solid fa-copy"></i></button>`;
-  let betHistory = `<button onclick="betHistory(${d.id})" class="btn btn-link btn-suucess btn-icon pl-0 bet-history-show">
+  let betHistory = `<button onclick="betHistory(${d.user_id})" class="btn btn-link btn-suucess btn-icon pl-0 bet-history-show">
     <i class="fa-solid fa-money-bill text-success"></i></button>`;
   var expandContent = `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
       <tr>
