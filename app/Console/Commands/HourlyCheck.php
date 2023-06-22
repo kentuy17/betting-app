@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\User;
 use Pusher\Pusher;
+use Illuminate\Support\Facades\Log;
 
 class HourlyCheck extends Command
 {
@@ -28,6 +29,7 @@ class HourlyCheck extends Command
     public function handle()
     {
         info("Cron Job running at " . now());
+        Log::channel('cron')->info("Cron Job running at " . now());
 
         $auth_key = 'e0c6c349e2fee92e00ca';
         $secret_key = 'e4aa957c59f83b4f373e';

@@ -189,7 +189,7 @@
                 @if(Auth::user()->share_holder)
                   BOSS / {{ Auth::user()->share_holder->role_description }}
                 @elseif(Auth::user()->agent)
-                  AGENT<span class="text-black">(4%)</span> WIN COMMISSION
+                  AGENT<span class="text-black">(6%)</span> COMMISSION
                 @else
                   {{ Auth::user()->user_role->name}}
                 @endif

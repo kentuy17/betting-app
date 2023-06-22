@@ -14,6 +14,7 @@ use App\Models\Roles;
 use App\Models\Referral;
 use App\Models\Agent;
 use Shetabit\Visitor\Traits\Visitor;
+use DateTimeInterface;
 
 class User extends Authenticatable
 {
@@ -61,8 +62,13 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'created_at' => 'datetime:m/d/y h:s',
+        // 'created_at' => 'datetime:m/d/y h:s',
     ];
+
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->timezone('Asia/Singapore')->format('M-d-y H:i:s');
+    }
 
     public function bet()
     {

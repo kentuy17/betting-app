@@ -28,13 +28,13 @@ class BetHistory extends Model
     ];
 
     protected $casts = [
-        // 'created_at' => 'datetime:M d, Y h:s A',
-        'updated_at' => 'datetime:M d, Y h:i A',
+        'created_at' => 'datetime:M-d-y H:i:s',
+        'updated_at' => 'datetime:M-d-y H:i:s',
     ];
 
     protected function serializeDate(DateTimeInterface $date)
     {
-        return $date->timezone('Asia/Singapore')->format('M d, Y H:i:s');
+        return $date->timezone('Asia/Singapore')->format('M-d-y H:i:s');
     }
 
     public function user()

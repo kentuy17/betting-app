@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use DateTimeInterface;
 
 class Transactions extends Model
 {
@@ -29,11 +30,16 @@ class Transactions extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'datetime:m/d/y h:s',
-        'updated_at' => 'datetime:M d, Y h:s A',
+        'created_at' => 'datetime:M-d-y H:i:s',
+        'updated_at' => 'datetime:M d, Y h:i A',
     ];
 
-        /**
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->timezone('Asia/Singapore')->format('M-d-y H:i:s');
+    }
+
+    /**
      * createTransaction
      * @param array $aParameter
      * @return mix
@@ -42,12 +48,13 @@ class Transactions extends Model
     {
         return $this->create($aParameter);
     }
-            /**
+
+    /**
      * createTransaction
      * @param array $aParameter
      * @return mix
      */
-    public function updateStatus(int $transID, array $aParameters) 
+    public function updateStatus(int $transID, array $aParameters)
     {
         return $this->where('id', $transID)->update($aParameters);
     }

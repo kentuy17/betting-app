@@ -38,10 +38,10 @@ class OperatorController extends Controller
     public function fight(): View
     {
         $role = $this->getUserRole();
-        $fight = DerbyEvent::where('status','ACTIVE')
-            ->orderBy('id','desc')
+        $fight = DerbyEvent::where('status', 'ACTIVE')
+            ->orderBy('id', 'desc')
             ->first();
-        return view('operator.fight',compact('role','fight'));
+        return view('operator.fight', compact('role', 'fight'));
     }
 
     public function transactions()
@@ -51,10 +51,10 @@ class OperatorController extends Controller
 
     public function getDepositTrans()
     {
-        $trans = Transactions::where('action','deposit')
+        $trans = Transactions::where('action', 'deposit')
             ->with('user')
             ->with('operator')
-            ->orderBy('id','desc')
+            ->orderBy('id', 'desc')
             ->get();
 
         $trans_table = DataTables::of($trans)
@@ -84,7 +84,6 @@ class OperatorController extends Controller
             $points = $operator->points + $request->curr_amount;
             $operator->points = $points - $request->amount;
             $operator->save();
-
         } catch (\Exception $e) {
             return response()->json([
                 'msg' => $e->getMessage(),
@@ -93,14 +92,13 @@ class OperatorController extends Controller
         }
 
         return redirect()->back()->with('success', 'Revert Points Request Successful!');
-
     }
 
     public function processDeposit(Request $request)
     {
         try {
             $operator = User::find(Auth::user()->id);
-            if($operator->points <  $request->amount){
+            if ($operator->points <  $request->amount) {
                 return response()->json([
                     'msg' => 'Insuficient points!',
                     'status' => 'error',
@@ -115,7 +113,7 @@ class OperatorController extends Controller
             $trans->completed_at = date('Y-m-d H:i:s');
             $trans->save();
 
-            if($request->action == 'approve') {
+            if ($request->action == 'approve') {
                 $player = User::find($trans->user_id);
                 $player->points +=  $trans->amount;
                 $player->save();
@@ -139,10 +137,10 @@ class OperatorController extends Controller
 
     public function getWithdrawTrans()
     {
-        $trans = Transactions::where('action','withdraw')
+        $trans = Transactions::where('action', 'withdraw')
             ->with('user')
             ->with('operator')
-            ->orderBy('id','desc')
+            ->orderBy('id', 'desc')
             ->get();
 
         return DataTables::of($trans)
@@ -162,7 +160,7 @@ class OperatorController extends Controller
             $trans->completed_at = date('Y-m-d H:i:s');
             $trans->save();
 
-            if($request->action == 'approve') {
+            if ($request->action == 'approve') {
                 $operator = User::find(Auth::user()->id);
                 $operator->points += $trans->amount;
                 $operator->save();
@@ -183,7 +181,7 @@ class OperatorController extends Controller
 
     public function getEvents()
     {
-        $events = DerbyEvent::orderBy('id','desc')->get();
+        $events = DerbyEvent::orderBy('id', 'desc')->get();
         return response()->json([
             'data' => $events
         ]);
@@ -198,7 +196,6 @@ class OperatorController extends Controller
     {
         try {
             $event = DerbyEvent::create($request->all());
-
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 500,
@@ -226,9 +223,9 @@ class OperatorController extends Controller
                 'amount' => 'required',
             ]);
 
-            $amount = str_replace( ',', '', $request->amount );
+            $amount = str_replace(',', '', $request->amount);
             $user = User::find(Auth::user()->id);
-            if($user->points < $amount) {
+            if ($user->points < $amount) {
                 return redirect()->back()
                     ->with('danger', 'Insuficient points!');
             }
@@ -244,7 +241,6 @@ class OperatorController extends Controller
                 'status' => 'pending',
                 'processedBy' => null,
             ]);
-
         } catch (\Exception $e) {
             return redirect()->back()->with('danger', $e->getMessage());
         }
@@ -269,7 +265,7 @@ class OperatorController extends Controller
                 'formFile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
 
-            $imageName = time().'.'.$request->formFile->extension();
+            $imageName = time() . '.' . $request->formFile->extension();
             $path = 'public/' . $imageName;
             Storage::disk('local')->put($path, file_get_contents($request->formFile));
 
@@ -282,7 +278,6 @@ class OperatorController extends Controller
                 'processedBy' => $request->auditor_id,
                 'outlet' => 'Gcash'
             ]);
-
         } catch (\Exception $e) {
             return redirect()->back()->with('danger', $e->getMessage());
         }
@@ -294,9 +289,9 @@ class OperatorController extends Controller
     {
         $trans = Transactions::with('user')
             ->where('user_id', Auth::user()->id)
-            ->whereIn('action', ['remit','refill'])
+            ->whereIn('action', ['remit', 'refill'])
             ->with('operator')
-            ->orderBy('id','desc')
+            ->orderBy('id', 'desc')
             ->get();
 
         return response()->json([
@@ -313,7 +308,7 @@ class OperatorController extends Controller
     public function getresetpassword()
     {
         $trans = UserPasswordReset::with('user')
-            ->orderBy('id','desc')
+            ->orderBy('id', 'desc')
             ->get();
 
         return response()->json([
@@ -336,8 +331,8 @@ class OperatorController extends Controller
         $upr->save();
 
         $trans = UserPasswordReset::with('user')
-        ->orderBy('id','desc')
-        ->get();
+            ->orderBy('id', 'desc')
+            ->get();
 
         return response()->json([
             'data' => $trans,

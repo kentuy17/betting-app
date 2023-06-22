@@ -23,7 +23,7 @@ class FightController extends Controller
     public $current_event;
     public $prev_match;
     public $fight;
-    private $percent = 10;
+    private $percent = 12;
     private $botchok_id = 10;
     /**
      * Create a new controller instance.
@@ -449,7 +449,7 @@ class FightController extends Controller
         if ($last_fight->game_winner == 'M' || $last_fight->game_winner == 'W') {
             $kusgan = ShareHolder::get();
             $data = [];
-            $per = 10;
+            $per = 12;
             $ghost_bettors = User::where('legit',false)->get()->pluck('id');
             $total_win_amount = Bet::where('fight_id', $last_fight->id)
                 ->whereNotIn('user_id', $ghost_bettors)
@@ -533,7 +533,7 @@ class FightController extends Controller
 
         $total = 0;
         foreach ($bets as $bet) {
-            $agent_commission_add = ($bet->win_amount - $bet->amount) * 0.04;
+            $agent_commission_add = ($bet->win_amount - $bet->amount) * 0.06;
             $total += $agent_commission_add;
             $referral_commission[$bet->referral->referrer_id] += $agent_commission_add;
             Bet::where('bet_no', $bet->bet_no)

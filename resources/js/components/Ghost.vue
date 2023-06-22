@@ -121,8 +121,8 @@ export default {
         wala: 0,
       },
       percentage: {
-        meron: 187,
-        wala: 187,
+        meron: 188,
+        wala: 188,
       },
       player: {
         points: 0,
@@ -232,11 +232,11 @@ export default {
 
     // GET FROM EACH SIDE
     meronComm() {
-      return this.total.meron * 10 / 100
+      return this.total.meron * 12 / 100
     },
 
     walaComm() {
-      return this.total.wala * 10 / 100
+      return this.total.wala * 12 / 100
     },
 
     meronPercentage() {

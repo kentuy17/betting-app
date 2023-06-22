@@ -1,5 +1,19 @@
 <template>
   <div class="card bet-boxed-area mb-1">
+    <div v-if="!player.legit" class="mx-2">
+      <div class="grid grid-cols-2 bg-os_bg">
+        <div class="px-2 py-1 border border-black">
+          <div>
+            <h3 class="font-extrabold text-center m-2 font-tally text-red-700 text-2xl">{{ formatMoney(ghost.meron) }}</h3>
+          </div>
+        </div>
+        <div class="px-2 py-1 border border-black">
+          <div>
+            <h3 class="font-extrabold text-center m-2 font-tally text-blue-700 text-2xl">{{ formatMoney(ghost.wala) }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="bet-bg-head items-center grid grid-cols-3">
       <h6><b class="text-lg">FIGHT # </b> <b id="fight-no" class="text-lg">{{ fightNo }}</b></h6>
       <div class="text-center"><span class="btn btn-block btn-sm gradient-status-close btn-lg vue-components">{{ message }}</span></div>
@@ -106,8 +120,8 @@ export default {
         wala: 0,
       },
       percentage: {
-        meron: 187,
-        wala: 187,
+        meron: 188,
+        wala: 188,
       },
       player: {
         points: 0,
@@ -125,6 +139,14 @@ export default {
         masked: false,
         shouldRound: false,
       },
+      ghost: {
+        meron: 0,
+        wala: 0,
+      },
+      autobots: {
+        meron: 0,
+        wala: 0,
+      }
     }
   },
   mounted() {
@@ -169,6 +191,10 @@ export default {
           this.fight = e.fight
         }
 
+        if(this.fight.status == null) {
+          this.ghost.meron = this.ghost.wala = 0
+        }
+
         this.message = this.setFightStatus(this.fight)
       });
 
@@ -186,6 +212,10 @@ export default {
           e.bet.side == 'M'
             ? this.player.bets.meron += this.betAmount
             : this.player.bets.wala += this.betAmount
+        } else {
+          e.bet.side == 'M'
+            ? this.ghost.meron += e.bet.amount
+            : this.ghost.wala += e.bet.amount
         }
       });
 
@@ -203,11 +233,11 @@ export default {
 
     // GET FROM EACH SIDE
     meronComm() {
-      return this.total.meron * 10 / 100
+      return this.total.meron * 12 / 100
     },
 
     walaComm() {
-      return this.total.wala * 10 / 100
+      return this.total.wala * 12 / 100
     },
 
     meronPercentage() {

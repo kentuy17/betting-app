@@ -57,6 +57,11 @@ return [
             'path' => storage_path('logs/custom.log'),
             'level' => 'info',
         ],
+        'cron' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/cron.log'),
+            'level' => 'info',
+        ],
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],
