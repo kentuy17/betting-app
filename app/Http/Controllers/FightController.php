@@ -523,7 +523,7 @@ class FightController extends Controller
             ->has('referral')
             ->get();
 
-        $this->logger($bets, 'bets');
+        // $this->logger($bets, 'bets');
 
         $unique_referrers = $referred_players->groupBy('referral.referrer_id');
 
