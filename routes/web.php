@@ -159,6 +159,8 @@ Route::group(['middleware' => ['auth','visitor']], function() {
     Route::get('/bet/history', [BetController::class, 'getBetHistoryByUserController']);
     Route::get('/profile', [UserController::class, 'getProfileByUserID']);
 
+    Route::post('/settings/video-display', [UserController::class, 'setVideoDisplay']);
+
     //Fight
     Route::get('/fight/current', [FightController::class, 'getCurrentFight']);
     Route::get('/fight/results', [FightController::class, 'fightResults']);

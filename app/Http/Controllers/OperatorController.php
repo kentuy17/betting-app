@@ -11,6 +11,7 @@ use App\Models\UserPasswordReset;
 use App\Models\DerbyEvent;
 use App\Models\User;
 use App\Models\BetHistory;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
@@ -39,10 +40,9 @@ class OperatorController extends Controller
     public function fight(): View
     {
         $role = $this->getUserRole();
-        $fight = DerbyEvent::where('status', 'ACTIVE')
-            ->orderBy('id', 'desc')
-            ->first();
-        return view('operator.fight', compact('role', 'fight'));
+        $fight = DerbyEvent::where('status', 'ACTIVE')->orderBy('id', 'desc')->first();
+        $setting = Setting::where('name', 'video_display')->first()->value ?? false;
+        return view('operator.fight', compact('role', 'fight','setting'));
     }
 
     public function transactions()

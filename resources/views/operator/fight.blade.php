@@ -41,6 +41,11 @@
   }
   /* #clappr{ width: 100%;height: 100%;position: relative; min-height: 320px; margin-bottom: 25px;} */
   /* #clappr > div{ width:100%;height:100%;position: absolute;} */
+  #header-fight {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+  }
 </style>
 @endsection
 
@@ -49,11 +54,17 @@
   <div class="col-md-7 my-1">
     <div class="card mb-0">
       <div id="video-stream-container" class="embed-responsive">
-        <div id="header-fight" class="bet-bg-head font-bold" style="display: block;">{{ $fight->name }}</div>
-        <div id="header-closed" class="bet-bg-head font-bold" style="display: none;">EVENT CLOSED</div>
+        <div id="header-fight" class="bet-bg-head font-bold">
+          <div id="event-name">{{ $fight->name }}</div>
+          <div id="header-closed" class="bet-bg-head font-bold" style="display: none;">EVENT CLOSED</div>
+          <div class="form-check form-switch">
+            <label class="text-black mr-2" for="switch-video-display">JENO PINDOTA NI</label>
+            <input class="form-check-input" type="checkbox" id="switch-video-display" @if ($setting) checked @endif>
+          </div>
+        </div>
         <img id="poster-img" style="display: none;" src="{{ asset('img/10-streak-win-promo-poster.png') }}" alt="10-streak-win-promo">
         <mux-player
-          style="display: block;"
+          id="mux-player"
           stream-type="live"
           playback-id="MOj400Q02mTPiMOtfP64s4HCwmYkzCXdNF00HsregJ41fo"
           metadata-video-title="Placeholder (optional)"

@@ -14,12 +14,10 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        
-
         \DB::table('users')->delete();
-        
+
         \DB::table('users')->insert(array (
-            0 => 
+            0 =>
             array (
                 'id' => 1,
                 'active' => false,
@@ -32,7 +30,7 @@ class UsersTableSeeder extends Seeder
                 'password' => bcrypt('123456'),
             ),
         ));
-        
-        
+
+
     }
 }

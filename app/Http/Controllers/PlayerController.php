@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response as FacadeResponse;
 use App\Models\Chat;
+use App\Models\Setting;
 use Yajra\DataTables\DataTables;
 
 class PlayerController extends Controller
@@ -38,11 +39,9 @@ class PlayerController extends Controller
     public function index(): View
     {
         $role = $this->getUserRole();
-        $fight = DerbyEvent::where('status','ACTIVE')
-            ->orderBy('id','desc')
-            ->first();
-
-        return view('player.play', compact('role','fight'));
+        $fight = DerbyEvent::where('status','ACTIVE')->orderBy('id','desc')->first();
+        $video_display = Setting::where('name','video_display')->first()->value ?? false;
+        return view('player.play', compact('role','fight','video_display'));
     }
 
     public function bethistory()

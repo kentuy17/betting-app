@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Transactions;
 use App\Models\ShareHolder;
+use App\Models\Setting;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
@@ -250,5 +251,16 @@ class UserController extends Controller
             'current_commission' => number_format($boss->current_commission, 2),
             'points' => number_format($user->points, 2),
         ], 200);
+    }
+
+    public function setVideoDisplay(Request $request)
+    {
+        $setting = Setting::where('name','video_display')->first();
+        $setting->value = $request->screen;
+        $setting->save();
+
+        return response()->json([
+            'data' => $setting,
+        ]);
     }
 }

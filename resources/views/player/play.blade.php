@@ -50,11 +50,13 @@
   <div class="col-md-7 my-1">
     <div class="card mb-0">
       <div id="video-stream-container" class="embed-responsive">
-        <div class="bet-bg-head font-bold">{{ $fight->name }}</div>
-        {{-- <div class="bet-bg-head font-bold">EVENT CLOSED</div> --}}
-        {{-- <img src="{{ asset('img/10-streak-win-promo-poster.png') }}" alt="10-streak-win-promo"> --}}
+        <input type="hidden" id="video-display" value="{{ $video_display }}">
+        <div class="bet-bg-head font-bold" id="event-name">{{ $fight->name }}</div>
+        <div id="header-closed" class="bet-bg-head font-bold" style="display: none;">EVENT CLOSED</div>
+        <img id="poster-img" style="display: none;" src="{{ asset('img/10-streak-win-promo-poster.png') }}" alt="10-streak-win-promo">
         <mux-player
           stream-type="live"
+          id="mux-player"
           playback-id="MOj400Q02mTPiMOtfP64s4HCwmYkzCXdNF00HsregJ41fo"
           metadata-video-title="Placeholder (optional)"
           metadata-viewer-user-id="Placeholder (optional)"
@@ -110,6 +112,19 @@
         $(this).val(amt);
       }
     });
+
+    var showVideo = $('#video-display').val();
+    if(showVideo == true) {
+      $('#event-name').show();
+      $('#header-closed').hide();
+      $('#poster-img').hide();
+      $('#mux-player').show();
+    } else {
+      $('#event-name').hide();
+      $('#header-closed').show();
+      $('#poster-img').show();
+      $('#mux-player').hide();
+    }
   })
 
 </script>

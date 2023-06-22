@@ -14,32 +14,39 @@ $(function() {
 
   const [lastPostion, setLastPosition] = useState('');
 
-  $('#settings-btn').on('click', function (e) {
-    // $('#modal-settings').modal('show')
-    Swal.fire({
-      title: 'SHOW VIDEO?',
-      showCloseButton: false,
-      showDenyButton: true,
-      allowOutsideClick: false,
-      confirmButtonText: 'YES',
-      denyButtonText: 'NO',
-      denyButtonColor: 'secondary',
-      allowEscapeKey: false
-    })
-    .then((result) => {
-      if (result.isConfirmed) {
-        $('#header-fight').show();
+
+  if($('#switch-video-display').is(':checked')) {
+    $('#event-name').show();
+    $('#header-closed').hide();
+    $('#poster-img').hide();
+    $('#mux-player').show();
+  } else {
+    $('#event-name').hide();
+    $('#header-closed').show();
+    $('#poster-img').show();
+    $('#mux-player').hide();
+  }
+
+  $('#switch-video-display').on('change', async function (e) {
+
+    try {
+      let displayVideo = $('#switch-video-display').is(':checked') ? true : false;
+      await axios.post('/settings/video-display', { screen: displayVideo });
+      if(displayVideo) {
+        $('#event-name').show();
         $('#header-closed').hide();
         $('#poster-img').hide();
-        $('mux-player').show();
+        $('#mux-player').show();
       } else {
-        $('#header-fight').hide();
+        $('#event-name').hide();
         $('#header-closed').show();
         $('#poster-img').show();
-        $('mux-player').hide();
+        $('#mux-player').hide();
       }
-    })
-
+    }
+    catch (error) {
+      console.log(error);
+    }
   })
 
   fetch('/fight/results') // change to ajax later
