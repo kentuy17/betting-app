@@ -292,7 +292,7 @@ async function betHistory(id) {
       "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
     "columnDefs": [
       {
-          "targets": [1, 2, 3, 4, 5],
+          "targets": [1, 2, 3, 4, 5, 6],
           className: 'dt-body-center'
       }
     ],
@@ -328,6 +328,12 @@ async function betHistory(id) {
         "data": null,
         render: function(data, type, row, meta) {
           return row.winamount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+      },
+      {
+        "data": null,
+        render: function(data, type, row, meta) {
+          return row.current_points.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         }
       },
       {

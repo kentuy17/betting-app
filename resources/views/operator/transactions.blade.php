@@ -221,6 +221,7 @@
                 <th>PERCENT %</th>
                 <th>STATUS</th>
                 <th>WIN AMOUNT</th>
+                <th>CURRENT POINTS</th>
                 <th>DATE</th>
               </tr>
             </thead>
