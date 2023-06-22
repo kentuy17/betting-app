@@ -120,7 +120,6 @@ Route::group(['middleware' => ['auth','visitor']], function() {
     Route::group(['middleware' => ['csr']], function () {
         Route::get('/remitpoints', [OperatorController::class, 'remit'])->name('remit');
         Route::post('/remitpoints', [OperatorController::class, 'remitSubmit']);
-
         Route::get('/refillpoints', [OperatorController::class, 'refill'])->name('refill');
         Route::post('/refillpoints', [OperatorController::class, 'refillSubmit'])->name('refill.upload.post');
         Route::get('/requests', [OperatorController::class, 'viewRequests'])->name('requests');
@@ -129,7 +128,7 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::get('/passwordreset-request', [OperatorController::class, 'viewResetPassword'])->name('operator.password-reset');
         Route::post('/passwordreset-approve', [OperatorController::class, 'changePasswordApprove'])->name('changePasswordApprove');
 
-
+        Route::get('/transaction/user-bet-history/{id}', [OperatorController::class, 'getBetHistoryByUserId']);
     });
 
     Route::group(['middleware' => ['auditor_csr']], function () {

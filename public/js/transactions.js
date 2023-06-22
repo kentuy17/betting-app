@@ -23,7 +23,7 @@ transactionsTable.DataTable({
       "className": 'dt-body-right',
   }, ],
   "columns": [{
-      className: 'dt-control',
+      className: 'dt-control dt-body-left',
       orderable: false,
       data: null,
       defaultContent: '',
@@ -173,20 +173,23 @@ $('#deposit-form').on('click', 'input[type="submit"]', function (e) {
     })
     .then((res) => {
       Swal.fire({
-          icon: 'success',
-          confirmButtonColor: 'green',
-          title: res.data.msg,
-          timer: 1500
-        })
-        .then(() => {
-          console.log(res);
-          $('#modal-center').modal('hide')
-          $('#operator-pts').html(res.data.points)
-          clearFields();
-        });
+        icon: 'success',
+        confirmButtonColor: 'green',
+        title: res.data.msg,
+        timer: 1500
+      })
+      .then(() => {
+        console.log(res);
+        $('#modal-center').modal('hide')
+        $('#operator-pts').html(res.data.points)
+        clearFields();
+      });
 
       transactionsTable.DataTable().ajax.reload();
       pendingCount = 0;
+    })
+    .then(() => {
+
     })
     .catch((err) => {
       Swal.fire({
@@ -283,7 +286,7 @@ $('#deposit-undo-form').on('click', 'input[type="submit"]', function (e) {
 
 function clearFields() {
   $('#updated-trans-pts').val(''), $('#trans-note-undo').val(''),
-    $('#trans-note').parent().hide();
+    $('#trans-note').parent().hide(), $('#ref-code').val(''), $('#ref-point').val('');
 }
 
 function copyRefCode(e) {

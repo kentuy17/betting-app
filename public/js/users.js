@@ -26,10 +26,10 @@ usersTable.DataTable({
   ],
   "columns": [
     {
-      className: 'dt-control',
+      className: 'dt-control dt-body-left',
       orderable: false,
-      data: null,
-      defaultContent: '',
+      data: "id",
+      defaultContent: ''
     },
     {
       "data": "username"
@@ -71,6 +71,8 @@ usersTable.DataTable({
     },
   ],
   "createdRow": function( row, data, dataIndex){
+    $(row).find('td').eq(0).attr('style', 'color: transparent !important');
+
     if( data.active){
       $(row).addClass('table-success');
       onlineCount++;
@@ -93,6 +95,10 @@ function formatDeposit(d) {
   let points = d.points.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
   return (
     `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
+      <tr>
+        <td>ID:</td>
+        <td>#${d.id}</td>
+      </tr>
       <tr>
         <td>PLAYER:</td>
         <td>${d.username}</td>

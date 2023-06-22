@@ -10,6 +10,7 @@ use App\Models\Transactions;
 use App\Models\UserPasswordReset;
 use App\Models\DerbyEvent;
 use App\Models\User;
+use App\Models\BetHistory;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
@@ -338,5 +339,33 @@ class OperatorController extends Controller
             'data' => $trans,
             'status' => 'OK',
         ], 200);
+    }
+
+    public function get($id)
+    {
+        $trans = Transactions::where('user_id', $id)
+            ->with('user')
+            ->with('operator')
+            ->orderBy('id','desc')
+            ->where('action', $action)
+            ->get();
+
+        return DataTables::of($trans)
+            ->addIndexColumn()
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
+    public function getBetHistoryByUserId($id)
+    {
+        $history = BetHistory::where('user_id', $id)
+            ->with('fight.event')
+            ->orderBy('bethistory_no','desc')
+            ->get();
+
+        return DataTables::of($history)
+            ->addIndexColumn()
+            ->rawColumns(['action'])
+            ->make(true);
     }
 }

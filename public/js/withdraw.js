@@ -2,6 +2,20 @@ var withdrawTable = $('#withdraw-trans-table');
 var wPending = 0;
 var unverified = 0;
 
+const SIDE = {
+  M: 'MERON',
+  W: 'WALA',
+  D: 'DRAW'
+}
+
+const WINNER = {
+  P: 'PENDING',
+  W: 'WIN',
+  L: 'LOSE',
+  D: 'DRAW',
+  C: 'CANCELLED'
+}
+
 withdrawTable.DataTable({
   "ajax": '/transaction/withdrawals',
   "bPaginate": true,
@@ -20,7 +34,7 @@ withdrawTable.DataTable({
   ],
   "columns": [
     {
-      className: 'dt-control',
+      className: 'dt-control dt-body-left',
       orderable: false,
       data: null,
       defaultContent: '',
@@ -102,8 +116,8 @@ function format(d) {
       <i class="fa-solid fa-circle-info"></i></button>`;
   var btnCopy = `<button data-bs-toggle="tooltip" title="Copied!" data-bs-trigger="click" class="btn btn-link text-primary btn-icon copy-phone" id="copy-phone" data-phone-number="${d.mobile_number}"
       onclick="copyPhone(this);"><i class="fa-solid fa-copy"></i></button>`;
-  let betHistory = `<a href="javascript:void(0)" data-id="${d.id}" class="btn btn-link text-primary btn-icon pl-0 show">view
-      <i class="fa-solid fa-eye"></i></a>`;
+  let betHistory = `<button onclick="betHistory(${d.id})" class="btn btn-link btn-suucess btn-icon pl-0 bet-history-show">
+    <i class="fa-solid fa-money-bill text-success"></i></button>`;
   var expandContent = `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
       <tr>
         <td>ID:</td>
@@ -183,10 +197,9 @@ function copyPhone(e) {
 }
 
 async function operation(id) {
-  $('#withdraw-modal').modal('show')
+  $('#bet-history-modal').modal('show')
   $('.modal-title').text('WITHDRAW')
   $('input#withdraw-id').val(id);
-
 }
 
 $('#withdraw-form').on('click', 'input[type="submit"]',function(e) {
@@ -235,6 +248,7 @@ $('#withdraw-action').on('change', function(e) {
 
 $('[data-dismiss="modal"]').on('click', function() {
   $('#withdraw-modal').modal('hide');
+  $('#bethistory-modal').modal('hide');
 })
 
 $('#badge-withdraw-unverified').tooltip().show()
@@ -243,3 +257,120 @@ $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function(e){
   $($.fn.dataTable.tables(true)).DataTable()
      .columns.adjust();
 });
+
+
+// ----------------------------------------------------------------
+
+
+async function betHistory(id) {
+  var tr = $(this).closest('tr');
+  var row = withdrawTable.DataTable().row(tr);
+  console.log(row);
+  const betHistoryTable = $('#bethistory-table');
+  $('#bethistory-modal').modal('show')
+  await betHistoryTable.DataTable().clear().destroy();
+  betHistoryTable.DataTable({
+    "bPaginate": true,
+    // "async": true,
+    "bLengthChange": true,
+    "bFilter": true,
+    "bInfo": false,
+    "bAutoWidth": true,
+    "scrollX": true,
+    "ajax": '/transaction/user-bet-history/'+id,
+    "pagingType": 'numbers',
+    "processing": true,
+    "serverSide": true,
+    "pageLength": 25,
+    "language": {
+      "search": '',
+      "lengthMenu": "_MENU_",
+    },
+    "dom": "<'row'<'col-4'l><'col-8'f>>" +
+      "<'row'<'col-sm-12'tr>>" +
+      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+    "columnDefs": [
+      {
+          "targets": [1, 2, 3, 4, 5],
+          className: 'dt-body-center'
+      }
+    ],
+    "columns": [
+      {
+        "data": "fight_no"
+      },
+      {
+        "data": null,
+        render: (data, type, row, meta) => {
+          return SIDE[row.side]
+        }
+      },
+      {
+        "data": null,
+        render: function(data, type, row, meta) {
+          return row.betamount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+      },
+      {
+        "data": null,
+        render: (data, type, row, meta) => {
+          return `${row.percent.toFixed(2)}%`
+        }
+      },
+      {
+        "data": null,
+        render: (data, type, row, meta) => {
+          return row.status != '' ? WINNER[row.status] : "PENDING";
+        }
+      },
+      {
+        "data": null,
+        render: function(data, type, row, meta) {
+          return row.winamount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+      },
+      {
+        "data": "created_at"
+      }
+    ],
+    "createdRow": function( row, data, dataIndex){
+      if( data.status ==  `W`) {
+        $(row).find('td').eq(3).attr('style', 'color: green !important');
+        $(row).find('td').eq(4).attr('style', 'color: yellow !important');
+      }
+
+      if( data.status ==  `L` ) {
+        $(row).find('td').eq(1).attr('style', 'color: red !important');
+      }
+
+      if( data.side == 'M' ) {
+        $(row).find('td').eq(1).attr('style', 'color: red !important');
+      }
+
+      if( data.side == 'W' ) {
+        $(row).find('td').eq(1).attr('style', 'color: blue !important');
+      }
+    }
+  })
+}
+
+
+function formatBetHistory(d) {
+  let win = '', status = '', side = '';
+  if(d.status == 'W') {
+    win = 'style="color:yellow"';
+    status = 'style="color:green"';
+  }
+
+  if(d.status == 'L') {
+    status = 'style="color:red"';
+  }
+
+  if(d.side == 'M') {
+    side = 'style="color:red"'
+  }
+
+  if(d.side == 'W') {
+    side = 'style="color:blue"';
+  }
+}
