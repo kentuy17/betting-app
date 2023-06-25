@@ -16,32 +16,35 @@ $(function() {
 
 
   if($('#switch-video-display').is(':checked')) {
-    $('#event-name').show();
+    // $('#event-name').show();
     $('#header-closed').hide();
     $('#poster-img').hide();
     $('#mux-player').show();
+    $('#jeno-label').hide();
   } else {
     $('#event-name').hide();
     $('#header-closed').show();
     $('#poster-img').show();
     $('#mux-player').hide();
+    $('#jeno-label').show();
   }
 
   $('#switch-video-display').on('change', async function (e) {
-
     try {
       let displayVideo = $('#switch-video-display').is(':checked') ? true : false;
       await axios.post('/settings/video-display', { screen: displayVideo });
       if(displayVideo) {
-        $('#event-name').show();
+        // $('#event-name').show();
         $('#header-closed').hide();
         $('#poster-img').hide();
         $('#mux-player').show();
+        $('#jeno-label').hide();
       } else {
-        $('#event-name').hide();
+        // $('#event-name').hide();
         $('#header-closed').show();
         $('#poster-img').show();
         $('#mux-player').hide();
+        $('#jeno-label').show();
       }
     }
     catch (error) {

@@ -55,10 +55,10 @@
     <div class="card mb-0">
       <div id="video-stream-container" class="embed-responsive">
         <div id="header-fight" class="bet-bg-head font-bold">
-          <div id="event-name">{{ $fight->name }}</div>
+          <div id="event-name" style="display:none;">{{ $fight->name }}</div>
           <div id="header-closed" class="bet-bg-head font-bold" style="display: none;">EVENT CLOSED</div>
           <div class="form-check form-switch">
-            <label class="text-black mr-2" for="switch-video-display">JENO PINDOTA NI</label>
+            <label class="text-black mr-2" id="jeno-label" for="switch-video-display"></label>
             <input class="form-check-input" type="checkbox" id="switch-video-display" @if ($setting) checked @endif>
           </div>
         </div>

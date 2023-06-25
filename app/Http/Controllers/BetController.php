@@ -91,7 +91,8 @@ class BetController extends Controller
             'side' => $bet['side'],
             'percent' => 0,
             'betamount' => $bet['amount'],
-            'winamount' => 0
+            'winamount' => 0,
+            'current_points' => Auth::user()->points,
         ]);
 
         } catch (\Exception $e) {
