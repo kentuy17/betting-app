@@ -272,8 +272,6 @@ class FightController extends Controller
         }
 
         if ($winner == 'C' || $winner == 'D') {
-            $calc = $this->calculatePrevFight($fightDetail);
-
             $user_bets = Bet::where([
                 'fight_id' => $fightDetail->id
             ])->get();
@@ -290,6 +288,7 @@ class FightController extends Controller
                 $user->save();
 
                 if ($winner == 'D') {
+                    $calc = $this->calculatePrevFight($fightDetail);
                     $percentage = $bet->side == 'M' ? $calc['meron'] : $calc['wala'];
                 }
 

@@ -265,7 +265,7 @@ $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function(e){
 async function betHistory(id) {
   var tr = $(this).closest('tr');
   var row = withdrawTable.DataTable().row(tr);
-  console.log(row);
+  // console.log(row);
   const betHistoryTable = $('#bethistory-table');
   $('#bethistory-modal').modal('show')
   await betHistoryTable.DataTable().clear().destroy();
@@ -342,12 +342,12 @@ async function betHistory(id) {
     ],
     "createdRow": function( row, data, dataIndex){
       if( data.status ==  `W`) {
-        $(row).find('td').eq(3).attr('style', 'color: green !important');
-        $(row).find('td').eq(4).attr('style', 'color: yellow !important');
+        $(row).find('td').eq(4).attr('style', 'color: green !important');
+        $(row).find('td').eq(5).attr('style', 'color: yellow !important');
       }
 
       if( data.status ==  `L` ) {
-        $(row).find('td').eq(1).attr('style', 'color: red !important');
+        $(row).find('td').eq(4).attr('style', 'color: red !important');
       }
 
       if( data.side == 'M' ) {

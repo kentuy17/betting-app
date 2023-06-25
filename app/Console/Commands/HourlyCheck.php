@@ -6,6 +6,8 @@ use Illuminate\Console\Command;
 use App\Models\User;
 use Pusher\Pusher;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+use Shetabit\Visitor\Models\Visit;
 
 class HourlyCheck extends Command
 {
@@ -47,5 +49,9 @@ class HourlyCheck extends Command
                 ]);
             }
         }
+
+        $date = Carbon::now()->subHour();
+        $delete = Visit::where('created_at', '<=', $date)->delete();
+        Log::channel('cron')->info("Delete: " . $delete);
     }
 }
