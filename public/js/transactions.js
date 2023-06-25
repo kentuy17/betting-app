@@ -22,6 +22,7 @@ transactionsTable.DataTable({
     "search": '',
     "lengthMenu": "_MENU_",
   },
+  "order": [[5, 'DESC']],
   "dom": "<'row'<'col-4'l><'col-8'f>>" +
     "<'row'<'col-sm-12'tr>>" +
     "<'row'<'col-md-12'p>>",

@@ -27,6 +27,7 @@ withdrawTable.DataTable({
   // "processing": true,
   // "serverSide": true,
   // "pageLength": 25,
+  "order": [[6, 'DESC']],
   "pagingType": 'numbers',
   "language": {
     "search": '',
