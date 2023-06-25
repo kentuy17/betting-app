@@ -17,7 +17,11 @@ body.dark-mode {
 .card-body{padding:1.25rem;}
 
 .table>tbody>tr>td {
-  color: hsla(0,0%,100%,.7)!important;
+  color: hsla(0,0%,100%,.7) !important;
+}
+
+.table>tbody>tr.failed>td {
+  color: red !important;
 }
 
 .table>tbody>tr.bg-warning>td {

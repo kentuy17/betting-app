@@ -19,48 +19,51 @@
   @endphp
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-md-12">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-          @if (hasAccess('Cash-in Operator'))
-            <li class="nav-item" role="presentation">
-              <button class="nav-link {{ $cashin }}" id="deposit-tab" data-bs-toggle="tab" data-bs-target="#deposit-panel" type="button" role="tab" aria-controls="deposit" aria-selected="true">
-                DEPOSIT <span id="badge-deposit" style="display: none;" class="badge bg-danger">0</span></button>
-              {{-- <button onclick="showNotification('fuck yeah!')">Show Notif</button> --}}
+      <div class="col-md-12 card">
+        <div class="card-header" style="padding: 5px 5px 0 !important;">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            @if (hasAccess('Cash-in Operator'))
+              <li class="nav-item" role="presentation">
+                <button class="text-xs px-1 nav-link {{ $cashin }}" id="deposit-tab" data-bs-toggle="tab" data-bs-target="#deposit-panel" type="button" role="tab" aria-controls="deposit" aria-selected="true">
+                  DEPOSIT <span id="badge-deposit" style="display: none;" class="text-xs px-1 py-0 badge bg-danger">0</span></button>
+                {{-- <button onclick="showNotification('fuck yeah!')">Show Notif</button> --}}
+              </li>
+            @endif
+            @if (hasAccess('Cash-out Operator'))
+              <li class="nav-item" role="presentation">
+                <button class="text-xs px-1 nav-link {{ $cashout }}" id="withdraw-tab" data-bs-toggle="tab" data-bs-target="#withdraw" type="button" role="tab" aria-controls="withdraw" aria-selected="false">
+                  WITHDRAW <span id="badge-withdraw" style="display: none;" class="text-xs px-1 py-0 badge bg-danger">0</span>
+                  <span id="badge-withdraw-unverified" data-bs-toggle="tooltip" title="Missing Ref-code" style="display: none;" class="text-xs badge bg-warning">0</span></button>
+              </li>
+            @endif
+            <li class="nav-item credit-nav-item">
+              <div class="nav-credits-wr w-25 w-sm-50 gold-text">
+                <a href="/refillpoints" class="d-flex align-items-center justify-content-end gp-credits">
+                  <div class="bg-success add-btn">
+                    <svg class="svg-inline--fa fa-coins fa-w-16" data-prefix="fas" data-icon="coins" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+                      <path fill="currentColor"
+                        d="M0 405.3V448c0 35.3 86 64 192 64s192-28.7 192-64v-42.7C342.7 434.4 267.2 448 192 448S41.3 434.4 0 405.3zM320 128c106 0 192-28.7 192-64S426 0 320 0 128 28.7 128 64s86 64 192 64zM0 300.4V352c0 35.3 86 64 192 64s192-28.7 192-64v-51.6c-41.3 34-116.9 51.6-192 51.6S41.3 334.4 0 300.4zm416 11c57.3-11.1 96-31.7 96-55.4v-42.7c-23.2 16.4-57.3 27.6-96 34.5v63.6zM192 160C86 160 0 195.8 0 240s86 80 192 80 192-35.8 192-80-86-80-192-80zm219.3 56.3c60-10.8 100.7-32 100.7-56.3v-42.7c-35.5 25.1-96.5 38.6-160.7 41.8 29.5 14.3 51.2 33.5 60 57.2z">
+                      </path>
+                    </svg>
+                  </div>
+                  <div class="credits-data d-flex "><small class="mr-1">CREDITS:</small>
+                    <small class="pr-2 gp-yellow-text font-weight-bold" id="operator-pts">{{ number_format(Auth::user()->points, 2) }}</small>
+                  </div>
+                </a>
+              </div>
             </li>
-          @endif
-          @if (hasAccess('Cash-out Operator'))
-            <li class="nav-item" role="presentation">
-              <button class="nav-link {{ $cashout }}" id="withdraw-tab" data-bs-toggle="tab" data-bs-target="#withdraw" type="button" role="tab" aria-controls="withdraw" aria-selected="false">
-                WITHDRAW <span id="badge-withdraw" style="display: none;" class="badge bg-danger">0</span>
-                <span id="badge-withdraw-unverified" data-bs-toggle="tooltip" title="Missing Ref-code" style="display: none;" class="badge bg-warning">0</span></button>
-            </li>
-          @endif
-          <li class="nav-item credit-nav-item">
-            <div class="nav-credits-wr w-25 w-sm-50 gold-text">
-              <a href="/refillpoints" class="d-flex align-items-center justify-content-end gp-credits">
-                <div class="bg-success add-btn">
-                  <svg class="svg-inline--fa fa-coins fa-w-16" data-prefix="fas" data-icon="coins" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
-                    <path fill="currentColor"
-                      d="M0 405.3V448c0 35.3 86 64 192 64s192-28.7 192-64v-42.7C342.7 434.4 267.2 448 192 448S41.3 434.4 0 405.3zM320 128c106 0 192-28.7 192-64S426 0 320 0 128 28.7 128 64s86 64 192 64zM0 300.4V352c0 35.3 86 64 192 64s192-28.7 192-64v-51.6c-41.3 34-116.9 51.6-192 51.6S41.3 334.4 0 300.4zm416 11c57.3-11.1 96-31.7 96-55.4v-42.7c-23.2 16.4-57.3 27.6-96 34.5v63.6zM192 160C86 160 0 195.8 0 240s86 80 192 80 192-35.8 192-80-86-80-192-80zm219.3 56.3c60-10.8 100.7-32 100.7-56.3v-42.7c-35.5 25.1-96.5 38.6-160.7 41.8 29.5 14.3 51.2 33.5 60 57.2z">
-                    </path>
-                  </svg>
-                </div>
-                <div class="credits-data d-flex "><small class="mr-1">CREDITS:</small>
-                  <small class="pr-2 gp-yellow-text font-weight-bold" id="operator-pts">{{ number_format(Auth::user()->points, 2) }}</small>
-                </div>
-              </a>
-            </div>
-          </li>
-        </ul>
-        @if (Auth::user()->user_role->name == 'Cash-in Operator' || hasAccess('Cash-in Operator'))
+          </ul>
+        </div>
+        <div class="card-body" style="padding: 5px !important;">
           <div class="tab-content" id="myTabContent">
+            @if (Auth::user()->user_role->name == 'Cash-in Operator' || hasAccess('Cash-in Operator'))
             <div class="tab-pane fade show {{ $cashin }}" id="deposit-panel" role="tabpanel" aria-labelledby="deposit-tab">
               <table class="table dt-responsive table-striped nowrap w-100" id="deposit-trans-table">
                 <thead>
                   <tr>
-                    <th>#</th>
+                    {{-- <th>#</th> --}}
                     <th>Player</th>
-                    <th>Outlet</th>
+                    {{-- <th>Outlet</th> --}}
                     <th>Amount</th>
                     <th>Mobile#</th>
                     <th>Operator</th>
@@ -72,27 +75,29 @@
                 </thead>
               </table>
             </div>
-        @endif
-        @if (Auth::user()->user_role->name == 'Cash-out Operator' || hasAccess('Cash-out Operator'))
-          <div class="tab-pane fade show {{ $cashout }}" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
-            <table class="table dt-responsive table-striped nowrap w-100" id="withdraw-trans-table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Player</th>
-                  <th>Outlet</th>
-                  <th>Amount</th>
-                  <th>Mobile#</th>
-                  <th>Processed By</th>
-                  <th>Ref Code</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-            </table>
+            @endif
+            @if (Auth::user()->user_role->name == 'Cash-out Operator' || hasAccess('Cash-out Operator'))
+            <div class="tab-pane fade show {{ $cashout }}" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
+              <table class="table dt-responsive table-striped nowrap w-100" id="withdraw-trans-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Player</th>
+                    {{-- <th>Outlet</th> --}}
+                    <th>Amount</th>
+                    <th>Mobile#</th>
+                    <th>Processed By</th>
+                    <th>Ref Code</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+            @endif
           </div>
-        @endif
+        </div>
       </div>
 
     </div>
@@ -225,7 +230,13 @@
   <div class="modal fade" id="bethistory-modal" tabindex="-1" role="dialog" aria-labelledby="BET HISTORY" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
-        <div class="modal-body">
+        <div class="modal-header">
+          <h5 id="bethistory-head"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body pt-0">
           <table class="table dt-responsive table-striped nowrap w-100" id="bethistory-table">
             <thead>
               <tr>
@@ -242,7 +253,7 @@
           </table>
         </div>
         <div class="modal-footer">
-          <a class="btn btn-secondary btn-sm" data-dismiss="modal">CLOSE</a>
+          {{-- <a class="btn btn-secondary btn-sm" data-dismiss="modal">CLOSE</a> --}}
         </div>
       </div>
     </div>

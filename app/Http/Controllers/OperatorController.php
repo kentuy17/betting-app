@@ -58,12 +58,9 @@ class OperatorController extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
-        $trans_table = DataTables::of($trans)
-            ->addIndexColumn()
-            ->rawColumns(['action'])
-            ->make(true);
-
-        return $trans_table;
+        return response()->json([
+            'data' => $trans,
+        ]);
     }
 
     public function processDepositRevert(Request $request)
@@ -144,10 +141,9 @@ class OperatorController extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
-        return DataTables::of($trans)
-            ->addIndexColumn()
-            ->rawColumns(['action'])
-            ->make(true);
+        return response()->json([
+            'data' => $trans,
+        ]);
     }
 
     public function processWithdraw(Request $request)
