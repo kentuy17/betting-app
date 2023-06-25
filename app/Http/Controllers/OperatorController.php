@@ -55,15 +55,18 @@ class OperatorController extends Controller
         $trans = Transactions::where('action', 'deposit')
             ->with('user')
             ->with('operator')
-            ->orderBy('id', 'desc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
-        $trans_table = DataTables::of($trans)
-            ->addIndexColumn()
-            ->rawColumns(['action'])
-            ->make(true);
+        // $trans_table = DataTables::of($trans)
+        //     ->addIndexColumn()
+        //     ->rawColumns(['action'])
+        //     ->make(true);
 
-        return $trans_table;
+        // return $trans_table;
+        return response()->json([
+            'data' => $trans,
+        ]);
     }
 
     public function processDepositRevert(Request $request)
@@ -141,13 +144,17 @@ class OperatorController extends Controller
         $trans = Transactions::where('action', 'withdraw')
             ->with('user')
             ->with('operator')
-            ->orderBy('id', 'desc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
-        return DataTables::of($trans)
-            ->addIndexColumn()
-            ->rawColumns(['action'])
-            ->make(true);
+        // return DataTables::of($trans)
+        //     ->addIndexColumn()
+        //     ->rawColumns(['action'])
+        //     ->make(true);
+
+        return response()->json([
+            'data' => $trans
+        ]);
     }
 
     public function processWithdraw(Request $request)

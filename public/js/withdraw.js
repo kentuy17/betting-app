@@ -19,13 +19,21 @@ const WINNER = {
 withdrawTable.DataTable({
   "ajax": '/transaction/withdrawals',
   "bPaginate": true,
-  "bLengthChange": false,
+  "bLengthChange": true,
   "bFilter": true,
   "bInfo": false,
   "bAutoWidth": true,
   "scrollX": true,
-  "processing": true,
-  "serverSide": true,
+  // "processing": true,
+  // "serverSide": true,
+  "order": [[7, 'DESC']],
+  "language": {
+    "search": '',
+    "lengthMenu": "_MENU_",
+  },
+  "dom": "<'row'<'col-4'l><'col-8'f>>" +
+    "<'row'<'col-sm-12'tr>>" +
+    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
   "columnDefs": [
     {
       "targets": [3],
