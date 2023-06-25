@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
 
-  @vite(['resources/sass/app.scss', 'public/css/chat.scss', 'resources/js/app.js', 'resources/css/app.css'])
+  @vite(['resources/sass/app.scss', 'public/css/chat.scss', 'resources/js/app.js', 'resources/css/app.css', 'resources/js/notif-vue.js'])
 
   <!-- Custom -->
   <link rel="stylesheet" href="{{ asset('css/dark-mode.css') }}" type="text/css">
@@ -81,14 +81,7 @@
         </a>
       </div>
       <div class="nav-item dropdown" id="notif-nav" style="display: none">
-        <a class="nav-link" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-          <i class="far fa-bell"></i>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right hide" style="left: inherit; right: 0px;">
-          <span class="dropdown-item dropdown-header">0 Notifications</span>
-          <div class="dropdown-divider"></div>
-          <a href="#" id="allow-notifications" class="dropdown-item dropdown-footer">See All Notifications</a>
-        </div>
+
       </div>
       <div class="hidden w-full md:flex md:items-center md:w-auto" id="menu">
         <ul class="text-base md:flex md:justify-between md:pt-0 uppercase">

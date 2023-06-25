@@ -26,7 +26,8 @@ withdrawTable.DataTable({
   "scrollX": true,
   // "processing": true,
   // "serverSide": true,
-  "order": [[7, 'DESC']],
+  // "pageLength": 25,
+  "pagingType": 'numbers',
   "language": {
     "search": '',
     "lengthMenu": "_MENU_",
@@ -36,9 +37,17 @@ withdrawTable.DataTable({
     "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
   "columnDefs": [
     {
-      "targets": [3],
+      "targets": [2],
       "className": 'dt-body-right',
     },
+    {
+      "targets": [1, 3, 4, 5, ],
+      className: 'dt-body-center'
+    },
+    {
+      "targets": [1, 2, 3, 4, 5, 6, 7, 8],
+      className: 'dt-head-center'
+    }
   ],
   "columns": [
     {
@@ -50,9 +59,6 @@ withdrawTable.DataTable({
     },
     {
       "data": "user.username"
-    },
-    {
-      "data": "outlet"
     },
     {
       "data": null,
@@ -124,7 +130,7 @@ function format(d) {
       <i class="fa-solid fa-circle-info"></i></button>`;
   var btnCopy = `<button data-bs-toggle="tooltip" title="Copied!" data-bs-trigger="click" class="btn btn-link text-primary btn-icon copy-phone" id="copy-phone" data-phone-number="${d.mobile_number}"
       onclick="copyPhone(this);"><i class="fa-solid fa-copy"></i></button>`;
-  let betHistory = `<button onclick="betHistory(${d.user_id})" class="btn btn-link btn-suucess btn-icon pl-0 bet-history-show">
+  let betHistory = `<button onclick="betHistory(${d.user_id},'${d.user.username}')" class="btn btn-link btn-suucess btn-icon pl-0 bet-history-show">
     <i class="fa-solid fa-money-bill text-success"></i></button>`;
   var expandContent = `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
       <tr>
@@ -269,17 +275,13 @@ $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function(e){
 
 // ----------------------------------------------------------------
 
-
-async function betHistory(id) {
-  var tr = $(this).closest('tr');
-  var row = withdrawTable.DataTable().row(tr);
-  // console.log(row);
+async function betHistory(id,username='') {
   const betHistoryTable = $('#bethistory-table');
-  $('#bethistory-modal').modal('show')
   await betHistoryTable.DataTable().clear().destroy();
+  $('#bethistory-modal').modal('show')
+  $('#bethistory-head').text(username);
   betHistoryTable.DataTable({
     "bPaginate": true,
-    // "async": true,
     "bLengthChange": true,
     "bFilter": true,
     "bInfo": false,
@@ -290,7 +292,6 @@ async function betHistory(id) {
     "processing": true,
     "serverSide": true,
     "order": [[6, 'desc']],
-    // "pageLength": 25,
     "language": {
       "search": '',
       "lengthMenu": "_MENU_",

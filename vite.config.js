@@ -14,6 +14,7 @@ export default defineConfig({
                 'resources/js/play-vue.js',
                 'resources/js/fight-vue.js',
                 'resources/js/ghost-vue.js',
+                'resources/js/notif-vue.js',
                 'public/js/play.js',
                 'public/js/fight.js',
                 'public/js/ghost.js',

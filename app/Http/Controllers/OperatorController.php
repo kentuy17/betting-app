@@ -58,12 +58,6 @@ class OperatorController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        // $trans_table = DataTables::of($trans)
-        //     ->addIndexColumn()
-        //     ->rawColumns(['action'])
-        //     ->make(true);
-
-        // return $trans_table;
         return response()->json([
             'data' => $trans,
         ]);
@@ -147,13 +141,8 @@ class OperatorController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        // return DataTables::of($trans)
-        //     ->addIndexColumn()
-        //     ->rawColumns(['action'])
-        //     ->make(true);
-
         return response()->json([
-            'data' => $trans
+            'data' => $trans,
         ]);
     }
 

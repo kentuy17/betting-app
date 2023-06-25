@@ -79,7 +79,7 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::get('/play', [PlayerController::class, 'index'])->name('play');
         Route::get('/play/history', [PlayerController::class, 'bethistory'])->name('player.bethistory');
         Route::get('/reports', [PlayerController::class, 'reports'])->name('player.reports');
-        Route::post('/bet/add', [BetController::class, 'addBet']);
+        Route::post('/bet/add', [BetController::class, 'addBet'])->name('player.bet');
         Route::get('/deposit', [PlayerController::class, 'deposit'])->name('deposit');
         Route::post('/deposit', [PlayerController::class, 'depositSubmit'])->name('deposit.upload.post');
         Route::get('/withdrawform', [PlayerController::class, 'profileWithdraw'])->name('player.withdraw');
