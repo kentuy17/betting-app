@@ -39,7 +39,7 @@ class HourlyCheck extends Command
 
         $pusher = new Pusher($auth_key, $secret_key, $app_id,['cluster'=>'ap1']);
 
-        $users = User::get();
+        $users = User::whereNotIn('id',[9,2])->get();
         foreach ($users as $key => $user) {
             # code...
             if(!$user->isOnline()) {
@@ -50,7 +50,7 @@ class HourlyCheck extends Command
             }
         }
 
-        $date = Carbon::now()->subHour();
+        $date = Carbon::now()->subHours(2);
         $delete = Visit::where('created_at', '<=', $date)->delete();
         Log::channel('cron')->info("Delete: " . $delete);
     }

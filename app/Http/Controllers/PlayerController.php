@@ -105,17 +105,17 @@ class PlayerController extends Controller
                 'formFile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
 
-            $trimPhone = $request->phone_no;
-            if (Str::startsWith($request->phone_no, ['+63', '63'])) {
-                 $trimPhone = preg_replace('/^\+?63/', '0', $trimPhone);
-            }
-            else if (Str::startsWith($request->phone_no, ['9'])) {
-                $trimPhone = '0' . $request->phone_no;
-            }
+            // $trimPhone = $request->phone_no;
+            // if (Str::startsWith($request->phone_no, ['+63', '63'])) {
+            //      $trimPhone = preg_replace('/^\+?63/', '0', $trimPhone);
+            // }
+            // else if (Str::startsWith($request->phone_no, ['9'])) {
+            //     $trimPhone = '0' . $request->phone_no;
+            // }
 
-            $this->validate($request, [
-                'phone_no' => ['regex:/(0?9|\+?63)[0-9]{9}/'],
-            ]);
+            // $this->validate($request, [
+            //     'phone_no' => ['regex:/(0?9|\+?63)[0-9]{9}/'],
+            // ]);
 
             $imageName = time().'.'.$request->formFile->extension();
             $path = 'public/' . $imageName;

@@ -11,19 +11,18 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>EVENT</th>
+                {{-- <th>EVENT</th> --}}
                 <th>FIGHT #</th>
-                <th>SIDE</th>
-                <th>BET AMOUNT</th>
+                <th>BET SIDE</th>
+                <th>RESULT</th>
+                <th>TOTAL WIN</th>
                 <th>PERCENT %</th>
-                <th>STATUS</th>
-                <th>WIN AMOUNT</th>
+                <th>BET</th>
                 <th>DATE</th>
               </tr>
             </thead>
           </table>
         </div>
-
       </div>
     </div>
   </div>
