@@ -107,14 +107,14 @@
   <div class="modal fade" id="modal-center" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-top" role="document">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header pb-3">
           <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <form id="deposit-form" method="post">
-          <div class="modal-body">
+          <div class="modal-body pt-0">
             <input type="hidden" name="trans-id" id="trans-id">
             <div class="form-group align-center">
               <img id="trans-receipt" data-storage="{{ asset('storage/') }}" src="" alt="">

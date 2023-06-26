@@ -164,7 +164,7 @@
       @yield('content')
     </main>
     @auth
-    @if(Auth::user()->user_role->name == 'Player')
+    @if(Auth::user()->user_role->name == 'Player' && Auth::user()->legit)
     @include('layouts.components.floating-chat')
     <script>
       var _user_id = {!! Auth::user()->id !!}
@@ -184,7 +184,7 @@
 <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js" type="text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" type="text/javascript"></script>
 @auth
-@if(Auth::user()->user_role->name == 'Player')
+@if(Auth::user()->user_role->name == 'Player' && Auth::user()->legit)
 <script src="{{ asset('js/floating-chat.js') }}"></script>
 @endif
 @endauth
