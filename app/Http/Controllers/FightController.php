@@ -612,7 +612,8 @@ class FightController extends Controller
                 $event->save();
 
                 // set next event as active
-                $next = $event->next();
+                $first = DerbyEvent::find(1);
+                $next = $event->next() ?? $first;
                 $next->status = 'ACTIVE';
                 $next->save();
             }
