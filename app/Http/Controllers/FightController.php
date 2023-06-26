@@ -267,7 +267,7 @@ class FightController extends Controller
                     $hist->save();
                 }
 
-                event(new Result($update));
+                // event(new Result($update));
             }
         }
 
@@ -373,7 +373,7 @@ class FightController extends Controller
                     $hist->save();
                 }
 
-                event(new Result($update));
+                // event(new Result($update));
             }
         }
         if ($winner == 'M' || $winner == 'W') {
@@ -412,7 +412,7 @@ class FightController extends Controller
                     $hist->save();
                 }
 
-                event(new Result($update));
+                // event(new Result($update));
             }
 
             #region updatelose history

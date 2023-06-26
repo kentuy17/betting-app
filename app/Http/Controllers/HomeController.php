@@ -80,4 +80,9 @@ class HomeController extends Controller
 
         return redirect('/play');
     }
+
+    public function getNotifications()
+    {
+        return false;
+    }
 }

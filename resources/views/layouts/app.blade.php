@@ -165,7 +165,7 @@
     </main>
     @auth
     @if(Auth::user()->user_role->name == 'Player' && Auth::user()->legit)
-    @include('layouts.components.floating-chat')
+    {{-- @include('layouts.components.floating-chat') --}}
     <script>
       var _user_id = {!! Auth::user()->id !!}
     </script>
@@ -185,7 +185,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" type="text/javascript"></script>
 @auth
 @if(Auth::user()->user_role->name == 'Player' && Auth::user()->legit)
-<script src="{{ asset('js/floating-chat.js') }}"></script>
+{{-- <script src="{{ asset('js/floating-chat.js') }}"></script> --}}
 @endif
 @endauth
 @yield('additional-scripts')

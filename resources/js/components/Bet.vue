@@ -154,7 +154,6 @@ export default {
       .then(resp => resp.json())
       .then(json => {
         this.fight = json.current
-        // console.log(json, 'json');
         this.message = this.setFightStatus(json.current)
         this.player.points = json.points
         this.player.id = json.id
@@ -170,7 +169,7 @@ export default {
                 alert(`Returened ${this.formatMoney(e.bet.amount)} points!`);
               }
               else {
-                alert(`Congratulations! You win ${this.formatMoney(e.bet.win_amount)}`)
+                alert(`Congratulationsss! You win ${this.formatMoney(e.bet.win_amount)}`)
               }
             }
 
@@ -181,8 +180,31 @@ export default {
 
     window.Echo.channel('fight')
       .listen('.fight', async (e) => {
-        if (e == null) return
+        if (e == null)
+        return
+
         if (e.fight.curr) {
+          if((e.fight.prev.game_winner == 'D' || e.fight.prev.game_winner == 'C') && this.playerTotalBets > 0) {
+            if(this.player.legit) {
+              alert(`Returened ${this.formatMoney(this.playerTotalBets)} points!`);
+            }
+            this.player.points += this.playerTotalBets
+          }
+
+          if(e.fight.prev.game_winner == 'M' && this.meronWinAmount > 0) {
+            if(this.player.legit) {
+              alert(`Congratulations! MERON Wins ${this.formatMoney(this.meronWinAmount)}`)
+            }
+            this.player.points += this.meronWinAmount
+          }
+
+          if(e.fight.prev.game_winner == 'W' && this.walaWinAmount > 0) {
+            if(this.player.legit) {
+              alert(`Congratulations! WALA Wins ${this.formatMoney(this.walaWinAmount)}`)
+            }
+            this.player.points += this.walaWinAmount
+          }
+
           this.fight = e.fight.curr
           this.total.meron = this.total.wala = 0
           this.player.bets.meron = this.player.bets.wala = 0
@@ -256,7 +278,11 @@ export default {
 
     walaWinAmount() {
       return (this.player.bets.wala * this.walaPercentage) / 100
-    }
+    },
+
+    playerTotalBets() {
+      return this.player.bets.meron + this.player.bets.wala
+    },
 
     // GET 5% FROM TOTAL BETS
     // commission() {
