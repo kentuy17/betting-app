@@ -110,6 +110,7 @@ export default {
       fight: [],
       fightNo: 0,
       betAmount: 0,
+      daog: false,
       amounts: [20, 50, 100, 500, 1000, 5000, 10000],
       total: {
         meron: 0,
@@ -186,25 +187,36 @@ export default {
         if (e.fight.curr) {
           if((e.fight.prev.game_winner == 'D' || e.fight.prev.game_winner == 'C') && this.playerTotalBets > 0) {
             if(this.player.legit) {
-              alert(`Returened ${this.formatMoney(this.playerTotalBets)} points!`);
+              alert(`Returened ${this.formatMoney(this.playerTotalBets)} points!`)
+              this.tada()
             }
+            this.daog = true
             this.player.points += this.playerTotalBets
           }
 
           if(e.fight.prev.game_winner == 'M' && this.meronWinAmount > 0) {
             if(this.player.legit) {
               alert(`Congratulations! MERON Wins ${this.formatMoney(this.meronWinAmount)}`)
+              this.tada()
             }
+            this.daog = true
             this.player.points += this.meronWinAmount
           }
 
           if(e.fight.prev.game_winner == 'W' && this.walaWinAmount > 0) {
             if(this.player.legit) {
               alert(`Congratulations! WALA Wins ${this.formatMoney(this.walaWinAmount)}`)
+              this.tada()
             }
+            this.daog = true
             this.player.points += this.walaWinAmount
           }
 
+          if(this.daog && !this.player.legit) {
+            this.tada()
+          }
+
+          this.daog = false
           this.fight = e.fight.curr
           this.total.meron = this.total.wala = 0
           this.player.bets.meron = this.player.bets.wala = 0
@@ -346,6 +358,11 @@ export default {
       window.location.href = 'add-credits'
     },
 
+    tada() {
+      var audio = new Audio('/music/tada.mp3');
+      return audio.play();
+    },
+
     async addBet(betSide) {
       try {
         if (this.message !== 'OPEN') {
@@ -364,7 +381,7 @@ export default {
         }
 
         if(this.player.legit) {
-          if (!confirm(`Bet ${this.betAmount}?`)) {
+          if (!confirm(`Bet ${this.betAmount.toFixed(2)}?`)) {
             return
           }
         }

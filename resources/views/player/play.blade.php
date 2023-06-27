@@ -42,12 +42,16 @@
   }
   /* #clappr{ width: 100%;height: 100%;position: relative; min-height: 320px; margin-bottom: 25px;}
   #clappr > div{ width:100%;height:100%;position: absolute;} */
+  #play-container {
+    display: flex;
+    align-content: flex-start;
+  }
 </style>
 @endsection
 
 @section('content')
 <div class="max-w-full min-w-full min-h-screen shadow-md bg-os_event_body_black row m-0 g-2" id="play-container">
-  <div class="col-md-7 my-1">
+  <div class="col-md-7 my-0">
     <div class="card mb-0">
       <div id="video-stream-container" class="embed-responsive">
         <input type="hidden" id="video-display" value="{{ $video_display }}">

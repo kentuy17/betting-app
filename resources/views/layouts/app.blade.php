@@ -32,7 +32,7 @@
       font-weight: 700;
     }
     .icon-logo {
-      max-height: 3rem;
+      max-height: 2.5rem;
     }
     .logo-container {
       display: flex;
