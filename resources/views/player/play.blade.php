@@ -58,15 +58,11 @@
         <div class="bet-bg-head font-bold" id="event-name">{{ $fight->name }}</div>
         <div id="header-closed" class="bet-bg-head font-bold" style="display: none;">EVENT CLOSED</div>
         <img id="poster-img" style="display: none;" src="{{ asset('img/10-streak-win-promo-poster.png') }}" alt="10-streak-win-promo">
-        <mux-player
-          stream-type="live"
-          id="mux-player"
-          playback-id="MOj400Q02mTPiMOtfP64s4HCwmYkzCXdNF00HsregJ41fo"
-          metadata-video-title="Placeholder (optional)"
-          metadata-viewer-user-id="Placeholder (optional)"
-          primary-color="#FFFFFF"
-          secondary-color="#000000"
-        ></mux-player>
+        <div style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
+          <iframe src="https://app.onestream.live/api/v2/rtmp/auth/stream/embed_player?key=d_auth_2078804_1tt42mfs4"
+            width="100%" height="100%" style="width:100%;height:100%;position:absolute;left:0px;top:0px;overflow: hidden;"
+            scrolling="no" frameborder="0" allow="autoplay" allowfullscreen> </iframe>
+        </div>
       </div>
     </div>
   </div>
