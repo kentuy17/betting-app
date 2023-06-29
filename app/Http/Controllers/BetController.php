@@ -70,6 +70,14 @@ class BetController extends Controller
                 ->where('fight_no', $request->fight_no)
                 ->first();
 
+            if($this->current_fight->status == 'C') {
+                $this->hacking($request, 'Closed Bet');
+                return response()->json([
+                    'status' => 422,
+                    'error' => 'Bet is closed!!!'
+                ], 422);
+            }
+
             $bet = Bet::create([
                 'fight_id' => $this->current_fight->id,
                 'fight_no' => $request->fight_no,

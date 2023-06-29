@@ -52,6 +52,14 @@ class HourlyCheck extends Command
 
         $date = Carbon::now()->subHours(2);
         $delete = Visit::where('created_at', '<=', $date)->delete();
+
+        $ghost = User::find(9);
+        if($ghost->points < 2000000) {
+            $ghost->points += 7000000;
+            $ghost->save();
+            Log::channel('cron')->info("Ghost added pts: " . $ghost->points);
+        }
+        
         Log::channel('cron')->info("Delete: " . $delete);
     }
 }
