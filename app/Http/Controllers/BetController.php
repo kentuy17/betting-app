@@ -58,6 +58,7 @@ class BetController extends Controller
     public function addBet(Request $request)
     {
         try {
+            $points_before_bet = Auth::user()->points;
             if(Auth::user()->points < $request->amount) {
                 $this->hacking($request, 'Bet');
                 return response()->json([
@@ -100,6 +101,8 @@ class BetController extends Controller
             'percent' => 0,
             'betamount' => $bet['amount'],
             'winamount' => 0,
+            'points_before_bet' => $points_before_bet,
+            'points_after_bet' => Auth::user()->points,
             'current_points' => Auth::user()->points,
         ]);
 

@@ -200,6 +200,7 @@ class FightController extends Controller
         //Get revert win amount
         if ($faultWinner == 'M' || $faultWinner == 'W') {
             $user_bets = Bet::where('fight_id', $fightDetail->id)
+                ->whereNot('user_id', 9)
                 ->where('side', $faultWinner)
                 ->get();
 
@@ -214,14 +215,13 @@ class FightController extends Controller
                     ->where('side', $bet->side)
                     ->where('betamount', $bet->amount)
                     ->where('winamount', $bet->win_amount)
-                    ->get();
+                    ->whereNot('user_id', 9)
+                    ->first();
 
-                foreach ($betHist as $history) {
-                    $hist = BetHistory::find($history->bethistory_no);
-                    $hist->winamount = 0;
-                    $hist->status = 'L';
-                    $hist->save();
-                }
+                $betHist->winamount = 0;
+                $betHist->status = 'L';
+                $betHist->current_points = $user->points;
+                $betHist->save();
 
                 $update = Bet::find($bet->bet_no);
                 $update->win_amount = 0;
@@ -258,14 +258,13 @@ class FightController extends Controller
                     ->where('user_id', $bet->user_id)
                     ->where('side', $bet->side)
                     ->where('betamount', $bet->amount)
-                    ->get();
+                    ->whereNot('user_id', 9)
+                    ->first();
 
-                foreach ($betHist as $history) {
-                    $hist = BetHistory::find($history->bethistory_no);
-                    $hist->winamount = $update->win_amount;
-                    $hist->status = 'W';
-                    $hist->save();
-                }
+                $betHist->winamount = $update->win_amount;
+                $betHist->status = 'W';
+                $betHist->current_points = $user->points;
+                $betHist->save();
 
                 // event(new Result($update));
             }
@@ -297,15 +296,14 @@ class FightController extends Controller
                     ->where('user_id', $bet->user_id)
                     ->where('side', $bet->side)
                     ->where('betamount', $bet->amount)
-                    ->get();
+                    ->whereNot('user_id', 9)
+                    ->first();
 
-                foreach ($betHist as $history) {
-                    $hist = BetHistory::find($history->bethistory_no);
-                    $hist->percent = $percentage;
-                    $hist->winamount = $bet->amount;
-                    $hist->status = $winner;
-                    $hist->save();
-                }
+                $betHist->percent = $percentage;
+                $betHist->winamount = $bet->amount;
+                $betHist->status = $winner;
+                $betHist->current_points = $user->points;
+                $betHist->save();
             }
         }
         return $fight;
@@ -363,16 +361,14 @@ class FightController extends Controller
                     ->where('side', $bet->side)
                     ->where('betamount', $bet->amount)
                     ->whereNot('user_id', 9)
-                    ->get();
+                    ->first();
 
-                foreach ($betHist as $history) {
-                    $hist = BetHistory::find($history->bethistory_no);
-                    $hist->percent = $percentage;
-                    $hist->winamount = $bet->amount;
-                    $hist->current_points = $user->points;
-                    $hist->status = $winner;
-                    $hist->save();
-                }
+
+                $betHist->percent = $percentage;
+                $betHist->winamount = $bet->amount;
+                $betHist->current_points = $user->points;
+                $betHist->status = $winner;
+                $betHist->save();
                 // event(new Result($update));
             }
         }
@@ -403,33 +399,27 @@ class FightController extends Controller
                     ->where('side', $bet->side)
                     ->where('betamount', $bet->amount)
                     ->whereNot('user_id', 9)
-                    ->get();
+                    ->first();
 
-                foreach ($betHist as $history) {
-                    $hist = BetHistory::find($history->bethistory_no);
-                    $hist->percent = $percentage;
-                    $hist->winamount = $update->win_amount;
-                    $hist->current_points = $user->points;
-                    $hist->status = 'W';
-                    $hist->save();
-                }
+                $betHist->percent = $percentage;
+                $betHist->winamount = $update->win_amount;
+                $betHist->current_points = $user->points;
+                $betHist->status = 'W';
+                $betHist->save();
+
                 // event(new Result($update));
             }
 
             #region updatelose history
             $lose = $winner == 'M' ? 'W' : 'M';
             $percentagelb = $lose == 'M' ? $calc['meron'] : $calc['wala'];
-            // $lose_bet = Bet::where([
-            //     'side' => $lose,
-            //     'fight_id' => $last_fight->id
-            // ])->get();
 
             $lose_bet = Bet::where('side', $lose)
                 ->where('fight_id', $last_fight->id)
                 ->whereNot('user_id', 9)
                 ->get();
 
-            foreach ($lose_bet as $lb) {
+            foreach($lose_bet as $lb) {
                 $betHistLB = BetHistory::where('fight_no', $lb->fight_no)
                     ->where('fight_id', $lb->fight_id)
                     ->where('user_id', $lb->user_id)
@@ -437,16 +427,13 @@ class FightController extends Controller
                     ->where('side', $lb->side)
                     ->where('betamount', $lb->amount)
                     ->whereNot('user_id', 9)
-                    ->get();
+                    ->first();
 
                 $user_2 = User::find($lb->user_id);
-                foreach ($betHistLB as $historyLB) {
-                    $histLB = BetHistory::find($historyLB->bethistory_no);
-                    $histLB->percent = $percentagelb;
-                    $histLB->current_points = $user_2->points;
-                    $histLB->status = 'L';
-                    $histLB->save();
-                }
+                $betHistLB->percent = $percentagelb;
+                $betHistLB->current_points = $user_2->points;
+                $betHistLB->status = 'L';
+                $betHistLB->save();
             }
             #endregion
 
@@ -616,12 +603,14 @@ class FightController extends Controller
             if ($event->status == 'ACTIVE') {
                 // set current event as done
                 $event->status = 'DONE';
+                $event->updated_by = Auth::user()->id;
                 $event->save();
 
                 // set next event as active
                 $first = DerbyEvent::find(1);
                 $next = $event->next() ?? $first;
                 $next->status = 'ACTIVE';
+                $event->updated_by = Auth::user()->id;
                 $next->save();
             }
 
@@ -632,6 +621,7 @@ class FightController extends Controller
 
                 // activate selected event
                 $event->status = 'ACTIVE';
+                $event->updated_by = Auth::user()->id;
                 $event->save();
             }
 

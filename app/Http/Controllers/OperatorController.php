@@ -192,7 +192,13 @@ class OperatorController extends Controller
     public function addNewEvent(Request $request)
     {
         try {
-            $event = DerbyEvent::create($request->all());
+            $event = DerbyEvent::create([
+                'name' => $request->name,
+                'schedule_date' => $request->schedule_date,
+                'schedule_time' => $request->schedule_time,
+                'status' => 'WAITING',
+                'added_by' => Auth::user()->id,
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 500,
