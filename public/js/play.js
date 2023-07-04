@@ -50,7 +50,7 @@ $(function() {
     .then((json) => {
       for (var j = 1; j <= 7; j++) {
         var tr = $('<tr>');
-        for (var i = 1; i <= 150; i++) {
+        for (var i = 1; i <= 200; i++) {
           tr.append('<td> <div id="tdBaccaratAllConsecutive-' + j + i + '"></div></td>');
         }
         tr.append("</tr>");

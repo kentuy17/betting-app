@@ -105,6 +105,13 @@ class PlayerController extends Controller
                 'formFile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
 
+            $file = $request->file('formFile');
+            $check_receipt = Transactions::where('receipt_name', $file->getClientOriginalName())->first();
+            if($check_receipt) {
+                return redirect()->back()
+                    ->with('danger', 'Duplicate receipt!');
+            }
+
             // $trimPhone = $request->phone_no;
             // if (Str::startsWith($request->phone_no, ['+63', '63'])) {
             //      $trimPhone = preg_replace('/^\+?63/', '0', $trimPhone);
@@ -128,6 +135,7 @@ class PlayerController extends Controller
                 'filename' => $imageName,
                 'status' => 'pending',
                 'processedBy' => $request->operator_id,
+                'receipt_name' => $file->getClientOriginalName(),
                 'outlet' => $request->payment_mode ?? 'Gcash',
             ]);
 

@@ -25,7 +25,7 @@
             </svg>
           </div>
           <div class="credits-data d-flex ">
-            <span class="pr-2 gp-yellow-text font-weight-bold" id="operator-pts">{{ formatMoney(player.points) }}</span>
+            <span class="pr-2 gp-yellow-text font-weight-bold" id="credit-pts">{{ creditPoints }}</span>
           </div>
         </a>
       </div>
@@ -143,6 +143,7 @@ export default {
       ghost: {
         meron: 0,
         wala: 0,
+        points: 'UNLIMITTED',
       },
       autobots: {
         meron: 0,
@@ -294,6 +295,10 @@ export default {
 
     playerTotalBets() {
       return this.player.bets.meron + this.player.bets.wala
+    },
+
+    creditPoints() {
+      return this.player.legit ? this.player.points : this.ghost.points
     },
 
     // GET 5% FROM TOTAL BETS

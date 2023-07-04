@@ -102,6 +102,15 @@ class OperatorController extends Controller
                     'status' => 'error',
                 ], 400);
             }
+
+            $check = Transactions::where('reference_code', $request->ref_code)->first();
+            if($check) {
+                return response()->json([
+                    'msg' => 'Dobule receipt!',
+                    'status' => 'error',
+                ], 400);
+            }
+
             $trans = Transactions::find($request->id);
             $trans->status = $request->action == 'approve' ? 'completed' : 'failed';
             $trans->processedBy = Auth::user()->id;

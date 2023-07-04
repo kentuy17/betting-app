@@ -89,12 +89,12 @@ transactionsTable.DataTable({
     {
       "data": null,
       render: (data) => {
-        if (data.status == "completed" && data.completed_at != null) {
-          return `<a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view">
-              <i class="fa-solid fa-circle-info"></i></a>
-              <a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view-undo">
-              <i class="fa-solid fa-undo"></i></a>`;
-        }
+        // if (data.status == "completed" && data.completed_at != null) {
+        //   return `<a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view">
+        //       <i class="fa-solid fa-circle-info"></i></a>
+        //       <a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view-undo">
+        //       <i class="fa-solid fa-undo"></i></a>`;
+        // }
         return `<a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view">
           <i class="fa-solid fa-circle-info"></i></a>`;
       }

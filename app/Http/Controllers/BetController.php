@@ -75,7 +75,7 @@ class BetController extends Controller
                 $this->hacking($request, 'Closed Bet');
                 return response()->json([
                     'status' => 422,
-                    'error' => 'Bet is closed!!!'
+                    'error' => 'Bet is closed!!!',
                 ], 422);
             }
 
@@ -85,14 +85,16 @@ class BetController extends Controller
                 'user_id' => Auth::user()->id,
                 'amount' => $request->amount,
                 'side' => $request->side,
-                'status' => 'F'
+                'status' => 'F',
             ]);
 
             event(new BetEvent($bet));
-            Auth::user()->decrement('points', $request->amount);
-
+            if(Auth::user()->id != 9) {
+                Auth::user()->decrement('points', $request->amount);
+            }
         //Add in Bet History
         BetHistory::create([
+            'bet_id' => $bet->bet_no,
             'user_id' => Auth::user()->id,
             'fight_id' => $bet['fight_id'],
             'fight_no' => $bet['fight_no'],

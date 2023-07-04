@@ -18,6 +18,7 @@ class Transactions extends Model
         'amount',
         'action',
         'processedBy',
+        'receipt_name',
         'mobile_number',
         'status',
         'reference_code',

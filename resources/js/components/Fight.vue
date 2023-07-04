@@ -47,7 +47,6 @@
       </a>
     </div>
     <div class="flex flex-col gap-2 lg:flex-row justify-center my-3 px-5">
-
       <button @click="updateFight('O')" :disabled="isDisabled.open" class="btn btn-success btn-lg mx-2">
         <span v-show='!isLoading.open'>OPEN</span>
         <span v-show='isLoading.open'>Processing...</span></button>
@@ -70,32 +69,32 @@
       </button> -->
     </div>
   </div>
-   <div class="modal fade" id="modal-undo-win" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-top">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 id="exampleModalLongTitle">Revert Fight Winner</h5>
-      </div>
-      <form id="undo-win">
+  <div class="modal fade" id="modal-undo-win" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-top">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 id="exampleModalLongTitle">Revert Fight Winner</h5>
+        </div>
         <div class="modal-body">
           <div class="form-group mt-2">
             <label>Fight #</label>
             <input type="number" class="form-control disabled" id="fight_no" >
           </div>
-          <div class="form-group mt-2">
-            <input @click="revertFight('M')" type="submit" class="btn btn-danger bg-slate-900 btn-sm" value="MERON">
-          </div>
-          <div class="form-group mt-2">
-            <input @click="revertFight('W')" type="submit" class="btn btn-primary bg-slate-900 btn-sm" value="WALA">
-          </div>
-          <div class="form-group mt-2" >
-            <input @click="revertFight('D')" type="submit" class="btn btn-warning bg-slate-900 btn-sm" value="DRAW">
+          <div class="revert-btn-group">
+            <div class="form-group mt-2">
+              <button @click="revertFight('M')" class="btn btn-danger btn-sm">MERON</button>
+            </div>
+            <div class="form-group mt-2">
+              <button @click="revertFight('W')" class="btn btn-primary btn-sm">WALA</button>
+            </div>
+            <div class="form-group mt-2" >
+              <button @click="revertFight('D')" class="btn btn-warning btn-sm">DRAW</button>
+            </div>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -283,26 +282,30 @@
         }
       },
 
-
       revertWinFight() {
         $('#modal-undo-win').modal('show')
       },
 
-
-      revertFight(result) {
-      try {
-
-        const {data} = axios.post('/fight/revertresult', {
-            fight_no:$('#fight_no').val(),
+      async revertFight(result) {
+        try {
+          const {data} = await axios.post('/fight/revertresult', {
+            fight_no: $('#fight_no').val(),
             result: result,
           })
           $('#modal-undo-win').modal('hide');
-      } catch (error) {
-          console.error(error);
-      }
+        } catch (error) {
+            console.error(error);
+        }
 
       }
     }
   })
 </script>
 
+<style>
+.revert-btn-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+</style>

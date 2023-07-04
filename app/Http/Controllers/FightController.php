@@ -189,12 +189,21 @@ class FightController extends Controller
     public function revertResult(Request $request)
     {
         //Get Fight Detail
-        $fight = $this->currenctMatch();
+        // $fight = $this->currenctMatch();
+
         $this->current_event = DerbyEvent::where('status', 'ACTIVE')->first();
 
         $fightDetail = Fight::where('fight_no', $request->fight_no)
             ->where('event_id', $this->current_event->id)
             ->first();
+
+        if(!$fightDetail) {
+            return response()->json([
+                'message' => 'Invalid fight number!',
+                'status' => 'Error',
+            ], 402);
+        }
+
         $faultWinner = $fightDetail->game_winner;
 
         //Get revert win amount
@@ -209,15 +218,7 @@ class FightController extends Controller
                 $user->points -= $bet->win_amount;
                 $user->save();
 
-                $betHist = BetHistory::where('fight_no', $bet->fight_no)
-                    ->where('fight_id', $bet->fight_id)
-                    ->where('user_id', $bet->user_id)
-                    ->where('side', $bet->side)
-                    ->where('betamount', $bet->amount)
-                    ->where('winamount', $bet->win_amount)
-                    ->whereNot('user_id', 9)
-                    ->first();
-
+                $betHist = BetHistory::where('bet_id', $bet->bet_no)->first();
                 $betHist->winamount = 0;
                 $betHist->status = 'L';
                 $betHist->current_points = $user->points;
@@ -253,14 +254,7 @@ class FightController extends Controller
                 $user->points += $bet->amount * $percentage / 100;
                 $user->save();
 
-                $betHist = BetHistory::where('fight_no', $bet->fight_no)
-                    ->where('fight_id', $bet->fight_id)
-                    ->where('user_id', $bet->user_id)
-                    ->where('side', $bet->side)
-                    ->where('betamount', $bet->amount)
-                    ->whereNot('user_id', 9)
-                    ->first();
-
+                $betHist = BetHistory::where('bet_id', $bet->bet_no)->first();
                 $betHist->winamount = $update->win_amount;
                 $betHist->status = 'W';
                 $betHist->current_points = $user->points;
@@ -291,14 +285,7 @@ class FightController extends Controller
                     $percentage = $bet->side == 'M' ? $calc['meron'] : $calc['wala'];
                 }
 
-                $betHist = BetHistory::where('fight_no', $bet->fight_no)
-                    ->where('fight_id', $bet->fight_id)
-                    ->where('user_id', $bet->user_id)
-                    ->where('side', $bet->side)
-                    ->where('betamount', $bet->amount)
-                    ->whereNot('user_id', 9)
-                    ->first();
-
+                $betHist = BetHistory::where('bet_id', $bet->bet_no)->first();
                 $betHist->percent = $percentage;
                 $betHist->winamount = $bet->amount;
                 $betHist->status = $winner;
@@ -306,7 +293,11 @@ class FightController extends Controller
                 $betHist->save();
             }
         }
-        return $fight;
+
+        return response()->json([
+            'data' => $fightDetail,
+            'message' => 'Succesfully reverted!',
+        ], 200);
     }
 
     private function fightDone($last_fight, $winner)
@@ -354,16 +345,7 @@ class FightController extends Controller
                     $percentage = $bet->side == 'M' ? $calc['meron'] : $calc['wala'];
                 }
 
-                $betHist = BetHistory::where('fight_no', $bet->fight_no)
-                    ->where('fight_id', $bet->fight_id)
-                    ->where('user_id', $bet->user_id)
-                    ->where('status', 'P')
-                    ->where('side', $bet->side)
-                    ->where('betamount', $bet->amount)
-                    ->whereNot('user_id', 9)
-                    ->first();
-
-
+                $betHist = BetHistory::where('bet_id', $bet->bet_no)->first();
                 $betHist->percent = $percentage;
                 $betHist->winamount = $bet->amount;
                 $betHist->current_points = $user->points;
@@ -392,15 +374,7 @@ class FightController extends Controller
                 $user->points += $bet->amount * $percentage / 100;
                 $user->save();
 
-                $betHist = BetHistory::where('fight_no', $bet->fight_no)
-                    ->where('fight_id', $bet->fight_id)
-                    ->where('user_id', $bet->user_id)
-                    ->where('status', 'P')
-                    ->where('side', $bet->side)
-                    ->where('betamount', $bet->amount)
-                    ->whereNot('user_id', 9)
-                    ->first();
-
+                $betHist = BetHistory::where('bet_id', $bet->bet_no)->first();
                 $betHist->percent = $percentage;
                 $betHist->winamount = $update->win_amount;
                 $betHist->current_points = $user->points;
@@ -420,16 +394,8 @@ class FightController extends Controller
                 ->get();
 
             foreach($lose_bet as $lb) {
-                $betHistLB = BetHistory::where('fight_no', $lb->fight_no)
-                    ->where('fight_id', $lb->fight_id)
-                    ->where('user_id', $lb->user_id)
-                    ->where('status', 'P')
-                    ->where('side', $lb->side)
-                    ->where('betamount', $lb->amount)
-                    ->whereNot('user_id', 9)
-                    ->first();
-
                 $user_2 = User::find($lb->user_id);
+                $betHistLB = BetHistory::where('bet_id', $lb->bet_no)->first();
                 $betHistLB->percent = $percentagelb;
                 $betHistLB->current_points = $user_2->points;
                 $betHistLB->status = 'L';
