@@ -65,9 +65,9 @@
         <span v-show='!isLoading.cancel'>CANCEL</span>
         <span v-show='isLoading.cancel'>Loading...</span>
       </button>
-       <button @click="revertWinFight()" class="btn btn-info btn-lg mx-2 text-white">
+       <!-- <button @click="revertWinFight()" class="btn btn-info btn-lg mx-2 text-white">
         <span>REVERT</span>
-      </button>
+      </button> -->
     </div>
   </div>
    <div class="modal fade" id="modal-undo-win" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
