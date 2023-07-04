@@ -186,7 +186,7 @@ export default {
               this.player.points = user.points
             }
           })
-        }, 5000);
+        }, 10000);
       })
 
     window.Echo.channel('fight')
