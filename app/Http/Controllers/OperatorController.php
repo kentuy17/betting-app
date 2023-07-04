@@ -58,9 +58,9 @@ class OperatorController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return response()->json([
-            'data' => $trans,
-        ]);
+        return DataTables::of($trans)
+            ->addIndexColumn()
+            ->make(true);
     }
 
     public function processDepositRevert(Request $request)

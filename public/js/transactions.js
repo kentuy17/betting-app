@@ -15,8 +15,8 @@ transactionsTable.DataTable({
   "bInfo": false,
   "bAutoWidth": true,
   "scrollX": true,
-  // "processing": true,
-  // "serverSide": true,
+  "processing": true,
+  "serverSide": true,
   "pagingType": 'numbers',
   "language": {
     "search": '',
