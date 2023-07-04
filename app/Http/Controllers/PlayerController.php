@@ -315,4 +315,11 @@ class PlayerController extends Controller
             'data' => $bets,
         ], 200);
     }
+
+    public function getUserPoints()
+    {
+        return response()->json([
+            'points' => Auth::user()->points,
+        ]);
+    }
 }

@@ -179,6 +179,15 @@ export default {
             this.clear
           });
       })
+      .then(() => {
+        setInterval(() => {
+          this.checkPoints().then((user) => {
+            if(this.player.legit) {
+              this.player.points = user.points
+            }
+          })
+        }, 5000);
+      })
 
     window.Echo.channel('fight')
       .listen('.fight', async (e) => {
@@ -298,7 +307,7 @@ export default {
     },
 
     creditPoints() {
-      return this.player.legit ? this.player.points : this.ghost.points
+      return this.player.legit ? this.formatMoney(this.player.points) : this.ghost.points
     },
 
     // GET 5% FROM TOTAL BETS
@@ -366,6 +375,15 @@ export default {
     tada() {
       var audio = new Audio('/music/tada.mp3');
       return audio.play();
+    },
+
+    async checkPoints() {
+      try {
+        const { data } = await axios.get('/user/points');
+        return data;
+      } catch (error) {
+        console.log(error.message);
+      }
     },
 
     async addBet(betSide) {

@@ -95,7 +95,6 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::post('/chat/send-message', [PlayerController::class, 'sendUserMsg']);
         Route::post('/chat/seen-message', [PlayerController::class, 'seenMessage']);
 
-
     });
 
     // Operator
@@ -160,6 +159,7 @@ Route::group(['middleware' => ['auth','visitor']], function() {
     Route::get('/profile', [UserController::class, 'getProfileByUserID']);
 
     Route::post('/settings/video-display', [UserController::class, 'setVideoDisplay']);
+    Route::get('/user/points', [PlayerController::class, 'getUserPoints']);
 
     //Fight
     Route::get('/fight/current', [FightController::class, 'getCurrentFight']);
