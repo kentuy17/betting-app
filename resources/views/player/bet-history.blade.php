@@ -18,6 +18,7 @@
                 <th>TOTAL WIN</th>
                 <th>PERCENT %</th>
                 <th>BET</th>
+                <th>CURRENT POINTS</th>
                 <th>DATE</th>
               </tr>
             </thead>

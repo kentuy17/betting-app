@@ -35,16 +35,12 @@ betHistoryTable.DataTable({
     "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
   "columnDefs": [
     {
-      "targets": [1, 2, 3, 4, 5, 6, 7],
+      "targets": [1, 2, 3, 4, 5, 6, 7, 8],
       className: 'dt-head-center',
     },
     {
-      "targets": [1, 2, 3, 7],
+      "targets": [1, 2, 3, 4, 5, 6, 7, 8],
       className: 'dt-body-center',
-    },
-    {
-      "targets": [4, 5, 6],
-      className: 'dt-body-right',
     },
   ],
   "columns": [
@@ -93,6 +89,12 @@ betHistoryTable.DataTable({
       render: function(data, type, row, meta) {
         return row.betamount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
       }
+    },
+    {
+      "data": null,
+      render: function(data, type, row, meta) {
+        return row.current_points.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+      },
     },
     {
       "data": "created_at"

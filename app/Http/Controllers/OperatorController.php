@@ -104,9 +104,9 @@ class OperatorController extends Controller
             }
 
             $check = Transactions::where('reference_code', $request->ref_code)->first();
-            if($check) {
+            if($check && $request->action == 'approve') {
                 return response()->json([
-                    'msg' => 'Dobule receipt!',
+                    'msg' => 'Double receipt!',
                     'status' => 'error',
                 ], 400);
             }
