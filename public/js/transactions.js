@@ -52,10 +52,7 @@ transactionsTable.DataTable({
     //   data: "user_id",
     // },
     {
-      "data": null,
-      render: (data) => {
-        return data.user_id == 666 ? data.user.name : data.user.username;
-      },
+      "data": "user.name",
     },
     // {
     //   "data": "outlet"
