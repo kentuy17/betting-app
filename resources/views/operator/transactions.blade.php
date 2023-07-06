@@ -277,6 +277,7 @@
         x1 = x1.replace(rgx, '$1' + ',' + '$2');
       return x1 + x2;
     }
+    const DUMMY_ID = '{{ config('app.dummy_id') }}'
   </script>
   <script src="{{ asset('js/transactions.js') }}" defer></script>
   <script src="{{ asset('js/withdraw.js') }}" defer></script>

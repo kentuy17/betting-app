@@ -215,4 +215,7 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
     ])->toArray(),
 
+    // CUSTOM aliases
+    'dummy_id' => env('DUMMY_ID', false),
+
 ];
