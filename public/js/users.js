@@ -148,7 +148,7 @@ usersTable.on('click', 'tbody td .view', async function() {
       permissions.data.data.forEach((p) => {
         perms.push(p.role_id);
       })
-      $('input#name').val(user.name);
+      $('input#name').val(user.id==666?user.username:user.name);
       $('select#role').val(user.role_id);
       return perms;
     })
