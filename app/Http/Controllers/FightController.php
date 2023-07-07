@@ -142,15 +142,18 @@ class FightController extends Controller
 
     public function updateFight(Request $request)
     {
-        $fight = $this->currenctMatch();
+        try {
+            $fight = $this->currenctMatch();
+            if ($request->status == 'D') {
+                return $this->fightDone($fight, $request->result);
+            }
 
-        if ($request->status == 'D') {
-            return $this->fightDone($fight, $request->result);
-        }
-
-        $updated = $fight->update(['status' => $request->status]);
-        if ($updated) {
-            event(new FightEvent($fight));
+            $updated = $fight->update(['status' => $request->status]);
+            if ($updated) {
+                event(new FightEvent($fight));
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
 
         return $fight;
