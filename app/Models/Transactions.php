@@ -24,6 +24,7 @@ class Transactions extends Model
         'reference_code',
         'filename',
         'note',
+        'deleted',
         'created_at',
         'updated_at',
         'outlet',

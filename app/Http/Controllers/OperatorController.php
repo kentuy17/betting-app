@@ -112,6 +112,15 @@ class OperatorController extends Controller
             }
 
             $trans = Transactions::find($request->id);
+
+            if($request->action == 'approve' && $trans->status == 'completed') {
+                $approver = User::find($trans->processedBy);
+                return response()->json([
+                    'msg' => 'Oops! Request already approved by '. $approver->username,
+                    'status' => 'error',
+                ], 400);
+            }
+
             $trans->status = $request->action == 'approve' ? 'completed' : 'failed';
             $trans->processedBy = Auth::user()->id;
             $trans->reference_code = $request->ref_code;

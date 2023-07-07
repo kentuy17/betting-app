@@ -143,7 +143,7 @@ export default {
       ghost: {
         meron: 0,
         wala: 0,
-        points: 'UNLIMITTED',
+        points: 'UNLIMITED',
       },
       autobots: {
         meron: 0,

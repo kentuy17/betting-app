@@ -78,6 +78,7 @@ class PlayerController extends Controller
             ->with('operator')
             ->orderBy('id','desc')
             ->where('action', $action)
+            ->where('deleted', false)
             ->get();
 
         return DataTables::of($trans)
@@ -321,5 +322,40 @@ class PlayerController extends Controller
         return response()->json([
             'points' => Auth::user()->points,
         ]);
+    }
+
+    public function cancelWithdraw(Request $request)
+    {
+        try {
+            $withdraw = Transactions::where('id', $request->id)
+                ->where('user_id', Auth::user()->id)
+                ->where('action', 'withdraw')
+                ->where('status','pending')
+                ->first();
+
+            if(!$withdraw) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Invalid request!!!',
+                ], 402);
+            }
+
+            $withdraw->status = 'failed';
+            $withdraw->note = 'Cancelled by user';
+            $withdraw->save();
+            Auth::user()->increment('points', $withdraw->amount);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => 'OK',
+            'message' => 'Withdrawal request successfully cancelled!',
+            'points' => Auth::user()->points,
+        ], 200);
     }
 }

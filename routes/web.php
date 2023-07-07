@@ -87,6 +87,7 @@ Route::group(['middleware' => ['auth','visitor']], function() {
 
         Route::get('/withdraw', [PlayerController::class, 'withdraw'])->name('withdraw');
         Route::post('/withdraw', [PlayerController::class, 'withdrawSubmit'])->name('withdraw.submit');
+        Route::post('/withdraw/cancel', [PlayerController::class, 'cancelWithdraw'])->name('withdraw.cancel');
 
         Route::get('/playertransaction', [PlayerController::class, 'playerTransaction'])->name('player.player-transaction');
         Route::get('/player/transaction/{action}', [PlayerController::class, 'getTransactionByPlayerController']);

@@ -43,7 +43,7 @@
             <thead>
               <tr>
                 <th>Status</th>
-                <th>Outlet</th>
+                {{-- <th>Outlet</th> --}}
                 <th>Receiver</th>
                 <th>Amount</th>
                 <th>Submitted</th>
@@ -58,12 +58,13 @@
             <thead>
               <tr>
                 <th>Status</th>
-                <th>Outlet</th>
+                {{-- <th>Outlet</th> --}}
                 <th>Receiver</th>
                 <th>Amount</th>
                 <th>Submitted</th>
                 <th>Ref-Code #</th>
                 <th>Note</th>
+                <th>Action</th>
               </tr>
             </thead>
           </table>
