@@ -87,13 +87,13 @@ class BetController extends Controller
                 ], 422);
             }
 
-            if($request->side !== 'M' || $request->side !== 'W') {
-                $this->hacking($request, 'Invalid side');
-                return response()->json([
-                    'status' => 422,
-                    'error' => 'Invalid Bet Side!!!',
-                ], 422);
-            }
+            // if($request->side !== 'M' || $request->side !== 'W') {
+            //     $this->hacking($request, 'Invalid side');
+            //     return response()->json([
+            //         'status' => 422,
+            //         'error' => 'Invalid Bet Side!!!',
+            //     ], 422);
+            // }
 
             if($request->amount < 0) {
                 $this->hacking($request, 'Negative amount');
