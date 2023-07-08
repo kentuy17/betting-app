@@ -75,7 +75,7 @@ class BetController extends Controller
             if(!$this->current_fight) {
                 $this->hacking($request, 'Illegal Bet');
                 return response()->json([
-                    'status' => 422,
+                    'status' => 400,
                     'error' => 'Illegal Bet!!!',
                 ], 400);
             }
@@ -83,7 +83,7 @@ class BetController extends Controller
             if($this->current_fight->status == 'C') {
                 $this->hacking($request, 'Closed Bet');
                 return response()->json([
-                    'status' => 422,
+                    'status' => 400,
                     'error' => 'Betting is Closed!!!',
                 ], 400);
             }
@@ -91,7 +91,7 @@ class BetController extends Controller
             if($this->current_fight->fight_no !== $request->fight_no) {
                 $this->hacking($request, 'Fight number');
                 return response()->json([
-                    'status' => 422,
+                    'status' => 400,
                     'error' => 'Invalid Fight number!!!',
                 ], 400);
             }
@@ -99,7 +99,7 @@ class BetController extends Controller
             if(!in_array($request->side,['M','W'])) {
                 $this->hacking($request, 'Invalid side');
                 return response()->json([
-                    'status' => 422,
+                    'status' => 400,
                     'error' => 'Invalid Bet!!!',
                 ], 400);
             }
@@ -107,7 +107,7 @@ class BetController extends Controller
             if($request->amount < 0) {
                 $this->hacking($request, 'Negative amount');
                 return response()->json([
-                    'status' => 422,
+                    'status' => 400,
                     'error' => 'Invalid Amount!!!',
                 ], 400);
             }
