@@ -20,12 +20,12 @@ class AgentController extends Controller
                 ], 402);
             }
 
-            // if($request->points < 500) {
-            //     return response()->json([
-            //         'status' => 'error',
-            //         'message' => 'Minimum conversation points is 500.00',
-            //     ], 402);
-            // }
+            if($request->points < 200) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Minimum commission points is 200.00',
+                ], 402);
+            }
 
             $agent = Agent::where('user_id', Auth::user()->id)->first();
             $agent->current_commission -= $request->points;
