@@ -567,12 +567,12 @@ class FightController extends Controller
         try {
             $event = DerbyEvent::find($request->id);
 
-            if ($event->status == 'DONE') {
-                return response()->json([
-                    'message' => 'Can\'t Activate DONE Event!',
-                    'success' => false,
-                ], 403);
-            }
+            // if ($event->status == 'DONE') {
+            //     return response()->json([
+            //         'message' => 'Can\'t Activate DONE Event!',
+            //         'success' => false,
+            //     ], 403);
+            // }
 
             if ($event->status == 'ACTIVE') {
                 // set current event as done
@@ -588,8 +588,8 @@ class FightController extends Controller
                 $next->save();
             }
 
-            if ($event->status == 'WAITING') {
-                // dont active event
+            if ($event->status == 'WAITING' || $event->status == 'DONE') {
+                // done active event
                 DerbyEvent::where('status', 'ACTIVE')
                     ->update(['status' => 'DONE']);
 
@@ -605,7 +605,7 @@ class FightController extends Controller
 
             if ($fights_count == 0) {
                 Fight::create([
-                    'id' => $last_fight->id + 1,
+                    // 'id' => $last_fight->id + 1,
                     'event_id' => $activated_event->id,
                     'fight_no' => 1,
                     'user_id' => 1,
