@@ -148,6 +148,11 @@ class FightController extends Controller
                 return $this->fightDone($fight, $request->result);
             }
 
+            if(!$fight) {
+                $this->hacking($request, 'Update Fight');
+                throw new \ErrorException('Invalid request');
+            }
+
             $updated = $fight->update(['status' => $request->status]);
             if ($updated) {
                 event(new FightEvent($fight));

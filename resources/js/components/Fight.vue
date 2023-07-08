@@ -288,6 +288,7 @@
 
       async revertFight(result) {
         try {
+          return false;
           const {data} = await axios.post('/fight/revertresult', {
             fight_no: $('#fight_no').val(),
             result: result,
