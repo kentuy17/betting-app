@@ -77,7 +77,7 @@ class BetController extends Controller
                 return response()->json([
                     'status' => 422,
                     'error' => 'Illegal Bet!!!',
-                ], 422);
+                ], 400);
             }
 
             if($this->current_fight->status == 'C') {
@@ -85,7 +85,7 @@ class BetController extends Controller
                 return response()->json([
                     'status' => 422,
                     'error' => 'Betting is Closed!!!',
-                ], 422);
+                ], 400);
             }
 
             if($this->current_fight->fight_no !== $request->fight_no) {
@@ -93,7 +93,7 @@ class BetController extends Controller
                 return response()->json([
                     'status' => 422,
                     'error' => 'Invalid Fight number!!!',
-                ], 422);
+                ], 400);
             }
 
             if(!in_array($request->side,['M','W'])) {
@@ -101,7 +101,7 @@ class BetController extends Controller
                 return response()->json([
                     'status' => 422,
                     'error' => 'Invalid Bet!!!',
-                ], 422);
+                ], 400);
             }
 
             if($request->amount < 0) {
@@ -109,7 +109,7 @@ class BetController extends Controller
                 return response()->json([
                     'status' => 422,
                     'error' => 'Invalid Amount!!!',
-                ], 422);
+                ], 400);
             }
 
             $bet = Bet::create([
