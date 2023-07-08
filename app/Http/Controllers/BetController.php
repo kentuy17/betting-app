@@ -75,7 +75,31 @@ class BetController extends Controller
                 $this->hacking($request, 'Closed Bet');
                 return response()->json([
                     'status' => 422,
-                    'error' => 'Bet is closed!!!',
+                    'error' => 'Betting is Closed!!!',
+                ], 422);
+            }
+
+            if($this->current_fight->fight_no !== $request->fight_no) {
+                $this->hacking($request, 'Fight number');
+                return response()->json([
+                    'status' => 422,
+                    'error' => 'Invalid Fight number!!!',
+                ], 422);
+            }
+
+            if($request->side !== 'M' || $request->side !== 'W') {
+                $this->hacking($request, 'Invalid side');
+                return response()->json([
+                    'status' => 422,
+                    'error' => 'Invalid Bet Side!!!',
+                ], 422);
+            }
+
+            if($request->amount < 0) {
+                $this->hacking($request, 'Negative amount');
+                return response()->json([
+                    'status' => 422,
+                    'error' => 'Invalid Amount!!!',
                 ], 422);
             }
 
