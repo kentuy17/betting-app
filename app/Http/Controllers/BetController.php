@@ -69,7 +69,16 @@ class BetController extends Controller
 
             $this->current_fight = Fight::where('event_id', $this->current_event->id)
                 ->where('fight_no', $request->fight_no)
+                ->where('status', 'O')
                 ->first();
+
+            if(!$this->current_fight) {
+                $this->hacking($request, 'Illegal Bet');
+                return response()->json([
+                    'status' => 422,
+                    'error' => 'Illegal Bet!!!',
+                ], 422);
+            }
 
             if($this->current_fight->status == 'C') {
                 $this->hacking($request, 'Closed Bet');
@@ -87,13 +96,13 @@ class BetController extends Controller
                 ], 422);
             }
 
-            // if($request->side !== 'M' || $request->side !== 'W') {
-            //     $this->hacking($request, 'Invalid side');
-            //     return response()->json([
-            //         'status' => 422,
-            //         'error' => 'Invalid Bet Side!!!',
-            //     ], 422);
-            // }
+            if(!in_array($request->side,['M','W'])) {
+                $this->hacking($request, 'Invalid side');
+                return response()->json([
+                    'status' => 422,
+                    'error' => 'Invalid Bet!!!',
+                ], 422);
+            }
 
             if($request->amount < 0) {
                 $this->hacking($request, 'Negative amount');
