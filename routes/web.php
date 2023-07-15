@@ -40,7 +40,7 @@ Route::post('/password_reset', [ResetPasswordController::class, 'submitresetpass
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::group(['middleware' => ['auth','visitor']], function() {
+Route::group(['middleware' => ['auth']], function() {
     // TEST
     Route::get('/players/referred', [FightController::class, 'calcRefCommission'], function ($players) {
         ddd($players);

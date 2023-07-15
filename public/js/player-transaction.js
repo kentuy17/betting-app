@@ -121,14 +121,7 @@ $(document).ready(function () {
       {
         "data": null,
         render: (data) => {
-          let act = `<i class="fa-sharp fa-solid fa-rotate-right"></i>`, fck = 'resubmit';
-          if(data.status == 'pending') {
-            act = `<i class="fa-solid fa-ban"></i>`, fck = 'cancel';
-          }
-          return `<a href="javascript:void(0);" data-id="${data.id}" data-action="${fck}" class="btn btn-link text-primary btn-icon btn-sm fuego">${act}</a>
-          <a href="javascript:void(0);" data-id="${data.id}" class="btn btn-link text-secondary btn-icon btn-sm edit"><i class="fa-solid fa-pencil"></i></a>
-          <a href="javascript:void(0);" data-id="${data.id}" class="btn btn-link text-danger btn-icon btn-sm remove"><i class="fa-solid fa-xmark"></i></a>
-          </td>`
+          return '';
         },
       },
     ],
