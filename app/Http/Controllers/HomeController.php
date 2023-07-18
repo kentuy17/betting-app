@@ -34,7 +34,7 @@ class HomeController extends Controller
             if (Auth::user()->defaultpassword) {
                 $this->redirectTo = '/changepassword';
             } else {
-                $this->redirectTo = '/play';
+                $this->redirectTo = '/landing';
             }
         }
 

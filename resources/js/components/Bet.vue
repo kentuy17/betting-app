@@ -16,7 +16,9 @@
     </div>
     <div class="bet-bg-head items-center grid grid-cols-3">
       <h6><b class="text-lg">FIGHT # </b> <b id="fight-no" class="text-lg">{{ fightNo }}</b></h6>
-      <div class="text-center"><span class="btn btn-block btn-sm gradient-status-close btn-lg vue-components">{{ message }}</span></div>
+      <div class="text-center">
+        <span class="font-bold btn btn-block btn-sm btn-lg vue-components" :class="fightStatusClass[message]">{{ message }}</span>
+      </div>
       <div class="nav-credits-wr w-25 w-sm-50 gold-text ml-auto">
         <a href="/deposit" class="d-flex align-items-center justify-content-end gp-credits">
           <div class="bg-success add-btn p-1">
@@ -107,6 +109,11 @@ export default {
   data() {
     return {
       message: '_____',
+      fightStatusClass: {
+        OPEN: 'gradient-status-open',
+        CLOSE: 'gradient-status-close',
+        '_____': 'gradient-status-pending',
+      },
       fight: [],
       fightNo: 0,
       betAmount: 0,
@@ -152,7 +159,7 @@ export default {
     }
   },
   mounted() {
-    fetch('fight/current')
+    fetch('/fight/current')
       .then(resp => resp.json())
       .then(json => {
         this.fight = json.current
@@ -400,6 +407,11 @@ export default {
 
         if (this.betAmount > this.player.points) {
           alert('Insuficient Points')
+          return
+        }
+
+        if (this.betAmount > 1500 && this.player.legit) {
+          alert('Maximum bet is 1,500.00')
           return
         }
 

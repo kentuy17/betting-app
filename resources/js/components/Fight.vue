@@ -2,7 +2,9 @@
   <div class='card bet-boxed-area mb-1'>
     <div class="bet-bg-head items-center grid grid-cols-3">
       <h6><b class="text-lg">FIGHT # </b> <b id="fight-no" class="text-lg">{{ fightNo }}</b></h6>
-      <div class="text-center"><span class="btn btn-block btn-sm gradient-status-close btn-lg vue-components">{{ message }}</span></div>
+      <div class="text-center">
+        <span class="font-bold btn btn-block btn-sm btn-lg vue-components" :class="fightStatusClass[message]">{{ message }}</span>
+      </div>
       <div class="nav-credits-wr w-25 w-sm-50 gold-text ml-auto">
         <a href="/refillpoints" class="d-flex align-items-center justify-content-end gp-credits">
           <div class="bg-success add-btn p-1">
@@ -105,6 +107,11 @@
       return {
         fightNo: 0,
         message: '____',
+        fightStatusClass: {
+          OPEN: 'gradient-status-open',
+          CLOSE: 'gradient-status-close',
+          '_____': 'gradient-status-pending',
+        },
         total: {
           meron: 0,
           wala: 0,
@@ -217,6 +224,7 @@
           denyButtonText: 'WALA',
           denyButtonColor: 'blue',
           cancelButtonText: 'DRAW',
+          cancelButtonColor: 'green',
           allowEscapeKey: false
         })
         .then((result) => {

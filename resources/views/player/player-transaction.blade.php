@@ -49,6 +49,7 @@
                 <th>Submitted</th>
                 <th>Ref-Code #</th>
                 <th>Note</th>
+                <th>Processed by</th>
               </tr>
             </thead>
           </table>
@@ -64,7 +65,7 @@
                 <th>Submitted</th>
                 <th>Ref-Code #</th>
                 <th>Note</th>
-                <th>Action</th>
+                <th>Processed by</th>
               </tr>
             </thead>
           </table>

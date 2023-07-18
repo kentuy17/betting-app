@@ -280,7 +280,7 @@
                   <div class="col-12">
                     <label class="text-black form-label mt-4">Username</label>
                     <div class="input-group">
-                      <input id="username" name="username" class="form-control disabled" type="text" value="{{ $user->username }}" placeholder="Username"  >
+                      <input id="username" name="username" class="form-control disabled" disabled type="text" value="{{ $user->username }}" placeholder="Username"  >
                     </div>
                   </div>
                 </div>

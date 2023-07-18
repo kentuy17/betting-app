@@ -156,6 +156,7 @@ class OperatorController extends Controller
         $trans = Transactions::where('action', 'withdraw')
             ->with('user')
             ->with('operator')
+            ->where('deleted',false)
             ->orderBy('created_at', 'desc')
             ->get();
 

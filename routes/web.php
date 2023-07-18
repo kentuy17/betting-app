@@ -40,7 +40,7 @@ Route::post('/password_reset', [ResetPasswordController::class, 'submitresetpass
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::group(['middleware' => ['auth']], function() {
+Route::group(['middleware' => ['auth','visitor']], function() {
     // TEST
     Route::get('/players/referred', [FightController::class, 'calcRefCommission'], function ($players) {
         ddd($players);
@@ -167,5 +167,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/fight/results', [FightController::class, 'fightResults']);
 
     Route::get('/video', [PlayerController::class, 'video']);
+
+    Route::get('/landing', [PlayerController::class, 'landing']);
+    Route::get('/watch/movie', [PlayerController::class, 'watchMovie']);
 
 });

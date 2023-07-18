@@ -244,6 +244,13 @@ body.bet-dark .bet-sell {
 }
 
 .gradient-status-close {
+  background: #fe3a2e linear-gradient(180deg,#fc3e34,#f51c11) repeat-x!important;
+  border-color: #cc150b;
+  color: #ececec;
+  pointer-events: none;
+}
+
+.gradient-status-pending {
   background: #6c757d linear-gradient(180deg,#73797f,#5a6268) repeat-x!important;
   border-color: #545b62;
   color: #ececec;

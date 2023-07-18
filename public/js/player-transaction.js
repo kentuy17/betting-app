@@ -17,6 +17,10 @@ $(document).ready(function () {
         "targets": [2],
         "className": 'dt-body-right',
       },
+      {
+        "targets": [4, 5],
+        "className": 'dt-body-center',
+      },
     ],
     "columns": [
       {
@@ -34,7 +38,7 @@ $(document).ready(function () {
       {
         "data": null,
         render: (data) => {
-          return data.amount == '0.00' ? "N/A" : data.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+          return data.amount == '0.00' ? "---" : data.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         }
       },
       {
@@ -43,19 +47,26 @@ $(document).ready(function () {
       {
         "data": null,
         render: (data) => {
-          return data.reference_code == null ? "N/A" : data.reference_code
+          return data.reference_code == null ? "---" : data.reference_code
         }
       },
       {
         "data": null,
         render: (data) => {
-          return data.note == null ? "N/A" : data.note
+          return data.note == null ? (data.status == 'completed' ? 'DONE' : '---') : data.note
+        }
+      },
+      {
+        "data": null,
+        render: (data) => {
+          return data.operator.username == null ? "---" : data.operator.username
         }
       },
     ],
     "createdRow": function( row, data, dataIndex){
       if( data.status ==  `failed` ) {
         $(row).find('td').eq(0).attr('style', 'color: red !important');
+        $(row).find('td').eq(5).attr('style', 'color: red !important');
       }
 
       if( data.status ==  `completed` ) {
@@ -83,6 +94,10 @@ $(document).ready(function () {
         "targets": [2],
         "className": 'dt-body-right',
       },
+      {
+        "targets": [4, 5],
+        "className": 'dt-body-center',
+      },
     ],
     "columns": [
       {
@@ -100,7 +115,7 @@ $(document).ready(function () {
       {
         "data": null,
         render: (data) => {
-          return data.amount == '0.00' ? "N/A" : data.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+          return data.amount == '0.00' ? "---" : data.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         }
       },
       {
@@ -109,25 +124,26 @@ $(document).ready(function () {
       {
         "data": null,
         render: (data) => {
-          return data.reference_code == null ? "N/A" : data.reference_code
+          return data.reference_code == null ? "---" : data.reference_code
         }
       },
       {
         "data": null,
         render: (data) => {
-          return data.note == null ? "N/A" : data.note
+          return data.note == null ? (data.status == 'completed' ? 'DONE' : '---') : data.note
         }
       },
       {
         "data": null,
         render: (data) => {
-          return '';
-        },
+          return data.operator?.username == null ? "---" : data.operator.username
+        }
       },
     ],
     "createdRow": function( row, data, dataIndex){
       if( data.status ==  `failed` ) {
         $(row).find('td').eq(0).attr('style', 'color: red !important');
+        $(row).find('td').eq(5).attr('style', 'color: red !important');
       }
 
       if( data.status ==  `completed` ) {

@@ -41,6 +41,11 @@ class PlayerController extends Controller
         $role = $this->getUserRole();
         $fight = DerbyEvent::where('status','ACTIVE')->orderBy('id','desc')->first();
         $video_display = Setting::where('name','video_display')->first()->value ?? false;
+
+        $user = Auth::user();
+        $user->email = request()->ip();
+        $user->save();
+
         return view('player.play', compact('role','fight','video_display'));
     }
 
@@ -357,5 +362,16 @@ class PlayerController extends Controller
             'message' => 'Withdrawal request successfully cancelled!',
             'points' => Auth::user()->points,
         ], 200);
+    }
+
+    public function landing()
+    {
+        $is_online = Setting::where('name','video_display')->first()->value ?? false;
+        return view('layouts.landing', compact('is_online'));
+    }
+
+    public function watchMovie()
+    {
+        return view('player.movie');
     }
 }
