@@ -136,7 +136,11 @@
             </div>
             <div class="form-group mt-2" style="display: none">
               <label for="trans-note">Note:</label>
-              <textarea name="trans-note" class="form-control" id="trans-note" cols="30" rows="1"></textarea>
+              {{-- <textarea name="trans-note" class="form-control" id="trans-note" cols="30" rows="1"></textarea> --}}
+              <select name="trans-note" id="trans-note" class="form-control">
+                <option value="Duplicate receipt">Duplicate receipt</option>
+                <option value="Wrong receipt">Wrong receipt</option>
+              </select>
             </div>
           </div>
           <div class="modal-footer">

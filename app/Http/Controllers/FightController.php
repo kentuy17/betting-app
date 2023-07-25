@@ -37,7 +37,10 @@ class FightController extends Controller
 
     private function getTotalBets()
     {
-        $total_bets = array('meron' => 0, 'wala' => 0);
+        $total_bets = array(
+            'meron' =>  0,
+            'wala'  =>  0,
+        );
 
         if (!$this->fight) {
             return $total_bets;
@@ -45,6 +48,10 @@ class FightController extends Controller
 
         $total_bets['meron'] = Bet::where(['fight_id' => $this->fight->id, 'side' => 'M'])->sum('amount');
         $total_bets['wala'] = Bet::where(['fight_id' => $this->fight->id, 'side' => 'W'])->sum('amount');
+
+        if($total_bets['meron'] == 0 || $total_bets['wala'] == 0) {
+            return array('meron' => 0, 'wala' => 0);
+        }
 
         return $total_bets;
     }
@@ -175,6 +182,11 @@ class FightController extends Controller
 
         $bets['meron'] = Bet::where(['fight_id' => $fight->id, 'side' => 'M'])->sum('amount');
         $bets['wala'] = Bet::where(['fight_id' => $fight->id, 'side' => 'W'])->sum('amount');
+
+        if($bets['meron'] == 0 || $bets['wala'] == 0) {
+            return array('meron' => 0, 'wala' => 0);
+        }
+
         //TotalBets
         //Calculation
         $total_bets = $bets['meron'] + $bets['wala'];

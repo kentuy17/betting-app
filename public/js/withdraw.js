@@ -111,6 +111,10 @@ withdrawTable.DataTable({
       unverified++;
     }
 
+    if(data.status == `failed`) {
+      $(row).addClass('failed');
+    }
+
     if(wPending > 0) {
       $('#badge-withdraw').show().text(wPending);
     } else {
@@ -156,6 +160,10 @@ function format(d) {
       <tr>
         <td>AMOUNT:</td>
         <td>${d.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+      </tr>
+      <tr>
+        <td>NOTE:</td>
+        <td>${d.note ? d.note : 'N/A'}</td>
       </tr>
       <tr>
         <td>ACTION:</td>
