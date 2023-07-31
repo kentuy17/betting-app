@@ -1,0 +1,3 @@
+
+  0 * * * *  php artisan app:hourly-check ...... Next Due: 19 minutes from now
+
