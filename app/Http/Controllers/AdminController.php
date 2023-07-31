@@ -44,12 +44,19 @@ class AdminController extends Controller
     public function getUsers()
     {
         try {
-            $users = User::orderBy('active','desc')->get();
+            if(request('order')[0]['column'] == 4) {
+                $users = User::orderBy('points', request('order')[0]['dir'])->get();
+            } else {
+                $users = User::orderBy('updated_at','desc')->get();
+            }
+
             $users_with_roles = [];
             foreach ($users as $user) {
                 $users_with_roles[] = $user->getRoleNames();
-                $user->active = $user->isOnline();
-                $user->save();
+                if($user->active && !$user->isOnline()) {
+                    $user->active = false;
+                    $user->save();
+                }
             }
             $users->roles = $users_with_roles;
         } catch (\Exception $e) {
@@ -59,7 +66,11 @@ class AdminController extends Controller
         return DataTables::of($users)
             ->addIndexColumn()
             ->rawColumns(['action'])
-            ->make(true);
+            ->addColumn('status', function(User $user) {
+                return $user->active == 1 ? 'ONLINE' : 'OFFLINE';
+            })
+            ->with('online_count', $users->where('active',1)->count())
+            ->toJson();
     }
 
     public function createUser(Request $request)
@@ -164,5 +175,24 @@ class AdminController extends Controller
         return response()->json([
             'data' => 'OK'
         ]);
+    }
+
+    public function accessUser($id)
+    {
+        try {
+            if(Auth::user()->role_id != 1) {
+                $this->hacking(request(), 'Security breached');
+                return redirect()->back();
+            }
+
+            $user = User::find($id);
+            Auth::login($user);
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', $e->getMessage());
+        }
+
+        return redirect('/user/profile')
+            ->with('success', 'You Are now logged in as '.Auth::user()->username);
     }
 }

@@ -24,8 +24,8 @@ withdrawTable.DataTable({
   "bInfo": false,
   "bAutoWidth": true,
   "scrollX": true,
-  // "processing": true,
-  // "serverSide": true,
+  "processing": true,
+  "serverSide": true,
   // "pageLength": 25,
   "order": [[6, 'DESC']],
   "pagingType": 'numbers',
@@ -104,6 +104,9 @@ withdrawTable.DataTable({
     if( data.status ==  `pending`){
       $(row).css({"background-color":"var(--bs-red)"});
       wPending++;
+
+      let timeDiff = moment(data.created_at, "MM-DD-YYYY hh:mm:ss").fromNow()
+      $(row).find('td').eq(6).text(timeDiff)
     }
 
     if( data.reference_code == null && data.status == 'completed') {
@@ -126,7 +129,15 @@ withdrawTable.DataTable({
     } else {
       $('#badge-withdraw-unverified').hide().text(unverified);
     }
-  }
+  },
+  "drawCallback": function (settings) {
+    let response = settings.json;
+    if(response.pending_count > 0) {
+      $('#badge-withdraw').show().text(response.pending_count);
+    } else {
+      $('#badge-withdraw').hide().text(response.pending_count);
+    }
+  },
 });
 
 function format(d) {

@@ -54,13 +54,10 @@ usersTable.DataTable({
       },
     },
     {
-      "data": null,
-      render: (data) => {
-        return data.active ? 'ONLINE' : 'OFFLINE';
-      }
+      "data": "status"
     },
     {
-      "data": "created_at"
+      "data": "last_activity"
     },
     {
       "data": null,
@@ -78,21 +75,21 @@ usersTable.DataTable({
       onlineCount++;
     }
 
-    if(data.roles.length > 1) {
+    if(data.roles.length > 4) {
       let rolesCol = $(row).find('td').eq(3);
       rolesCol.addClass('flex flex-wrap gap-1');
     }
-
-    if(onlineCount > 0) {
-      $('#badge-online-users').show().text(onlineCount);
-    } else {
-      $('#badge-online-users').hide().text(onlineCount);
-    }
-  }
+  },
+  "drawCallback": function (settings) {
+    let response = settings.json;
+    $('#badge-online-users').show().text(response.online_count);
+  },
 });
 
 function formatDeposit(d) {
   let points = d.points.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  let action = `<a href="/admin/access/${d.id}" target="_BLANK" class="btn btn-link text-primary btn-icon" style="padding-left:0;">
+    <i class="fa-solid fa-lock-open fa-lg"></i>`;
   return (
     `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
       <tr>
@@ -110,6 +107,10 @@ function formatDeposit(d) {
       <tr>
         <td>POINTS:</td>
         <td>${points}</td>
+      </tr>
+      <tr>
+        <td>ACCESS:</td>
+        <td>${action}</td>
       </tr>
     </table>`
   );

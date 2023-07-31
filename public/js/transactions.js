@@ -103,10 +103,11 @@ transactionsTable.DataTable({
   "createdRow": function (row, data, dataIndex) {
     $(row).attr("data-id", data.id).addClass('cursor-pointer expandable');
     if (data.status == `pending`) {
-      $(row).css({
-        "background-color": "var(--bs-red)"
-      });
+      $(row).css({"background-color": "var(--bs-red)"});
       pendingCount++;
+
+      let timeDiff = moment(data.created_at, "MM-DD-YYYY hh:mm:ss").fromNow()
+      $(row).find('td').eq(5).text(timeDiff)
     }
 
     if(data.status == `failed`) {

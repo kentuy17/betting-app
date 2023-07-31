@@ -42,10 +42,11 @@ class HourlyCheck extends Command
         $users = User::whereNotIn('id',[9,2])->get();
         foreach ($users as $key => $user) {
             # code...
-            if(!$user->isOnline()) {
+            if(!$user->isOnline() && $user->active) {
                 $pusher->terminateUserConnections($user->id);
                 $user->update([
-                    'active' => false
+                    'active' => false,
+                    'timestamps' => false,
                 ]);
             }
         }
@@ -59,7 +60,7 @@ class HourlyCheck extends Command
             $ghost->save();
             Log::channel('cron')->info("Ghost added pts: " . $ghost->points);
         }
-        
+
         Log::channel('cron')->info("Delete: " . $delete);
     }
 }

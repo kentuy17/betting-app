@@ -264,6 +264,7 @@
   </div>
 @endsection
 @section('additional-scripts')
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
   <script>
     function Comma(Num) { //function to add commas to textboxes
       Num += '';

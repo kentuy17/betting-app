@@ -1788,6 +1788,22 @@
         </div>
       </a>
     </div>
+    @if (Auth::user()->role_id == 1)
+    <div class="bg-os_black border p-2 mb-8">
+      <div class="flex px-2 justify-between">
+        <h3 class="text-white text-sm">ONLINE</h3>
+        <i class="fa-solid fa-circle-dot text-xs animate-pulse-fast"></i>
+      </div>
+      <h3 class="text-white font-bold text-3xl text-center mb-4">
+        TRANSACTIONS
+      </h3> <a href="/transactions" class="">
+        <div class="py-3 bg-os_orange text-white text-center text-sm hover:bg-os_menu_yellow cursor-pointer" style="width:100% !important;">
+          <h3 class="font-bold"><i class="fa-solid fa-arrow-up-right-from-square"></i> ENTER TRANS PAGE
+          </h3>
+        </div>
+      </a>
+    </div>
+    @endif
     <div class="bg-os_black border p-2 mb-8" style="display: none;">
       <div class="flex px-2 justify-between">
         <h3 class="text-red-500 font-bold text-sm">LIVE</h3>

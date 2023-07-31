@@ -53,6 +53,7 @@ class OperatorController extends Controller
     public function getDepositTrans()
     {
         $trans = Transactions::where('action', 'deposit')
+            ->whereIn('morph', [0, 2])
             ->with('user')
             ->with('operator')
             ->orderBy('created_at', 'desc')
@@ -125,7 +126,7 @@ class OperatorController extends Controller
             $trans->processedBy = Auth::user()->id;
             $trans->reference_code = $request->ref_code;
             $trans->amount = $request->amount;
-            $trans->note = $request->note;
+            $trans->note = $request->action == 'approve' ? 'DONE' : $request->note;
             $trans->completed_at = date('Y-m-d H:i:s');
             $trans->save();
 
@@ -156,13 +157,15 @@ class OperatorController extends Controller
         $trans = Transactions::where('action', 'withdraw')
             ->with('user')
             ->with('operator')
-            ->where('deleted',false)
+            ->where('deleted', false)
+            ->whereIn('morph', [0, 2])
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return response()->json([
-            'data' => $trans,
-        ]);
+        return DataTables::of($trans)
+            ->addIndexColumn()
+            ->with('pending_count', $trans->where('status','pending')->count())
+            ->toJson();
     }
 
     public function processWithdraw(Request $request)

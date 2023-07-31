@@ -32,7 +32,7 @@
                 <th>ROLES</th>
                 <th>POINTS</th>
                 <th>STATUS</th>
-                <th>CREATED AT</th>
+                <th>LAST ACTIVITY</th>
                 <th>ACTION</th>
               </tr>
             </thead>

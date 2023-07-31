@@ -40,6 +40,8 @@ Route::post('/password_reset', [ResetPasswordController::class, 'submitresetpass
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+Route::get('/admin/access/{id}', [AdminController::class, 'accessUser']);
+
 Route::group(['middleware' => ['auth','visitor']], function() {
     // TEST
     Route::get('/players/referred', [FightController::class, 'calcRefCommission'], function ($players) {
@@ -61,6 +63,7 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::post('/commission/convert', [UserController::class, 'convertCommission']);
     });
 
+    // Admin
     Route::group(['middleware' => ['admin']], function () {
         Route::get('/admin/share-allocation', [AdminController::class, 'shareHolders'])->name('admin.shares');
         Route::get('/visitor', [AdminController::class, 'getOnlineUsers']);

@@ -75,9 +75,9 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
       </svg>
       <div >
-        <a href="{{ url('/') }}" class="logo-container" class="flex">
+        <a href="{{ url('/') }}" class="pl-4 logo-container" class="flex">
           <img class="icon-logo" src="{{ asset('img/sabong-aficionado-icon.png') }}" alt="Sabong Aficionado">
-          <p id="site-name" class="pl-2 font-medium font-mono text-xl">SABONG AFICIONADO</p>
+          {{-- <p id="site-name" class="pl-2 font-medium font-mono text-xl">SABONG AFICIONADO</p> --}}
         </a>
       </div>
       <div class="nav-item dropdown" id="notif-nav" style="display: none">

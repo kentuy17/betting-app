@@ -25,6 +25,7 @@ class Transactions extends Model
         'filename',
         'note',
         'deleted',
+        'morph',
         'created_at',
         'updated_at',
         'outlet',

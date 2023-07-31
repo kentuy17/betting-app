@@ -47,7 +47,7 @@ class HomeController extends Controller
         }
 
         if ($role->name == 'Admin') {
-            $this->redirectTo = '/admin';
+            $this->redirectTo = '/landing';
         }
 
         if ($role->name == 'Auditor') {

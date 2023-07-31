@@ -204,7 +204,7 @@ export default {
         if (e.fight.curr) {
           if((e.fight.prev.game_winner == 'D' || e.fight.prev.game_winner == 'C') && this.playerTotalBets > 0) {
             if(this.player.legit) {
-              alert(`Returened ${this.formatMoney(this.playerTotalBets)} points!`)
+              alert(`Returned ${this.formatMoney(this.playerTotalBets)} points!`)
               this.tada()
             }
             this.daog = true

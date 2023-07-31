@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Agent;
 use App\Models\User;
 use App\Models\Referral;
+use App\Models\CommissionHistory;
 use Illuminate\Http\Request;
 
 class AgentController extends Controller
@@ -34,6 +35,12 @@ class AgentController extends Controller
             $user = User::find(Auth::user()->id);
             $user->points += $request->points;
             $user->save();
+
+            CommissionHistory::create([
+                'user_id' => Auth::user()->id,
+                'points_converted' => $request->points,
+                'current_points' => $user->points,
+            ]);
         }
         catch (\Exception $e) {
             return response()->json([
@@ -44,7 +51,7 @@ class AgentController extends Controller
 
         return response()->json([
             'data' => [
-                'current_commission' => $agent->current_commission,
+                'current_commission' => number_format($agent->current_commission,2),
                 'points' => $user->points,
             ],
             'status' => 'success',

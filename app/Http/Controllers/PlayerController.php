@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response as FacadeResponse;
 use App\Models\Chat;
 use App\Models\Setting;
+use Carbon\Carbon;
 use Yajra\DataTables\DataTables;
 
 class PlayerController extends Controller
@@ -44,6 +45,7 @@ class PlayerController extends Controller
 
         $user = Auth::user();
         $user->email = request()->ip();
+        $user->last_activity = Carbon::now();
         $user->save();
 
         return view('player.play', compact('role','fight','video_display'));
@@ -84,6 +86,7 @@ class PlayerController extends Controller
             ->orderBy('id','desc')
             ->where('action', $action)
             ->where('deleted', false)
+            ->whereIn('morph', [0, 1])
             ->get();
 
         return DataTables::of($trans)
