@@ -59,7 +59,10 @@
         <div id="header-closed" class="bet-bg-head font-bold" style="display: none;">EVENT CLOSED</div>
         <img id="poster-img" style="display: none;" src="{{ asset('img/10-streak-win-promo-poster.png') }}" alt="10-streak-win-promo">
         <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
-          <iframe src="https://app.onestream.live/api/v2/rtmp/auth/stream/embed_player?key=d_auth_2078804_1tt42mfs4" width="100%" height="100%" style="width:100%;height:100%;position:absolute;left:0px;top:0px;overflow: hidden;" scrolling="no"  frameborder="0" allow="autoplay" allowfullscreen> </iframe>
+          <iframe
+            src="https://player.onestream.live/embed?token=ZF9hdXRoXzIwNzg4MDRfMXR0NDJtZnM0&type=psk"
+            style="position:absolute;width:100%;height:100%;overflow: hidden;" scrolling="no" frameborder="0" allow="autoplay"
+            allowfullscreen></iframe>
         </div>
       </div>
     </div>
