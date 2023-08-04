@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
+use App\Models\Transactions;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,4 +23,13 @@ Broadcast::channel('user.{id}', function($user, $betUserId) {
         return $user->id == $betUserId;
     }
     // return false;
+});
+
+Broadcast::channel('cashin.{processedBy}', function ($user, $processedBy) {
+    $trans = Transactions::where('processedBy', $processedBy)
+        ->where('action', 'deposit')
+        ->where('status', 'pending')
+        ->orderBy('id', 'desc')
+        ->first();
+    return $user->id == $trans->processedBy;
 });
