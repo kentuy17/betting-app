@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Transactions;
 use App\Models\BetHistory;
 use App\Models\Referral;
+use App\Events\CashIn;
 use \Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
@@ -65,12 +66,14 @@ class PlayerController extends Controller
     public function deposit()
     {
         $user = Auth::user();
-        $active_operators = ModelHasRoles::with('users')->has('active_operators')->get()
+        $active_operators = ModelHasRoles::with('users')
+            ->has('active_operators')->get()
             ->pluck('users')
             ->sortBy('points')
             ->first();
 
-        $low_pts = ModelHasRoles::with('users')->has('operators')->get()
+        $low_pts = ModelHasRoles::with('users')
+            ->has('operators')->get()
             ->pluck('users')
             ->sortBy('points')
             ->first();
@@ -79,12 +82,12 @@ class PlayerController extends Controller
         return view('player.deposit', compact('user', 'operators'));
     }
 
-    public function getTransactionByPlayerController($action=true)
+    public function getTransactionByPlayerController($action = true)
     {
         $trans = Transactions::where('user_id', Auth::user()->id)
             ->with('user')
             ->with('operator')
-            ->orderBy('id','desc')
+            ->orderBy('id', 'desc')
             ->where('action', $action)
             ->where('deleted', false)
             ->whereIn('morph', [0, 1])
@@ -134,11 +137,11 @@ class PlayerController extends Controller
             //     'phone_no' => ['regex:/(0?9|\+?63)[0-9]{9}/'],
             // ]);
 
-            $imageName = time().'.'.$request->formFile->extension();
+            $imageName = time() . '.' . $request->formFile->extension();
             $path = 'public/' . $imageName;
             Storage::disk('local')->put($path, file_get_contents($request->formFile));
 
-            Transactions::create([
+            $trans = Transactions::create([
                 'user_id' => Auth::user()->id,
                 'action' => 'deposit',
                 'mobile_number' => $request->phone_no,
@@ -149,6 +152,7 @@ class PlayerController extends Controller
                 'outlet' => $request->payment_mode ?? 'Gcash',
             ]);
 
+            event(new CashIn($trans));
         } catch (\Exception $e) {
             return redirect()->back()->with('danger', $e->getMessage());
         }
@@ -165,14 +169,15 @@ class PlayerController extends Controller
                 'amount' => 'required',
             ]);
 
-            $amount = str_replace( ',', '', $request->amount );
+            $amount = str_replace(',', '', $request->amount);
             $user = User::find(Auth::user()->id);
-            if($amount < 100){
+
+            if ($amount < 100) {
                 return redirect()->back()
-                ->with('danger', "Minimum Withdrawal is P100");
+                    ->with('danger', "Minimum Withdrawal is P100");
             }
 
-            if($user->points < $amount) {
+            if ($user->points < $amount) {
                 return redirect()->back()
                     ->with('danger', 'Insuficient points!');
             }
@@ -202,7 +207,6 @@ class PlayerController extends Controller
                 'status' => 'pending',
                 'processedBy' => null,
             ]);
-
         } catch (\Exception $e) {
             return redirect()->back()->with('danger', $e->getMessage());
         }
@@ -214,10 +218,10 @@ class PlayerController extends Controller
     {
         try {
             $user = User::find(Auth::user()->id);
+
             if (Hash::check($user->password, $request->curr_pass)) {
-            //   if($user->password != bcrypt($request->curr_pass)) {
-                  return redirect('/withdrawform')->with('error', 'Incorrect Password!');
-              }
+                return redirect('/withdrawform')->with('error', 'Incorrect Password!');
+            }
 
             $this->validate($request, [
                 'phone_no' => 'required',
@@ -226,21 +230,17 @@ class PlayerController extends Controller
             ]);
 
             $trimPhone = $request->phone_no;
-            if (Str::startsWith($request->phone_no, ['+63', '63']))
-            {
-                 $trimPhone = preg_replace('/^\+?63/', '0', $trimPhone);
-            }else if (Str::startsWith($request->phone_no, ['9']))
-            {
+            if (Str::startsWith($request->phone_no, ['+63', '63'])) {
+                $trimPhone = preg_replace('/^\+?63/', '0', $trimPhone);
+            } else if (Str::startsWith($request->phone_no, ['9'])) {
                 $trimPhone = '0' . $request->phone_no;
             }
 
-                $this->validate($request, [
-               'phone_no' => ['regex:/(0?9|\+?63)[0-9]{9}/'],
-                ]);
+            $this->validate($request, ['phone_no' => ['regex:/(0?9|\+?63)[0-9]{9}/']]);
 
-             if($user->points < $request->amount){
-                 return redirect('/withdrawform')->with('error', 'Insufficient Amount!');
-             }
+            if ($user->points < $request->amount) {
+                return redirect('/withdrawform')->with('error', 'Insufficient Amount!');
+            }
 
             Transactions::create([
                 'user_id' => Auth::user()->id,
@@ -250,7 +250,6 @@ class PlayerController extends Controller
                 'amount' => $request->amount,
                 'outlet' => $request->outlet,
             ]);
-
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -327,8 +326,7 @@ class PlayerController extends Controller
         try {
             //code...
             $bets = BetHistory::where('user_id', $id)
-                ->orderBy('bethistory_no','desc')->get();
-
+                ->orderBy('bethistory_no', 'desc')->get();
         } catch (\Exception $e) {
             //throw $th;
             return response()->json([
