@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\ModelHasRoles;
 use App\Models\Referral;
 use App\Models\Agent;
+use App\Models\Promo;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -97,6 +98,19 @@ class RegisterController extends Controller
                 'referrer_id' => $referrer->id,
                 'user_id' => $create->id,
             ]);
+        }
+
+        if($data['code']) {
+            $active_codes = ['SWW-SIQ'];
+            $promo = Promo::create([
+                'user_id' => $create->id,
+                'code' => $data['code'],
+            ]);
+
+            if(in_array($data['code'], $active_codes)) {
+                $create->points = 200;
+                $create->save();
+            }
         }
 
         ModelHasRoles::create([

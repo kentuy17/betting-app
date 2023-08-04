@@ -11,6 +11,7 @@ use App\Models\Roles;
 use App\Models\User;
 use App\Models\Transactions;
 use App\Models\BetHistory;
+use App\Models\Referral;
 use \Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
@@ -155,6 +156,7 @@ class PlayerController extends Controller
         return redirect()->back()->with('success', 'Submitted Successfully!');
     }
 
+    // Current Working
     public function withdrawSubmit(Request $request)
     {
         try {
@@ -169,12 +171,27 @@ class PlayerController extends Controller
                 return redirect()->back()
                 ->with('danger', "Minimum Withdrawal is P100");
             }
+
             if($user->points < $amount) {
                 return redirect()->back()
                     ->with('danger', 'Insuficient points!');
             }
 
-            $user->points -=  $amount;
+            $referral = Referral::where('user_id', Auth::user()->id)
+                ->where('referrer_id', 1)
+                ->first();
+
+            if($referral && !$referral->promo_done) {
+                if($request->amount < 500) {
+                    return redirect()->back()
+                        ->with('danger', "To Cash-out Bonus, minimum of P500");
+                } else {
+                    $referral->promo_done = true;
+                    $referral->save();
+                }
+            }
+
+            $user->points -= $amount;
             $user->save();
 
             Transactions::create([
