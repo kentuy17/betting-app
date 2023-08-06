@@ -74,7 +74,8 @@
               </div>
               <div class="position-relative">
                 <label for="phone_no">Promo Code <span style="font-style:italic;">(Optional)</span></label>
-                <input type="text" name="code" id="code" class="form-control form-control input-block">
+                <input type="text" name="code" id="code" placeholder="Enter Promo Code"
+                  class="form-control form-control input-block">
               </div>
               <div class="position-relative">
                 <label for="password">Password</label>

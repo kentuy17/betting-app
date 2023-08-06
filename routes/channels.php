@@ -31,5 +31,8 @@ Broadcast::channel('cashin.{processedBy}', function ($user, $processedBy) {
         ->where('status', 'pending')
         ->orderBy('id', 'desc')
         ->first();
-    return $user->id == $trans->processedBy;
+    if($trans) {
+        return $user->id == $trans->processedBy;
+    }
+    return false;
 });

@@ -88,8 +88,8 @@ usersTable.DataTable({
 
 function formatDeposit(d) {
   let points = d.points.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-  let action = `<a href="/admin/access/${d.id}" target="_BLANK" class="btn btn-link text-primary btn-icon" style="padding-left:0;">
-    <i class="fa-solid fa-lock-open fa-lg"></i>`;
+  let action = `<button id="access-user-btn" onClick="accessUser(${d.id})" class="btn btn-link text-primary btn-icon" style="padding-left:0;">
+    <i class="fa-solid fa-lock-open fa-lg"></i></button>`;
   return (
     `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
       <tr>
@@ -115,6 +115,19 @@ function formatDeposit(d) {
     </table>`
   );
 }
+
+function accessUser (id) {
+  Swal.fire({
+    title: 'Login to this User?',
+    showCancelButton: true,
+    confirmButtonText: 'Yes',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.open('/admin/access/'+id, '_blank');
+    }
+    return;
+  })
+};
 
 $('#admin-users-table tbody').on('click', 'td.dt-control', function () {
   var tr = $(this).closest('tr');
