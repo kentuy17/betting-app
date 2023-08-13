@@ -107,14 +107,14 @@
   <div class="modal fade" id="modal-center" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-top" role="document">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header pb-3">
           <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <form id="deposit-form" method="post">
-          <div class="modal-body">
+          <div class="modal-body pt-0">
             <input type="hidden" name="trans-id" id="trans-id">
             <div class="form-group align-center">
               <img id="trans-receipt" data-storage="{{ asset('storage/') }}" src="" alt="">
@@ -136,7 +136,11 @@
             </div>
             <div class="form-group mt-2" style="display: none">
               <label for="trans-note">Note:</label>
-              <textarea name="trans-note" class="form-control" id="trans-note" cols="30" rows="1"></textarea>
+              {{-- <textarea name="trans-note" class="form-control" id="trans-note" cols="30" rows="1"></textarea> --}}
+              <select name="trans-note" id="trans-note" class="form-control">
+                <option value="Duplicate receipt">Duplicate receipt</option>
+                <option value="Wrong receipt">Wrong receipt</option>
+              </select>
             </div>
           </div>
           <div class="modal-footer">
@@ -260,6 +264,7 @@
   </div>
 @endsection
 @section('additional-scripts')
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
   <script>
     function Comma(Num) { //function to add commas to textboxes
       Num += '';
@@ -277,6 +282,7 @@
         x1 = x1.replace(rgx, '$1' + ',' + '$2');
       return x1 + x2;
     }
+    const DUMMY_ID = '{{ config('app.dummy_id') }}'
   </script>
   <script src="{{ asset('js/transactions.js') }}" defer></script>
   <script src="{{ asset('js/withdraw.js') }}" defer></script>

@@ -18,8 +18,8 @@ use App\Models\Transactions;
 //     return (int) $user->id === (int) $id;
 // });
 
-Broadcast::channel('user.{id}', function($user, $betUserId) {
-    if($user->isOnline() ) {
+Broadcast::channel('user.{id}', function ($user, $betUserId) {
+    if ($user->isOnline()) {
         return $user->id == $betUserId;
     }
     // return false;
@@ -31,5 +31,8 @@ Broadcast::channel('cashin.{processedBy}', function ($user, $processedBy) {
         ->where('status', 'pending')
         ->orderBy('id', 'desc')
         ->first();
-    return $user->id == $trans->processedBy;
+    if ($trans) {
+        return $user->id == $trans->processedBy;
+    }
+    return false;
 });

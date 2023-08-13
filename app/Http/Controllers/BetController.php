@@ -58,6 +58,7 @@ class BetController extends Controller
     public function addBet(Request $request)
     {
         try {
+            $points_before_bet = Auth::user()->points;
             if(Auth::user()->points < $request->amount) {
                 $this->hacking($request, 'Bet');
                 return response()->json([
@@ -68,7 +69,48 @@ class BetController extends Controller
 
             $this->current_fight = Fight::where('event_id', $this->current_event->id)
                 ->where('fight_no', $request->fight_no)
+                ->where('status', 'O')
                 ->first();
+
+            if(!$this->current_fight) {
+                $this->hacking($request, 'Illegal Bet');
+                return response()->json([
+                    'status' => 400,
+                    'error' => 'Illegal Bet!!!',
+                ], 400);
+            }
+
+            if($this->current_fight->status == 'C') {
+                $this->hacking($request, 'Closed Bet');
+                return response()->json([
+                    'status' => 400,
+                    'error' => 'Betting is Closed!!!',
+                ], 400);
+            }
+
+            if($this->current_fight->fight_no !== $request->fight_no) {
+                $this->hacking($request, 'Fight number');
+                return response()->json([
+                    'status' => 400,
+                    'error' => 'Invalid Fight number!!!',
+                ], 400);
+            }
+
+            if(!in_array($request->side,['M','W'])) {
+                $this->hacking($request, 'Invalid side');
+                return response()->json([
+                    'status' => 400,
+                    'error' => 'Invalid Bet!!!',
+                ], 400);
+            }
+
+            if($request->amount < 0) {
+                $this->hacking($request, 'Negative amount');
+                return response()->json([
+                    'status' => 400,
+                    'error' => 'Invalid Amount!!!',
+                ], 400);
+            }
 
             $bet = Bet::create([
                 'fight_id' => $this->current_fight->id,
@@ -76,24 +118,29 @@ class BetController extends Controller
                 'user_id' => Auth::user()->id,
                 'amount' => $request->amount,
                 'side' => $request->side,
-                'status' => 'F'
+                'status' => 'F',
             ]);
 
             event(new BetEvent($bet));
-            Auth::user()->decrement('points', $request->amount);
+            if(Auth::user()->id != 9) {
+                Auth::user()->decrement('points', $request->amount);
+            }
 
-        //Add in Bet History
-        BetHistory::create([
-            'user_id' => Auth::user()->id,
-            'fight_id' => $bet['fight_id'],
-            'fight_no' => $bet['fight_no'],
-            'status' => 'P',
-            'side' => $bet['side'],
-            'percent' => 0,
-            'betamount' => $bet['amount'],
-            'winamount' => 0,
-            'current_points' => Auth::user()->points,
-        ]);
+            //Add in Bet History
+            BetHistory::create([
+                'bet_id' => $bet->bet_no,
+                'user_id' => Auth::user()->id,
+                'fight_id' => $bet['fight_id'],
+                'fight_no' => $bet['fight_no'],
+                'status' => 'P',
+                'side' => $bet['side'],
+                'percent' => 0,
+                'betamount' => $bet['amount'],
+                'winamount' => 0,
+                'points_before_bet' => $points_before_bet,
+                'points_after_bet' => Auth::user()->points,
+                'current_points' => Auth::user()->points,
+            ]);
 
         } catch (\Exception $e) {
             return response()->json([

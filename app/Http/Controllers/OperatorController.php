@@ -12,6 +12,7 @@ use App\Models\DerbyEvent;
 use App\Models\User;
 use App\Models\BetHistory;
 use App\Models\Setting;
+use App\Models\Referral;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
@@ -53,14 +54,15 @@ class OperatorController extends Controller
     public function getDepositTrans()
     {
         $trans = Transactions::where('action', 'deposit')
+            ->whereIn('morph', [0, 2])
             ->with('user')
             ->with('operator')
-            ->orderBy('id', 'desc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
-        return response()->json([
-            'data' => $trans,
-        ]);
+        return DataTables::of($trans)
+            ->addIndexColumn()
+            ->make(true);
     }
 
     public function processDepositRevert(Request $request)
@@ -102,17 +104,44 @@ class OperatorController extends Controller
                     'status' => 'error',
                 ], 400);
             }
+
+            $check = Transactions::where('reference_code', $request->ref_code)->first();
+            if($check && $request->action == 'approve') {
+                return response()->json([
+                    'msg' => 'Double receipt!',
+                    'status' => 'error',
+                ], 400);
+            }
+
             $trans = Transactions::find($request->id);
+
+            if($request->action == 'approve' && $trans->status == 'completed') {
+                $approver = User::find($trans->processedBy);
+                return response()->json([
+                    'msg' => 'Oops! Request already approved by '. $approver->username,
+                    'status' => 'error',
+                ], 400);
+            }
+
             $trans->status = $request->action == 'approve' ? 'completed' : 'failed';
             $trans->processedBy = Auth::user()->id;
             $trans->reference_code = $request->ref_code;
             $trans->amount = $request->amount;
-            $trans->note = $request->note;
+            $trans->note = $request->action == 'approve' ? 'DONE' : $request->note;
             $trans->completed_at = date('Y-m-d H:i:s');
             $trans->save();
 
             if ($request->action == 'approve') {
                 $player = User::find($trans->user_id);
+                $referral = Referral::where('user_id',$trans->user_id)
+                    ->where('promo_done', false)
+                    ->first();
+
+                if($referral && ($player->points < 100)) {
+                    $referral->promo_done = true;
+                    $referral->save();
+                }
+
                 $player->points +=  $trans->amount;
                 $player->save();
 
@@ -138,12 +167,15 @@ class OperatorController extends Controller
         $trans = Transactions::where('action', 'withdraw')
             ->with('user')
             ->with('operator')
-            ->orderBy('id', 'desc')
+            ->where('deleted', false)
+            ->whereIn('morph', [0, 2])
+            ->orderBy('created_at', 'desc')
             ->get();
 
-        return response()->json([
-            'data' => $trans,
-        ]);
+        return DataTables::of($trans)
+            ->addIndexColumn()
+            ->with('pending_count', $trans->where('status','pending')->count())
+            ->toJson();
     }
 
     public function processWithdraw(Request $request)
@@ -192,7 +224,13 @@ class OperatorController extends Controller
     public function addNewEvent(Request $request)
     {
         try {
-            $event = DerbyEvent::create($request->all());
+            $event = DerbyEvent::create([
+                'name' => $request->name,
+                'schedule_date' => $request->schedule_date,
+                'schedule_time' => $request->schedule_time,
+                'status' => 'WAITING',
+                'added_by' => Auth::user()->id,
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 500,

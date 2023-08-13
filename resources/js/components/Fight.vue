@@ -2,7 +2,9 @@
   <div class='card bet-boxed-area mb-1'>
     <div class="bet-bg-head items-center grid grid-cols-3">
       <h6><b class="text-lg">FIGHT # </b> <b id="fight-no" class="text-lg">{{ fightNo }}</b></h6>
-      <div class="text-center"><span class="btn btn-block btn-sm gradient-status-close btn-lg vue-components">{{ message }}</span></div>
+      <div class="text-center">
+        <span class="font-bold btn btn-block btn-sm btn-lg vue-components" :class="fightStatusClass[message]">{{ message }}</span>
+      </div>
       <div class="nav-credits-wr w-25 w-sm-50 gold-text ml-auto">
         <a href="/refillpoints" class="d-flex align-items-center justify-content-end gp-credits">
           <div class="bg-success add-btn p-1">
@@ -47,7 +49,6 @@
       </a>
     </div>
     <div class="flex flex-col gap-2 lg:flex-row justify-center my-3 px-5">
-
       <button @click="updateFight('O')" :disabled="isDisabled.open" class="btn btn-success btn-lg mx-2">
         <span v-show='!isLoading.open'>OPEN</span>
         <span v-show='isLoading.open'>Processing...</span></button>
@@ -70,32 +71,32 @@
       </button>
     </div>
   </div>
-   <div class="modal fade" id="modal-undo-win" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-top">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 id="exampleModalLongTitle">Revert Fight Winner</h5>
-      </div>
-      <form id="undo-win">
+  <div class="modal fade" id="modal-undo-win" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-top">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 id="exampleModalLongTitle">Revert Fight Winner</h5>
+        </div>
         <div class="modal-body">
           <div class="form-group mt-2">
             <label>Fight #</label>
             <input type="number" class="form-control disabled" id="fight_no" >
           </div>
-          <div class="form-group mt-2">
-            <input @click="revertFight('M')" type="submit" class="btn btn-danger bg-slate-900 btn-sm" value="MERON">
-          </div>
-          <div class="form-group mt-2">
-            <input @click="revertFight('W')" type="submit" class="btn btn-primary bg-slate-900 btn-sm" value="WALA">
-          </div>
-          <div class="form-group mt-2" >
-            <input @click="revertFight('D')" type="submit" class="btn btn-warning bg-slate-900 btn-sm" value="DRAW">
+          <div class="revert-btn-group">
+            <div class="form-group mt-2">
+              <button @click="revertFight('M')" class="btn btn-danger btn-sm">MERON</button>
+            </div>
+            <div class="form-group mt-2">
+              <button @click="revertFight('W')" class="btn btn-primary btn-sm">WALA</button>
+            </div>
+            <div class="form-group mt-2" >
+              <button @click="revertFight('D')" class="btn btn-warning btn-sm">DRAW</button>
+            </div>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -106,6 +107,11 @@
       return {
         fightNo: 0,
         message: '____',
+        fightStatusClass: {
+          OPEN: 'gradient-status-open',
+          CLOSE: 'gradient-status-close',
+          '_____': 'gradient-status-pending',
+        },
         total: {
           meron: 0,
           wala: 0,
@@ -218,6 +224,7 @@
           denyButtonText: 'WALA',
           denyButtonColor: 'blue',
           cancelButtonText: 'DRAW',
+          cancelButtonColor: 'green',
           allowEscapeKey: false
         })
         .then((result) => {
@@ -283,26 +290,30 @@
         }
       },
 
-
       revertWinFight() {
         $('#modal-undo-win').modal('show')
       },
 
-
-      revertFight(result) {
-      try {
-
-        const {data} = axios.post('/fight/revertresult', {
-            fight_no:$('#fight_no').val(),
+      async revertFight(result) {
+        try {
+          const {data} = await axios.post('/fight/revertresult', {
+            fight_no: $('#fight_no').val(),
             result: result,
           })
           $('#modal-undo-win').modal('hide');
-      } catch (error) {
-          console.error(error);
-      }
+        } catch (error) {
+            console.error(error);
+        }
 
       }
     }
   })
 </script>
 
+<style>
+.revert-btn-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+</style>

@@ -55,8 +55,8 @@ agentPlayersTable.DataTable({
       "data": null,
       render: (data, type, row, meta) => {
         if(!data.user) return "---";
-        return data.bet_sum_agent_commission 
-          ? data.bet_sum_agent_commission.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') 
+        return data.commission
+          ? data.commission.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
           : "0.00";
       }
     },

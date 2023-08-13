@@ -11,13 +11,16 @@ use App\Models\Roles;
 use App\Models\User;
 use App\Models\Transactions;
 use App\Models\BetHistory;
+use App\Models\Referral;
+use App\Models\Promo;
+use App\Models\Chat;
+use App\Models\Setting;
 use App\Events\CashIn;
 use \Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response as FacadeResponse;
-use App\Models\Chat;
-use App\Models\Setting;
+use Carbon\Carbon;
 use Yajra\DataTables\DataTables;
 
 class PlayerController extends Controller
@@ -42,6 +45,12 @@ class PlayerController extends Controller
         $role = $this->getUserRole();
         $fight = DerbyEvent::where('status', 'ACTIVE')->orderBy('id', 'desc')->first();
         $video_display = Setting::where('name', 'video_display')->first()->value ?? false;
+
+        $user = Auth::user();
+        $user->email = request()->ip();
+        $user->last_activity = Carbon::now();
+        $user->save();
+
         return view('player.play', compact('role', 'fight', 'video_display'));
     }
 
@@ -81,6 +90,8 @@ class PlayerController extends Controller
             ->with('operator')
             ->orderBy('id', 'desc')
             ->where('action', $action)
+            ->where('deleted', false)
+            ->whereIn('morph', [0, 1])
             ->get();
 
         return DataTables::of($trans)
@@ -97,7 +108,13 @@ class PlayerController extends Controller
 
     public function withdraw()
     {
-        return view('player.withdraw-form');
+        $referral = Referral::where('user_id', Auth::user()->id)
+            ->where('promo_done', false)
+            ->first();
+
+        $promo = Promo::where('user_id', Auth::user()->id)->first();
+        $availed = $referral && $promo ? false : true;
+        return view('player.withdraw-form', compact('availed'));
     }
 
     public function depositSubmit(Request $request)
@@ -108,16 +125,24 @@ class PlayerController extends Controller
                 'formFile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
 
-            $trimPhone = $request->phone_no;
-            if (Str::startsWith($request->phone_no, ['+63', '63'])) {
-                $trimPhone = preg_replace('/^\+?63/', '0', $trimPhone);
-            } else if (Str::startsWith($request->phone_no, ['9'])) {
-                $trimPhone = '0' . $request->phone_no;
+            $file = $request->file('formFile');
+            $check_receipt = Transactions::where('receipt_name', $file->getClientOriginalName())->first();
+            if ($check_receipt) {
+                return redirect()->back()
+                    ->with('danger', 'Duplicate receipt!');
             }
 
-            $this->validate($request, [
-                'phone_no' => ['regex:/(\+?)[0-9]*/'],
-            ]);
+            // $trimPhone = $request->phone_no;
+            // if (Str::startsWith($request->phone_no, ['+63', '63'])) {
+            //      $trimPhone = preg_replace('/^\+?63/', '0', $trimPhone);
+            // }
+            // else if (Str::startsWith($request->phone_no, ['9'])) {
+            //     $trimPhone = '0' . $request->phone_no;
+            // }
+
+            // $this->validate($request, [
+            //     'phone_no' => ['regex:/(0?9|\+?63)[0-9]{9}/'],
+            // ]);
 
             $imageName = time() . '.' . $request->formFile->extension();
             $path = 'public/' . $imageName;
@@ -130,6 +155,7 @@ class PlayerController extends Controller
                 'filename' => $imageName,
                 'status' => 'pending',
                 'processedBy' => $request->operator_id,
+                'receipt_name' => $file->getClientOriginalName(),
                 'outlet' => $request->payment_mode ?? 'Gcash',
             ]);
 
@@ -141,6 +167,7 @@ class PlayerController extends Controller
         return redirect()->back()->with('success', 'Submitted Successfully!');
     }
 
+    // Current Working
     public function withdrawSubmit(Request $request)
     {
         try {
@@ -162,7 +189,20 @@ class PlayerController extends Controller
                     ->with('danger', 'Insuficient points!');
             }
 
-            $user->points -=  $amount;
+            $referral = Referral::where('user_id', Auth::user()->id)->first();
+            $promo = Promo::where('user_id', Auth::user()->id)->first();
+
+            if ($promo && !$referral->promo_done) {
+                if ($amount < 1500) {
+                    return redirect()->back()
+                        ->with('danger', "For bonus credit only, you need to win 1500 to cash out " . $request->amount);
+                } else {
+                    $referral->promo_done = true;
+                    $referral->save();
+                }
+            }
+
+            $user->points -= $amount;
             $user->save();
 
             Transactions::create([
@@ -304,5 +344,57 @@ class PlayerController extends Controller
         return response()->json([
             'data' => $bets,
         ], 200);
+    }
+
+    public function getUserPoints()
+    {
+        return response()->json([
+            'points' => Auth::user()->points,
+        ]);
+    }
+
+    public function cancelWithdraw(Request $request)
+    {
+        try {
+            $withdraw = Transactions::where('id', $request->id)
+                ->where('user_id', Auth::user()->id)
+                ->where('action', 'withdraw')
+                ->where('status', 'pending')
+                ->first();
+
+            if (!$withdraw) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Invalid request!!!',
+                ], 402);
+            }
+
+            $withdraw->status = 'failed';
+            $withdraw->note = 'Cancelled by user';
+            $withdraw->save();
+            Auth::user()->increment('points', $withdraw->amount);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => 'OK',
+            'message' => 'Withdrawal request successfully cancelled!',
+            'points' => Auth::user()->points,
+        ], 200);
+    }
+
+    public function landing()
+    {
+        $is_online = Setting::where('name', 'video_display')->first()->value ?? false;
+        return view('layouts.landing', compact('is_online'));
+    }
+
+    public function watchMovie()
+    {
+        return view('player.movie');
     }
 }

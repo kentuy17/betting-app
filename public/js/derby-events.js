@@ -9,6 +9,7 @@ $(document).ready(function () {
     "bAutoWidth": false,
     "ajax": '/event/lists',
     "scrollX": true,
+    "order": [[0, 'DESC']],
     "columns": [
       {
         "data": "id"
@@ -52,7 +53,7 @@ $(document).ready(function () {
     }
   });
 
-  $('#time-start').val('09:00');
+  $('#time-start').val('08:00');
   $('#sched-date').val(moment().format('YYYY-MM-DD'));
 
   $('#add-derby').on('click', function(e) {

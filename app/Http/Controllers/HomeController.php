@@ -34,7 +34,7 @@ class HomeController extends Controller
             if (Auth::user()->defaultpassword) {
                 $this->redirectTo = '/changepassword';
             } else {
-                $this->redirectTo = '/play';
+                $this->redirectTo = '/landing';
             }
         }
 
@@ -47,7 +47,7 @@ class HomeController extends Controller
         }
 
         if ($role->name == 'Admin') {
-            $this->redirectTo = '/admin';
+            $this->redirectTo = '/landing';
         }
 
         if ($role->name == 'Auditor') {
@@ -79,5 +79,10 @@ class HomeController extends Controller
         $user->save();
 
         return redirect('/play');
+    }
+
+    public function getNotifications()
+    {
+        return false;
     }
 }

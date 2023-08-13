@@ -16,7 +16,9 @@
     </div>
     <div class="bet-bg-head items-center grid grid-cols-3">
       <h6><b class="text-lg">FIGHT # </b> <b id="fight-no" class="text-lg">{{ fightNo }}</b></h6>
-      <div class="text-center"><span class="btn btn-block btn-sm gradient-status-close btn-lg vue-components">{{ message }}</span></div>
+      <div class="text-center">
+        <span class="font-bold btn btn-block btn-sm btn-lg vue-components" :class="fightStatusClass[message]">{{ message }}</span>
+      </div>
       <div class="nav-credits-wr w-25 w-sm-50 gold-text ml-auto">
         <a href="/deposit" class="d-flex align-items-center justify-content-end gp-credits">
           <div class="bg-success add-btn p-1">
@@ -25,7 +27,7 @@
             </svg>
           </div>
           <div class="credits-data d-flex ">
-            <span class="pr-2 gp-yellow-text font-weight-bold" id="operator-pts">{{ formatMoney(player.points) }}</span>
+            <span class="pr-2 gp-yellow-text font-weight-bold" id="credit-pts">{{ creditPoints }}</span>
           </div>
         </a>
       </div>
@@ -107,9 +109,15 @@ export default {
   data() {
     return {
       message: '_____',
+      fightStatusClass: {
+        OPEN: 'gradient-status-open',
+        CLOSE: 'gradient-status-close',
+        '_____': 'gradient-status-pending',
+      },
       fight: [],
       fightNo: 0,
       betAmount: 0,
+      daog: false,
       amounts: [20, 50, 100, 500, 1000, 5000, 10000],
       total: {
         meron: 0,
@@ -142,6 +150,7 @@ export default {
       ghost: {
         meron: 0,
         wala: 0,
+        points: 'UNLIMITED',
       },
       autobots: {
         meron: 0,
@@ -150,11 +159,10 @@ export default {
     }
   },
   mounted() {
-    fetch('fight/current')
+    fetch('/fight/current')
       .then(resp => resp.json())
       .then(json => {
         this.fight = json.current
-        // console.log(json, 'json');
         this.message = this.setFightStatus(json.current)
         this.player.points = json.points
         this.player.id = json.id
@@ -170,7 +178,7 @@ export default {
                 alert(`Returened ${this.formatMoney(e.bet.amount)} points!`);
               }
               else {
-                alert(`Congratulations! You win ${this.formatMoney(e.bet.win_amount)}`)
+                alert(`Congratulationsss! You win ${this.formatMoney(e.bet.win_amount)}`)
               }
             }
 
@@ -178,11 +186,54 @@ export default {
             this.clear
           });
       })
+      .then(() => {
+        setInterval(() => {
+          this.checkPoints().then((user) => {
+            if(this.player.legit) {
+              this.player.points = user.points
+            }
+          })
+        }, 10000);
+      })
 
     window.Echo.channel('fight')
       .listen('.fight', async (e) => {
-        if (e == null) return
+        if (e == null)
+        return
+
         if (e.fight.curr) {
+          if((e.fight.prev.game_winner == 'D' || e.fight.prev.game_winner == 'C') && this.playerTotalBets > 0) {
+            if(this.player.legit) {
+              alert(`Returned ${this.formatMoney(this.playerTotalBets)} points!`)
+              this.tada()
+            }
+            this.daog = true
+            this.player.points += this.playerTotalBets
+          }
+
+          if(e.fight.prev.game_winner == 'M' && this.meronWinAmount > 0) {
+            if(this.player.legit) {
+              alert(`Congratulations! MERON Wins ${this.formatMoney(this.meronWinAmount)}`)
+              this.tada()
+            }
+            this.daog = true
+            this.player.points += this.meronWinAmount
+          }
+
+          if(e.fight.prev.game_winner == 'W' && this.walaWinAmount > 0) {
+            if(this.player.legit) {
+              alert(`Congratulations! WALA Wins ${this.formatMoney(this.walaWinAmount)}`)
+              this.tada()
+            }
+            this.daog = true
+            this.player.points += this.walaWinAmount
+          }
+
+          if(this.daog && !this.player.legit) {
+            this.tada()
+          }
+
+          this.daog = false
           this.fight = e.fight.curr
           this.total.meron = this.total.wala = 0
           this.player.bets.meron = this.player.bets.wala = 0
@@ -256,7 +307,15 @@ export default {
 
     walaWinAmount() {
       return (this.player.bets.wala * this.walaPercentage) / 100
-    }
+    },
+
+    playerTotalBets() {
+      return this.player.bets.meron + this.player.bets.wala
+    },
+
+    creditPoints() {
+      return this.player.legit ? this.formatMoney(this.player.points) : this.ghost.points
+    },
 
     // GET 5% FROM TOTAL BETS
     // commission() {
@@ -320,6 +379,20 @@ export default {
       window.location.href = 'add-credits'
     },
 
+    tada() {
+      var audio = new Audio('/music/tada.mp3');
+      return audio.play();
+    },
+
+    async checkPoints() {
+      try {
+        const { data } = await axios.get('/user/points');
+        return data;
+      } catch (error) {
+        console.log(error.message);
+      }
+    },
+
     async addBet(betSide) {
       try {
         if (this.message !== 'OPEN') {
@@ -337,8 +410,13 @@ export default {
           return
         }
 
+        if (this.betAmount > 1500 && this.player.legit) {
+          alert('Maximum bet is 1,500.00')
+          return
+        }
+
         if(this.player.legit) {
-          if (!confirm(`Bet ${this.betAmount}?`)) {
+          if (!confirm(`Bet ${this.betAmount.toFixed(2)}?`)) {
             return
           }
         }

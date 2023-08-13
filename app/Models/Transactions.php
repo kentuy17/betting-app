@@ -18,11 +18,14 @@ class Transactions extends Model
         'amount',
         'action',
         'processedBy',
+        'receipt_name',
         'mobile_number',
         'status',
         'reference_code',
         'filename',
         'note',
+        'deleted',
+        'morph',
         'created_at',
         'updated_at',
         'outlet',
@@ -30,13 +33,13 @@ class Transactions extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'datetime:M-d-y H:i:s',
-        'updated_at' => 'datetime:M d, Y h:i A',
+        // 'created_at' => 'datetime:m-d-y H:i:s',
+        // 'updated_at' => 'datetime:M d, Y h:i A',
     ];
 
     protected function serializeDate(DateTimeInterface $date)
     {
-        return $date->timezone('Asia/Singapore')->format('M-d-y H:i:s');
+        return $date->timezone('Asia/Singapore')->format('m-d-y H:i:s');
     }
 
     /**

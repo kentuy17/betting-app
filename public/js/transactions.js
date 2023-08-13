@@ -15,13 +15,14 @@ transactionsTable.DataTable({
   "bInfo": false,
   "bAutoWidth": true,
   "scrollX": true,
-  // "processing": true,
-  // "serverSide": true,
+  "processing": true,
+  "serverSide": true,
   "pagingType": 'numbers',
   "language": {
     "search": '',
     "lengthMenu": "_MENU_",
   },
+  "order": [[5, 'DESC']],
   "dom": "<'row'<'col-4'l><'col-8'f>>" +
     "<'row'<'col-sm-12'tr>>" +
     "<'row'<'col-md-12'p>>",
@@ -51,7 +52,7 @@ transactionsTable.DataTable({
     //   data: "user_id",
     // },
     {
-      "data": "user.username"
+      "data": "user.name",
     },
     // {
     //   "data": "outlet"
@@ -60,7 +61,7 @@ transactionsTable.DataTable({
       "data": null,
       render: (data) => {
         return data.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-      }
+      },
     },
     {
       "data": "mobile_number"
@@ -88,12 +89,12 @@ transactionsTable.DataTable({
     {
       "data": null,
       render: (data) => {
-        if (data.status == "completed" && data.completed_at != null) {
-          return `<a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view">
-              <i class="fa-solid fa-circle-info"></i></a>
-              <a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view-undo">
-              <i class="fa-solid fa-undo"></i></a>`;
-        }
+        // if (data.status == "completed" && data.completed_at != null) {
+        //   return `<a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view">
+        //       <i class="fa-solid fa-circle-info"></i></a>
+        //       <a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view-undo">
+        //       <i class="fa-solid fa-undo"></i></a>`;
+        // }
         return `<a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view">
           <i class="fa-solid fa-circle-info"></i></a>`;
       }
@@ -102,10 +103,11 @@ transactionsTable.DataTable({
   "createdRow": function (row, data, dataIndex) {
     $(row).attr("data-id", data.id).addClass('cursor-pointer expandable');
     if (data.status == `pending`) {
-      $(row).css({
-        "background-color": "var(--bs-red)"
-      });
+      $(row).css({"background-color": "var(--bs-red)"});
       pendingCount++;
+
+      let timeDiff = moment(data.created_at, "MM-DD-YYYY hh:mm:ss").fromNow()
+      $(row).find('td').eq(5).text(timeDiff)
     }
 
     if(data.status == `failed`) {
@@ -122,6 +124,14 @@ transactionsTable.DataTable({
 });
 
 function formatDeposit(d) {
+  let userId = d.user_id;
+  let userName = d.user.username;
+
+  if(d.user_id == 666) {
+    userId = DUMMY_ID;
+    userName = d.user.name;
+  }
+
   let copyRefCode = `<button data-bs-toggle="tooltip" title="Copied!" data-bs-trigger="click" class="btn btn-link text-primary btn-icon copy-ref-code py-0" id="copy-ref-code" data-ref-code="${d.reference_code}"
       onclick="copyRefCode(this);"><i class="fa-solid fa-copy"></i></button>`;
   let note = d.note ? `<tr><td>NOTE:</td><td>${d.note}</td></tr>` : '';
@@ -134,11 +144,11 @@ function formatDeposit(d) {
     `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
       <tr>
         <td>ID:</td>
-        <td>#${d.user_id}</td>
+        <td>#${userId}</td>
       </tr>
       <tr>
         <td>PLAYER:</td>
-        <td>${d.user.username}</td>
+        <td>${userName}</td>
       </tr>
       <tr>
         <td>MOBILE#:</td>

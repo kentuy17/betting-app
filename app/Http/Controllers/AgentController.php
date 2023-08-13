@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Agent;
 use App\Models\User;
 use App\Models\Referral;
+use App\Models\CommissionHistory;
+use App\Models\AgentCommission;
 use Illuminate\Http\Request;
 
 class AgentController extends Controller
@@ -20,12 +22,12 @@ class AgentController extends Controller
                 ], 402);
             }
 
-            // if($request->points < 500) {
-            //     return response()->json([
-            //         'status' => 'error',
-            //         'message' => 'Minimum conversation points is 500.00',
-            //     ], 402);
-            // }
+            if($request->points < 200) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Minimum commission points is 200.00',
+                ], 402);
+            }
 
             $agent = Agent::where('user_id', Auth::user()->id)->first();
             $agent->current_commission -= $request->points;
@@ -34,6 +36,12 @@ class AgentController extends Controller
             $user = User::find(Auth::user()->id);
             $user->points += $request->points;
             $user->save();
+
+            CommissionHistory::create([
+                'user_id' => Auth::user()->id,
+                'points_converted' => $request->points,
+                'current_points' => $user->points,
+            ]);
         }
         catch (\Exception $e) {
             return response()->json([
@@ -44,7 +52,7 @@ class AgentController extends Controller
 
         return response()->json([
             'data' => [
-                'current_commission' => $agent->current_commission,
+                'current_commission' => number_format($agent->current_commission,2),
                 'points' => $user->points,
             ],
             'status' => 'success',
@@ -58,14 +66,56 @@ class AgentController extends Controller
 
     public function playerLists()
     {
-        $players = Referral::with('user')
-            ->with('bet')
-            ->withSum('bet','agent_commission')
-            ->where('referrer_id', Auth::user()->id)->get();
+        // $players = Referral::with('user')
+        //     ->with('bet')
+        //     ->withSum('bet','agent_commission')
+        //     ->where('referrer_id', Auth::user()->id)->get();
+
+        $players = AgentCommission::with('user','agent')
+            ->where('agent_id', Auth::user()->id)
+            ->get();
 
         return response()->json([
             'data' => $players,
             'status' => 'success',
+        ], 200);
+    }
+
+    public function agentPlayerList()
+    {
+        try {
+            $agents = Agent::where('player_count', '>', 0)
+                ->whereNotIn('user_id', [10])
+                ->get();
+
+            $players = Referral::with('user')
+                ->with('bet')
+                ->withSum('bet','agent_commission')
+                ->whereIn('referrer_id', $agents->pluck('user_id'))->get();
+
+            $sums = [];
+            foreach ($players as $key => $player) {
+                $sums[] = $player->bet_sum_agent_commission;
+                AgentCommission::create([
+                    'agent_id' => $player->referrer_id,
+                    'user_id' => $player->user_id,
+                    'commission' => $player->bet_sum_agent_commission ?? 0,
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'status' => 500,
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'OK',
+            'data' => [
+                'players' => $players,
+                'sums' => $sums,
+            ],
         ], 200);
     }
 }

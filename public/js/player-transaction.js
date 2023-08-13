@@ -14,8 +14,12 @@ $(document).ready(function () {
     "pageLength": 25,
     "columnDefs": [
       {
-        "targets": [3],
+        "targets": [2],
         "className": 'dt-body-right',
+      },
+      {
+        "targets": [4, 5],
+        "className": 'dt-body-center',
       },
     ],
     "columns": [
@@ -25,16 +29,16 @@ $(document).ready(function () {
           return data.status.toUpperCase();
         }
       },
-      {
-        "data": "outlet"
-      },
+      // {
+      //   "data": "outlet"
+      // },
       {
         "data": "mobile_number"
       },
       {
         "data": null,
         render: (data) => {
-          return data.amount == '0.00' ? "N/A" : data.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+          return data.amount == '0.00' ? "---" : data.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         }
       },
       {
@@ -43,19 +47,26 @@ $(document).ready(function () {
       {
         "data": null,
         render: (data) => {
-          return data.reference_code == null ? "N/A" : data.reference_code
+          return data.reference_code == null ? "---" : data.reference_code
         }
       },
       {
         "data": null,
         render: (data) => {
-          return data.note == null ? "DONE" : data.note
+          return data.note == null ? (data.status == 'completed' ? 'DONE' : '---') : data.note
+        }
+      },
+      {
+        "data": null,
+        render: (data) => {
+          return data.operator.username == null ? "---" : data.operator.username
         }
       },
     ],
     "createdRow": function( row, data, dataIndex){
       if( data.status ==  `failed` ) {
         $(row).find('td').eq(0).attr('style', 'color: red !important');
+        $(row).find('td').eq(5).attr('style', 'color: red !important');
       }
 
       if( data.status ==  `completed` ) {
@@ -65,7 +76,8 @@ $(document).ready(function () {
   });
 
   // WITHDRAW TABLE
-  $('#player-withdraw-table').DataTable({
+  var playerWithdrawTable = $('#player-withdraw-table');
+  playerWithdrawTable.DataTable({
     "bPaginate": true,
     "bLengthChange": false,
     "bFilter": false,
@@ -79,8 +91,12 @@ $(document).ready(function () {
     "serverSide": true,
     "columnDefs": [
       {
-        "targets": [3],
+        "targets": [2],
         "className": 'dt-body-right',
+      },
+      {
+        "targets": [4, 5],
+        "className": 'dt-body-center',
       },
     ],
     "columns": [
@@ -90,16 +106,16 @@ $(document).ready(function () {
           return data.status.toUpperCase();
         }
       },
-      {
-        "data": "outlet"
-      },
+      // {
+      //   "data": "outlet"
+      // },
       {
         "data": "mobile_number"
       },
       {
         "data": null,
         render: (data) => {
-          return data.amount == '0.00' ? "N/A" : data.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+          return data.amount == '0.00' ? "---" : data.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         }
       },
       {
@@ -108,19 +124,26 @@ $(document).ready(function () {
       {
         "data": null,
         render: (data) => {
-          return data.reference_code == null ? "N/A" : data.reference_code
+          return data.reference_code == null ? "---" : data.reference_code
         }
       },
       {
         "data": null,
         render: (data) => {
-          return data.note == null ? "DONE" : data.note
+          return data.note == null ? (data.status == 'completed' ? 'DONE' : '---') : data.note
         }
-      }
+      },
+      {
+        "data": null,
+        render: (data) => {
+          return data.operator?.username == null ? "---" : data.operator.username
+        }
+      },
     ],
     "createdRow": function( row, data, dataIndex){
       if( data.status ==  `failed` ) {
         $(row).find('td').eq(0).attr('style', 'color: red !important');
+        $(row).find('td').eq(5).attr('style', 'color: red !important');
       }
 
       if( data.status ==  `completed` ) {
@@ -130,7 +153,36 @@ $(document).ready(function () {
 
     }
   });
+
+  playerWithdrawTable.on('click', 'tbody td .fuego', async function() {
+    let id = $(this).data('id');
+    let action = $(this).data('action');
+    if(action == 'cancel') {
+      response = await axios.post('/withdraw/cancel', { id: id });
+      Swal.fire({
+        icon: 'success',
+        confirmButtonColor: 'red',
+        title: 'Cancelled successfully',
+      }).then(() =>  {
+        playerWithdrawTable.DataTable().ajax.reload();
+        let playerPts = response.data.points.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        $('#operator-pts').text(playerPts);
+      });
+    }
+    else {
+      window.location.href = '/withdraw';
+    }
+  });
+
+  playerWithdrawTable.on('click', 'tbody td .remove', async function() {
+    let id = $(this).data('id');
+    let action = $(this).data('action');
+    alert('Can\'t remove!');
+  });
+
 });
+
+
 
 $('[data-bs-toggle="tab"]').on('shown.bs.tab', function(e){
   $($.fn.dataTable.tables(true)).DataTable()

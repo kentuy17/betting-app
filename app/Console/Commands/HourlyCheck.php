@@ -39,19 +39,28 @@ class HourlyCheck extends Command
 
         $pusher = new Pusher($auth_key, $secret_key, $app_id,['cluster'=>'ap1']);
 
-        $users = User::get();
+        $users = User::whereNotIn('id',[9,2])->get();
         foreach ($users as $key => $user) {
             # code...
-            if(!$user->isOnline()) {
+            if(!$user->isOnline() && $user->active) {
                 $pusher->terminateUserConnections($user->id);
                 $user->update([
-                    'active' => false
+                    'active' => false,
+                    'timestamps' => false,
                 ]);
             }
         }
 
-        $date = Carbon::now()->subHour();
+        $date = Carbon::now()->subHours(2);
         $delete = Visit::where('created_at', '<=', $date)->delete();
+
+        $ghost = User::find(9);
+        if($ghost->points < 2000000) {
+            $ghost->points += 7000000;
+            $ghost->save();
+            Log::channel('cron')->info("Ghost added pts: " . $ghost->points);
+        }
+
         Log::channel('cron')->info("Delete: " . $delete);
     }
 }

@@ -16,6 +16,7 @@ class Referral extends Model
         'rid',
         'referrer_id',
         'user_id',
+        'promo_done',
         'created_at',
         'updated_at',
     ];

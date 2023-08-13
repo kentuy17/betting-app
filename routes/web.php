@@ -40,11 +40,13 @@ Route::post('/password_reset', [ResetPasswordController::class, 'submitresetpass
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+Route::get('/admin/access/{id}', [AdminController::class, 'accessUser']);
+
 Route::group(['middleware' => ['auth','visitor']], function() {
     // TEST
-    Route::get('/players/referred', [FightController::class, 'calcRefCommission'], function ($players) {
-        ddd($players);
-    });
+    // Route::get('/agent/all-players', [AgentController::class, 'agentPlayerList'], function ($players) {
+    //     ddd($players);
+    // });
 
     Route::get('/changepassword', [HomeController::class, 'showChangePasswordGet'])->name('auth.change-password');
     Route::post('/changepassword', [HomeController::class, 'changePasswordPost'])->name('changePasswordPost');
@@ -61,6 +63,7 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::post('/commission/convert', [UserController::class, 'convertCommission']);
     });
 
+    // Admin
     Route::group(['middleware' => ['admin']], function () {
         Route::get('/admin/share-allocation', [AdminController::class, 'shareHolders'])->name('admin.shares');
         Route::get('/visitor', [AdminController::class, 'getOnlineUsers']);
@@ -87,6 +90,7 @@ Route::group(['middleware' => ['auth','visitor']], function() {
 
         Route::get('/withdraw', [PlayerController::class, 'withdraw'])->name('withdraw');
         Route::post('/withdraw', [PlayerController::class, 'withdrawSubmit'])->name('withdraw.submit');
+        Route::post('/withdraw/cancel', [PlayerController::class, 'cancelWithdraw'])->name('withdraw.cancel');
 
         Route::get('/playertransaction', [PlayerController::class, 'playerTransaction'])->name('player.player-transaction');
         Route::get('/player/transaction/{action}', [PlayerController::class, 'getTransactionByPlayerController']);
@@ -94,7 +98,6 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::get('/chat/messages', [PlayerController::class, 'getUserMsg']);
         Route::post('/chat/send-message', [PlayerController::class, 'sendUserMsg']);
         Route::post('/chat/seen-message', [PlayerController::class, 'seenMessage']);
-
 
     });
 
@@ -160,11 +163,15 @@ Route::group(['middleware' => ['auth','visitor']], function() {
     Route::get('/profile', [UserController::class, 'getProfileByUserID']);
 
     Route::post('/settings/video-display', [UserController::class, 'setVideoDisplay']);
+    Route::get('/user/points', [PlayerController::class, 'getUserPoints']);
 
     //Fight
     Route::get('/fight/current', [FightController::class, 'getCurrentFight']);
     Route::get('/fight/results', [FightController::class, 'fightResults']);
 
     Route::get('/video', [PlayerController::class, 'video']);
+
+    Route::get('/landing', [PlayerController::class, 'landing']);
+    Route::get('/watch/movie', [PlayerController::class, 'watchMovie']);
 
 });

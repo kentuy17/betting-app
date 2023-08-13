@@ -24,9 +24,10 @@ withdrawTable.DataTable({
   "bInfo": false,
   "bAutoWidth": true,
   "scrollX": true,
-  // "processing": true,
-  // "serverSide": true,
+  "processing": true,
+  "serverSide": true,
   // "pageLength": 25,
+  "order": [[6, 'DESC']],
   "pagingType": 'numbers',
   "language": {
     "search": '',
@@ -58,7 +59,7 @@ withdrawTable.DataTable({
       data: "user_id",
     },
     {
-      "data": "user.username"
+      "data": "user.name",
     },
     {
       "data": null,
@@ -103,11 +104,18 @@ withdrawTable.DataTable({
     if( data.status ==  `pending`){
       $(row).css({"background-color":"var(--bs-red)"});
       wPending++;
+
+      let timeDiff = moment(data.created_at, "MM-DD-YYYY hh:mm:ss").fromNow()
+      $(row).find('td').eq(6).text(timeDiff)
     }
 
     if( data.reference_code == null && data.status == 'completed') {
       $(row).addClass('bg-warning');
       unverified++;
+    }
+
+    if(data.status == `failed`) {
+      $(row).addClass('failed');
     }
 
     if(wPending > 0) {
@@ -121,25 +129,40 @@ withdrawTable.DataTable({
     } else {
       $('#badge-withdraw-unverified').hide().text(unverified);
     }
-  }
+  },
+  "drawCallback": function (settings) {
+    let response = settings.json;
+    if(response.pending_count > 0) {
+      $('#badge-withdraw').show().text(response.pending_count);
+    } else {
+      $('#badge-withdraw').hide().text(response.pending_count);
+    }
+  },
 });
 
 function format(d) {
   // `d` is the original data object for the row
+  let userId = d.user_id;
+  let userName = d.user.username;
+
+  if(d.user_id == 666) {
+    userId = DUMMY_ID;
+    userName = d.user.name;
+  }
   var operation = `<button onclick="operation(${d.id})" class="btn btn-link text-primary btn-icon operation" style="padding-left:0;">
       <i class="fa-solid fa-circle-info"></i></button>`;
   var btnCopy = `<button data-bs-toggle="tooltip" title="Copied!" data-bs-trigger="click" class="btn btn-link text-primary btn-icon copy-phone" id="copy-phone" data-phone-number="${d.mobile_number}"
       onclick="copyPhone(this);"><i class="fa-solid fa-copy"></i></button>`;
-  let betHistory = `<button onclick="betHistory(${d.user_id},'${d.user.username}')" class="btn btn-link btn-suucess btn-icon pl-0 bet-history-show">
+  let betHistory = `<button onclick="betHistory(${d.user_id},'${userName}')" class="btn btn-link btn-suucess btn-icon pl-0 bet-history-show">
     <i class="fa-solid fa-money-bill text-success"></i></button>`;
   var expandContent = `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
       <tr>
         <td>ID:</td>
-        <td>#${d.user_id}</td>
+        <td>#${userId}</td>
       </tr>
       <tr>
         <td>PLAYER:</td>
-        <td>${d.user.username}</td>
+        <td>${userName}</td>
       </tr>
       <tr>
         <td>MOBILE#:</td>
@@ -148,6 +171,10 @@ function format(d) {
       <tr>
         <td>AMOUNT:</td>
         <td>${d.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+      </tr>
+      <tr>
+        <td>NOTE:</td>
+        <td>${d.note ? d.note : 'N/A'}</td>
       </tr>
       <tr>
         <td>ACTION:</td>

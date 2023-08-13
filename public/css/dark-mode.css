@@ -27,7 +27,9 @@ body.dark-mode {
 .table>tbody>tr.bg-warning>td {
   color: var(--bs-dark) !important;;
 }
-
+.table>tbody>tr.shown {
+  background: currentColor
+}
 .table>thead>tr>th {
   border-bottom-width: 1px px;
   font-size: 12px;

@@ -35,9 +35,13 @@ betHistoryTable.DataTable({
     "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
   "columnDefs": [
     {
-        "targets": [3, 4, 5, 6, 7],
-        className: 'dt-body-center'
-    }
+      "targets": [1, 2, 3, 4, 5, 6, 7, 8],
+      className: 'dt-head-center',
+    },
+    {
+      "targets": [1, 2, 3, 4, 5, 6, 7, 8],
+      className: 'dt-body-center',
+    },
   ],
   "columns": [
     {
@@ -46,13 +50,12 @@ betHistoryTable.DataTable({
       data: null,
       defaultContent: '',
     },
-    {
-      "data": null,
-      render: (data, type, row, meta) => {
-        let fightName = row.fight ? row.fight.event.name : 'N/A';
-        return fightName;
-      }
-    },
+    // {
+    //   "data": null,
+    //   render: (data, type, row, meta) => {
+    //     return row.fight ? row.fight.event.name : 'N/A';
+    //   }
+    // },
     {
       "data": "fight_no"
     },
@@ -64,8 +67,15 @@ betHistoryTable.DataTable({
     },
     {
       "data": null,
+      render: (data, type, row, meta) => {
+        return row.status != '' ? WINNER[row.status] : "PENDING";
+      }
+    },
+
+    {
+      "data": null,
       render: function(data, type, row, meta) {
-        return row.betamount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        return row.winamount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
       }
     },
     {
@@ -76,15 +86,15 @@ betHistoryTable.DataTable({
     },
     {
       "data": null,
-      render: (data, type, row, meta) => {
-        return row.status != '' ? WINNER[row.status] : "PENDING";
+      render: function(data, type, row, meta) {
+        return row.betamount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
       }
     },
     {
       "data": null,
       render: function(data, type, row, meta) {
-        return row.winamount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-      }
+        return row.current_points.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+      },
     },
     {
       "data": "created_at"
@@ -92,20 +102,20 @@ betHistoryTable.DataTable({
   ],
   "createdRow": function( row, data, dataIndex){
     if( data.status ==  `W`) {
-      $(row).find('td').eq(6).attr('style', 'color: green !important');
-      $(row).find('td').eq(7).attr('style', 'color: yellow !important');
+      $(row).find('td').eq(3).attr('style', 'color: green !important');
+      $(row).find('td').eq(4).attr('style', 'color: yellow !important');
     }
 
     if( data.status ==  `L` ) {
-      $(row).find('td').eq(6).attr('style', 'color: red !important');
+      $(row).find('td').eq(3).attr('style', 'color: #d67474eb !important');
     }
 
     if( data.side == 'M' ) {
-      $(row).find('td').eq(3).attr('style', 'color: red !important');
+      $(row).find('td').eq(2).attr('style', 'color: red !important');
     }
 
     if( data.side == 'W' ) {
-      $(row).find('td').eq(3).attr('style', 'color: blue !important');
+      $(row).find('td').eq(2).attr('style', 'color: blue !important');
     }
   }
 })

@@ -42,7 +42,9 @@ class User extends Authenticatable
         'email',
         'points',
         'active',
-        'defaultpassword'
+        'defaultpassword',
+        'status',
+        'last_activity',
     ];
 
     /**
@@ -67,7 +69,7 @@ class User extends Authenticatable
 
     protected function serializeDate(DateTimeInterface $date)
     {
-        return $date->timezone('Asia/Singapore')->format('M-d-y H:i:s');
+        return $date->timezone('Asia/Singapore')->format('m-d-y H:i');
     }
 
     public function bet()

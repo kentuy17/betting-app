@@ -54,29 +54,35 @@ class LoginController extends Controller
 
     public function redirectTo()
     {
-        $role = $this->getUserRole();  
+        $role = $this->getUserRole();
         $user = User::find(Auth::user()->id);
         $user->update(['active' => true]);
-        $user->save();     
-        if($role->name == 'Player') {
-            if(Auth::user()->defaultpassword){
-                $this->redirectTo = '/changepassword';
-            } else{
-                $this->redirectTo = '/play';
-            }
-        }
-        
-        if($role->name == 'Operator' || $role->name == 'Cash-out Operator' || $role->name == 'Cash-in Operator') {
-            $this->redirectTo = '/home';
+        $user->save();
+
+        if(Auth::user()->defaultpassword){
+            $this->redirectTo = '/changepassword';
         }
 
-        if($role->name == 'Admin') {
-            $this->redirectTo = '/home';
+        if($role->name == 'Player') {
+            $this->redirectTo = '/landing';
         }
-        
-        if($role->name == 'Auditor') {
-            $this->redirectTo = '/home';
+
+        if ($role->name == 'Operator') {
+            $this->redirectTo = '/fight';
         }
+
+        if ($role->name == 'Cash-out Operator' || $role->name == 'Cash-in Operator') {
+            $this->redirectTo = '/transactions';
+        }
+
+        if ($role->name == 'Admin') {
+            $this->redirectTo = '/transactions';
+        }
+
+        if ($role->name == 'Auditor') {
+            $this->redirectTo = '/transactions-auditor';
+        }
+
         return $this->redirectTo;
     }
 }

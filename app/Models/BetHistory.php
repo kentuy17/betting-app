@@ -14,14 +14,17 @@ class BetHistory extends Model
     protected $table = 'bet_history';
     protected $primaryKey = 'bethistory_no';
     protected $fillable = [
+        'bet_id',
         'user_id',
         'fight_id',
         'fight_no',
         'status',
         'side',
         'percent',
-        'betamount',
         'winamount',
+        'points_before_bet',
+        'betamount',
+        'points_after_bet',
         'current_points',
         'created_at',
         'updated_at',
