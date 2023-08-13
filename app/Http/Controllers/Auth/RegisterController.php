@@ -72,7 +72,7 @@ class RegisterController extends Controller
     {
         $validator = $this->validator($data);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
@@ -90,7 +90,9 @@ class RegisterController extends Controller
 
         $referrer = null;
         $referral = null;
-        if(isset($data['rid'])) {
+        $agent_comm = null;
+
+        if (isset($data['rid'])) {
             $referrer = User::where('rid', $data['rid'])->first();
             $agent = Agent::where('user_id', $referrer->id)->first();
             $agent->player_count += 1;
@@ -102,7 +104,7 @@ class RegisterController extends Controller
                 'user_id' => $create->id,
             ]);
 
-            AgentCommission::create([
+            $agent_comm = AgentCommission::create([
                 'agent_id' => $referrer->id,
                 'user_id' => $create->id,
                 'commission' => 0,
@@ -113,9 +115,9 @@ class RegisterController extends Controller
         strtoupper($data['code']);
         $bonus = false;
 
-        if($data['code'] && in_array($data['code'], $active_codes)) {
+        if ($data['code'] && in_array($data['code'], $active_codes)) {
             $bonus = true;
-            if(!$referral) {
+            if (!$referral) {
                 Referral::create([
                     'rid' => 'REFSVWXM9N8',
                     'referrer_id' => 1,
@@ -124,11 +126,11 @@ class RegisterController extends Controller
             }
         }
 
-        if($referrer && $referrer->id == 1) {
+        if ($referrer && $referrer->id == 1) {
             $bonus = true;
         }
 
-        if($bonus) {
+        if ($bonus) {
             Promo::create([
                 'user_id' => $create->id,
                 'code' => $data['code'] ?? 'SWW23',
@@ -136,6 +138,14 @@ class RegisterController extends Controller
 
             $create->points = 150;
             $create->save();
+
+            if (!$agent_comm) {
+                AgentCommission::create([
+                    'agent_id' => 1,
+                    'user_id' => $create->id,
+                    'commission' => 0,
+                ]);
+            }
         }
 
         ModelHasRoles::create([
