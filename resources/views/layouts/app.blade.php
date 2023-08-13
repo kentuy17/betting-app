@@ -89,13 +89,13 @@
 <body class="dark-mode">
   <header>
     <nav class="flex flex-wrap items-center justify-between w-full py-1 md:py-0 px-4 text-lg text-gray-700 bg-white">
-      <svg xmlns="http://www.w3.org/2000/svg" id="menu-button" title="Click Here to Cash-IN" data-bs-toggle="tooltip"
+      <svg xmlns="http://www.w3.org/2000/svg" id="menu-button"
         class="h-6 w-6 cursor-pointer md:hidden block red-tooltip" fill="none" viewBox="0 0 24 24"
         stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
       </svg>
       <div>
-        <a href="{{ url('/') }}" class="pl-4 logo-container" class="flex">
+        <a href="{{ url('/') }}" class="logo-container" class="flex">
           <img class="icon-logo" src="{{ asset('img/sabong-aficionado-icon.png') }}" alt="Sabong Aficionado">
           {{-- <p id="site-name" class="pl-2 font-medium font-mono text-xl">SABONG AFICIONADO</p> --}}
         </a>

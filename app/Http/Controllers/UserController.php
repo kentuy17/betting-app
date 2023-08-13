@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\Transactions;
 use App\Models\ShareHolder;
 use App\Models\Setting;
+use App\Models\Referral;
+use App\Models\Promo;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
@@ -150,8 +152,13 @@ class UserController extends Controller
     public function profile()
     {
         $user = Auth::user();
-        return view('users.userprofile', compact('user'));
-        //return view('users.userprofile');
+        $referral = Referral::where('user_id', Auth::user()->id)
+            ->where('promo_done',false)
+            ->first();
+
+        $promo = Promo::where('user_id', Auth::user()->id)->first();
+        $availed = $referral && $promo ? false : true;
+        return view('users.userprofile', compact('user','availed'));
     }
 
     public function getProfileByUserID()

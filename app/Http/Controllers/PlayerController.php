@@ -12,13 +12,14 @@ use App\Models\User;
 use App\Models\Transactions;
 use App\Models\BetHistory;
 use App\Models\Referral;
+use App\Models\Promo;
+use App\Models\Chat;
+use App\Models\Setting;
 use App\Events\CashIn;
 use \Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response as FacadeResponse;
-use App\Models\Chat;
-use App\Models\Setting;
 use Carbon\Carbon;
 use Yajra\DataTables\DataTables;
 
@@ -107,7 +108,13 @@ class PlayerController extends Controller
 
     public function withdraw()
     {
-        return view('player.withdraw-form');
+        $referral = Referral::where('user_id', Auth::user()->id)
+            ->where('promo_done',false)
+            ->first();
+
+        $promo = Promo::where('user_id', Auth::user()->id)->first();
+        $availed = $referral && $promo ? false : true;
+        return view('player.withdraw-form', compact('availed'));
     }
 
     public function depositSubmit(Request $request)
@@ -182,14 +189,13 @@ class PlayerController extends Controller
                     ->with('danger', 'Insuficient points!');
             }
 
-            $referral = Referral::where('user_id', Auth::user()->id)
-                ->where('referrer_id', 1)
-                ->first();
+            $referral = Referral::where('user_id', Auth::user()->id)->first();
+            $promo = Promo::where('user_id', Auth::user()->id)->first();
 
-            if($referral && !$referral->promo_done) {
-                if($request->amount < 500) {
+            if($promo && !$referral->promo_done) {
+                if($amount < 1500) {
                     return redirect()->back()
-                        ->with('danger', "To Cash-out Bonus, minimum of P500");
+                        ->with('danger', "For bonus credit only, you need to win 1500 to cash out ".$request->amount);
                 } else {
                     $referral->promo_done = true;
                     $referral->save();

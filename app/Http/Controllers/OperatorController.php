@@ -12,6 +12,7 @@ use App\Models\DerbyEvent;
 use App\Models\User;
 use App\Models\BetHistory;
 use App\Models\Setting;
+use App\Models\Referral;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
@@ -132,6 +133,15 @@ class OperatorController extends Controller
 
             if ($request->action == 'approve') {
                 $player = User::find($trans->user_id);
+                $referral = Referral::where('user_id',$trans->user_id)
+                    ->where('promo_done', false)
+                    ->first();
+
+                if($referral && ($player->points < 100)) {
+                    $referral->promo_done = true;
+                    $referral->save();
+                }
+
                 $player->points +=  $trans->amount;
                 $player->save();
 

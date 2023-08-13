@@ -9,6 +9,7 @@ use App\Models\ModelHasRoles;
 use App\Models\Referral;
 use App\Models\Agent;
 use App\Models\Promo;
+use App\Models\AgentCommission;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -87,30 +88,54 @@ class RegisterController extends Controller
             'name' => $validated['username'],
         ]);
 
+        $referrer = null;
+        $referral = null;
         if(isset($data['rid'])) {
             $referrer = User::where('rid', $data['rid'])->first();
             $agent = Agent::where('user_id', $referrer->id)->first();
             $agent->player_count += 1;
             $agent->save();
 
-            Referral::create([
+            $referral = Referral::create([
                 'rid' => $data['rid'],
                 'referrer_id' => $referrer->id,
                 'user_id' => $create->id,
             ]);
+
+            AgentCommission::create([
+                'agent_id' => $referrer->id,
+                'user_id' => $create->id,
+                'commission' => 0,
+            ]);
         }
 
-        if($data['code']) {
-            $active_codes = ['SWW-SIQ'];
-            $promo = Promo::create([
+        $active_codes = ['SWW-SIQ', 'SWW23'];
+        strtoupper($data['code']);
+        $bonus = false;
+
+        if($data['code'] && in_array($data['code'], $active_codes)) {
+            $bonus = true;
+            if(!$referral) {
+                Referral::create([
+                    'rid' => 'REFSVWXM9N8',
+                    'referrer_id' => 1,
+                    'user_id' => $create->id,
+                ]);
+            }
+        }
+
+        if($referrer && $referrer->id == 1) {
+            $bonus = true;
+        }
+
+        if($bonus) {
+            Promo::create([
                 'user_id' => $create->id,
-                'code' => $data['code'],
+                'code' => $data['code'] ?? 'SWW23',
             ]);
 
-            if(in_array($data['code'], $active_codes)) {
-                $create->points = 200;
-                $create->save();
-            }
+            $create->points = 150;
+            $create->save();
         }
 
         ModelHasRoles::create([

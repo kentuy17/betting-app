@@ -44,9 +44,9 @@ Route::get('/admin/access/{id}', [AdminController::class, 'accessUser']);
 
 Route::group(['middleware' => ['auth','visitor']], function() {
     // TEST
-    Route::get('/players/referred', [FightController::class, 'calcRefCommission'], function ($players) {
-        ddd($players);
-    });
+    // Route::get('/agent/all-players', [AgentController::class, 'agentPlayerList'], function ($players) {
+    //     ddd($players);
+    // });
 
     Route::get('/changepassword', [HomeController::class, 'showChangePasswordGet'])->name('auth.change-password');
     Route::post('/changepassword', [HomeController::class, 'changePasswordPost'])->name('changePasswordPost');

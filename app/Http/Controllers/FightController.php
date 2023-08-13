@@ -16,6 +16,7 @@ use App\Models\Commission;
 use App\Models\ShareHolder;
 use App\Models\Referral;
 use App\Models\Agent;
+use App\Models\AgentCommission;
 use Illuminate\Support\Facades\DB;
 
 class FightController extends Controller
@@ -518,10 +519,14 @@ class FightController extends Controller
             Bet::where('bet_no', $bet->bet_no)
                 ->update(['agent_commission' => $agent_commission_add]);
 
-            if($bet->referral->referrer_id != $this->botchok_id) {
+            if(!in_array($bet->referral->referrer_id, [10, 1])) {
                 $user_referrer = Agent::where('user_id', $bet->referral->referrer_id)->first();
                 $user_referrer->current_commission += $agent_commission_add;
                 $user_referrer->save();
+
+                $agent_comm = AgentCommission::where('user_id',$bet->user_id)->first();
+                $agent_comm->commission += $agent_commission_add;
+                $agent_comm->save();
             }
         }
 
