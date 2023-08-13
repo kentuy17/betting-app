@@ -112,10 +112,9 @@ class RegisterController extends Controller
         }
 
         $active_codes = ['SWW-SIQ', 'SWW23'];
-        strtoupper($data['code']);
         $bonus = false;
 
-        if ($data['code'] && in_array($data['code'], $active_codes)) {
+        if ($data['code'] && in_array(strtoupper($data['code']), $active_codes)) {
             $bonus = true;
             if (!$referral) {
                 Referral::create([
