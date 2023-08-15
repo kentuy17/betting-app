@@ -13,6 +13,7 @@ use App\Models\Transactions;
 use App\Models\BetHistory;
 use App\Models\Referral;
 use App\Models\Promo;
+use App\Models\IpBan;
 use App\Models\Chat;
 use App\Models\Setting;
 use App\Events\CashIn;
@@ -199,6 +200,8 @@ class PlayerController extends Controller
                 } else {
                     $referral->promo_done = true;
                     $referral->save();
+
+                    IpBan::create([ 'ip_address' => $user->email ]);
                 }
             }
 

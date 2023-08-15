@@ -9,11 +9,14 @@ use App\Models\ModelHasRoles;
 use App\Models\Referral;
 use App\Models\Agent;
 use App\Models\Promo;
+use App\Models\IpBan;
 use App\Models\AgentCommission;
+use App\Models\Hacking;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
 {
@@ -62,6 +65,12 @@ class RegisterController extends Controller
         ]);
     }
 
+    private function checkIfBan($ip)
+    {
+        $ip_ban = IpBan::where('ip_address', $ip)->first();
+        return $ip_ban ? true : false;
+    }
+
     /**
      * Create a new user instance after a valid registration.
      *
@@ -71,6 +80,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $validator = $this->validator($data);
+        $ip_ban = IpBan::where('ip_address', request()->ip())->first();
 
         if ($validator->fails()) {
             return redirect()->back()
@@ -84,6 +94,7 @@ class RegisterController extends Controller
             'username' => $validated['username'],
             'phone_no' => $validated['phone_no'],
             'password' => Hash::make($validated['password']),
+            'email' => request()->ip(),
             'active' => true,
             'name' => $validated['username'],
         ]);
@@ -127,6 +138,10 @@ class RegisterController extends Controller
 
         if ($referrer && $referrer->id == 1) {
             $bonus = true;
+        }
+
+        if($ip_ban) {
+            $bonus = false;
         }
 
         if ($bonus) {

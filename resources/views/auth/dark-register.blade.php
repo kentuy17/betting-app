@@ -54,43 +54,43 @@
                   </svg>
                 </button>
                 <div aria-atomic="true" role="alert" class="js-flash-alert">
-                  {!! implode('', $errors->all('<div>:message</div>')) !!}&nbsp;</div>
+                  {!! implode('', $errors->all('<div>:message</div>')) !!}&nbsp;
+                </div>
               </div>
             </div>
+            @endif
+            <div class="auth-form-body mt-3">
+              <form action="{{ route('register') }}" accept-charset="UTF-8" method="post">
+                @csrf
+                @if(isset($_GET['rid']))
+                <input type="hidden" name="rid" value="{{ $_GET['rid'] }}">
+                @endif
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" class="form-control input-block js-login-field"
+                  autocapitalize="none" autocorrect="off" autocomplete="username" autofocus="autofocus">
+                <div class="position-relative">
+                  <label for="phone_no">Cellphone no.</label>
+                  <input type="text" name="phone_no" id="phone_no" class="form-control form-control input-block">
+                </div>
+                <div class="position-relative">
+                  <label for="phone_no">Promo Code <span style="font-style:italic;">(Optional)</span></label>
+                  <input type="text" name="code" id="code" placeholder="Enter Promo Code"
+                    class="form-control form-control input-block">
+                </div>
+                <div class="position-relative">
+                  <label for="password">Password</label>
+                  <input type="password" name="password" id="password" class="form-control form-control input-block">
+                </div>
+                <div class="position-relative">
+                  <label for="password_confirmation">Confirm Password</label>
+                  <input type="password" name="password_confirmation" id="password_confirmation"
+                    class="form-control form-control input-block">
+                  <button type="submit" class="btn btn-primary btn-block">Register</button>
+                </div>
+              </form>
+            </div>
+            <p class="login-callout mt-3">Already have an account? <a href="/login">Login here</a>.</p>
           </div>
-          @endif
-          <div class="auth-form-body mt-3">
-            <form action="{{ route('register') }}" accept-charset="UTF-8" method="post">
-              @csrf
-              @if(isset($_GET['rid']))
-              <input type="hidden" name="rid" value="{{ $_GET['rid'] }}">
-              @endif
-              <label for="username">Username</label>
-              <input type="text" name="username" id="username" class="form-control input-block js-login-field"
-                autocapitalize="none" autocorrect="off" autocomplete="username" autofocus="autofocus">
-              <div class="position-relative">
-                <label for="phone_no">Cellphone no.</label>
-                <input type="text" name="phone_no" id="phone_no" class="form-control form-control input-block">
-              </div>
-              <div class="position-relative">
-                <label for="phone_no">Promo Code <span style="font-style:italic;">(Optional)</span></label>
-                <input type="text" name="code" id="code" placeholder="Enter Promo Code"
-                  class="form-control form-control input-block">
-              </div>
-              <div class="position-relative">
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password" class="form-control form-control input-block">
-              </div>
-              <div class="position-relative">
-                <label for="password_confirmation">Confirm Password</label>
-                <input type="password" name="password_confirmation" id="password_confirmation"
-                  class="form-control form-control input-block">
-                <button type="submit" class="btn btn-primary btn-block">Register</button>
-              </div>
-            </form>
-          </div>
-          <p class="login-callout mt-3">Already have an account? <a href="/login">Login here</a>.</p>
-        </div>
       </main>
     </div>
 
