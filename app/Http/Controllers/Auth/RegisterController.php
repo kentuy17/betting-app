@@ -122,7 +122,7 @@ class RegisterController extends Controller
             ]);
         }
 
-        $active_codes = ['SWW-SIQ', 'SWW23'];
+        $active_codes = ['SWW-SIQ', 'SWW23-FCK'];
         $bonus = false;
 
         if ($data['code'] && in_array(strtoupper($data['code']), $active_codes)) {
@@ -150,7 +150,8 @@ class RegisterController extends Controller
                 'code' => $data['code'] ?? 'SWW23',
             ]);
 
-            $create->points = 150;
+            // $create->points = 150;
+            $create->points = 50;
             $create->save();
 
             if (!$agent_comm) {

@@ -3,34 +3,41 @@
 @section('additional-styles')
 <link rel="stylesheet" href="{{ asset('css/play-sabong.css') }}" type="text/css">
 <link rel="stylesheet" href="{{ asset('css/operator.css') }}" type="text/css">
-<link rel="stylesheet" href="https://vjs.zencdn.net/7.8.2/video-js.css"/>
+<link rel="stylesheet" href="https://vjs.zencdn.net/7.8.2/video-js.css" />
 <style>
   .offline-embeds-channel-info-panel {
-    background: rgba(0,0,0,.6);
+    background: rgba(0, 0, 0, .6);
     background: var(--color-background-overlay-alt);
     width: 320px;
     display: none !important;
   }
+
   video {
     width: 100%;
     height: auto;
   }
+
   .hide {
-    display:none;
+    display: none;
   }
+
   #sabong-aficionado {
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 */
+    padding-bottom: 56.25%;
+    /* 16:9 */
     /* padding-top: 25px; */
     height: 0;
   }
-  #sabong-aficionado object, #sabong-aficionado iframe {
+
+  #sabong-aficionado object,
+  #sabong-aficionado iframe {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
   }
+
   #video-unavailable {
     background-image: url("{{ asset('img/video-unavailable.webp') }}");
     object-fit: cover;
@@ -39,6 +46,7 @@
     width: -moz-available;
     height: fit-content;
   }
+
   /* #clappr{ width: 100%;height: 100%;position: relative; min-height: 320px; margin-bottom: 25px;} */
   /* #clappr > div{ width:100%;height:100%;position: absolute;} */
   #header-fight {
@@ -46,7 +54,8 @@
     justify-content: space-between;
     flex-direction: row;
   }
-  body{
+
+  body {
     margin: 0 !important;
   }
 </style>
@@ -65,14 +74,20 @@
             <input class="form-check-input" type="checkbox" id="switch-video-display" @if ($setting) checked @endif>
           </div>
         </div>
-        <img id="poster-img" style="display: none;" src="{{ asset('img/10-streak-win-promo-poster.png') }}" alt="10-streak-win-promo">
+        <img id="poster-img" style="display: none;" src="{{ asset('img/10-streak-win-promo-poster.png') }}"
+          alt="10-streak-win-promo">
         <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
-          {{-- <iframe src="https://app.onestream.live/api/v2/rtmp/auth/stream/embed_player?key=d_auth_2078804_1tt42mfs4"
-            width="100%" height="100%" style="width:100%;height:100%;position:absolute;left:0px;top:0px;overflow: hidden;"
-            scrolling="no" frameborder="0" allow="autoplay" allowfullscreen> </iframe> --}}
+          {{-- <iframe
+            src="https://app.onestream.live/api/v2/rtmp/auth/stream/embed_player?key=d_auth_2078804_1tt42mfs4"
+            width="100%" height="100%"
+            style="width:100%;height:100%;position:absolute;left:0px;top:0px;overflow: hidden;" scrolling="no"
+            frameborder="0" allow="autoplay" allowfullscreen> </iframe> --}}
+          {{-- <iframe src="https://player.onestream.live/embed?token=ZF9hdXRoXzIwNzg4MDRfMXR0NDJtZnM0&type=psk"
+            style="position:absolute;width:100%;height:100%;overflow: hidden;" scrolling="no" frameborder="0"
+            allow="autoplay" allowfullscreen></iframe> --}}
           <iframe src="https://player.onestream.live/embed?token=ZF9hdXRoXzIwNzg4MDRfMXR0NDJtZnM0&type=psk"
-            style="position:absolute;width:100%;height:100%;overflow: hidden;" scrolling="no"  frameborder="0"
-            allow="autoplay" allowfullscreen ></iframe>
+            style="position:absolute;width:100%;height:100%;overflow: hidden;" scrolling="no" frameborder="0"
+            allow="autoplay" allowfullscreen> </iframe>
         </div>
       </div>
     </div>
@@ -84,7 +99,7 @@
       <div class="results">
         <div class="bet-result-chart">
           <table id="tblBaccaratResultConsecutive" class="cell-border w-100 dataTable no-footer">
-              <tbody></tbody>
+            <tbody></tbody>
           </table>
         </div>
       </div>
@@ -93,7 +108,8 @@
 </div>
 
 <!-- Deposit Modal -->
-<div class="modal fade" id="modal-settings" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="modal-settings" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-top" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -114,7 +130,8 @@
           </div>
           <div class="form-group mt-2">
             <label for="trans-pts">Points</label>
-            <input type="text" class="form-control" required id="trans-pts" placeholder="Points" onkeyup = "javascript:this.value=Comma(this.value);" >
+            <input type="text" class="form-control" required id="trans-pts" placeholder="Points"
+              onkeyup="javascript:this.value=Comma(this.value);">
           </div>
           <div class="form-group mt-2">
             <label for="trans-action">Action</label>
@@ -142,19 +159,23 @@
     display: flex;
     justify-content: space-between;
   }
+
   .total-bets {
     color: blue;
     text-align: center;
     font-weight: bold;
   }
+
   .win-chance {
     text-align: center;
     font-weight: bold;
   }
+
   button:disabled {
     cursor: not-allowed;
     pointer-events: all !important;
   }
+
   .results .bet-result-chart {
     /* max-width: 720px; */
     overflow-x: auto;
