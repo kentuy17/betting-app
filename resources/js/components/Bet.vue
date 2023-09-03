@@ -4,12 +4,14 @@
       <div class="grid grid-cols-2 bg-os_bg">
         <div class="px-2 py-1 border border-black">
           <div>
-            <h3 class="font-extrabold text-center m-2 font-tally text-red-700 text-2xl">{{ formatMoney(ghost.meron) }}</h3>
+            <h3 class="font-extrabold text-center m-2 font-tally text-red-700 text-2xl">{{ formatMoney(ghost.meron) }}
+            </h3>
           </div>
         </div>
         <div class="px-2 py-1 border border-black">
           <div>
-            <h3 class="font-extrabold text-center m-2 font-tally text-blue-700 text-2xl">{{ formatMoney(ghost.wala) }}</h3>
+            <h3 class="font-extrabold text-center m-2 font-tally text-blue-700 text-2xl">{{ formatMoney(ghost.wala) }}
+            </h3>
           </div>
         </div>
       </div>
@@ -17,13 +19,17 @@
     <div class="bet-bg-head items-center grid grid-cols-3">
       <h6><b class="text-lg">FIGHT # </b> <b id="fight-no" class="text-lg">{{ fightNo }}</b></h6>
       <div class="text-center">
-        <span class="font-bold btn btn-block btn-sm btn-lg vue-components" :class="fightStatusClass[message]">{{ message }}</span>
+        <span class="font-bold btn btn-block btn-sm btn-lg vue-components" :class="fightStatusClass[message]">{{ message
+        }}</span>
       </div>
       <div class="nav-credits-wr w-25 w-sm-50 gold-text ml-auto">
         <a href="/deposit" class="d-flex align-items-center justify-content-end gp-credits">
           <div class="bg-success add-btn p-1">
-            <svg class="svg-inline--fa fa-coins fa-w-16" data-prefix="fas" data-icon="coins" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
-              <path fill="currentColor" d="M0 405.3V448c0 35.3 86 64 192 64s192-28.7 192-64v-42.7C342.7 434.4 267.2 448 192 448S41.3 434.4 0 405.3zM320 128c106 0 192-28.7 192-64S426 0 320 0 128 28.7 128 64s86 64 192 64zM0 300.4V352c0 35.3 86 64 192 64s192-28.7 192-64v-51.6c-41.3 34-116.9 51.6-192 51.6S41.3 334.4 0 300.4zm416 11c57.3-11.1 96-31.7 96-55.4v-42.7c-23.2 16.4-57.3 27.6-96 34.5v63.6zM192 160C86 160 0 195.8 0 240s86 80 192 80 192-35.8 192-80-86-80-192-80zm219.3 56.3c60-10.8 100.7-32 100.7-56.3v-42.7c-35.5 25.1-96.5 38.6-160.7 41.8 29.5 14.3 51.2 33.5 60 57.2z"></path>
+            <svg class="svg-inline--fa fa-coins fa-w-16" data-prefix="fas" data-icon="coins" role="img"
+              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+              <path fill="currentColor"
+                d="M0 405.3V448c0 35.3 86 64 192 64s192-28.7 192-64v-42.7C342.7 434.4 267.2 448 192 448S41.3 434.4 0 405.3zM320 128c106 0 192-28.7 192-64S426 0 320 0 128 28.7 128 64s86 64 192 64zM0 300.4V352c0 35.3 86 64 192 64s192-28.7 192-64v-51.6c-41.3 34-116.9 51.6-192 51.6S41.3 334.4 0 300.4zm416 11c57.3-11.1 96-31.7 96-55.4v-42.7c-23.2 16.4-57.3 27.6-96 34.5v63.6zM192 160C86 160 0 195.8 0 240s86 80 192 80 192-35.8 192-80-86-80-192-80zm219.3 56.3c60-10.8 100.7-32 100.7-56.3v-42.7c-35.5 25.1-96.5 38.6-160.7 41.8 29.5 14.3 51.2 33.5 60 57.2z">
+              </path>
             </svg>
           </div>
           <div class="credits-data d-flex ">
@@ -35,9 +41,11 @@
     <div class="m-2">
       <div class="grid grid-cols-2">
         <div class="border justify-center items-center flex bg-meroncolor">
-          <h3 class="bet-button-red-full">MERON</h3></div>
+          <h3 class="bet-button-red-full">MERON</h3>
+        </div>
         <div class="border justify-center items-center flex bg-walacolor">
-          <h3 class="bet-button-blue-full">WALA</h3></div>
+          <h3 class="bet-button-blue-full">WALA</h3>
+        </div>
       </div>
       <div class="grid grid-cols-2 bg-os_bg">
         <div class="px-2 py-1 border border-black">
@@ -48,7 +56,8 @@
               <div class="flex justify-center items-center">
                 <h3 class="font-bold text-drawcolor text-center text-sm">
                   <span class='text-player-bet'>{{ formatMoney(player.bets.meron) }}</span> =
-                  <span class='text-player-win'>{{ formatMoney(meronWinAmount) }}</span></h3>
+                  <span class='text-player-win'>{{ formatMoney(meronWinAmount) }}</span>
+                </h3>
               </div>
             </div>
           </div>
@@ -61,7 +70,8 @@
               <div class="flex justify-center items-center">
                 <h3 class="font-bold text-drawcolor text-center text-sm">
                   <span class="text-player-bet">{{ formatMoney(player.bets.wala) }}</span> =
-                  <span class='text-player-win'>{{ formatMoney(walaWinAmount) }}</span></h3>
+                  <span class='text-player-win'>{{ formatMoney(walaWinAmount) }}</span>
+                </h3>
               </div>
             </div>
           </div>
@@ -69,28 +79,29 @@
       </div>
     </div>
     <div class="grid grid-cols-2 bg-os_bg">
-    <div class="px-1 py-1">
-      <button type="button" color="#00D7E7" @click="addBet('M')" class="button text-ellipsis overflow-clip uppercase bg-os_meron_btn text-sm font-bold is-info is-fullwidth">
-        <i class="fa-solid fa-circle-plus text-sm mr-1"></i> BET MERON</button>
-    </div>
-    <div class="px-1 py-1">
-      <button type="button" color="#00D7E7" @click="addBet('W')" class="button text-ellipsis overflow-clip uppercase bg-os_wala_btn text-sm font-bold is-info is-fullwidth">
-        <i class="fa-solid fa-circle-plus text-sm mr-1"></i> BET WALA</button>
-    </div>
+      <div class="px-1 py-1">
+        <button type="button" color="#00D7E7" @click="addBet('M')"
+          class="button text-ellipsis overflow-clip uppercase bg-os_meron_btn text-sm font-bold is-info is-fullwidth">
+          <i class="fa-solid fa-circle-plus text-sm mr-1"></i> BET MERON</button>
+      </div>
+      <div class="px-1 py-1">
+        <button type="button" color="#00D7E7" @click="addBet('W')"
+          class="button text-ellipsis overflow-clip uppercase bg-os_wala_btn text-sm font-bold is-info is-fullwidth">
+          <i class="fa-solid fa-circle-plus text-sm mr-1"></i> BET WALA</button>
+      </div>
     </div>
     <div class="col-md-12">
       <div class="input-group px-4 py-2">
         <!-- <input type="number" v-model='betAmount' class="form-control bet-amount" min="0"> -->
         <money3 class="form-control" :model-modifiers="{ number: true }" v-model="betAmount" v-bind="money"></money3>
         <div class="input-group-append">
-          <button @click='clear' class="input-group-text">CLEAR</button></div>
+          <button @click='clear' class="input-group-text">CLEAR</button>
+        </div>
       </div>
     </div>
     <div class="col-md-12">
       <div class="amounts-bet-btn py-2 flex-wrap">
-        <button v-for="(amnt, index) in amounts"
-          v-bind:key="index"
-          @click="betManual(amnt)"
+        <button v-for="(amnt, index) in amounts" v-bind:key="index" @click="betManual(amnt)"
           class="btn btn-success btn-sm m-1">
           {{ amnt }}
         </button>
@@ -173,8 +184,8 @@ export default {
       .then(() => {
         window.Echo.private('user.' + this.player.id)
           .listen('Result', async (e) => {
-            if(e.bet.user.legit) {
-              if(e.bet.status == 'X') {
+            if (e.bet.user.legit) {
+              if (e.bet.status == 'X') {
                 alert(`Returened ${this.formatMoney(e.bet.amount)} points!`);
               }
               else {
@@ -189,7 +200,7 @@ export default {
       .then(() => {
         setInterval(() => {
           this.checkPoints().then((user) => {
-            if(this.player.legit) {
+            if (this.player.legit) {
               this.player.points = user.points
             }
           })
@@ -199,11 +210,11 @@ export default {
     window.Echo.channel('fight')
       .listen('.fight', async (e) => {
         if (e == null)
-        return
+          return
 
         if (e.fight.curr) {
-          if((e.fight.prev.game_winner == 'D' || e.fight.prev.game_winner == 'C') && this.playerTotalBets > 0) {
-            if(this.player.legit) {
+          if ((e.fight.prev.game_winner == 'D' || e.fight.prev.game_winner == 'C') && this.playerTotalBets > 0) {
+            if (this.player.legit) {
               alert(`Returned ${this.formatMoney(this.playerTotalBets)} points!`)
               this.tada()
             }
@@ -211,8 +222,8 @@ export default {
             this.player.points += this.playerTotalBets
           }
 
-          if(e.fight.prev.game_winner == 'M' && this.meronWinAmount > 0) {
-            if(this.player.legit) {
+          if (e.fight.prev.game_winner == 'M' && this.meronWinAmount > 0) {
+            if (this.player.legit) {
               alert(`Congratulations! MERON Wins ${this.formatMoney(this.meronWinAmount)}`)
               this.tada()
             }
@@ -220,8 +231,8 @@ export default {
             this.player.points += this.meronWinAmount
           }
 
-          if(e.fight.prev.game_winner == 'W' && this.walaWinAmount > 0) {
-            if(this.player.legit) {
+          if (e.fight.prev.game_winner == 'W' && this.walaWinAmount > 0) {
+            if (this.player.legit) {
               alert(`Congratulations! WALA Wins ${this.formatMoney(this.walaWinAmount)}`)
               this.tada()
             }
@@ -229,7 +240,7 @@ export default {
             this.player.points += this.walaWinAmount
           }
 
-          if(this.daog && !this.player.legit) {
+          if (this.daog && !this.player.legit) {
             this.tada()
           }
 
@@ -242,7 +253,7 @@ export default {
           this.fight = e.fight
         }
 
-        if(this.fight.status == null) {
+        if (this.fight.status == null) {
           this.ghost.meron = this.ghost.wala = 0
         }
 
@@ -257,7 +268,7 @@ export default {
           this.total.wala = this.total.wala + e.bet.amount
         }
 
-        if(e.bet.user_id == this.player.id && !this.player.legit) {
+        if (e.bet.user_id == this.player.id && !this.player.legit) {
           this.player.points -= e.bet.amount
           this.betAmount = e.bet.amount
           e.bet.side == 'M'
@@ -415,7 +426,7 @@ export default {
           return
         }
 
-        if(this.player.legit) {
+        if (this.player.legit) {
           if (!confirm(`Bet ${this.betAmount.toFixed(2)}?`)) {
             return
           }

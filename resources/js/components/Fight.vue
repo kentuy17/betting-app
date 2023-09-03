@@ -46,6 +46,35 @@
         </div>
       </div>
     </div>
+    <div class="grid grid-cols-2 bg-os_bg">
+      <div class="px-1 py-1">
+        <button type="button" color="#00D7E7" @click="addBet('M')"
+          class="button text-ellipsis overflow-clip uppercase bg-os_meron_btn text-sm font-bold is-info is-fullwidth">
+          <i class="fa-solid fa-circle-plus text-sm mr-1"></i> BET MERON</button>
+      </div>
+      <div class="px-1 py-1">
+        <button type="button" color="#00D7E7" @click="addBet('W')"
+          class="button text-ellipsis overflow-clip uppercase bg-os_wala_btn text-sm font-bold is-info is-fullwidth">
+          <i class="fa-solid fa-circle-plus text-sm mr-1"></i> BET WALA</button>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="input-group px-4 py-2">
+        <!-- <input type="number" v-model='betAmount' class="form-control bet-amount" min="0"> -->
+        <money3 class="form-control" :model-modifiers="{ number: true }" v-model="betAmount" v-bind="money"></money3>
+        <div class="input-group-append">
+          <button @click='clear' class="input-group-text">CLEAR</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="amounts-bet-btn py-2 flex-wrap">
+        <button v-for="(amnt, index) in amounts" v-bind:key="index" @click="betManual(amnt)"
+          class="btn btn-success btn-sm m-1">
+          {{ amnt }}
+        </button>
+      </div>
+    </div>
     <div class="self-end mr-2">
       <a href="javascript:void(0)" data-id="1" id="settings-btn" class="btn btn-link text-primary btn-icon btn-sm play">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear"
@@ -121,6 +150,7 @@ export default ({
         CLOSE: 'gradient-status-close',
         '_____': 'gradient-status-pending',
       },
+      amounts: [20, 50, 100, 500, 1000, 5000, 10000],
       total: {
         meron: 0,
         wala: 0,
