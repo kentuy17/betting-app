@@ -1,5 +1,21 @@
 <template>
   <div class='card bet-boxed-area mb-1'>
+    <div v-if="!player.legit" class="mx-2">
+      <div class="grid grid-cols-2 bg-os_bg">
+        <div class="px-2 py-1 border border-black">
+          <div>
+            <h3 class="font-extrabold text-center m-2 font-tally text-red-700 text-2xl">{{ formatMoney(ghost.meron) }}
+            </h3>
+          </div>
+        </div>
+        <div class="px-2 py-1 border border-black">
+          <div>
+            <h3 class="font-extrabold text-center m-2 font-tally text-blue-700 text-2xl">{{ formatMoney(ghost.wala) }}
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="bet-bg-head items-center grid grid-cols-3">
       <h6><b class="text-lg">FIGHT # </b> <b id="fight-no" class="text-lg">{{ fightNo }}</b></h6>
       <div class="text-center">
