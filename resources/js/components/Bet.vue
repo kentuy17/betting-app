@@ -328,35 +328,6 @@ export default {
       return this.player.legit ? this.formatMoney(this.player.points) : this.ghost.points
     },
 
-    // GET 5% FROM TOTAL BETS
-    // commission() {
-    //   return this.totalSum * 10 / 100
-    // },
-
-    // meronPercentage() {
-    //   let gross = this.totalSum - this.total.meron
-    //   let tong = gross * 0.1
-    //   let net = (gross - tong) / this.total.meron * 100
-    //   return net + 100
-    // },
-
-    // walaPercentage() {
-    //   // let gross = this.totalSum - this.commission
-    //   // return gross / this.total.wala * 100
-    //   let gross = this.totalSum - this.total.wala
-    //   let tong = gross * 0.1
-    //   return ((gross - tong) * 2) + 100
-    // },
-
-    // meronWinAmount() {
-    //   return this.meronPercentage * this.player.bets.meron / 100
-    // },
-
-    // walaWinAmount() {
-    //   return this.walaPercentage * this.player.bets.wala / 100
-    // }
-
-
   },
 
   methods: {

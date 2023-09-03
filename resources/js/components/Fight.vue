@@ -17,7 +17,7 @@
             </svg>
           </div>
           <div class="credits-data d-flex ">
-            <span class="pr-2 gp-yellow-text font-weight-bold" id="operator-pts">{{ formatMoney(player.points) }}</span>
+            <span class="pr-2 gp-yellow-text font-weight-bold" id="operator-pts">{{ creditPoints }}</span>
           </div>
         </a>
       </div>
@@ -35,13 +35,29 @@
         <div class="px-2 py-1 border border-black">
           <div>
             <h3 class="font-extrabold text-center m-2 font-tally text-2xl">{{ formatMoney(total.meron) }}</h3>
-            <h3 class="font-bold text-black text-center m-2 font-tally"> PERCENT = {{ formatMoney(meronPercentage) }}</h3>
+            <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT = {{ formatMoney(meronPercentage) }}</h3>
+            <div>
+              <div class="flex justify-center items-center">
+                <h3 class="font-bold text-drawcolor text-center text-sm">
+                  <span class='text-player-bet'>{{ formatMoney(player.bets.meron) }}</span> =
+                  <span class='text-player-win'>{{ formatMoney(meronWinAmount) }}</span>
+                </h3>
+              </div>
+            </div>
           </div>
         </div>
         <div class="px-2 py-1 border border-black">
           <div>
             <h3 class="font-extrabold text-center m-2 font-tally text-2xl">{{ formatMoney(total.wala) }}</h3>
-            <h3 class="font-bold text-black text-center m-2 font-tally"> PERCENT = {{ formatMoney(walaPercentage) }}</h3>
+            <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT = {{ formatMoney(walaPercentage) }}</h3>
+            <div>
+              <div class="flex justify-center items-center">
+                <h3 class="font-bold text-drawcolor text-center text-sm">
+                  <span class="text-player-bet">{{ formatMoney(player.bets.wala) }}</span> =
+                  <span class='text-player-win'>{{ formatMoney(walaWinAmount) }}</span>
+                </h3>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -60,7 +76,6 @@
     </div>
     <div class="col-md-12">
       <div class="input-group px-4 py-2">
-        <!-- <input type="number" v-model='betAmount' class="form-control bet-amount" min="0"> -->
         <money3 class="form-control" :model-modifiers="{ number: true }" v-model="betAmount" v-bind="money"></money3>
         <div class="input-group-append">
           <button @click='clear' class="input-group-text">CLEAR</button>
@@ -88,24 +103,20 @@
         </svg>
       </a>
     </div>
-    <div class="flex flex-col gap-2 lg:flex-row justify-center my-3 px-5">
-      <button @click="updateFight('O')" :disabled="isDisabled.open" class="btn btn-success btn-lg mx-2">
+    <div class="flex gap-2 mb-3" style="display: flex; justify-content: center; flex-wrap: nowrap;">
+      <button @click="updateFight('O')" :disabled="isDisabled.open" class="btn btn-success">
         <span v-show='!isLoading.open'>OPEN</span>
         <span v-show='isLoading.open'>Processing...</span></button>
-      <button @click="updateFight('C')" :disabled="isDisabled.close" class="btn btn-danger btn-lg mx-2">
+      <button @click="updateFight('C')" :disabled="isDisabled.close" class="btn btn-danger">
         <span v-show='!isLoading.close'>CLOSE</span>
         <span v-show='isLoading.close'>Processing...</span></button>
-      <button @click="doneFight()" :disabled="isDisabled.done" class="btn btn-secondary btn-lg mx-2">
+      <button @click="doneFight()" :disabled="isDisabled.done" class="btn btn-secondary">
         <span v-show='!isLoading.done'>DONE</span>
         <span v-show='isLoading.done'>Loading...</span></button>
-      <button @click="cancelFight()" :disabled='isLoading.cancel' class="btn btn-primary btn-lg mx-2"
-        v-show='!isLoading.cancel'>
+      <button @click="cancelFight()" :disabled='isLoading.cancel' class="btn btn-primary" v-show='!isLoading.cancel'>
         <span v-show='!isLoading.cancel'>CANCEL</span>
         <span v-show='isLoading.cancel'>Loading...</span>
       </button>
-      <!-- <button @click="revertWinFight()" class="btn btn-info btn-lg mx-2 text-white">
-        <span>REVERT</span>
-      </button> -->
     </div>
   </div>
   <div class="modal fade" id="modal-undo-win" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
@@ -139,11 +150,16 @@
 
 <script>
 import { axios } from '@bundled-es-modules/axios';
+import { Money3Component } from 'v-money3'
 
 export default ({
+  components: {
+    money3: Money3Component,
+  },
   data() {
     return {
       fightNo: 0,
+      betAmount: 0,
       message: '____',
       fightStatusClass: {
         OPEN: 'gradient-status-open',
@@ -152,6 +168,10 @@ export default ({
       },
       amounts: [20, 50, 100, 500, 1000, 5000, 10000],
       total: {
+        meron: 0,
+        wala: 0,
+      },
+      payout: {
         meron: 0,
         wala: 0,
       },
@@ -176,6 +196,28 @@ export default ({
       },
       player: {
         points: 0,
+        id: '',
+        legit: true,
+        bets: {
+          meron: 0,
+          wala: 0,
+        },
+      },
+      money: {
+        decimal: '.',
+        thousands: ',',
+        precision: 0,
+        masked: false,
+        shouldRound: false,
+      },
+      ghost: {
+        meron: 0,
+        wala: 0,
+        points: 'UNLIMITED',
+      },
+      autobots: {
+        meron: 0,
+        wala: 0,
       }
     }
 
@@ -188,13 +230,83 @@ export default ({
         this.player.points = json.points
         this.message = this.setFightStatus(json.current)
         this.total = json.bets
+        this.player.bets = json.player
+        this.player.id = json.id
+        this.player.legit = json.legit
+      });
+
+    window.Echo.channel('fight')
+      .listen('.fight', async (e) => {
+        if (e == null)
+          return
+
+        if (e.fight.curr) {
+          if ((e.fight.prev.game_winner == 'D' || e.fight.prev.game_winner == 'C') && this.playerTotalBets > 0) {
+            if (this.player.legit) {
+              alert(`Returned ${this.formatMoney(this.playerTotalBets)} points!`)
+              this.tada()
+            }
+            this.daog = true
+            this.player.points += this.playerTotalBets
+          }
+
+          if (e.fight.prev.game_winner == 'M' && this.meronWinAmount > 0) {
+            if (this.player.legit) {
+              alert(`Congratulations! MERON Wins ${this.formatMoney(this.meronWinAmount)}`)
+              this.tada()
+            }
+            this.daog = true
+            this.player.points += this.meronWinAmount
+          }
+
+          if (e.fight.prev.game_winner == 'W' && this.walaWinAmount > 0) {
+            if (this.player.legit) {
+              alert(`Congratulations! WALA Wins ${this.formatMoney(this.walaWinAmount)}`)
+              this.tada()
+            }
+            this.daog = true
+            this.player.points += this.walaWinAmount
+          }
+
+          if (this.daog && !this.player.legit) {
+            this.tada()
+          }
+
+          this.daog = false
+          this.fight = e.fight.curr
+          this.total.meron = this.total.wala = 0
+          this.player.bets.meron = this.player.bets.wala = 0
+        }
+        else {
+          this.fight = e.fight
+        }
+
+        if (this.fight.status == null) {
+          this.ghost.meron = this.ghost.wala = 0
+        }
+
+        this.message = this.setFightStatus(this.fight)
       });
 
     window.Echo.channel('bet')
       .listen('.bet', async (e) => {
-        e.bet.side === 'M'
-          ? this.total.meron += e.bet.amount
-          : this.total.wala += e.bet.amount
+        if (e.bet.side === 'M') {
+          this.total.meron = this.total.meron + e.bet.amount
+        } else {
+          this.total.wala = this.total.wala + e.bet.amount
+        }
+
+        if (e.bet.user_id == this.player.id && !this.player.legit) {
+          this.player.points -= e.bet.amount
+          this.betAmount = e.bet.amount
+          e.bet.side == 'M'
+            ? this.player.bets.meron += this.betAmount
+            : this.player.bets.wala += this.betAmount
+        } else {
+          e.bet.side == 'M'
+            ? this.ghost.meron += e.bet.amount
+            : this.ghost.wala += e.bet.amount
+        }
       });
   },
   computed: {
@@ -202,6 +314,7 @@ export default ({
       return this.total.meron + this.total.wala
     },
 
+    // GET FROM EACH SIDE
     meronComm() {
       return this.total.meron * 12 / 100
     },
@@ -220,6 +333,22 @@ export default ({
       return win / this.total.wala * 100
     },
 
+    meronWinAmount() {
+      return (this.player.bets.meron * this.meronPercentage) / 100
+    },
+
+    walaWinAmount() {
+      return (this.player.bets.wala * this.walaPercentage) / 100
+    },
+
+    playerTotalBets() {
+      return this.player.bets.meron + this.player.bets.wala
+    },
+
+    creditPoints() {
+      return this.player.legit ? this.formatMoney(this.player.points) : this.ghost.points
+    },
+
   },
 
   methods: {
@@ -229,7 +358,7 @@ export default ({
     },
 
     clear() {
-      this.total.meron = this.total.wala = 0
+      this.betAmount = 0
     },
 
     setFightStatus(data) {
@@ -249,6 +378,15 @@ export default ({
         this.isDisabled.done = false
         return 'CLOSE'
       }
+    },
+
+    betManual(amount) {
+      this.betAmount = amount == 'ALL-IN' ? this.player.points : amount
+    },
+
+    tada() {
+      var audio = new Audio('/music/tada.mp3');
+      return audio.play();
     },
 
     doneFight() {
@@ -344,6 +482,52 @@ export default ({
         console.error(error);
       }
 
+    },
+    async addBet(betSide) {
+      try {
+        if (this.message !== 'OPEN') {
+          alert('Cannot Bet')
+          return
+        }
+
+        if (this.betAmount < 10) {
+          alert('Minimum bet is 10.00')
+          return
+        }
+
+        if (this.betAmount > this.player.points) {
+          alert('Insuficient Points')
+          return
+        }
+
+        if (this.betAmount > 1500 && this.player.legit) {
+          alert('Maximum bet is 1,500.00')
+          return
+        }
+
+        if (this.player.legit) {
+          if (!confirm(`Bet ${this.betAmount.toFixed(2)}?`)) {
+            return
+          }
+        }
+
+        const { data } = await axios.post('/bet/add', {
+          fight_no: this.fightNo,
+          amount: this.betAmount,
+          side: betSide
+        });
+
+        if (data.status == 'OK' && this.player.legit) {
+          this.player.points -= this.betAmount
+          betSide == 'M'
+            ? this.player.bets.meron += this.betAmount
+            : this.player.bets.wala += this.betAmount
+          this.clear()
+        }
+
+      } catch (err) {
+        alert(err.response.data.error);
+      }
     }
   }
 })
