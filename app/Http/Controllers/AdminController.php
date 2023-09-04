@@ -8,8 +8,10 @@ use App\Models\ShareHolder;
 use App\Models\User;
 use App\Models\Roles;
 use App\Models\Agent;
+use App\Models\Incorpo;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
+use App\Http\Controllers\Auth\RegisterController;
 
 class AdminController extends Controller
 {
@@ -22,7 +24,7 @@ class AdminController extends Controller
     public function shareHolders()
     {
         $share_holders = ShareHolder::with('user')
-            ->orderBy('percentage','desc')
+            ->orderBy('percentage', 'desc')
             ->get();
         return view('admin.share-holders', compact('share_holders'));
     }
@@ -41,19 +43,103 @@ class AdminController extends Controller
         ], 200);
     }
 
+    public function getNotAgents()
+    {
+        try {
+            $term = request('term')['term'];
+            if (strlen($term) > 3) {
+                $users = User::where('username', 'LIKE', '%' . $term . '%')
+                    ->where('rid', NULL)->get();
+            }
+        } catch (\Exception $e) {
+            return response($e->getMessage(), 500);
+        }
+
+        return response()->json([
+            'data' => $users
+        ], 200);
+    }
+
+
+    public function incorpo()
+    {
+        return view('admin.incorpo');
+    }
+
+    public function getCorpos()
+    {
+        try {
+            $incorpo = Incorpo::where('master_agent', 1)->get();
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+
+        return DataTables::of($incorpo)
+            ->addIndexColumn()
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
+    public function addCorpoAgent(Request $request)
+    {
+        try {
+            //code...
+            $create = Incorpo::create([
+                'user_id' => $request->user_id,
+                'bracket' => $request->bracket,
+                'master_agent' => 1, // for main corpo only
+                'player_count' => 0,
+            ]);
+
+            if ($create) {
+                $corpo = new Request();
+                $corpo->user_id = $request->user_id;
+                $this->addAgent($corpo);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Corpo created!'
+        ]);
+    }
+
+    public function addCorpSubAgents(Request $request)
+    {
+        $default_pass = '123456';
+        $corpo = User::find($request->user_id);
+        $reg = new RegisterController();
+        for ($i = 1; $i <= $request->agent_count; $i++) {
+            $agent_req = new Request([
+                'username' => $corpo->username . $i,
+                'password' => $default_pass,
+                'password_confirmation' => $default_pass,
+
+            ]);
+        }
+    }
+
     public function getUsers()
     {
         try {
-            if(request('order')[0]['column'] == 4) {
+            if (request('order')[0]['column'] == 4) {
                 $users = User::orderBy('points', request('order')[0]['dir'])->get();
             } else {
-                $users = User::orderBy('updated_at','desc')->get();
+                $users = User::orderBy('updated_at', 'desc')->get();
             }
 
             $users_with_roles = [];
             foreach ($users as $user) {
                 $users_with_roles[] = $user->getRoleNames();
-                if($user->active && !$user->isOnline()) {
+                if ($user->active && !$user->isOnline()) {
                     $user->active = false;
                     $user->save();
                 }
@@ -66,10 +152,10 @@ class AdminController extends Controller
         return DataTables::of($users)
             ->addIndexColumn()
             ->rawColumns(['action'])
-            ->addColumn('status', function(User $user) {
+            ->addColumn('status', function (User $user) {
                 return $user->active == 1 ? 'ONLINE' : 'OFFLINE';
             })
-            ->with('online_count', $users->where('active',1)->count())
+            ->with('online_count', $users->where('active', 1)->count())
             ->toJson();
     }
 
@@ -140,21 +226,22 @@ class AdminController extends Controller
 
     public function agentList()
     {
-        $agents = Agent::with('user')->orderBy('id','desc')->get();
+        $agents = Agent::with('user')->orderBy('id', 'desc')->get();
         return response()->json([
             'data' => $agents
         ]);
     }
 
-    private function generateRandomString($length = 10) {
-        return substr(str_shuffle(str_repeat($x='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+    private function generateRandomString($length = 10)
+    {
+        return substr(str_shuffle(str_repeat($x = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length / strlen($x)))), 1, $length);
     }
 
     public function addAgent(Request $request)
     {
         try {
             //code...
-            $rid = 'REF'.$this->generateRandomString(8);
+            $rid = 'REF' . $this->generateRandomString(8);
             Agent::create([
                 'user_id' => $request->user_id,
                 'rid' => $rid,
@@ -163,8 +250,7 @@ class AdminController extends Controller
             $user = User::find($request->user_id);
             $user->rid = $rid;
             $user->save();
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             //throw $th;
             return response()->json([
                 'message' => $e->getMessage(),
@@ -180,7 +266,7 @@ class AdminController extends Controller
     public function accessUser($id)
     {
         try {
-            if(Auth::user()->role_id != 1) {
+            if (Auth::user()->role_id != 1) {
                 $this->hacking(request(), 'Security breached');
                 return redirect()->back();
             }
@@ -193,6 +279,6 @@ class AdminController extends Controller
         }
 
         return redirect('/user/profile')
-            ->with('success', 'You Are now logged in as '.Auth::user()->username);
+            ->with('success', 'You Are now logged in as ' . Auth::user()->username);
     }
 }

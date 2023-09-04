@@ -42,7 +42,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::get('/admin/access/{id}', [AdminController::class, 'accessUser']);
 
-Route::group(['middleware' => ['auth','visitor']], function() {
+Route::group(['middleware' => ['auth', 'visitor']], function () {
     // TEST
     // Route::get('/agent/all-players', [AgentController::class, 'agentPlayerList'], function ($players) {
     //     ddd($players);
@@ -75,6 +75,13 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::get('/admin/agents', [AdminController::class, 'getAgents'])->name('admin.agents');
         Route::get('/admin/agent-list', [AdminController::class, 'agentList']);
         Route::post('/admin/add-agent', [AdminController::class, 'addAgent']);
+        Route::get('/admin/non-agents', [AdminController::class, 'getNotAgents']);
+
+        // Corpo
+        Route::get('/admin/incorpo', [AdminController::class, 'incorpo']);
+        Route::get('/admin/incorpo-list', [AdminController::class, 'getCorpos']);
+        Route::post('/admin/add-corpo-agent', [AdminController::class, 'addCorpoAgent']);
+        Route::post('/admin/add-agents', [AdminController::class, 'addCorpSubAgents']);
     });
 
     // Player
@@ -98,7 +105,6 @@ Route::group(['middleware' => ['auth','visitor']], function() {
         Route::get('/chat/messages', [PlayerController::class, 'getUserMsg']);
         Route::post('/chat/send-message', [PlayerController::class, 'sendUserMsg']);
         Route::post('/chat/seen-message', [PlayerController::class, 'seenMessage']);
-
     });
 
     // Operator
@@ -173,5 +179,4 @@ Route::group(['middleware' => ['auth','visitor']], function() {
 
     Route::get('/landing', [PlayerController::class, 'landing']);
     Route::get('/watch/movie', [PlayerController::class, 'watchMovie']);
-
 });

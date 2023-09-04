@@ -59,11 +59,11 @@ class LoginController extends Controller
         $user->update(['active' => true]);
         $user->save();
 
-        if(Auth::user()->defaultpassword){
+        if (Auth::user()->defaultpassword) {
             $this->redirectTo = '/changepassword';
         }
 
-        if($role->name == 'Player') {
+        if ($role->name == 'Player') {
             $this->redirectTo = '/landing';
         }
 
@@ -76,7 +76,7 @@ class LoginController extends Controller
         }
 
         if ($role->name == 'Admin') {
-            $this->redirectTo = '/transactions';
+            $this->redirectTo = '/landing';
         }
 
         if ($role->name == 'Auditor') {

@@ -118,6 +118,7 @@
           @if (Auth::user()->user_role->name == 'Admin')
           <li><a class="md:p-4 py-2 block" href="/admin">Manage Users</a></li>
           <li><a class="md:p-4 py-2 block" href="{{ route('roles.index') }}">Roles</a></li>
+          <li><a class="md:p-4 py-2 block" href="/admin/incorpo">Incorpo</a></li>
           @endif
 
           @if (Auth::user()->user_role->name == 'Operator')

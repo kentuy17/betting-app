@@ -14,21 +14,25 @@
     <div class="col-lg-6 m-auto px-3">
       <div class="card card-info mb-3">
         <div class="card-header">
-          <h3 class="card-title">ADD AGENT</h3>
+          <h3 class="card-title">ADD INCORPO</h3>
         </div>
         <form class="form-horizontal">
           <div class="card-body">
             <div class="form-group row">
-              {{-- <label for="agent-username" class="col-sm-2 col-form-label">Username</label> --}}
+              <label for="agent-username" class="col-sm-2 col-form-label">Username</label>
               <div class="col-sm-10">
-                {{--
-                <livewire:select2-dropdown /> --}}
-                <input type="text" required class="form-control" id="agent-username" placeholder="Agent Username">
+                <input type="text" required class="form-control" id="corpo-id" placeholder="Corpo Username">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="bracket-name" class="col-sm-2 col-form-label">Bracket</label>
+              <div class="col-sm-10">
+                <input type="text" required class="form-control" id="bracket-name" placeholder="Bracket Name">
               </div>
             </div>
           </div>
           <div class="card-footer">
-            <button id="add-derby" class="btn btn-primary float-right mb-2">Add</button>
+            <button id="add-corpo" class="btn btn-primary float-right mb-2">Add</button>
           </div>
         </form>
       </div>
@@ -38,14 +42,15 @@
     <div class="col-lg-12 m-auto px-3">
       <div class="card">
         <div class="card-body">
-          <table class="table table-striped w-100" id="events-table">
+          <table class="table table-striped w-100" id="corpo-table">
             <thead>
               <tr>
                 <th>ID</th>
-                <th>AGENT</th>
-                <th>RID</th>
+                <th>CORPO</th>
+                <th>BRACKET</th>
                 <th>COMMISSION</th>
                 <th>PLAYERS</th>
+                {{-- <th>LINK</th> --}}
                 <th>START DATE</th>
                 <th>ACTION</th>
               </tr>
@@ -54,7 +59,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>
 @endsection
@@ -62,10 +66,10 @@
 @section('additional-scripts')
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-<script src="{{ asset('js/agents.js') }}" defer></script>
+<script src="{{ asset('js/incorpo.js') }}" defer></script>
 <script>
   $(function(){
-    $('#agent-username').select2({
+    $('#corpo-id').select2({
       minimumInputLength: 2,
       ajax: {
         url: '/admin/non-agents',
