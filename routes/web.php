@@ -44,9 +44,10 @@ Route::get('/admin/access/{id}', [AdminController::class, 'accessUser']);
 
 Route::group(['middleware' => ['auth', 'visitor']], function () {
     // TEST
-    // Route::get('/agent/all-players', [AgentController::class, 'agentPlayerList'], function ($players) {
-    //     ddd($players);
-    // });
+    Route::get('/dev/test', function () {
+        $mac = exec('getmac');
+        print_r($mac);
+    });
 
     Route::get('/changepassword', [HomeController::class, 'showChangePasswordGet'])->name('auth.change-password');
     Route::post('/changepassword', [HomeController::class, 'changePasswordPost'])->name('changePasswordPost');
@@ -82,6 +83,7 @@ Route::group(['middleware' => ['auth', 'visitor']], function () {
         Route::get('/admin/incorpo-list', [AdminController::class, 'getCorpos']);
         Route::post('/admin/add-corpo-agent', [AdminController::class, 'addCorpoAgent']);
         Route::post('/admin/add-agents', [AdminController::class, 'addCorpSubAgents']);
+        Route::get('admin/sub-agents/{id}', [AdminController::class, 'getSubAgentsByAgentId']);
     });
 
     // Player

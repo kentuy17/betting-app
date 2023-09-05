@@ -1,15 +1,13 @@
-@extends('layouts.app')
-@section('additional-styles')
-<style>
+@extends('layouts.app') @section('additional-styles') <style>
   .select2-container {
     width: 100% !important;
   }
-</style>
 
-<!-- padidi -->
-@endsection
-@section('content')
-<div class="container">
+  .corpo-bracket {
+    text-decoration: underline;
+  }
+</style>
+<!-- padidi --> @endsection @section('content') <div class="container">
   <div class="row col-md-12 justify-content-center pt-3">
     <div class="col-lg-6 m-auto px-3">
       <div class="card card-info mb-3">
@@ -49,9 +47,7 @@
                 <th>CORPO</th>
                 <th>BRACKET</th>
                 <th>COMMISSION</th>
-                <th>PLAYERS</th>
-                {{-- <th>LINK</th> --}}
-                <th>START DATE</th>
+                <th>PLAYERS</th> {{-- <th>LINK</th> --}} <th>START DATE</th>
                 <th>ACTION</th>
               </tr>
             </thead>
@@ -60,11 +56,38 @@
       </div>
     </div>
   </div>
-</div>
-@endsection
-
-@section('additional-scripts')
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <div class="modal fade" id="sub-agents-modal" tabindex="-1" role="dialog" aria-labelledby="SUB AGENTS"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 id="bracket-head"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body pt-0">
+          <table class="table table-striped w-100" id="sub-agents-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>AGENT</th>
+                <th>DEFAULT PASS</th>
+                <th>COMMISSION</th>
+                <th>PLAYERS</th>
+                <th>RID</th>
+                <th>START DATE</th> {{-- <th>ACTION</th> --}}
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+</div> @endsection @section('additional-scripts') <script
+  src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 <script src="{{ asset('js/incorpo.js') }}" defer></script>
 <script>
@@ -93,5 +116,4 @@
       }
     });
   });
-</script>
-@endsection
+</script> @endsection

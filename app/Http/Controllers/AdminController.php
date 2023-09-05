@@ -8,10 +8,13 @@ use App\Models\ShareHolder;
 use App\Models\User;
 use App\Models\Roles;
 use App\Models\Agent;
+use App\Models\AgentCommission;
 use App\Models\Incorpo;
+use App\Models\Referral;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
-use App\Http\Controllers\Auth\RegisterController;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -69,7 +72,7 @@ class AdminController extends Controller
     public function getCorpos()
     {
         try {
-            $incorpo = Incorpo::where('master_agent', 1)->get();
+            $incorpo = Incorpo::with('user')->where('master_agent', 1)->get();
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -94,11 +97,21 @@ class AdminController extends Controller
                 'player_count' => 0,
             ]);
 
-            if ($create) {
-                $corpo = new Request();
-                $corpo->user_id = $request->user_id;
-                $this->addAgent($corpo);
-            }
+            $corpo = new Request();
+            $corpo->user_id = $request->user_id;
+            $this->addAgent($corpo);
+
+            $referral = Referral::create([
+                'rid' => 'REFSVWXM9N8',
+                'referrer_id' => 1,
+                'user_id' => $create->id,
+            ]);
+
+            AgentCommission::create([
+                'agent_id' => $referral->referrer_id,
+                'user_id' => $create->id,
+                'commission' => 0,
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -114,17 +127,89 @@ class AdminController extends Controller
 
     public function addCorpSubAgents(Request $request)
     {
-        $default_pass = '123456';
-        $corpo = User::find($request->user_id);
-        $reg = new RegisterController();
-        for ($i = 1; $i <= $request->agent_count; $i++) {
-            $agent_req = new Request([
-                'username' => $corpo->username . $i,
-                'password' => $default_pass,
-                'password_confirmation' => $default_pass,
+        try {
+            $master_agent = User::find($request->user_id);
+            $corpo = Incorpo::where('user_id', $master_agent->id)
+                ->where('master_agent', 1)
+                ->first();
 
-            ]);
+            $agents_count = Incorpo::where('master_agent', $corpo->user_id)->count();
+            $created_agents = [];
+            for ($i = 1; $i <= $request->agent_count; $i++) {
+                $randomPass = Str::random(6);
+                $rid = 'REF' . $this->generateRandomString(8);
+                $alyas = $master_agent->username . $agents_count + $i;
+
+                // create user
+                $create = User::create([
+                    'username' => $alyas,
+                    'name' => $alyas,
+                    'phone_no' => $master_agent->phone_no,
+                    'password' => Hash::make($randomPass),
+                    'active' => true,
+                    'rid' => $rid,
+                    'role_id' => 2,
+                ]);
+
+                $created_agents[] = $create;
+                $add_agent_req = new Request([
+                    'user_id' => $create->id,
+                    'bracket' => $corpo->bracket,
+                ]);
+
+                Incorpo::create([
+                    'user_id' => $create->id,
+                    'bracket' => $corpo->bracket,
+                    'master_agent' => $corpo->user_id, // for main corpo only
+                    'player_count' => 0,
+                    'default_pass' => $randomPass
+                ]);
+
+                $this->addAgent($add_agent_req);
+
+                ModelHasRoles::create([
+                    'role_id' => '2',
+                    'model_type' => "App\Models\User",
+                    'model_id' => $create->id,
+                ]);
+
+                $referral = Referral::create([
+                    'rid' => $rid,
+                    'referrer_id' => $corpo->user_id,
+                    'user_id' => $create->id,
+                ]);
+
+                AgentCommission::create([
+                    'agent_id' => $referral->referrer_id,
+                    'user_id' => $create->id,
+                    'commission' => 0,
+                ]);
+            }
+
+            $corpo->player_count += count($created_agents);
+            $corpo->save();
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
         }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Agents created successfully!',
+            'data' => $created_agents
+        ]);
+    }
+
+    public function getSubAgentsByAgentId($id)
+    {
+        $sub_agents = Incorpo::with('agent_commission', 'user')->where('master_agent', $id)->get();
+
+        return DataTables::of($sub_agents)
+            ->addIndexColumn()
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     public function getUsers()
@@ -260,7 +345,7 @@ class AdminController extends Controller
 
         return response()->json([
             'data' => 'OK'
-        ]);
+        ], 200);
     }
 
     public function accessUser($id)
