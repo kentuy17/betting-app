@@ -50,7 +50,7 @@ class AdminController extends Controller
     {
         try {
             $term = request('term')['term'];
-            if (strlen($term) > 3) {
+            if (strlen($term) >= 3) {
                 $users = User::where('username', 'LIKE', '%' . $term . '%')
                     ->where('rid', NULL)->get();
             }

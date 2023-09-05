@@ -22,7 +22,7 @@ $(document).ready(function () {
     ],
     columns: [
       {
-        data: "id",
+        data: "user_id",
       },
       {
         data: "user.username",
