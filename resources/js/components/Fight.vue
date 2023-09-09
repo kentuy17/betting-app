@@ -55,8 +55,8 @@
             <div>
               <div class="flex justify-center items-center">
                 <h3 class="font-bold text-drawcolor text-center text-sm">
-                  <span class='text-player-bet'>{{ formatMoney(player.bets.meron) }}</span> =
-                  <span class='text-player-win'>{{ formatMoney(meronWinAmount) }}</span>
+                  <span class='text-player-bet'>{{ formatMoney(player.bets.meron) }}</span> = <span
+                    class='text-player-win'>{{ formatMoney(meronWinAmount) }}</span>
                 </h3>
               </div>
             </div>
@@ -69,8 +69,8 @@
             <div>
               <div class="flex justify-center items-center">
                 <h3 class="font-bold text-drawcolor text-center text-sm">
-                  <span class="text-player-bet">{{ formatMoney(player.bets.wala) }}</span> =
-                  <span class='text-player-win'>{{ formatMoney(walaWinAmount) }}</span>
+                  <span class="text-player-bet">{{ formatMoney(player.bets.wala) }}</span> = <span
+                    class='text-player-win'>{{ formatMoney(walaWinAmount) }}</span>
                 </h3>
               </div>
             </div>
@@ -101,9 +101,7 @@
     <div class="col-md-12">
       <div class="amounts-bet-btn py-2 flex-wrap">
         <button v-for="(amnt, index) in amounts" v-bind:key="index" @click="betManual(amnt)"
-          class="btn btn-success btn-sm m-1">
-          {{ amnt }}
-        </button>
+          class="btn btn-success btn-sm m-1"> {{ amnt }} </button>
       </div>
     </div>
     <div class="self-end mr-2">

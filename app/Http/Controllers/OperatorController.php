@@ -43,7 +43,7 @@ class OperatorController extends Controller
         $role = $this->getUserRole();
         $fight = DerbyEvent::where('status', 'ACTIVE')->orderBy('id', 'desc')->first();
         $setting = Setting::where('name', 'video_display')->first()->value ?? false;
-        return view('operator.fight', compact('role', 'fight','setting'));
+        return view('operator.fight', compact('role', 'fight', 'setting'));
     }
 
     public function transactions()
@@ -106,7 +106,7 @@ class OperatorController extends Controller
             }
 
             $check = Transactions::where('reference_code', $request->ref_code)->first();
-            if($check && $request->action == 'approve') {
+            if ($check && $request->action == 'approve') {
                 return response()->json([
                     'msg' => 'Double receipt!',
                     'status' => 'error',
@@ -115,10 +115,10 @@ class OperatorController extends Controller
 
             $trans = Transactions::find($request->id);
 
-            if($request->action == 'approve' && $trans->status == 'completed') {
+            if ($request->action == 'approve' && $trans->status == 'completed') {
                 $approver = User::find($trans->processedBy);
                 return response()->json([
-                    'msg' => 'Oops! Request already approved by '. $approver->username,
+                    'msg' => 'Oops! Request already approved by ' . $approver->username,
                     'status' => 'error',
                 ], 400);
             }
@@ -133,11 +133,11 @@ class OperatorController extends Controller
 
             if ($request->action == 'approve') {
                 $player = User::find($trans->user_id);
-                $referral = Referral::where('user_id',$trans->user_id)
+                $referral = Referral::where('user_id', $trans->user_id)
                     ->where('promo_done', false)
                     ->first();
 
-                if($referral && ($player->points < 100)) {
+                if ($referral && ($player->points < 100)) {
                     $referral->promo_done = true;
                     $referral->save();
                 }
@@ -174,7 +174,7 @@ class OperatorController extends Controller
 
         return DataTables::of($trans)
             ->addIndexColumn()
-            ->with('pending_count', $trans->where('status','pending')->count())
+            ->with('pending_count', $trans->where('status', 'pending')->count())
             ->toJson();
     }
 
@@ -182,7 +182,7 @@ class OperatorController extends Controller
     {
         try {
             $trans = Transactions::find($request->id);
-            $trans->status = $request->status == 'reject' ? 'failed' : 'completed';
+            $trans->status = $request->action == 'reject' ? 'failed' : 'completed';
             $trans->processedBy = Auth::user()->id;
             $trans->reference_code = $request->ref_code;
             $trans->note = $request->note;
@@ -380,7 +380,7 @@ class OperatorController extends Controller
         $trans = Transactions::where('user_id', $id)
             ->with('user')
             ->with('operator')
-            ->orderBy('id','desc')
+            ->orderBy('id', 'desc')
             ->where('action', $action)
             ->get();
 
@@ -394,7 +394,7 @@ class OperatorController extends Controller
     {
         $history = BetHistory::where('user_id', $id)
             ->with('fight.event')
-            ->orderBy('bethistory_no','desc')
+            ->orderBy('bethistory_no', 'desc')
             ->get();
 
         return DataTables::of($history)
