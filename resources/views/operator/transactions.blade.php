@@ -1,20 +1,33 @@
-@extends('layouts.app')
-@section('additional-styles')
+@extends('layouts.app') @section('additional-styles')
   <link rel="stylesheet" href="{{ asset('css/operator.css') }}">
+  <style>
+    .receipt-container {
+      max-height: 400px;
+      max-width: 350px;
+      overflow: hidden;
+      margin: auto;
+    }
+
+    #trans-receipt {
+      max-width: 350px;
+      height: 800px;
+      margin: -40px 0 0 0;
+    }
+  </style>
 @endsection
 @section('content')
   @php
     $cashin = $cashout = '';
     switch (Auth::user()->user_role->name) {
-      case 'Cash-in Operator':
-        $cashin = 'active';
-        break;
-      case 'Cash-out Operator':
-        $cashout = 'active';
-        break;
-      default:
-        $cashin = 'active';
-        break;
+        case 'Cash-in Operator':
+            $cashin = 'active';
+            break;
+        case 'Cash-out Operator':
+            $cashout = 'active';
+            break;
+        default:
+            $cashin = 'active';
+            break;
     }
   @endphp
   <div class="container">
@@ -25,8 +38,8 @@
             @if (hasAccess('Cash-in Operator'))
               <li class="nav-item" role="presentation">
                 <button class="text-xs px-1 nav-link {{ $cashin }}" id="deposit-tab" data-bs-toggle="tab" data-bs-target="#deposit-panel" type="button" role="tab" aria-controls="deposit" aria-selected="true">
-                  DEPOSIT <span id="badge-deposit" style="display: none;" class="text-xs px-1 py-0 badge bg-danger">0</span></button>
-                {{-- <button onclick="showNotification('fuck yeah!')">Show Notif</button> --}}
+                  DEPOSIT <span id="badge-deposit" style="display: none;" class="text-xs px-1 py-0 badge bg-danger">0</span></button> {{-- <button
+            onclick="showNotification('fuck yeah!')">Show Notif</button> --}}
               </li>
             @endif
             @if (hasAccess('Cash-out Operator'))
@@ -57,49 +70,45 @@
         <div class="card-body" style="padding: 5px !important;">
           <div class="tab-content" id="myTabContent">
             @if (Auth::user()->user_role->name == 'Cash-in Operator' || hasAccess('Cash-in Operator'))
-            <div class="tab-pane fade show {{ $cashin }}" id="deposit-panel" role="tabpanel" aria-labelledby="deposit-tab">
-              <table class="table dt-responsive table-striped nowrap w-100" id="deposit-trans-table">
-                <thead>
-                  <tr>
-                    {{-- <th>#</th> --}}
-                    <th>Player</th>
-                    {{-- <th>Outlet</th> --}}
-                    <th>Amount</th>
-                    <th>Mobile#</th>
-                    <th>Operator</th>
-                    <th>Ref Code</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-              </table>
-            </div>
+              <div class="tab-pane fade show {{ $cashin }}" id="deposit-panel" role="tabpanel" aria-labelledby="deposit-tab">
+                <table class="table dt-responsive table-striped nowrap w-100" id="deposit-trans-table">
+                  <thead>
+                    <tr>
+                      <th>Player</th>
+                      <th>Amount</th>
+                      <th>Mobile#</th>
+                      <th>Operator</th>
+                      <th>Ref Code</th>
+                      <th>Date</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
             @endif
             @if (Auth::user()->user_role->name == 'Cash-out Operator' || hasAccess('Cash-out Operator'))
-            <div class="tab-pane fade show {{ $cashout }}" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
-              <table class="table dt-responsive table-striped nowrap w-100" id="withdraw-trans-table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Player</th>
-                    {{-- <th>Outlet</th> --}}
-                    <th>Amount</th>
-                    <th>Mobile#</th>
-                    <th>Processed By</th>
-                    <th>Ref Code</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-              </table>
-            </div>
+              <div class="tab-pane fade show {{ $cashout }}" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
+                <table class="table dt-responsive table-striped nowrap w-100" id="withdraw-trans-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Player</th>
+                      <th>Amount</th>
+                      <th>Mobile#</th>
+                      <th>Processed By</th>
+                      <th>Ref Code</th>
+                      <th>Date</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
             @endif
           </div>
         </div>
       </div>
-
     </div>
   </div>
   </div>
@@ -116,7 +125,7 @@
         <form id="deposit-form" method="post">
           <div class="modal-body pt-0">
             <input type="hidden" name="trans-id" id="trans-id">
-            <div class="form-group align-center">
+            <div class="form-group align-center receipt-container">
               <img id="trans-receipt" data-storage="{{ asset('storage/') }}" src="" alt="">
             </div>
             <div class="form-group mt-2">
@@ -135,9 +144,8 @@
               </select>
             </div>
             <div class="form-group mt-2" style="display: none">
-              <label for="trans-note">Note:</label>
-              {{-- <textarea name="trans-note" class="form-control" id="trans-note" cols="30" rows="1"></textarea> --}}
-              <select name="trans-note" id="trans-note" class="form-control">
+              <label for="trans-note">Note:</label> {{-- <textarea name="trans-note" class="form-control" id="trans-note"
+              cols="30" rows="1"></textarea> --}} <select name="trans-note" id="trans-note" class="form-control">
                 <option value="Duplicate receipt">Duplicate receipt</option>
                 <option value="Wrong receipt">Wrong receipt</option>
               </select>
@@ -256,9 +264,7 @@
             </thead>
           </table>
         </div>
-        <div class="modal-footer">
-          {{-- <a class="btn btn-secondary btn-sm" data-dismiss="modal">CLOSE</a> --}}
-        </div>
+        <div class="modal-footer"> {{-- <a class="btn btn-secondary btn-sm" data-dismiss="modal">CLOSE</a> --}} </div>
       </div>
     </div>
   </div>
@@ -282,7 +288,7 @@
         x1 = x1.replace(rgx, '$1' + ',' + '$2');
       return x1 + x2;
     }
-    const DUMMY_ID = '{{ config('app.dummy_id') }}'
+    const DUMMY_ID = '{{ config(' app.dummy_id ') }}'
   </script>
   <script src="{{ asset('js/transactions.js') }}" defer></script>
   <script src="{{ asset('js/withdraw.js') }}" defer></script>
