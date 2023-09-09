@@ -64,7 +64,7 @@ return [
         ],
         'bet' => [
             'driver' => 'single',
-            'path' => storage_path('logs/be.log'),
+            'path' => storage_path('logs/bet.log'),
             'level' => 'info',
         ],
         'stack' => [
