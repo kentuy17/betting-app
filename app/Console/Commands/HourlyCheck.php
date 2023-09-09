@@ -71,9 +71,10 @@ class HourlyCheck extends Command
 
             $bets = Bet::where('fight_id', '<', $fight->id - 5)
                 ->where('user_id', 9)->delete();
+
+            Log::channel('bet')->info('Delete: ' . $bets);
         }
 
-        Log::channel('bet')->info('Delete: ' . $bets);
         Log::channel('cron')->info("Delete: " . $delete);
     }
 }
