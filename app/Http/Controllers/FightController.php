@@ -492,7 +492,6 @@ class FightController extends Controller
             return 0;
         }
 
-        // $referred_players = User::has('referred_players')->with('referral')->get();
         $ghost_bettors = User::where('legit', false)->get()->pluck('id');
         $bets = Bet::where('fight_id', $fight_id)
             ->whereNotIn('user_id', $ghost_bettors)
@@ -501,15 +500,6 @@ class FightController extends Controller
             ->with('referral')
             ->has('referral')
             ->get();
-
-        // $this->logger($bets, 'bets');
-
-        // $unique_referrers = $referred_players->groupBy('referral.referrer_id');
-
-        // $referral_commission = [];
-        // foreach ($unique_referrers as $key => $referral) {
-        //     $referral_commission[$key] = 0;
-        // }
 
         $total = 0;
         // $agent_commission_percent = 0.06; // win only
@@ -522,7 +512,6 @@ class FightController extends Controller
             }
 
             $total += $agent_commission_add;
-            // $referral_commission[$bet->referral->referrer_id] += $agent_commission_add;
             Bet::where('bet_no', $bet->bet_no)
                 ->update(['agent_commission' => $agent_commission_add]);
 
@@ -536,13 +525,6 @@ class FightController extends Controller
                 $agent_comm->save();
             }
         }
-
-        // $data = [
-        //     'bets' => $bets,
-        //     'referred_players' => $referred_players,
-        //     'unique_referrers' => $unique_referrers,
-        //     'referral_commission' => $referral_commission,
-        // ];
 
         return $total;
     }
