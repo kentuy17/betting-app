@@ -8,9 +8,13 @@
       margin: auto;
     }
 
+    .full-length {
+      max-height: 800px !important;
+    }
+
     #trans-receipt {
       /* max-width: 350px;
-          height: 800px; */
+                height: 800px; */
       margin: -40px 0 0 0;
     }
   </style>
@@ -289,6 +293,10 @@
       return x1 + x2;
     }
     const DUMMY_ID = '{{ config(' app.dummy_id ') }}'
+
+    $('#trans-receipt').on('click', function() {
+      $('.receipt-container').toggleClass('full-length');
+    })
   </script>
   <script src="{{ asset('js/transactions.js') }}" defer></script>
   <script src="{{ asset('js/withdraw.js') }}" defer></script>
