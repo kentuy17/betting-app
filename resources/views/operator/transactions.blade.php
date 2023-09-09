@@ -8,11 +8,11 @@
       margin: auto;
     }
 
-    /* #trans-receipt {
-        max-width: 350px;
-        height: 800px;
-        margin: -40px 0 0 0;
-      } */
+    #trans-receipt {
+      /* max-width: 350px;
+          height: 800px; */
+      margin: -40px 0 0 0;
+    }
   </style>
 @endsection
 @section('content')
