@@ -69,7 +69,7 @@ class HourlyCheck extends Command
             $fight = Fight::where('event_id', $event->id)
                 ->orderBy('id', 'desc')->first();
 
-            $bets = Bet::where('fight_id', '<', $fight->id)
+            $bets = Bet::where('fight_id', '<', $fight->id - 5)
                 ->where('user_id', 9)->delete();
         }
 
