@@ -49,10 +49,31 @@
     }
 
     /* #clappr{ width: 100%;height: 100%;position: relative; min-height: 320px; margin-bottom: 25px;}
-        #clappr > div{ width:100%;height:100%;position: absolute;} */
+                                                  #clappr > div{ width:100%;height:100%;position: absolute;} */
     #play-container {
       display: flex;
       align-content: flex-start;
+    }
+
+    #event-name {
+      overflow: hidden;
+      height: 20px;
+    }
+
+    .running-text {
+      position: absolute;
+      white-space: nowrap;
+      animation: floatText 15s infinite ease-in-out;
+    }
+
+    @-webkit-keyframes floatText {
+      from {
+        left: -50%;
+      }
+
+      to {
+        left: 100%;
+      }
     }
   </style>
 @endsection
@@ -63,17 +84,17 @@
       <div class="card mb-0">
         <div id="video-stream-container" class="embed-responsive">
           <input type="hidden" id="video-display" value="{{ $video_display }}">
-          <div class="bet-bg-head font-bold" id="event-name">{{ $fight->name }}</div>
+          <div class="bet-bg-head font-bold" id="event-name">
+            <p class="running-text">{{ $fight->name }}</p>
+          </div>
           <div id="header-closed" class="bet-bg-head font-bold" style="display: none;">EVENT CLOSED</div>
           <img id="poster-img" style="display: none;" src="{{ asset('img/10-streak-win-promo-poster.png') }}" alt="10-streak-win-promo">
-          {{-- <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
-          <iframe
-            src="https://player.onestream.live/embed?token=ZF9hdXRoXzIwNzg4MDRfMXR0NDJtZnM0&type=psk"
-            style="position:absolute;width:100%;height:100%;overflow: hidden;" scrolling="no" frameborder="0" allow="autoplay"
-            allowfullscreen></iframe>
-        </div> --}}
-          <div id="mux-player" style="position:relative;padding-bottom:56.25%;overflow:hidden;height:0;max-width:100%;">
-            <iframe id="f451d308-fee8-4022-9ed8-1a9375d507a6" src="https://iframe.dacast.com/live/a3e4275e-c022-b1b4-c231-3bef437168da/f451d308-fee8-4022-9ed8-1a9375d507a6" width="100%" height="100%" frameborder="0" scrolling="no" allow="autoplay;encrypted-media" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen style="position:absolute;top:0;left:0;"></iframe>
+          {{-- <div id="mux-player" style="position:relative;padding-bottom:56.25%;overflow:hidden;height:0;max-width:100%;">
+            <iframe id="73e7d7d3-9acb-86ce-c699-cf9b5b71a3b8" src="https://iframe.dacast.com/live/a3e4275e-c022-b1b4-c231-3bef437168da/73e7d7d3-9acb-86ce-c699-cf9b5b71a3b8" width="100%" height="100%" frameborder="0" scrolling="no" allow="autoplay;encrypted-media" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen style="position:absolute;top:0;left:0;">
+            </iframe>
+          </div> --}}
+          <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
+            <iframe src="https://player.onestream.live/embed?token=MjA3ODgwNA==&type=up" style="position:absolute;width:100%;height:100%;overflow: hidden;" scrolling="no" frameborder="0" allow="autoplay" allowfullscreen> </iframe>
           </div>
         </div>
       </div>
