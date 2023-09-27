@@ -16,6 +16,7 @@ class Agent extends Model
         'user_id',
         'current_commission',
         'player_count',
+        'is_master_agent',
         'created_at',
         'updated_at',
     ];
@@ -33,5 +34,15 @@ class Agent extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function agents_commission()
+    {
+        return $this->hasMany(AgentsCommission::class, 'agent_id', 'user_id');
+    }
+
+    public function referral()
+    {
+        return $this->hasMany(Referral::class, 'referrer_id', 'user_id');
     }
 }

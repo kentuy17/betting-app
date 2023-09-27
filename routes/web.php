@@ -159,6 +159,8 @@ Route::group(['middleware' => ['auth', 'visitor']], function () {
         Route::post('/agent/commission-convert', [AgentController::class, 'commissionConvert']);
         Route::get('/agent/players', [AgentController::class, 'playersUnder'])->name('agent.players');
         Route::get('/agent/players-list', [AgentController::class, 'playerLists']);
+        Route::get('/master-agent', [AgentController::class, 'masterAgent']);
+        Route::get('/master-agent/points', [AgentController::class, 'getMasterAgentPoints']);
     });
 
     Route::group(['middleware' => ['ghost']], function () {

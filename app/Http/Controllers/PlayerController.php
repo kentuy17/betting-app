@@ -17,6 +17,7 @@ use App\Models\IpBan;
 use App\Models\Chat;
 use App\Models\Setting;
 use App\Events\CashIn;
+use App\Models\Agent;
 use \Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
@@ -201,7 +202,7 @@ class PlayerController extends Controller
                     $referral->promo_done = true;
                     $referral->save();
 
-                    IpBan::create([ 'ip_address' => $user->email ]);
+                    IpBan::create(['ip_address' => $user->email]);
                 }
             }
 
@@ -393,7 +394,8 @@ class PlayerController extends Controller
     public function landing()
     {
         $is_online = Setting::where('name', 'video_display')->first()->value ?? false;
-        return view('layouts.landing', compact('is_online'));
+        $agent = Agent::with('referral')->where('user_id', Auth::user()->id)->first();
+        return view('layouts.landing', compact('is_online', 'agent'));
     }
 
     public function watchMovie()

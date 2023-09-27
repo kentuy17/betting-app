@@ -15,14 +15,14 @@ class AgentController extends Controller
     public function commissionConvert(Request $request)
     {
         try {
-            if($request->points > Auth::user()->agent->current_commission) {
+            if ($request->points > Auth::user()->agent->current_commission) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Insufficient points to convert',
                 ], 402);
             }
 
-            if($request->points < 200) {
+            if ($request->points < 200) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Minimum commission points is 200.00',
@@ -42,8 +42,7 @@ class AgentController extends Controller
                 'points_converted' => $request->points,
                 'current_points' => $user->points,
             ]);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
                 'status' => 'error',
@@ -52,7 +51,7 @@ class AgentController extends Controller
 
         return response()->json([
             'data' => [
-                'current_commission' => number_format($agent->current_commission,2),
+                'current_commission' => number_format($agent->current_commission, 2),
                 'points' => $user->points,
             ],
             'status' => 'success',
@@ -71,7 +70,7 @@ class AgentController extends Controller
         //     ->withSum('bet','agent_commission')
         //     ->where('referrer_id', Auth::user()->id)->get();
 
-        $players = AgentCommission::with('user','agent')
+        $players = AgentCommission::with('user', 'agent')
             ->where('agent_id', Auth::user()->id)
             ->get();
 
@@ -90,7 +89,7 @@ class AgentController extends Controller
 
             $players = Referral::with('user')
                 ->with('bet')
-                ->withSum('bet','agent_commission')
+                ->withSum('bet', 'agent_commission')
                 ->whereIn('referrer_id', $agents->pluck('user_id'))->get();
 
             $sums = [];
@@ -117,5 +116,18 @@ class AgentController extends Controller
                 'sums' => $sums,
             ],
         ], 200);
+    }
+
+    public function masterAgent()
+    {
+        return view('agents.master-agent');
+    }
+
+    public function getMasterAgentPoints()
+    {
+        return response()->json([
+            'points' => Auth::user()->points,
+            'commission' => Auth::user()->agent->current_commission
+        ]);
     }
 }
