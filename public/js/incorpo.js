@@ -101,7 +101,7 @@ $(document).ready(function () {
 
   // View Agents
   corpoTable.on("click", "tbody td .view", async function () {
-    viewAgents($(this).data('id'),$(this).data('bracket'));
+    viewAgents($(this).data("id"), $(this).data("bracket"));
   });
 
   // Add Agents Under Corpo
@@ -132,9 +132,9 @@ $(document).ready(function () {
   });
 });
 
-$('[data-dismiss="modal"]').on('click', function() {
-  $('#sub-agents-modal').modal('hide');
-})
+$('[data-dismiss="modal"]').on("click", function () {
+  $("#sub-agents-modal").modal("hide");
+});
 
 async function viewAgents(agentId, bracketName) {
   const corpoId = agentId;
@@ -164,7 +164,7 @@ async function viewAgents(agentId, bracketName) {
       "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
     columnDefs: [
       {
-        targets: [1, 2, 3, 4, 5],
+        targets: [1, 2, 3, 4],
         className: "dt-body-center",
       },
     ],
@@ -181,20 +181,25 @@ async function viewAgents(agentId, bracketName) {
       {
         data: null,
         render: (row) => {
-          return row.agent_commission ? row.agent_commission.commission
-          .toFixed(2)
-          .replace(/\d(?=(\d{3})+\.)/g, "$&,") : '0.00';
+          return row.agent_commission
+            ? row.agent_commission.commission
+                .toFixed(2)
+                .replace(/\d(?=(\d{3})+\.)/g, "$&,")
+            : "0.00";
         },
       },
       {
         data: "player_count",
       },
       {
-        data: "user.rid",
+        data: null,
+        render: (row) => {
+          return `https://sww23-go.live/register?rid=${row.user.rid}`;
+        },
       },
-      {
-        data: "created_at",
-      },
+      // {
+      //   data: "created_at",
+      // },
     ],
     // createdRow: function (row, data, dataIndex) {
     //   if (data.status == `W`) {
