@@ -161,6 +161,9 @@ Route::group(['middleware' => ['auth', 'visitor']], function () {
         Route::get('/agent/players-list', [AgentController::class, 'playerLists']);
         Route::get('/master-agent', [AgentController::class, 'masterAgent']);
         Route::get('/master-agent/points', [AgentController::class, 'getMasterAgentPoints']);
+        Route::get('/master-agent/player-list', [AgentController::class, 'getPlayerList']);
+
+        Route::view('/master-agent/{path?}', 'agents.master-agent')->where('path', '.*');
     });
 
     Route::group(['middleware' => ['ghost']], function () {

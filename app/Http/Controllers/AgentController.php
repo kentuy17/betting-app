@@ -130,4 +130,27 @@ class AgentController extends Controller
             'commission' => Auth::user()->agent->current_commission
         ]);
     }
+
+    public function getPlayerList(Request $request)
+    {
+        $sort = json_decode($request->sorting);
+        $raw = Referral::with('user')->where('referrer_id', Auth::user()->id);
+
+        $count = $raw->count();
+
+
+        $filtered = $raw->offset($request->start ?? 0)
+            ->limit($request->size ?? 10)->get();
+
+
+        if (count($sort) > 0 && !empty($sort) && $sort[0]->desc) {
+            $filtered->sortByDesc($sort[0]?->id ?? 'id');
+        }
+
+        return response()->json([
+            'data' => $filtered,
+            'total' => $count,
+            'request' => $request->all(),
+        ]);
+    }
 }

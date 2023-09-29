@@ -17,9 +17,7 @@ import axios from '@bundled-es-modules/axios/axios';
 import { Link } from 'react-router-dom';
 import LocalOfferRoundedIcon from '@mui/icons-material/LocalOfferRounded';
 import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded';
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import { Avatar } from '@mui/material';
-import { Money } from '@mui/icons-material';
 
 const drawerStyle = {
   boxShadow:
@@ -28,7 +26,7 @@ const drawerStyle = {
   height: '100%',
 };
 
-const Dashboard = () => {
+const CashIn = () => {
   const [show, setShow] = useState(false);
   const [points, setPoints] = useState('0.00');
   const [commission, setCommission] = useState('0.00');
@@ -43,17 +41,6 @@ const Dashboard = () => {
     setShow(open);
   };
 
-  const LinkItemComponent = ({ title, link, icon }) => {
-    return (
-      <ListItem key={title} disablePadding>
-        <ListItemButton to={link} component={Link}>
-          <ListItemIcon>{icon}</ListItemIcon>
-          <ListItemText primary={title} />
-        </ListItemButton>
-      </ListItem>
-    );
-  };
-
   const list = () => (
     <Box
       sx={drawerStyle}
@@ -62,16 +49,37 @@ const Dashboard = () => {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        <LinkItemComponent
-          title={'Cash-In'}
-          link={'/master-agent/cashin'}
-          icon={<Money color="primary" />}
-        />
-        <LinkItemComponent
-          title={'Players'}
-          link={'/master-agent/players'}
-          icon={<AssignmentIndIcon color="primary" />}
-        />
+        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton to="/master-agent/load" component={Link}>
+              <ListItemIcon>
+                {index % 2 === 0 ? (
+                  <InboxIcon color="primary" />
+                ) : (
+                  <MailIcon color="primary" />
+                )}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {index % 2 === 0 ? (
+                  <InboxIcon color="primary" />
+                ) : (
+                  <MailIcon color="primary" />
+                )}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
       </List>
     </Box>
   );
@@ -151,4 +159,4 @@ const PointsIcon = () => {
   );
 };
 
-export default Dashboard;
+export default CashIn;

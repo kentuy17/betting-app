@@ -1,4 +1,4 @@
-const CardCommission = ({ amount, title, linkText }) => {
+const CardCommission = ({ amount, title, linkText, icon }) => {
   return (
     <div className="card-commission col-lg-12 my-3 mx-1">
       <div className="card-body">
@@ -16,13 +16,14 @@ const CardCommission = ({ amount, title, linkText }) => {
               </p>
             </div>
           </div>
-          <div className="col-4 text-end">
-            <div className="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
+          <div className="col-4 flex" style={{ justifyContent: 'end' }}>
+            {/* <div className="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
               <i
                 className="ni ni-money-coins text-lg opacity-10"
                 aria-hidden="true"
               ></i>
-            </div>
+            </div> */}
+            {icon}
           </div>
         </div>
       </div>
