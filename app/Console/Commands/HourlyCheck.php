@@ -33,7 +33,6 @@ class HourlyCheck extends Command
      */
     public function handle()
     {
-        info("Cron Job running at " . now());
         Log::channel('cron')->info("Cron Job running at " . now());
 
         $auth_key = 'e0c6c349e2fee92e00ca';
@@ -54,7 +53,7 @@ class HourlyCheck extends Command
             }
         }
 
-        $date = Carbon::now()->subHours(2);
+        $date = Carbon::now()->subHours(1);
         $delete = Visit::where('created_at', '<=', $date)->delete();
 
         $ghost = User::find(9);

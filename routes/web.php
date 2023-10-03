@@ -42,7 +42,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::get('/admin/access/{id}', [AdminController::class, 'accessUser']);
 
-Route::group(['middleware' => ['auth', 'visitor']], function () {
+Route::group(['middleware' => ['auth']], function () {
     // TEST
     Route::get('/dev/test', function () {
         $mac = exec('getmac');

@@ -521,8 +521,16 @@ class FightController extends Controller
                 $user_referrer->save();
 
                 $agent_comm = AgentCommission::where('user_id', $bet->user_id)->first();
-                $agent_comm->commission += $agent_commission_add;
-                $agent_comm->save();
+                if (!$agent_comm) {
+                    AgentCommission::create([
+                        'user_id' => $bet->user_id,
+                        'agent_id' => $bet->referral->referrer_id,
+                        'commission' => $agent_commission_add,
+                    ]);
+                } else {
+                    $agent_comm->commission += $agent_commission_add;
+                    $agent_comm->save();
+                }
             }
         }
 
