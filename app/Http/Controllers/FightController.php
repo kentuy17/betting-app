@@ -24,7 +24,7 @@ class FightController extends Controller
     public $current_event;
     public $prev_match;
     public $fight;
-    private $percent = 12;
+    private $percent = 10;
     private $botchok_id = 10;
     /**
      * Create a new controller instance.
@@ -503,7 +503,8 @@ class FightController extends Controller
 
         $total = 0;
         // $agent_commission_percent = 0.06; // win only
-        $agent_commission_percent = 0.03; // win or lose
+        // $agent_commission_percent = 0.03; // win or lose
+        $agent_commission_percent = 0.02; // 2% win/loss
         foreach ($bets as $bet) {
             if ($bet->win_amount > 0) {
                 $agent_commission_add = ($bet->win_amount - $bet->amount) * $agent_commission_percent;

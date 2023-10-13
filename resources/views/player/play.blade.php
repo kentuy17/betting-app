@@ -49,7 +49,7 @@
     }
 
     /* #clappr{ width: 100%;height: 100%;position: relative; min-height: 320px; margin-bottom: 25px;}
-                                                        #clappr > div{ width:100%;height:100%;position: absolute;} */
+                                                          #clappr > div{ width:100%;height:100%;position: absolute;} */
     #play-container {
       display: flex;
       align-content: flex-start;
@@ -91,14 +91,14 @@
           <img id="poster-img" style="display: none;" src="{{ asset('img/poster.png') }}" alt="10-streak-win-promo">
 
           {{-- DaCast --}}
-          <div id="mux-player" style="position:relative;padding-bottom:56.25%;overflow:hidden;height:0;max-width:100%;">
+          {{-- <div id="mux-player" style="position:relative;padding-bottom:56.25%;overflow:hidden;height:0;max-width:100%;">
             <iframe id="11b41ea8-e33c-6818-4331-1cb7d38e87cf" src="https://iframe.dacast.com/live/a3e4275e-c022-b1b4-c231-3bef437168da/11b41ea8-e33c-6818-4331-1cb7d38e87cf" width="100%" height="100%" frameborder="0" scrolling="no" allow="autoplay;encrypted-media" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen style="position:absolute;top:0;left:0;"></iframe>
-          </div>
+          </div> --}}
 
           {{-- Onestream --}}
-          {{-- <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
-            <iframe src="https://player.onestream.live/embed?token=MjA3ODgwNA==&type=up" style="position:absolute;width:100%;height:100%;overflow: hidden;" scrolling="no" frameborder="0" allow="autoplay" allowfullscreen> </iframe>
-          </div> --}}
+          <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
+            <iframe src="https://player.onestream.live/embed?token=ZF9hdXRoXzIwNzg4MDRfMXR0NDJtZnM0&type=psk" style="position:absolute;width:100%;height:100%;overflow: hidden;" scrolling="no" frameborder="0" allow="autoplay" allowfullscreen> </iframe>
+          </div>
         </div>
       </div>
     </div>
