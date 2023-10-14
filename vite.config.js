@@ -4,9 +4,16 @@ import vue from "@vitejs/plugin-vue";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
+  server: {
+    watch: { usePolling: true }
+  },
   plugins: [
     vue(),
-    react(),
+    react({
+      input: [
+        'resources/react/master-agent.jsx'
+      ],
+    }),
     laravel({
       input: [
         "resources/sass/app.scss",
@@ -17,12 +24,13 @@ export default defineConfig({
         "resources/js/fight-vue.js",
         "resources/js/ghost-vue.js",
         "resources/js/notif-vue.js",
-        "resources/react/master-agent.jsx", // react
         "public/js/play.js",
         "public/js/fight.js",
         "public/js/ghost.js",
       ],
       refresh: true,
     }),
+    // reactRefresh()
   ],
+
 });

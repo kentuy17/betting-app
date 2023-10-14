@@ -6,9 +6,11 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import {
   QueryClient,
   QueryClientProvider,
+  useMutation,
   useQuery,
 } from '@tanstack/react-query';
 import { Add, Delete, Edit } from '@mui/icons-material';
+import { axios } from '@bundled-es-modules/axios';
 
 const Example = () => {
   const [columnFilters, setColumnFilters] = useState([]);
@@ -57,24 +59,28 @@ const Example = () => {
     return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
   };
 
-  const formatter = (value) => {
-    let points = value?.user?.points;
-    let convert =
-      typeof points == 'undefined' || points == '0'
-        ? '0.00'
-        : new Intl.NumberFormat('en-US').format(points.toFixed(2));
-    return typeof points == 'undefined' ? (
-      <Skeleton width={getRandomInt(20, 50)} animation="wave" />
-    ) : (
-      <Box display="flex">
-        <Tooltip arrow placement="left" title="Add Points">
-          <IconButton onClick={() => prompt('Enter Amount to Add: ', 0)}>
-            <Add sx={{ color: '#0d6efd' }} />
-          </IconButton>
-        </Tooltip>
-        <Typography sx={{ color: 'yellow', mt: 1 }}>{convert}</Typography>
-      </Box>
-    );
+  const mutation = useMutation({
+    mutationFn: async (data) => {
+      const response = await axios.post('/master-agent/topup', {
+        userId: data.userId,
+        amount: data.amount,
+      });
+      return response;
+    },
+  });
+
+  const handleAddPoints = (userId) => {
+    try {
+      let amountToAdd = prompt('Enter Amount to Add: ', 0);
+      mutation.mutate({
+        userId: userId,
+        amount: amountToAdd,
+      });
+      alert('Points successfully added!');
+    } catch (error) {
+      console.log(error);
+      alert('Oops! something went wrong!');
+    }
   };
 
   const columns = useMemo(
@@ -82,21 +88,55 @@ const Example = () => {
       {
         accessorKey: 'user.username',
         header: 'Usermame',
+        size: 18,
       },
       {
         accessorKey: 'user.points',
         header: 'Points',
-        accessorFn: (row) => {
-          return formatter(row);
+        size: 18,
+        muiTableBodyCellProps: () => {
+          return {
+            style: {
+              paddingLeft: 0,
+            },
+          };
         },
+        Cell: ({ _, row }) =>
+          row.original.user !== undefined ? (
+            <Box
+              display="flex"
+              pl="0"
+              justifyContent="flex-start"
+              style={{ padding: 0, margin: 0 }}
+            >
+              <Tooltip arrow placement="left" title="Add Points">
+                <IconButton
+                  onClick={() => handleAddPoints(row.original?.user?.id)}
+                >
+                  <Add sx={{ color: '#0d6efd' }} />
+                </IconButton>
+              </Tooltip>
+              <Typography align="right" sx={{ color: 'yellow', mt: 1 }}>
+                {parseFloat(
+                  row.original.user !== undefined
+                    ? row.original.user.points
+                    : '0'
+                ).toFixed(2)}
+              </Typography>
+            </Box>
+          ) : (
+            <Skeleton width={getRandomInt(20, 50)} animation="wave" />
+          ),
       },
       {
         accessorKey: 'created_at',
         header: 'Created',
+        size: 18,
       },
       {
         accessorKey: 'updated_at',
         header: 'Updated',
+        size: 18,
       },
     ],
     []

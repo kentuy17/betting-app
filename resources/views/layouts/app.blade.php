@@ -16,8 +16,7 @@
 
   <!-- Scripts -->
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css"
-    type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" type="text/css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" type="text/css">
   {{--
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css" />
@@ -28,8 +27,7 @@
   {{--
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
 
-  @vite(['resources/sass/app.scss', 'public/css/chat.scss', 'resources/js/app.js', 'resources/css/app.css',
-  'resources/js/notif-vue.js'])
+  @vite(['resources/sass/app.scss', 'public/css/chat.scss', 'resources/js/app.js', 'resources/css/app.css', 'resources/js/notif-vue.js'])
 
   <!-- Custom -->
   <link rel="stylesheet" href="{{ asset('css/dark-mode.css') }}" type="text/css">
@@ -89,9 +87,7 @@
 <body class="dark-mode">
   <header>
     <nav class="flex flex-wrap items-center justify-between w-full py-1 md:py-0 px-4 text-lg text-gray-700 bg-white">
-      <svg xmlns="http://www.w3.org/2000/svg" id="menu-button"
-        class="h-6 w-6 cursor-pointer md:hidden block red-tooltip" fill="none" viewBox="0 0 24 24"
-        stroke="currentColor">
+      <svg xmlns="http://www.w3.org/2000/svg" id="menu-button" class="h-6 w-6 cursor-pointer md:hidden block red-tooltip" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
       </svg>
       <div>
@@ -106,103 +102,74 @@
       <div class="hidden w-full md:flex md:items-center md:w-auto" id="menu">
         <ul class="text-base md:flex md:justify-between md:pt-0 uppercase">
           @guest
-          @if (Route::has('login'))
-          <li><a class="md:p-4 py-2 block" href="{{ route('login') }}">{{ __('Login') }}</a></li>
-          @endif
+            @if (Route::has('login'))
+              <li><a class="md:p-4 py-2 block" href="{{ route('login') }}">{{ __('Login') }}</a></li>
+            @endif
 
-          @if (Route::has('register'))
-          <li><a class="md:p-4 py-2 block" href="{{ route('register') }}">{{ __('Register') }}</a></li>
-          @endif
-
+            @if (Route::has('register'))
+              <li><a class="md:p-4 py-2 block" href="{{ route('register') }}">{{ __('Register') }}</a></li>
+            @endif
           @else
-          @if (Auth::user()->user_role->name == 'Admin')
-          <li><a class="md:p-4 py-2 block" href="/admin">Manage Users</a></li>
-          <li><a class="md:p-4 py-2 block" href="{{ route('roles.index') }}">Roles</a></li>
-          <li><a class="md:p-4 py-2 block" href="/admin/incorpo">Incorpo</a></li>
-          @endif
+            @if (Auth::user()->user_role->name == 'Admin')
+              <li><a class="md:p-4 py-2 block" href="/admin">Manage Users</a></li>
+              <li><a class="md:p-4 py-2 block" href="{{ route('roles.index') }}">Roles</a></li>
+              <li><a class="md:p-4 py-2 block" href="/admin/incorpo">Incorpo</a></li>
+            @endif
 
-          @if (Auth::user()->user_role->name == 'Operator')
-          <li><a class="md:pl-4 py-2 block" href="{{ route('operator.fight') }}">FIGHT</a></li>
-          <li><a class="md:pl-4 py-2 block" href="{{ route('operator.derby.event') }}">EVENT</a></li>
-          @endif
+            @if (Auth::user()->user_role->name == 'Operator')
+              <li><a class="md:pl-4 py-2 block" href="{{ route('operator.fight') }}">FIGHT</a></li>
+              <li><a class="md:pl-4 py-2 block" href="{{ route('operator.derby.event') }}">EVENT</a></li>
+            @endif
 
-          @if (Auth::user()->user_role->name == 'Auditor')
-          <li><a class="md:pl-4 py-2 block" href="{{ route('auditor.transactions-operator') }}">TRANSACTIONS</a></li>
-          @endif
+            @if (Auth::user()->user_role->name == 'Auditor')
+              <li><a class="md:pl-4 py-2 block" href="{{ route('auditor.transactions-operator') }}">TRANSACTIONS</a></li>
+            @endif
 
-          @if (Auth::user()->user_role->name == 'Cash-in Operator')
-          <li><a
-              class="md:pl-4 py-2 block @if(Route::current()->getName() == 'operator.transactions') {{ 'active' }} @endif"
-              href="{{ route('operator.transactions') }}">TRANSACTIONS</a></li>
-          <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'refill') {{ 'active' }} @endif"
-              href="{{ route('refill') }}">REFILL</a></li>
-          <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'remit') {{ 'active' }} @endif"
-              href="{{ route('remit') }}">REMIT</a></li>
-          <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'requests') {{ 'active' }} @endif"
-              href="{{ route('requests') }}">REQUESTS</a></li>
-          @endif
+            @if (Auth::user()->user_role->name == 'Cash-in Operator')
+              <li><a class="md:pl-4 py-2 block @if (Route::current()->getName() == 'operator.transactions') {{ 'active' }} @endif" href="{{ route('operator.transactions') }}">TRANSACTIONS</a></li>
+              <li><a class="md:pl-4 py-2 block @if (Route::current()->getName() == 'refill') {{ 'active' }} @endif" href="{{ route('refill') }}">REFILL</a></li>
+              <li><a class="md:pl-4 py-2 block @if (Route::current()->getName() == 'remit') {{ 'active' }} @endif" href="{{ route('remit') }}">REMIT</a></li>
+              <li><a class="md:pl-4 py-2 block @if (Route::current()->getName() == 'requests') {{ 'active' }} @endif" href="{{ route('requests') }}">REQUESTS</a></li>
+            @endif
 
-          @if(Auth::user()->user_role->name == 'Cash-out Operator')
-          <li><a
-              class="md:pl-4 py-2 block @if(Route::current()->getName() == 'operator.transactions') {{ 'active' }} @endif"
-              href="{{ route('operator.transactions') }}">TRANSACTIONS</a></li>
-          <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'remit') {{ 'active' }} @endif"
-              href="{{ route('remit') }}">REMIT</a></li>
-          <li><a class="md:pl-4 py-2 block @if(Route::current()->getName() == 'requests') {{ 'active' }} @endif"
-              href="{{ route('requests') }}">REQUESTS</a></li>
-          @endif
+            @if (Auth::user()->user_role->name == 'Cash-out Operator')
+              <li><a class="md:pl-4 py-2 block @if (Route::current()->getName() == 'operator.transactions') {{ 'active' }} @endif" href="{{ route('operator.transactions') }}">TRANSACTIONS</a></li>
+              <li><a class="md:pl-4 py-2 block @if (Route::current()->getName() == 'remit') {{ 'active' }} @endif" href="{{ route('remit') }}">REMIT</a></li>
+              <li><a class="md:pl-4 py-2 block @if (Route::current()->getName() == 'requests') {{ 'active' }} @endif" href="{{ route('requests') }}">REQUESTS</a></li>
+            @endif
 
-          @if (hasAccess('Cash-out Operator') || hasAccess('Cash-in Operator'))
-          <li><a
-              class="md:pl-4 py-2 block @if(Route::current()->getName() == 'operator.password-reset') {{ 'active' }} @endif"
-              href="{{ route('operator.password-reset') }}">PASSWORD RESET</a></li>
-          @endif
+            @if (hasAccess('Cash-out Operator') || hasAccess('Cash-in Operator'))
+              <li><a class="md:pl-4 py-2 block @if (Route::current()->getName() == 'operator.password-reset') {{ 'active' }} @endif" href="{{ route('operator.password-reset') }}">PASSWORD RESET</a></li>
+            @endif
 
-          @if (Auth::user()->user_role->name == 'Player')
-          <li><a
-              class="md:pl-4 py-2 block @if(Route::current()->getName() == 'play') {{ 'active-nav' }} @endif py-2 block"
-              href="{{ route('play') }}">Play</a></li>
-          <li><a
-              class="md:pl-4 py-2 block @if(Route::current()->getName() == 'deposit') {{ 'active-nav' }} @endif py-2 block"
-              href="{{ route('deposit') }}">CASH-IN</a></li>
-          <li><a
-              class="md:pl-4 py-2 block @if(Route::current()->getName() == 'withdraw') {{ 'active-nav' }} @endif py-2 block"
-              href="{{ route('withdraw') }}">CASH-OUT</a></li>
-          @endif
+            @if (Auth::user()->user_role->name == 'Player')
+              <li><a class="md:pl-4 py-2 block @if (Route::current()->getName() == 'play') {{ 'active-nav' }} @endif py-2 block" href="{{ route('play') }}">Play</a></li>
+              <li><a class="md:pl-4 py-2 block @if (Route::current()->getName() == 'deposit') {{ 'active-nav' }} @endif py-2 block" href="{{ route('deposit') }}">CASH-IN</a></li>
+              <li><a class="md:pl-4 py-2 block @if (Route::current()->getName() == 'withdraw') {{ 'active-nav' }} @endif py-2 block" href="{{ route('withdraw') }}">CASH-OUT</a></li>
+            @endif
 
-          @if(Auth::user()->agent)
-          <li><a
-              class="md:pl-4 py-2 block @if(Route::current()->getName() == 'agent.players') {{ 'active-nav' }} @endif py-2 block"
-              href="{{ route('agent.players') }}">REFERRALS</a></li>
-          @endif
+            @if (Auth::user()->agent)
+              <li><a class="md:pl-4 py-2 block @if (Route::current()->getName() == 'agent.players') {{ 'active-nav' }} @endif py-2 block" href="{{ route('agent.players') }}">REFERRALS</a></li>
+            @endif
 
-          <li class="nav-item dropdown" id="profile-nav">
-            <a id="navbarDropdown" class="md:p-4 py-2 block dropdown-toggle" href="#" role="button"
-              data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>{{ Auth::user()->username
-              }}</a>
-            <div class="dropdown-menu dropdown-menu-right hide" style="left: inherit; right: 0px;">
-              <a class="@if(Route::current()->getName() == 'users.profile') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block"
-                href="{{ route('users.profile') }}">My Profile</a>
-              @if (Auth::user()->user_role->name == 'Admin')
-              <a class="@if(Route::current()->getName() == 'admin.shares') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block"
-                href="{{ route('admin.shares') }}">Shares</a>
-              <a class="@if(Route::current()->getName() == 'admin.agents') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block"
-                href="{{ route('admin.agents') }}">Agents</a>
-              @endif
-              @if (Auth::user()->user_role->name == 'Player')
-              <a class="@if(Route::current()->getName() == 'player.bethistory') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block"
-                href="{{ route('player.bethistory') }}">Bet History</a>
-              <a class="@if(Route::current()->getName() == 'player.player-transaction') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block"
-                href="{{ route('player.player-transaction') }}">Transaction</a>
-              @endif
-              <a class="dropdown-item" href="{{ route('logout') }}"
-                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout')
-                }}</a>
-              <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                @csrf
-              </form>
-            </div>
-          </li>
+            <li class="nav-item dropdown" id="profile-nav">
+              <a id="navbarDropdown" class="md:p-4 py-2 block dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>{{ Auth::user()->username }}</a>
+              <div class="dropdown-menu dropdown-menu-right hide" style="left: inherit; right: 0px;">
+                <a class="@if (Route::current()->getName() == 'users.profile') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('users.profile') }}">My Profile</a>
+                @if (Auth::user()->user_role->name == 'Admin')
+                  <a class="@if (Route::current()->getName() == 'admin.shares') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('admin.shares') }}">Shares</a>
+                  <a class="@if (Route::current()->getName() == 'admin.agents') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('admin.agents') }}">Agents</a>
+                @endif
+                @if (Auth::user()->user_role->name == 'Player')
+                  <a class="@if (Route::current()->getName() == 'player.bethistory') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('player.bethistory') }}">Bet History</a>
+                  <a class="@if (Route::current()->getName() == 'player.player-transaction') {{ 'active-nav' }} @endif dropdown-item md:pl-4 py-2 block" href="{{ route('player.player-transaction') }}">Transaction</a>
+                @endif
+                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                  @csrf
+                </form>
+              </div>
+            </li>
           @endguest
         </ul>
       </div>
@@ -213,13 +180,13 @@
       @yield('content')
     </main>
     @auth
-    @if(Auth::user()->user_role->name == 'Player' && Auth::user()->legit)
-    {{-- @include('layouts.components.floating-chat') --}}
-    @include('layouts.components.messenger')
-    <script>
-      var _user_id = {!! Auth::user()->id !!}
-    </script>
-    @endif
+      @if (Auth::user()->user_role->name == 'Player' && Auth::user()->legit)
+        {{-- @include('layouts.components.floating-chat') --}}
+        @include('layouts.components.messenger')
+        <script>
+          var _user_id = {!! Auth::user()->id !!}
+        </script>
+      @endif
     @endauth
   </div>
 </body>
@@ -231,12 +198,12 @@
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js" type="text/javascript"></script>
 {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> --}}
 <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js" type="text/javascript" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js"
-  type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js" type="text/javascript"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js" type="text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" type="text/javascript"></script>
 
 @yield('additional-scripts')
+@vite('resources/js/socket-vue.js')
 <script>
   const button = document.querySelector('#menu-button');
   const menu = document.querySelector('#menu');
@@ -244,7 +211,7 @@
     menu.classList.toggle('hidden');
   });
 
-  $(function(){
+  $(function() {
     setTimeout(function() {
       $('.fade-message').slideUp();
     }, 5000);

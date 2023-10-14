@@ -185,7 +185,7 @@ class OperatorController extends Controller
             $trans->status = $request->action == 'reject' ? 'failed' : 'completed';
             $trans->processedBy = Auth::user()->id;
             $trans->reference_code = $request->ref_code;
-            $trans->note = $request->note;
+            $trans->note = $request->action == 'reject' ? $request->note : 'DONE';
             $trans->completed_at = date('Y-m-d H:i:s');
             $trans->save();
 

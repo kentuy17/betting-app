@@ -153,4 +153,26 @@ class AgentController extends Controller
             'request' => $request->all(),
         ]);
     }
+
+    public function topUpPoints(Request $request)
+    {
+        try {
+            $referral = Referral::where('user_id', $request->userId)->first();
+            $players = Referral::with('user')->where('referrer_id', $referral->referrer_id)->get();
+            $user = User::find($request->userId);
+            $user->points += $request->amount;
+            $user->save();
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'status' => 500,
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'total' => $players->count(),
+            'data' => $players,
+        ], 200);
+    }
 }

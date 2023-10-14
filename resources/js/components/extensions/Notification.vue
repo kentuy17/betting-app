@@ -6,8 +6,7 @@
     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right hide" style="left: inherit; right: 0px;">
       <span class="dropdown-item dropdown-header">{{ unread_count }} Notifications</span>
       <div class="dropdown-divider"></div>
-      <a href="#" @click='triggerAlert()' id="allow-notifications" class="dropdown-item dropdown-footer">See All
-        Notifications</a>
+      <a @click='triggerAlert()' id="allow-notifications" class="dropdown-item dropdown-footer">See All Notifications</a>
     </div>
   </div>
 </template>
@@ -33,14 +32,33 @@ export default {
             this.unread_count++;
             console.log(e.cashin);
             this.triggerAlert();
+            // this.testAlert()
           });
       })
 
   },
   methods: {
+    testAlert() {
+      Notification.requestPermission().then(function (permission) {
+        if (permission != "granted") {
+          alert("Notification failed!");
+          return;
+        }
+
+        navigator.serviceWorker.register('/js/ws.js');
+        navigator.serviceWorker.ready.then(function (registration) {
+          registration.showNotification("Hello world", {
+            body: "Here is the body!"
+          })
+        }).catch((err) => {
+          console.log(err);
+        });
+
+      });
+    },
+
     triggerAlert() {
-      console.log('test');
-      navigator.serviceWorker.register('../../app.js');
+      navigator.serviceWorker.register('/js/ws.js');
       Notification.requestPermission(function (result) {
         if (result === 'granted') {
           navigator.serviceWorker.ready.then(function (registration) {
@@ -55,14 +73,14 @@ export default {
       } else if (Notification.permission === "granted") {
         // Check whether notification permissions have already been granted;
         // if so, create a notification
-        const notification = new Notification("New Cash-in Received!");
+        new Notification("New Cash-in Received!");
         // …
       } else if (Notification.permission !== "denied") {
         // We need to ask the user for permission
         Notification.requestPermission().then((permission) => {
           // If the user accepts, let's create a notification
           if (permission === "granted") {
-            const notification = new Notification("New Cash-in Received!");
+            Notification("New Cash-in Received!");
             // …
           }
         });
