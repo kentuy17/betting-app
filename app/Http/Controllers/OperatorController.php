@@ -375,21 +375,6 @@ class OperatorController extends Controller
         ], 200);
     }
 
-    public function get($id)
-    {
-        $trans = Transactions::where('user_id', $id)
-            ->with('user')
-            ->with('operator')
-            ->orderBy('id', 'desc')
-            ->where('action', $action)
-            ->get();
-
-        return DataTables::of($trans)
-            ->addIndexColumn()
-            ->rawColumns(['action'])
-            ->make(true);
-    }
-
     public function getBetHistoryByUserId($id)
     {
         $history = BetHistory::where('user_id', $id)

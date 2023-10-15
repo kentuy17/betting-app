@@ -986,7 +986,7 @@
                     <div class="col-12">
                       <label class="text-black form-label mt-4">Phone No.</label>
                       <div class="input-group">
-                        <input id="phone_no" name="phone_no" class="form-control disabled" type="text" value="{{ $user->phone_no }}" placeholder="09*********" readonly>
+                        <input id="phone_no" name="phone_no" class="form-control" type="text" value="{{ $user->phone_no }}" placeholder="09*********" {{ !Auth::user()->agent ? 'readonly' : '' }}>
                       </div>
                       @if (session('error'))
                         <p class="text-xs pt-1 text-danger">{{ session('error') }}</p>
@@ -1000,7 +1000,7 @@
                     <div class="col-md-6">
                       <label class="text-black form-label mt-4">New Password</label>
                       <div class="input-group">
-                        <input id="new_pass" name="new_pass" class="form-control disabled" type="password" placeholder="******" autocomplete="new-password">
+                        <input id="new_pass" name="new_pass" class="form-control" type="password" placeholder="******" autocomplete="new-password">
                       </div>
                     </div>
                     <div class="col-md-6">
