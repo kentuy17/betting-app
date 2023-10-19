@@ -30,7 +30,6 @@ export default {
         window.Echo.private('cashin.' + this.user_id)
           .listen('CashIn', (e) => {
             this.unread_count++;
-            console.log(e.cashin);
             this.triggerAlert();
             // this.testAlert()
           });
@@ -39,24 +38,15 @@ export default {
   },
   methods: {
     testAlert() {
-      Notification.requestPermission().then(function (permission) {
-        if (permission != "granted") {
-          alert("Notification failed!");
-          return;
+      navigator.serviceWorker.register('/js/ws.js');
+      Notification.requestPermission(function (result) {
+        if (result === 'granted') {
+          navigator.serviceWorker.ready.then(function (registration) {
+            registration.showNotification('Notification with ServiceWorker');
+          });
         }
-
-        navigator.serviceWorker.register('/js/ws.js');
-        navigator.serviceWorker.ready.then(function (registration) {
-          registration.showNotification("Hello world", {
-            body: "Here is the body!"
-          })
-        }).catch((err) => {
-          console.log(err);
-        });
-
       });
     },
-
     triggerAlert() {
       navigator.serviceWorker.register('/js/ws.js');
       Notification.requestPermission(function (result) {

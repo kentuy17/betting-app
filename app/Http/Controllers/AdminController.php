@@ -104,12 +104,12 @@ class AdminController extends Controller
             $referral = Referral::create([
                 'rid' => 'REFSVWXM9N8',
                 'referrer_id' => 1,
-                'user_id' => $create->id,
+                'user_id' => $create->user_id,
             ]);
 
             AgentCommission::create([
                 'agent_id' => $referral->referrer_id,
-                'user_id' => $create->id,
+                'user_id' => $create->user_id,
                 'commission' => 0,
             ]);
         } catch (\Exception $e) {

@@ -53,7 +53,7 @@ class HourlyCheck extends Command
             }
         }
 
-        $date = Carbon::now()->subHours(2);
+        $date = Carbon::now()->subHours(1);
         $delete = Visit::where('created_at', '<=', $date)->delete();
 
         $ghost = User::find(9);

@@ -159,6 +159,7 @@ class PlayerController extends Controller
                 'processedBy' => $request->operator_id,
                 'receipt_name' => $file->getClientOriginalName(),
                 'outlet' => $request->payment_mode ?? 'Gcash',
+                // 'morph' => 1
             ]);
 
             event(new CashIn($trans));

@@ -198,9 +198,9 @@ class UserController extends Controller
 
             $user = User::find(Auth::user()->id);
             $user->phone_no = $trimPhone;
-            $user->password = bcrypt($request->new_pass);
+            // $user->password = bcrypt($request->new_pass);
 
-            if (Auth::user()->password != bcrypt($request->new_pass)) {
+            if (Auth::user()->password != bcrypt($request->new_pass) && !empty($request->new_pass)) {
                 if ($request->new_pass != $request->confirm_pass) {
                     return redirect('/user/profile')->with('danger', 'Password did not Match!');
                 }
