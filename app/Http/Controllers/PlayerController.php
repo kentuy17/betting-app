@@ -158,6 +158,7 @@ class PlayerController extends Controller
                 'processedBy' => $request->operator_id,
                 'receipt_name' => $file->getClientOriginalName(),
                 'outlet' => $request->payment_mode ?? 'Gcash',
+                // 'morph' => 1
             ]);
 
             event(new CashIn($trans));
@@ -201,7 +202,7 @@ class PlayerController extends Controller
                     $referral->promo_done = true;
                     $referral->save();
 
-                    IpBan::create([ 'ip_address' => $user->email ]);
+                    IpBan::create(['ip_address' => $user->email]);
                 }
             }
 
