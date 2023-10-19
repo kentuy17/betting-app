@@ -14,10 +14,12 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { useState, useEffect } from 'react';
 import axios from '@bundled-es-modules/axios/axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LocalOfferRoundedIcon from '@mui/icons-material/LocalOfferRounded';
 import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded';
+import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import { Avatar } from '@mui/material';
 import { Money } from '@mui/icons-material';
 
@@ -29,9 +31,11 @@ const drawerStyle = {
 };
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [points, setPoints] = useState('0.00');
   const [commission, setCommission] = useState('0.00');
+  const [playerCnt, setPlayerCnt] = useState('0');
   const toggleDrawer = (open) => (event) => {
     if (
       event.type === 'keydown' &&
@@ -80,8 +84,36 @@ const Dashboard = () => {
     axios.get('/master-agent/points').then((res) => {
       setPoints(res.data.points);
       setCommission(res.data.commission);
+      setPlayerCnt(res.data.players);
     });
   }, []);
+
+  const handlePointsClick = () => {
+    window.location.href = '/deposit';
+  };
+
+  const handleCommissionClick = async () => {
+    try {
+      let pointsToConvert = prompt('Enter points to convert:', 0);
+      if (pointsToConvert === null) return;
+
+      let convert = await axios.post('/agent/commission-convert', {
+        points: pointsToConvert,
+      });
+
+      alert('Successfully converted into points!');
+
+      setCommission(convert.data.data.current_commission);
+      setPoints(convert.data.data.points);
+    } catch (error) {
+      let errMsg = error.response?.data?.message;
+      alert(errMsg);
+    }
+  };
+
+  const handlePlayerClick = () => {
+    navigate('/master-agent/players');
+  };
 
   return (
     <>
@@ -97,32 +129,40 @@ const Dashboard = () => {
               component="div"
               sx={{ flexGrow: 1, display: { sm: 'block' } }}
             >
-              DASHBOARD
+              AGENT DASHBOARD
             </Typography>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              sx={{ mr: 2 }}
-              onClick={toggleDrawer(true)}
-            >
-              <MenuIcon />
-            </IconButton>
           </div>
           <div className="card-body">
             <div className="col-lg-12">
               <CardCommission
                 title={'Points'}
-                amount={points}
+                amount={parseFloat(points).toFixed(2)}
                 linkText={'Manage'}
                 icon={<PointsIcon />}
+                onClick={handlePointsClick}
+                tooltip="Manage Points"
               />
               <CardCommission
                 title={'Commission'}
                 amount={commission}
-                linkText={'Manage'}
+                linkText={'Convert to points'}
+                linkIcon={
+                  <CurrencyExchangeIcon
+                    fontSize="small"
+                    sx={{ marginRight: 0.5 }}
+                  />
+                }
                 icon={<CommissionIcon />}
+                onClick={handleCommissionClick}
+                tooltip="Manage Commission"
+              />
+              <CardCommission
+                title={'Players'}
+                amount={playerCnt}
+                linkText={'View'}
+                icon={<PlayerIcon />}
+                onClick={handlePlayerClick}
+                tooltip="View Players"
               />
             </div>
           </div>
@@ -147,6 +187,14 @@ const PointsIcon = () => {
   return (
     <Avatar sx={{ bgcolor: '#0d6efd', width: 60, height: 60 }}>
       <AccountBalanceWalletRoundedIcon />
+    </Avatar>
+  );
+};
+
+const PlayerIcon = () => {
+  return (
+    <Avatar sx={{ bgcolor: '#0d6efd', width: 60, height: 60 }}>
+      <PeopleRoundedIcon />
     </Avatar>
   );
 };

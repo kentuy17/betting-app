@@ -127,7 +127,8 @@ class AgentController extends Controller
     {
         return response()->json([
             'points' => Auth::user()->points,
-            'commission' => Auth::user()->agent->current_commission
+            'commission' => Auth::user()->agent->current_commission,
+            'players' => Auth::user()->agent->player_count,
         ]);
     }
 
@@ -158,10 +159,31 @@ class AgentController extends Controller
     {
         try {
             $referral = Referral::where('user_id', $request->userId)->first();
-            $players = Referral::with('user')->where('referrer_id', $referral->referrer_id)->get();
+
+            if ($referral->referrer_id != Auth::user()->id) {
+                return response()->json([
+                    'error' => 'Invalid request!',
+                    'status' => 402,
+                ], 402);
+            }
+
+            if (Auth::user()->points < $request->amount) {
+                return response()->json([
+                    'error' => 'Insufficient points!',
+                    'status' => 402,
+                ], 402);
+            }
+
+            $agent = Auth::user();
+            $agent->points -= $request->amount;
+            $agent->save();
+
+
             $user = User::find($request->userId);
             $user->points += $request->amount;
             $user->save();
+
+            $players = Referral::with('user')->where('referrer_id', $referral->referrer_id)->get();
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),

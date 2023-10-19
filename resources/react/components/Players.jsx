@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MaterialReactTable } from 'material-react-table';
 import { Box, IconButton, Tooltip, Typography, Skeleton } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import CurrencyRubleIcon from '@mui/icons-material/CurrencyRuble';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import {
   QueryClient,
@@ -10,16 +11,34 @@ import {
   useQuery,
 } from '@tanstack/react-query';
 import { Add, Delete, Edit } from '@mui/icons-material';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { axios } from '@bundled-es-modules/axios';
+
+const queryClient = new QueryClient();
 
 const Example = () => {
   const [columnFilters, setColumnFilters] = useState([]);
   const [globalFilter, setGlobalFilter] = useState('');
   const [sorting, setSorting] = useState([]);
+  const [fakeData, setFakeData] = useState({});
+  const [points, setPoints] = useState(0);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
   });
+
+  const refreshPoints = () => {
+    axios.get('/user/points').then((res) => {
+      setPoints(res.data.points);
+    });
+  };
+
+  useEffect(() => {
+    axios.get('/user/points').then((res) => {
+      setPoints(res.data.points);
+    });
+  }, []);
 
   const { data, isError, isFetching, isLoading, refetch } = useQuery({
     queryKey: [
@@ -34,7 +53,7 @@ const Example = () => {
       const fetchURL = new URL(
         '/master-agent/player-list',
         process.env.NODE_ENV === 'production'
-          ? 'https://www.material-react-table.com'
+          ? 'https://sww23-go.live'
           : 'http://127.0.0.1:8006'
       );
       fetchURL.searchParams.set(
@@ -48,6 +67,7 @@ const Example = () => {
 
       const response = await fetch(fetchURL.href);
       const json = await response.json();
+      setFakeData(json);
       return json;
     },
     keepPreviousData: true,
@@ -61,22 +81,36 @@ const Example = () => {
 
   const mutation = useMutation({
     mutationFn: async (data) => {
-      const response = await axios.post('/master-agent/topup', {
-        userId: data.userId,
-        amount: data.amount,
-      });
+      const response = await axios.post('/master-agent/topup', data);
+      refreshPoints();
       return response;
+    },
+    onSuccess: async (result, variables, context) => {
+      await queryClient.setQueryData(['table-data'], result.data);
+      setFakeData(result.data);
+      alert('Points successfully added!');
     },
   });
 
   const handleAddPoints = (userId) => {
     try {
-      let amountToAdd = prompt('Enter Amount to Add: ', 0);
+      let amountToAdd = prompt('Enter Amount to Load: ', 0);
+      if (amountToAdd === null) return;
+
+      if (amountToAdd > points) {
+        alert('Amount exceeds points!');
+        return;
+      }
+
+      if (amountToAdd < 0) {
+        alert('Amount cannot be negative!');
+        return;
+      }
+
       mutation.mutate({
         userId: userId,
         amount: amountToAdd,
       });
-      alert('Points successfully added!');
     } catch (error) {
       console.log(error);
       alert('Oops! something went wrong!');
@@ -98,6 +132,7 @@ const Example = () => {
           return {
             style: {
               paddingLeft: 0,
+              paddingRight: 10,
             },
           };
         },
@@ -107,7 +142,13 @@ const Example = () => {
               display="flex"
               pl="0"
               justifyContent="flex-start"
-              style={{ padding: 0, margin: 0 }}
+              style={{
+                marginLeft: 0,
+                marginRight: 20,
+                padding: 0,
+                display: 'flex',
+                justifyContent: 'space-between',
+              }}
             >
               <Tooltip arrow placement="left" title="Add Points">
                 <IconButton
@@ -139,7 +180,7 @@ const Example = () => {
         size: 18,
       },
     ],
-    []
+    [points]
   );
 
   const theme = useMemo(
@@ -154,8 +195,15 @@ const Example = () => {
     <ThemeProvider theme={theme}>
       <MaterialReactTable
         columns={columns}
-        data={data?.data ?? []} //data is undefined on first render
+        data={fakeData?.data ?? []} //data is undefined on first render
         initialState={{ showColumnFilters: false }}
+        muiTableBodyCellProps={() => {
+          return {
+            sx: {
+              borderRight: '1px solid #f0f0f0',
+            },
+          };
+        }}
         manualFiltering
         manualPagination
         manualSorting
@@ -169,13 +217,22 @@ const Example = () => {
         onPaginationChange={setPagination}
         onSortingChange={setSorting}
         renderTopToolbarCustomActions={() => (
-          <Tooltip arrow title="Refresh Data">
-            <IconButton onClick={() => refetch()}>
-              <RefreshIcon />
-            </IconButton>
+          // <Tooltip arrow title="Refresh Data">
+          //   <IconButton onClick={() => refetch()}>
+          //     <RefreshIcon />
+          //   </IconButton>
+          // </Tooltip>
+          <Tooltip arrow placement="right" title="Current Points">
+            <Button
+              color="warning"
+              variant="outlined"
+              startIcon={<CurrencyRubleIcon />}
+            >
+              {parseFloat(points).toFixed(2)}
+            </Button>
           </Tooltip>
         )}
-        rowCount={data?.total ?? 0}
+        rowCount={fakeData?.total ?? 0}
         state={{
           columnFilters,
           globalFilter,
@@ -189,8 +246,6 @@ const Example = () => {
     </ThemeProvider>
   );
 };
-
-const queryClient = new QueryClient();
 
 const ExampleWithReactQueryProvider = () => (
   <QueryClientProvider client={queryClient}>

@@ -203,7 +203,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" type="text/javascript"></script>
 
 @yield('additional-scripts')
-@vite('resources/js/socket-vue.js')
+{{-- @vite('resources/js/socket-vue.js') --}}
 <script>
   const button = document.querySelector('#menu-button');
   const menu = document.querySelector('#menu');
