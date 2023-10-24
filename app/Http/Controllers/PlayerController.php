@@ -396,7 +396,13 @@ class PlayerController extends Controller
     {
         $is_online = Setting::where('name', 'video_display')->first()->value ?? false;
         $agent = Agent::with('referral')->where('user_id', Auth::user()->id)->first();
-        return view('layouts.landing', compact('is_online', 'agent'));
+        $master_agent = false;
+
+        if ($agent) {
+            $master_agent = $agent->is_master_agent;
+        }
+
+        return view('layouts.landing', compact('is_online', 'master_agent'));
     }
 
     public function watchMovie()

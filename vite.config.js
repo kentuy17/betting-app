@@ -9,11 +9,7 @@ export default defineConfig({
   },
   plugins: [
     vue(),
-    react({
-      input: [
-        'resources/react/master-agent.jsx'
-      ],
-    }),
+    react(),
     laravel({
       input: [
         "resources/sass/app.scss",
@@ -27,6 +23,7 @@ export default defineConfig({
         "public/js/play.js",
         "public/js/fight.js",
         "public/js/ghost.js",
+	"resources/react/master-agent.jsx",
       ],
       refresh: true,
     }),

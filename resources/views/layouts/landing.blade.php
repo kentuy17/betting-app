@@ -41,7 +41,7 @@
           </a>
         </div>
       @endif
-      @if ($agent->is_master_agent)
+      @if ($master_agent)
         <div class="bg-os_black border p-2 mb-8">
           <div class="flex px-2 justify-between">
             <h3 class="text-white text-sm">MASTER AGENT</h3>
