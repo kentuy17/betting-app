@@ -40,10 +40,10 @@ class AuditorController extends Controller
 
     public function getRefillTrans()
     {
-        $trans = Transactions::where('action','refill')
+        $trans = Transactions::where('action', 'refill')
             ->with('user')
             ->with('auditor')
-            ->orderBy('id','desc')
+            ->orderBy('id', 'desc')
             ->get();
 
         return response()->json([
@@ -55,7 +55,7 @@ class AuditorController extends Controller
     {
         try {
             $auditor = User::find(Auth::user()->id);
-            if($auditor->points <  $request->amount){
+            if ($auditor->points <  $request->amount) {
                 return response()->json([
                     'msg' => 'Insuficient points!',
                     'status' => 'error',
@@ -71,7 +71,7 @@ class AuditorController extends Controller
             $trans->completed_at = date('Y-m-d H:i:s');
             $trans->save();
 
-            if($request->action == 'approve') {
+            if ($request->action == 'approve') {
                 $operator = User::find($trans->user_id);
                 $operator->points += $request->amount;
                 $operator->save();
@@ -95,10 +95,10 @@ class AuditorController extends Controller
 
     public function getRemitTrans()
     {
-        $trans = Transactions::where('action','remit')
+        $trans = Transactions::where('action', 'remit')
             ->with('user')
             ->with('auditor')
-            ->orderBy('id','desc')
+            ->orderBy('id', 'desc')
             ->get();
 
         return response()->json([
@@ -117,7 +117,7 @@ class AuditorController extends Controller
             $trans->completed_at = date('Y-m-d H:i:s');
             $trans->save();
 
-            if($request->action == 'approve') {
+            if ($request->action == 'approve') {
                 $operator = User::find($trans->user_id);
                 $operator->points = 0;
                 $operator->save();
@@ -142,7 +142,7 @@ class AuditorController extends Controller
 
     public function getEvents()
     {
-        $events = DerbyEvent::orderBy('id','desc')->get();
+        $events = DerbyEvent::orderBy('id', 'desc')->get();
         return response()->json([
             'data' => $events
         ]);
@@ -157,7 +157,6 @@ class AuditorController extends Controller
     {
         try {
             $event = DerbyEvent::create($request->all());
-
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 500,
@@ -186,7 +185,7 @@ class AuditorController extends Controller
             ]);
 
             $user = User::find(Auth::user()->id);
-            if($user->points < $request->amount) {
+            if ($user->points < $request->amount) {
                 return redirect()->back()
                     ->with('danger', 'Insuficient points!');
             }
@@ -202,7 +201,6 @@ class AuditorController extends Controller
                 'status' => 'pending',
                 'processedBy' => null,
             ]);
-
         } catch (\Exception $e) {
             return redirect()->back()->with('danger', $e->getMessage());
         }
@@ -227,7 +225,7 @@ class AuditorController extends Controller
                 'formFile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
 
-            $imageName = time().'.'.$request->formFile->extension();
+            $imageName = time() . '.' . $request->formFile->extension();
             $path = 'public/' . $imageName;
             Storage::disk('local')->put($path, file_get_contents($request->formFile));
 
@@ -240,11 +238,24 @@ class AuditorController extends Controller
                 'processedBy' => $request->auditor_id,
                 'outlet' => 'Gcash'
             ]);
-
         } catch (\Exception $e) {
             return redirect()->back()->with('danger', $e->getMessage());
         }
 
         return redirect()->back()->with('success', 'Submitted Successfully!');
+    }
+
+    public function betSummary()
+    {
+        return view('auditor.bet-summary');
+    }
+
+    public function betSummaryEvent(Request $request)
+    {
+        $event = DerbyEvent::whereDate('created_at', $request->schedule_date)->get();
+        return response()->json([
+            'request' => $request,
+            'data' => $event,
+        ]);
     }
 }

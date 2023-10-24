@@ -126,6 +126,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/transaction/remit', [AuditorController::class, 'getRemitTrans']);
         Route::post('/transaction/remit', [AuditorController::class, 'processRemit']);
         Route::get('/transactions-auditor', [AuditorController::class, 'transactions'])->name('auditor.transactions-operator');
+        Route::get('/summary-bet', [AuditorController::class, 'betSummary'])->name('auditor.bet-summary');
+        Route::get('/summary-bet/event', [AuditorController::class, 'betSummaryEvent']);
     });
 
     Route::group(['middleware' => ['csr']], function () {

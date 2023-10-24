@@ -123,6 +123,7 @@
 
             @if (Auth::user()->user_role->name == 'Auditor')
               <li><a class="md:pl-4 py-2 block" href="{{ route('auditor.transactions-operator') }}">TRANSACTIONS</a></li>
+              <li><a class="md:pl-4 py-2 block" href="{{ route('auditor.bet-summary') }}">BET SUMMARY</a></li>
             @endif
 
             @if (Auth::user()->user_role->name == 'Cash-in Operator')
