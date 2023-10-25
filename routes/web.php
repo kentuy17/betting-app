@@ -128,6 +128,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/transactions-auditor', [AuditorController::class, 'transactions'])->name('auditor.transactions-operator');
         Route::get('/summary-bet', [AuditorController::class, 'betSummary'])->name('auditor.bet-summary');
         Route::get('/summary-bet/event', [AuditorController::class, 'betSummaryEvent']);
+        Route::get('/summary-bet/filter-date', [AuditorController::class, 'getBetSummaryByDate']);
     });
 
     Route::group(['middleware' => ['csr']], function () {

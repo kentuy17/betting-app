@@ -25,12 +25,12 @@ class BetController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->current_event = DerbyEvent::where('status','ACTIVE')->first();
+        $this->current_event = DerbyEvent::where('status', 'ACTIVE')->first();
     }
 
-    public function getTotalBetAmountPerFight($fight_no=1)
+    public function getTotalBetAmountPerFight($fight_no = 1)
     {
-        $bets = Bet::where('fight_no',$fight_no)->sum('amount');
+        $bets = Bet::where('fight_no', $fight_no)->sum('amount');
         return $bets;
     }
 
@@ -38,7 +38,7 @@ class BetController extends Controller
     {
         $history = BetHistory::where('user_id', Auth::user()->id)
             ->with('fight.event')
-            ->orderBy('bethistory_no','desc')
+            ->orderBy('bethistory_no', 'desc')
             ->get();
 
         return DataTables::of($history)
@@ -49,7 +49,7 @@ class BetController extends Controller
 
     private function getCurrentFight($fight_no)
     {
-        $this->current_fight = Fight::where('event_id',$this->current_event->id)
+        $this->current_fight = Fight::where('event_id', $this->current_event->id)
             ->where('fight_no', $fight_no)
             ->first();
     }
@@ -59,7 +59,7 @@ class BetController extends Controller
     {
         try {
             $points_before_bet = Auth::user()->points;
-            if(Auth::user()->points < $request->amount) {
+            if (Auth::user()->points < $request->amount) {
                 $this->hacking($request, 'Bet');
                 return response()->json([
                     'status' => 400,
@@ -72,7 +72,7 @@ class BetController extends Controller
                 ->where('status', 'O')
                 ->first();
 
-            if(!$this->current_fight) {
+            if (!$this->current_fight) {
                 $this->hacking($request, 'Illegal Bet');
                 return response()->json([
                     'status' => 400,
@@ -80,7 +80,7 @@ class BetController extends Controller
                 ], 400);
             }
 
-            if($this->current_fight->status == 'C') {
+            if ($this->current_fight->status == 'C') {
                 $this->hacking($request, 'Closed Bet');
                 return response()->json([
                     'status' => 400,
@@ -88,7 +88,7 @@ class BetController extends Controller
                 ], 400);
             }
 
-            if($this->current_fight->fight_no !== $request->fight_no) {
+            if ($this->current_fight->fight_no !== $request->fight_no) {
                 $this->hacking($request, 'Fight number');
                 return response()->json([
                     'status' => 400,
@@ -96,7 +96,7 @@ class BetController extends Controller
                 ], 400);
             }
 
-            if(!in_array($request->side,['M','W'])) {
+            if (!in_array($request->side, ['M', 'W'])) {
                 $this->hacking($request, 'Invalid side');
                 return response()->json([
                     'status' => 400,
@@ -104,7 +104,7 @@ class BetController extends Controller
                 ], 400);
             }
 
-            if($request->amount < 0) {
+            if ($request->amount < 0) {
                 $this->hacking($request, 'Negative amount');
                 return response()->json([
                     'status' => 400,
@@ -122,7 +122,7 @@ class BetController extends Controller
             ]);
 
             event(new BetEvent($bet));
-            if(Auth::user()->id != 9) {
+            if (Auth::user()->id != 9) {
                 Auth::user()->decrement('points', $request->amount);
             }
 
@@ -141,7 +141,6 @@ class BetController extends Controller
                 'points_after_bet' => Auth::user()->points,
                 'current_points' => Auth::user()->points,
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'Error',
@@ -153,6 +152,5 @@ class BetController extends Controller
             'status' => 'OK',
             'data' => $bet
         ]);
-
     }
 }

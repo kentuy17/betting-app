@@ -9,7 +9,9 @@ use \Illuminate\Contracts\Support\Carbon;
 use App\Models\ModelHasRoles;
 use App\Models\Transactions;
 use App\Models\DerbyEvent;
+use App\Models\Fight;
 use App\Models\User;
+use Yajra\DataTables\DataTables;
 
 class AuditorController extends Controller
 {
@@ -257,5 +259,21 @@ class AuditorController extends Controller
             'request' => $request,
             'data' => $event,
         ]);
+    }
+
+    public function getBetSummaryByDate(Request $request)
+    {
+        $event = DerbyEvent::whereDate('schedule_date', $request->event_date)->get();
+
+        $fights = Fight::whereIn('event_id', $event->pluck('id'))
+            ->with('event')
+            ->withSum('bet_legit_meron', 'amount')
+            ->withSum('bet_legit_wala', 'amount')
+            ->orderBy('fight_no', 'asc')
+            ->get();
+
+        return DataTables::of($fights)
+            ->addIndexColumn()
+            ->make(true);
     }
 }

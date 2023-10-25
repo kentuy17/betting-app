@@ -38,10 +38,22 @@ class Fight extends Model
         return $this->hasMany(Bet::class, 'fight_id');
     }
 
+    public function bet_legit_meron()
+    {
+        return $this->hasMany(Bet::class, 'fight_id')
+            ->whereNotIn('user_id', [9])
+            ->where('side', 'M');
+    }
+
+    public function bet_legit_wala()
+    {
+        return $this->hasMany(Bet::class, 'fight_id')
+            ->whereNotIn('user_id', [9])
+            ->where('side', 'W');
+    }
+
     public function event()
     {
         return $this->belongsTo(DerbyEvent::class, 'event_id');
     }
-
-
 }

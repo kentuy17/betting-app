@@ -30,7 +30,7 @@
               </div> --}}
             </div>
             <div class="card-footer">
-              <button id="add-derby" class="btn btn-primary float-right mb-2">FILTER</button>
+              <button id="filter-date" class="btn btn-primary float-right mb-2">FILTER</button>
             </div>
           </form>
         </div>
@@ -39,15 +39,15 @@
     <div class="row col-md-12 justify-content-center">
       <div class="card">
         <div class="card-body">
-          <table class="table table-striped w-100" id="events-table">
+          <table class="table table-striped w-100" id="bet-summary-table">
             <thead>
               <tr>
-                <th>FIGHT#</th>
                 <th>EVENT NAME</th>
-                <th>SCHED DATE</th>
-                <th>START TIME</th>
-                <th>STATUS</th>
-                <th>ACTION</th>
+                <th>FIGHT#</th>
+                <th>RESULT</th>
+                <th>ACTUAL MERON</th>
+                <th>ACTUAL WALA</th>
+                <th>DATE</th>
               </tr>
             </thead>
           </table>

@@ -1,109 +1,114 @@
 $(document).ready(function () {
-  const eventsTable = $('#events-table');
+  const getResult = (r) => {
+    switch (r) {
+      case 'M':
+        return 'MERON'
+      case 'W':
+        return 'WALA'
+      case 'D':
+        return 'DRAW'
+      case 'C':
+        return 'CANCELLED'
+      default:
+        return 'FIGHTING'
+    }
+  }
 
-  eventsTable.DataTable({
-    "bPaginate": true,
-    "bLengthChange": false,
-    "bFilter": false,
-    "bInfo": false,
-    "bAutoWidth": false,
-    "ajax": '/event/lists',
-    "scrollX": true,
-    "order": [[0, 'DESC']],
-    "columns": [
-      {
-        "data": "id"
-      }, {
-        "data": "name"
-      }, {
-        "data": null,
-        render: ((row) => {
-          return row.schedule_date ?? 'TBD';
-        })
-      }, {
-        "data": null,
-        render: ((row) => {
-          return row.schedule_time ?? 'TBD';
-        })
-      }, {
-        "data": null,
-        render: ((data, type, row, meta) => {
-          return data.status
-        })
+  const fetchBetSummary = async (schedDate) => {
+    const betSummaryTable = $('#bet-summary-table');
+    await betSummaryTable.DataTable().clear().destroy();
+
+    betSummaryTable.DataTable({
+      "bPaginate": true,
+      "bLengthChange": true,
+      "bFilter": true,
+      "bInfo": false,
+      "bAutoWidth": false,
+      "pagingType": 'numbers',
+      "processing": true,
+      "serverSide": true,
+      "pageLength": 15,
+      "ajax": {
+        "type": "GET",
+        "url": "/summary-bet/filter-date",
+        "data": {
+          "event_date": schedDate,
+        }
       },
-      {
-        "data": null,
-        render: (data, type, row, meta) => {
-          let act = data.status == 'ACTIVE' ? `<i class="fa-solid fa-stop"></i>` : `<i class="fa-solid fa-play"></i>`;
-          return `<a href="javascript:void(0)" data-id="${row.id}" class="btn btn-link text-primary btn-icon btn-sm play">${act}</a>
-          <a href="javascript:void(0)" data-id="${row.id}" class="btn btn-link text-secondary btn-icon btn-sm edit"><i class="fa-solid fa-pencil"></i></a>
-          <a href="javascript:void(0)" data-id="${row.id}" class="btn btn-link text-danger btn-icon btn-sm remove"><i class="fa-solid fa-xmark"></i></a>
-          </td>`
+      "language": {
+        "search": "",
+        "lengthMenu": "_MENU_",
+      },
+      dom:
+        "<'row'<'col-4'l><'col-8'f>>" +
+        "<'row'<'col-sm-12'tr>>" +
+        "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+      "scrollX": true,
+      "order": [[0, 'DESC']],
+      "columnDefs": [
+        {
+          "targets": [1, 2],
+          className: 'dt-body-center',
+        },
+        {
+          "targets": [3, 4],
+          className: 'dt-body-right',
+        },
+      ],
+      "columns": [
+        {
+          "data": "event.name"
+        }, {
+          "data": "fight_no"
+        }, {
+          "data": null,
+          render: (data) => getResult(data.game_winner)
+        }, {
+          "data": null,
+          render: (data) => {
+            let totalMeron = data.bet_legit_meron_sum_amount ?? 0
+            return parseFloat(totalMeron).toFixed(2)
+          }
+        }, {
+          "data": null,
+          render: (data) => {
+            let totalWala = data.bet_legit_wala_sum_amount ?? 0
+            return parseFloat(totalWala).toFixed(2)
+          }
+        },
+        {
+          "data": "created_at",
+        }
+      ],
+      "createdRow": function (row, data, dataIndex) {
+        if (data.game_winner == 'M') {
+          $(row).find('td').eq(2).attr('style', 'color: red !important');
+        }
+
+        if (data.game_winner == 'W') {
+          $(row).find('td').eq(2).attr('style', 'color: blue !important');
+        }
+
+        if (data.bet_legit_meron_sum_amount) {
+          $(row).find('td').eq(3).attr('style', 'color: yellow !important');
+        }
+
+        if (data.bet_legit_wala_sum_amount) {
+          $(row).find('td').eq(4).attr('style', 'color: yellow !important');
         }
       }
-    ],
-    "createdRow": function (row, data, dataIndex) {
-      if (data.status == `pending`) {
-        $(row).css({ "background-color": "red" });
-      }
-
-      if (data.status == 'ACTIVE') {
-        $(row).addClass('table-success');
-      }
-    }
-  });
+    });
+  }
 
   $('#time-start').val('08:00');
   $('#sched-date').val(moment().format('YYYY-MM-DD'));
 
-  $('#add-derby').on('click', function (e) {
-    if ($('#event-name').val() == '') {
-      alert('Event Name is Required!');
-      $(this).focus();
-      return;
-    }
+  var schedDate = $('#sched-date').val();
+  fetchBetSummary(schedDate)
 
+  $('#filter-date').on('click', function (e) {
     e.preventDefault();
-    data = {
-      // name: $('#event-name').val(),
-      schedule_date: $('#sched-date').val(),
-      // schedule_time: $('#time-start').val()
-    }
-
-    $.ajax({
-      headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-      type: 'GET',
-      data: data,
-      url: '/summary-bet/event',
-      success: function (resp) {
-        eventsTable.DataTable().ajax.reload();
-        alert('Event Fight Created!');
-        $('#event-name').val('')
-      },
-      error: function (err) {
-        console.log(err);
-      }
-    })
+    let schedDate = $('#sched-date').val()
+    fetchBetSummary(schedDate)
   })
-
-  eventsTable.on('click', 'tbody td .play', async function () {
-    try {
-      var id = $(this).data('id');
-      response = await axios.post('/event/activate', { id: id });
-      Swal.fire({
-        icon: 'success',
-        confirmButtonColor: 'green',
-        title: response.data.message,
-      }).then(() => {
-        eventsTable.DataTable().ajax.reload();
-      });
-    }
-    catch (error) {
-      Swal.fire({
-        icon: 'error',
-        confirmButtonColor: 'red',
-        title: error.response.data.message,
-      })
-    }
-  });
 });
