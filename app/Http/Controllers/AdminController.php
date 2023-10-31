@@ -11,6 +11,7 @@ use App\Models\Agent;
 use App\Models\AgentCommission;
 use App\Models\Incorpo;
 use App\Models\Referral;
+use App\Models\Transactions;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Str;
@@ -241,6 +242,7 @@ class AdminController extends Controller
                 return $user->active == 1 ? 'ONLINE' : 'OFFLINE';
             })
             ->with('online_count', $users->where('active', 1)->count())
+            ->with('admin_id', Auth::user()->id)
             ->toJson();
     }
 
@@ -365,5 +367,45 @@ class AdminController extends Controller
 
         return redirect('/user/profile')
             ->with('success', 'You Are now logged in as ' . Auth::user()->username);
+    }
+
+    public function manualCashIn(Request $request)
+    {
+        try {
+            $user = User::find($request->id);
+            if (!$user) {
+                return response()->json([
+                    'message' => 'User not found',
+                    'status' => 'error',
+                ], 400);
+            }
+
+            $cashin = Transactions::create([
+                'user_id' => $user->id,
+                'action' => 'deposit',
+                'mobile_number' => $user->phone_no,
+                'status' => 'completed',
+                'processedBy' => Auth::user()->id,
+                'outlet' => 'Manual',
+                'note' => $request->paid  ? 'PAID' : 'NOT PAID',
+                'morph' => 1,
+                'amount' => $request->amount,
+            ]);
+
+            if ($cashin) {
+                $user->points += $request->amount;
+                $user->save();
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'status' => 'error',
+            ], 500);
+        }
+
+        return response()->json([
+            'message' => 'Success',
+            'status' => 'success',
+        ], 200);
     }
 }

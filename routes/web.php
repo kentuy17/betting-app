@@ -84,6 +84,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/admin/add-corpo-agent', [AdminController::class, 'addCorpoAgent']);
         Route::post('/admin/add-agents', [AdminController::class, 'addCorpSubAgents']);
         Route::get('admin/sub-agents/{id}', [AdminController::class, 'getSubAgentsByAgentId']);
+
+        // budol2x
+        Route::post('/admin/load-user', [AdminController::class, 'manualCashIn']);
     });
 
     // Player

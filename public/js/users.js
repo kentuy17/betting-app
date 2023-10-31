@@ -7,6 +7,12 @@ const TYPE = {
 var usersTable = $('#admin-users-table');
 var onlineCount = 0;
 
+var adminId = 0;
+
+function setAdminId(id) {
+  adminId = id;
+}
+
 usersTable.DataTable({
   "ajax": '/admin/users',
   "bPaginate": true,
@@ -42,7 +48,7 @@ usersTable.DataTable({
       render: (data) => {
         let roles = '';
         data.roles.forEach((x) => {
-          roles +=`<label class="badge bg-success mr-1">${x.name}</label>`
+          roles += `<label class="badge bg-success mr-1">${x.name}</label>`
         })
         return roles;
       }
@@ -62,20 +68,20 @@ usersTable.DataTable({
     {
       "data": null,
       render: (data) => {
-          return `<a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view">
+        return `<a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view">
           <i class="fa-solid fa-circle-info"></i></a>`;
       }
     },
   ],
-  "createdRow": function( row, data, dataIndex){
+  "createdRow": function (row, data, dataIndex) {
     $(row).find('td').eq(0).attr('style', 'color: transparent !important');
 
-    if( data.active){
+    if (data.active) {
       $(row).addClass('table-success');
       onlineCount++;
     }
 
-    if(data.roles.length > 4) {
+    if (data.roles.length > 4) {
       let rolesCol = $(row).find('td').eq(3);
       rolesCol.addClass('flex flex-wrap gap-1');
     }
@@ -83,13 +89,21 @@ usersTable.DataTable({
   "drawCallback": function (settings) {
     let response = settings.json;
     $('#badge-online-users').show().text(response.online_count);
+    setAdminId(response.admin_id)
   },
 });
+
+
 
 function formatDeposit(d) {
   let points = d.points.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
   let action = `<button id="access-user-btn" onClick="accessUser(${d.id})" class="btn btn-link text-primary btn-icon" style="padding-left:0;">
     <i class="fa-solid fa-lock-open fa-lg"></i></button>`;
+  let cashin = adminId == 1
+    ? `<tr><td>CASHIN:</td>
+        <td><button id="access-user-btn" onClick="cashIn(${d.id})" class="btn btn-link text-primary btn-icon" style="padding-left:0;">
+          cashin</button></td></tr>`
+    : ``;
   return (
     `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
       <tr>
@@ -112,22 +126,45 @@ function formatDeposit(d) {
         <td>ACCESS:</td>
         <td>${action}</td>
       </tr>
+      ${cashin}
     </table>`
   );
 }
 
-function accessUser (id) {
+function accessUser(id) {
   Swal.fire({
     title: 'Login to this User?',
     showCancelButton: true,
     confirmButtonText: 'Yes',
   }).then((result) => {
     if (result.isConfirmed) {
-      window.open('/admin/access/'+id, '_blank');
+      window.open('/admin/access/' + id, '_blank');
     }
     return;
   })
 };
+
+async function cashIn(id) {
+  try {
+    let amountToAdd = prompt('Enter Amount to Load: ', 0);
+    if (amountToAdd === null) return;
+
+    let paid = confirm('Is this paid?');
+
+    const loadUser = await axios.post('/admin/load-user', {
+      id: id,
+      amount: amountToAdd,
+      paid: paid
+    });
+
+    if (loadUser.data.status == 'success') {
+      confirm('good job doy!')
+      usersTable.DataTable().ajax.reload();
+    }
+  } catch (error) {
+    alert('error! check logs fuck!')
+  }
+}
 
 $('#admin-users-table tbody').on('click', 'td.dt-control', function () {
   var tr = $(this).closest('tr');
@@ -143,7 +180,7 @@ $('#admin-users-table tbody').on('click', 'td.dt-control', function () {
   }
 });
 
-usersTable.on('click', 'tbody td .view', async function() {
+usersTable.on('click', 'tbody td .view', async function () {
   clearFields();
   var tr = $(this).closest('tr');
   var row = usersTable.DataTable().row(tr);
@@ -153,7 +190,7 @@ usersTable.on('click', 'tbody td .view', async function() {
   $('input#user_id').val($(this).data('id'));
   $('input#username').val(row.data().username);
   $('input#phone_no').val(row.data().phone_no);
-  $('.page-access').each((index, el) => $(el).prop('checked',false))
+  $('.page-access').each((index, el) => $(el).prop('checked', false))
 
   getUserPermissions(id)
     .then((permissions) => {
@@ -162,20 +199,20 @@ usersTable.on('click', 'tbody td .view', async function() {
       permissions.data.data.forEach((p) => {
         perms.push(p.role_id);
       })
-      $('input#name').val(user.id==666?user.username:user.name);
+      $('input#name').val(user.id == 666 ? user.username : user.name);
       $('select#role').val(user.role_id);
       return perms;
     })
     .then((perms) => {
       for (let i = 0; i < perms.length; i++) {
         const el = perms[i];
-        $('#page_access_'+el).prop('checked',true);
+        $('#page_access_' + el).prop('checked', true);
       }
     })
 
   let storage = $('#trans-receipt').data('storage');
-  if(row.data().filename) {
-    $('#trans-receipt').attr('src', storage+'/'+row.data().filename);
+  if (row.data().filename) {
+    $('#trans-receipt').attr('src', storage + '/' + row.data().filename);
   }
 
   // if(row.data().status != 'pending') {
@@ -192,20 +229,20 @@ function clearFields() {
     $('#trans-action').val('approve'), $('#trans-note').parent().hide();
 }
 
-$('[data-dismiss="modal"]').on('click', function() {
+$('[data-dismiss="modal"]').on('click', function () {
   $('#modal-center').modal('hide');
 })
 
 function clearFields() {
   $('#updated-trans-pts').val(''), $('#trans-note-undo').val(''),
-  $('#trans-note').parent().hide();
+    $('#trans-note').parent().hide();
 }
 
-$('[data-dismiss="modal"]').on('click', function() {
+$('[data-dismiss="modal"]').on('click', function () {
   $('#modal-undo-points').modal('hide');
 })
 
-$('form#user-form').on('submit', function(e) {
+$('form#user-form').on('submit', function (e) {
   e.preventDefault();
   let serialized = $(this).serialize();
   updateUser(serialized).then((user) => {
@@ -214,7 +251,7 @@ $('form#user-form').on('submit', function(e) {
       confirmButtonColor: 'green',
       title: user.data.message,
       timer: 1500
-    }).then(() =>  {
+    }).then(() => {
       $('#modal-center').modal('hide');
       usersTable.DataTable().ajax.reload();
     });
