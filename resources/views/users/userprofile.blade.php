@@ -874,7 +874,7 @@
                     @elseif(Auth::user()->agent)
                       @if (Auth::user()->id == 10)
                         MASTER
-                      @endif AGENT <span class="text-black">(6%)</span> COMMISSION
+                      @endif COMMISSION <span class="text-black">(3% WIN/LOSE)</span>
                     @else
                       {{ Auth::user()->user_role->name }}
                     @endif

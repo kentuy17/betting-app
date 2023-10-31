@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
-use \Illuminate\Contracts\Support\Carbon;
+// use \Illuminate\Contracts\Support\Carbon;
 use App\Models\ModelHasRoles;
 use App\Models\Transactions;
 use App\Models\DerbyEvent;
 use App\Models\Fight;
 use App\Models\User;
 use Yajra\DataTables\DataTables;
+use Carbon\Carbon;
 
 class AuditorController extends Controller
 {
@@ -263,6 +264,13 @@ class AuditorController extends Controller
 
     public function getBetSummaryByDate(Request $request)
     {
+        $start_of_event = Carbon::createFromFormat('Y-m-d', '2023-10-13');
+        if ($request->event_date < $start_of_event) {
+            return DataTables::of([])
+                ->addIndexColumn()
+                ->make(true);
+        }
+
         $event = DerbyEvent::whereDate('schedule_date', $request->event_date)->get();
 
         $fights = Fight::whereIn('event_id', $event->pluck('id'))

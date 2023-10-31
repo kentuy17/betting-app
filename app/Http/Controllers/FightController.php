@@ -496,23 +496,12 @@ class FightController extends Controller
         $ghost_bettors = User::where('legit', false)->get()->pluck('id');
         $bets = Bet::where('fight_id', $fight_id)
             ->whereNotIn('user_id', $ghost_bettors)
-            ->where('win_amount', '>', '0')
+            // ->where('win_amount', '>', '0')
             ->whereNotIn('user_id', [9])
+            ->where('status', 'D')
             ->with('referral')
             ->has('referral')
             ->get();
-
-        $total = 0;
-        // $agent_commission_percent = 0.06; // win only
-        // $agent_commission_percent = 0.03; // win or lose
-        $agent_commission_percent = 0.02; // 2% win/loss
-        foreach ($bets as $bet) {
-            if ($bet->win_amount > 0) {
-                $agent_commission_add = ($bet->win_amount - $bet->amount) * $agent_commission_percent;
-            } else {
-                $agent_commission_add = (0.9 * $bet->amount) * $agent_commission_percent;
-            }
-        }
 
         $unique_referrers = $referred_players->groupBy('referral.referrer_id');
 
@@ -522,8 +511,17 @@ class FightController extends Controller
         }
 
         $total = 0;
+
+        // $agent_commission_percent = 0.06; // win only
+        $agent_commission_percent = 0.03; // win or lose
+        // $agent_commission_percent = 0.02; // 2% win/loss
         foreach ($bets as $bet) {
-            $agent_commission_add = ($bet->win_amount - $bet->amount) * 0.06;
+            if ($bet->win_amount > 0) {
+                $agent_commission_add = ($bet->win_amount - $bet->amount) * $agent_commission_percent;
+            } else {
+                $agent_commission_add = (0.9 * $bet->amount) * $agent_commission_percent;
+            }
+            // $agent_commission_add = ($bet->win_amount - $bet->amount) * 0.06;
             $total += $agent_commission_add;
             $referral_commission[$bet->referral->referrer_id] += $agent_commission_add;
             Bet::where('bet_no', $bet->bet_no)
