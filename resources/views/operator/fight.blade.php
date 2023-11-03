@@ -77,15 +77,15 @@
           {{-- <img id="poster-img" style="display: none;" src="{{ asset('img/poster.png') }}" alt="10-streak-win-promo"> --}}
 
           {{-- DaCast --}}
-          <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
+          {{-- <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
             <script id="a3e4275e-c022-b1b4-c231-3bef437168da-live-11b41ea8-e33c-6818-4331-1cb7d38e87cf" width="100%" height="100%" src="https://player.dacast.com/js/player.js?contentId=a3e4275e-c022-b1b4-c231-3bef437168da-live-11b41ea8-e33c-6818-4331-1cb7d38e87cf" class="dacast-video"></script>
-          </div>
+          </div> --}}
 
 
           {{-- OneStream --}}
-          {{-- <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
+          <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
             <iframe src="https://player.onestream.live/embed?token=ZF9hdXRoXzIwNzg4MDRfMXR0NDJtZnM0&type=psk" style="position:absolute;width:100%;height:100%;" scrolling="no" frameborder="0" allow="autoplay" allowfullscreen> </iframe>
-          </div> --}}
+          </div>
         </div>
       </div>
     </div>
