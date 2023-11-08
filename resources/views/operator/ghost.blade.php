@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('additional-styles')
+  {{-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> --}}
   <link rel="stylesheet" href="{{ asset('css/play-sabong.css') }}" type="text/css">
   <link rel="stylesheet" href="{{ asset('css/operator.css') }}" type="text/css">
   <link rel="stylesheet" href="https://vjs.zencdn.net/7.8.2/video-js.css" />
@@ -84,7 +85,7 @@
 
           {{-- OneStream --}}
           <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
-            <iframe src="http://172.105.115.222:8080/players/hls.html" style="position:absolute;width:100%;height:100%;" scrolling="no" frameborder="0" allow="autoplay" allowfullscreen> </iframe>
+            <iframe src="https://172.105.115.222:8080/players/hls.html" style="position:absolute;width:100%;height:100%;" scrolling="no" frameborder="0" allow="autoplay" allowfullscreen> </iframe>
           </div>
         </div>
       </div>

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Bet;
 use App\Models\DerbyEvent;
+use DateTimeInterface;
 
 class Fight extends Model
 {
@@ -28,10 +29,15 @@ class Fight extends Model
         'amount',
     ];
 
-    protected $casts = [
-        'created_at' => 'datetime:M d, Y h:s A',
-        'updated_at' => 'datetime:M d, Y h:s A',
-    ];
+    // protected $casts = [
+    //     'created_at' => 'datetime:m d, y H:i',
+    //     'updated_at' => 'datetime:m d, y H:i',
+    // ];
+
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->timezone('Asia/Singapore')->format('m-d-y H:i');
+    }
 
     public function bet()
     {

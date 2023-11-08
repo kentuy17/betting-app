@@ -3,7 +3,10 @@
 @section('additional-styles')
   <link rel="stylesheet" href="{{ asset('css/play-sabong.css') }}" type="text/css">
   <link rel="stylesheet" href="{{ asset('css/operator.css') }}" type="text/css">
-  <link rel="stylesheet" href="https://vjs.zencdn.net/7.8.2/video-js.css" />
+  {{-- <link rel="stylesheet" href="https://vjs.zencdn.net/7.8.2/video-js.css" /> --}}
+  <link href="https://unpkg.com/video.js@7/dist/video-js.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/silvermine-videojs-quality-selector@1.1.2/dist/css/quality-selector.css" rel="stylesheet">
+
   <style>
     .offline-embeds-channel-info-panel {
       background: rgba(0, 0, 0, .6);
@@ -49,18 +52,20 @@
     }
 
     /* #clappr{ width: 100%;height: 100%;position: relative; min-height: 320px; margin-bottom: 25px;}
-                                                              #clappr > div{ width:100%;height:100%;position: absolute;} */
+          #clappr > div{ width:100%;height:100%;position: absolute;} */
     #play-container {
       display: flex;
       align-content: flex-start;
     }
 
-    #event-name {
+    #event-name,
+    #header-closed {
       overflow: hidden;
       height: 20px;
     }
 
-    .running-text {
+    .running-text,
+    .running-text-closed {
       position: absolute;
       white-space: nowrap;
       animation: floatText 15s infinite ease-in-out;
@@ -68,11 +73,11 @@
 
     @-webkit-keyframes floatText {
       from {
-        left: -50%;
+        right: -50%;
       }
 
       to {
-        left: 100%;
+        right: 100%;
       }
     }
   </style>
@@ -87,7 +92,9 @@
           <div class="bet-bg-head font-bold" id="event-name">
             <p class="running-text">{{ $fight->name }}</p>
           </div>
-          <div id="header-closed" class="bet-bg-head font-bold" style="display: none;">EVENT CLOSED</div>
+          <div id="header-closed" class="bet-bg-head font-bold" style="display: none;">
+            <p class="running-text-closed">EVENT CLOSED</p>
+          </div>
           <img id="poster-img" style="display: none;" src="{{ asset('img/poster.png') }}" alt="10-streak-win-promo">
 
           {{-- DaCast --}}
@@ -96,8 +103,19 @@
           </div> --}}
 
           {{-- Onestream --}}
-          <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
+          {{-- <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
             <iframe src="https://player.onestream.live/embed?token=ZF9hdXRoXzIwNzg4MDRfMXR0NDJtZnM0&type=psk" style="position:absolute;width:100%;height:100%;" scrolling="no" frameborder="0" allow="autoplay" allowfullscreen> </iframe>
+          </div> --}}
+
+          {{-- Wowza --}}
+          <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
+            <video id="videojs" class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered" controls preload="auto" autoplay muted playsinline fluid="true">
+              <source src="https://5caf24a595d94.streamlock.net:1937/urdzwgjrqg/urdzwgjrqg/playlist.m3u8" type="application/x-mpegURL">
+              <p class="vjs-no-js">
+                To view this video please enable JavaScript, and consider upgrading to a web browser that
+                <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+              </p>
+            </video>
           </div>
         </div>
       </div>
@@ -127,6 +145,35 @@
   {{-- <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script> --}}
   {{-- <script src="https://vjs.zencdn.net/7.8.2/video.js"></script> --}}
   {{-- <script src="https://cdn.jsdelivr.net/npm/@mux/mux-player"></script> --}}
+  <script src="https://cdn.jsdelivr.net/npm/can-autoplay@3.0.0/build/can-autoplay.js"></script>
+  <script src="https://unpkg.com/video.js@7/dist/video.min.js"></script>
+  <script type="text/javascript">
+    var player = videojs('videojs', {
+      autoplay: true
+    });
+
+
+    player.ready(function() {
+      var promise = player.play();
+
+      if (promise !== undefined) {
+        promise.then(function() {
+          // Autoplay started!
+        }).catch(function(error) {
+          // Autoplay was prevented.
+        });
+      }
+    });
+    canAutoplay.video().then(({
+      result
+    }) => {
+      if (result !== true) {
+        player.ready(function() {
+          player.play();
+        });
+      }
+    })
+  </script>
   <script>
     const useState = (defaultValue) => {
       let value = defaultValue;
