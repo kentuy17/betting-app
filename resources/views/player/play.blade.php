@@ -52,7 +52,7 @@
     }
 
     /* #clappr{ width: 100%;height: 100%;position: relative; min-height: 320px; margin-bottom: 25px;}
-          #clappr > div{ width:100%;height:100%;position: absolute;} */
+                  #clappr > div{ width:100%;height:100%;position: absolute;} */
     #play-container {
       display: flex;
       align-content: flex-start;
@@ -108,7 +108,7 @@
           </div> --}}
 
           {{-- Wowza --}}
-          <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
+          {{-- <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
             <video id="videojs" class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered" controls preload="auto" autoplay muted playsinline fluid="true">
               <source src="https://5caf24a595d94.streamlock.net:1937/urdzwgjrqg/urdzwgjrqg/playlist.m3u8" type="application/x-mpegURL">
               <p class="vjs-no-js">
@@ -116,6 +116,11 @@
                 <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
               </p>
             </video>
+          </div> --}}
+
+          {{-- 5Cent --}}
+          <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
+            <iframe src="https://iframes.5centscdn.com/videojs/hls/aHR0cHM6Ly9vcWdkcmdhemw0cm0taGxzLWxpdmUuNWNlbnRzY2RuLmNvbS9zd3cvZDBkYmU5MTUwOTFkNDAwYmQ4ZWU3ZjI3ZjA3OTEzMDMuc2RwL3BsYXlsaXN0Lm0zdTg=" frameBorder="0" allow="autoplay; encrypted-media" allowfullscreen style="overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:100%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px"></iframe>
           </div>
         </div>
       </div>
