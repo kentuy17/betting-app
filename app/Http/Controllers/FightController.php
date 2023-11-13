@@ -209,9 +209,6 @@ class FightController extends Controller
     }
     public function revertResult(Request $request)
     {
-        //Get Fight Detail
-        // $fight = $this->currenctMatch();
-
         $this->current_event = DerbyEvent::where('status', 'ACTIVE')->first();
 
         $fightDetail = Fight::where('fight_no', $request->fight_no)
@@ -229,91 +226,35 @@ class FightController extends Controller
 
         //Get revert win amount
         if ($faultWinner == 'M' || $faultWinner == 'W') {
-            $user_bets = Bet::where('fight_id', $fightDetail->id)
+            $bets = BetHistory::where('fight_id', $fightDetail->id)
                 ->whereNot('user_id', 9)
-                ->where('side', $faultWinner)
                 ->get();
 
-            foreach ($user_bets as $bet) {
-                $user = User::find($bet->user_id);
-                $user->points -= $bet->win_amount;
-                $user->save();
+            foreach ($bets as $bet_h) {
+                $to_revert = BetHistory::find($bet_h->bethistory_no);
+                $affected_user = User::find($bet_h->user_id);
 
-                $betHist = BetHistory::where('bet_id', $bet->bet_no)->first();
-                $betHist->winamount = 0;
-                $betHist->status = 'L';
-                $betHist->current_points = $user->points;
-                $betHist->save();
+                if ($bet_h->side == $faultWinner) {
+                    $affected_user->points -= $bet_h->winamount;
 
-                $update = Bet::find($bet->bet_no);
-                $update->win_amount = 0;
-                $update->save();
+                    $to_revert->status = 'L';
+                    $to_revert->winamount = 0;
+                } else {
+                    $win_amount_sana = ($bet_h->betamount * $bet_h->percent) / 100;
+                    $affected_user->points += $win_amount_sana;
+
+                    $to_revert->status = 'W';
+                    $to_revert->winamount = $win_amount_sana;
+                }
+
+                $to_revert->save();
+                $affected_user->save();
             }
         }
 
         //Update Fight
         $fightDetail->game_winner = $request->result;
         $fightDetail->save();
-
-        //update winner
-        $winner = $request->result;
-        if ($winner == 'M' || $winner == 'W') {
-            $calc = $this->calculatePrevFight($fightDetail);
-            $percentage = $winner == 'M' ? $calc['meron'] : $calc['wala'];
-
-            $user_bets = Bet::where([
-                'side' => $winner,
-                'fight_id' => $fightDetail->id
-            ])->get();
-
-            foreach ($user_bets as $bet) {
-                $update = Bet::with('user')->where('bet_no', $bet->bet_no)->first();
-                $update->win_amount = $bet->amount * $percentage / 100;
-                $update->save();
-
-                $user = User::find($bet->user_id);
-                $user->points += $bet->amount * $percentage / 100;
-                $user->save();
-
-                $betHist = BetHistory::where('bet_id', $bet->bet_no)->first();
-                $betHist->winamount = $update->win_amount;
-                $betHist->status = 'W';
-                $betHist->current_points = $user->points;
-                $betHist->save();
-
-                // event(new Result($update));
-            }
-        }
-
-        if ($winner == 'C' || $winner == 'D') {
-            $user_bets = Bet::where([
-                'fight_id' => $fightDetail->id
-            ])->get();
-
-            $percentage = 0;
-            foreach ($user_bets as $bet) {
-                $update = Bet::find($bet->bet_no);
-                $update->win_amount = $bet->amount;
-                $update->status = 'X';
-                $update->save();
-
-                $user = User::find($bet->user_id);
-                $user->points += $bet->amount;
-                $user->save();
-
-                if ($winner == 'D') {
-                    $calc = $this->calculatePrevFight($fightDetail);
-                    $percentage = $bet->side == 'M' ? $calc['meron'] : $calc['wala'];
-                }
-
-                $betHist = BetHistory::where('bet_id', $bet->bet_no)->first();
-                $betHist->percent = $percentage;
-                $betHist->winamount = $bet->amount;
-                $betHist->status = $winner;
-                $betHist->current_points = $user->points;
-                $betHist->save();
-            }
-        }
 
         return response()->json([
             'data' => $fightDetail,
