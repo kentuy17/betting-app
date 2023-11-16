@@ -1,15 +1,28 @@
 $(document).ready(function () {
+  function updateAgentType(agentId) {
+
+  }
+
   const eventsTable = $('#events-table');
 
   eventsTable.DataTable({
     "bPaginate": true,
-    "bLengthChange": false,
-    "bFilter": false,
-    "bInfo": false,
+    "bLengthChange": true,
+    "bFilter": true,
+    "bInfo": true,
     "bAutoWidth": false,
     "ajax": '/admin/agent-list',
     "scrollX": true,
     "pageLength": 25,
+    "pagingType": "numbers",
+    "language": {
+      "search": "",
+      "lengthMenu": "_MENU_",
+    },
+    "dom":
+      "<'row'<'col-4'l><'col-8'f>>" +
+      "<'row'<'col-sm-12'tr>>" +
+      "<'row'<'col-md-12'p>>",
     "columnDefs": [{
       "targets": [3],
       "className": 'dt-body-right',
@@ -41,7 +54,7 @@ $(document).ready(function () {
       render: (data, type, row, meta) => {
         let act = data.status == 'ACTIVE' ? `<i class="fa-solid fa-stop"></i>` : `<i class="fa-solid fa-eye"></i>`;
         return `<a href="javascript:void(0)" data-id="${row.id}" class="btn btn-link text-primary btn-icon btn-sm info">${act}</a>
-            <a href="javascript:void(0)" data-id="${row.id}" class="btn btn-link text-secondary btn-icon btn-sm edit"><i class="fa-solid fa-pencil"></i></a>
+            <a href="javascript:void(0)" data-id="${row.id}" data-type="${row.type}" class="btn btn-link text-secondary btn-icon btn-sm edit"><i class="fa-solid fa-pencil"></i></a>
             <a href="javascript:void(0)" data-id="${row.id}" class="btn btn-link text-danger btn-icon btn-sm remove"><i class="fa-solid fa-xmark"></i></a>`;
       }
     }],
@@ -81,6 +94,18 @@ $(document).ready(function () {
         console.log(err);
       }
     })
+  })
+
+  $('[data-dismiss="modal"]').on("click", function () {
+    $("#modal-center").modal("hide");
+  });
+
+  eventsTable.on('click', 'tbody td .edit', function () {
+    let id = $(this).data('id');
+    let type = $(this).data('type');
+    $('#agent-type').val(type);
+    $('#agent-id').val(id)
+    $('#modal-center').modal("show");
   })
 
   eventsTable.on('click', 'tbody td .view', async function () {

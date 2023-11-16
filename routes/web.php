@@ -73,6 +73,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/admin/users-create', [AdminController::class, 'createUser']);
         Route::get('/admin/user-permissions/{id}', [AdminController::class, 'getUserPagePermissions']);
         Route::post('/admin/user', [AdminController::class, 'updateUser']);
+        Route::post('/admin/agent-type', [AdminController::class, 'updateAgentType']);
         Route::get('/admin/agents', [AdminController::class, 'getAgents'])->name('admin.agents');
         Route::get('/admin/agent-list', [AdminController::class, 'agentList']);
         Route::post('/admin/add-agent', [AdminController::class, 'addAgent']);

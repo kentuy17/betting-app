@@ -319,6 +319,15 @@ class AdminController extends Controller
         ]);
     }
 
+    public function updateAgentType(Request $request)
+    {
+        $agent = Agent::find($request->id);
+        $agent->type = $request->type;
+        $agent->save();
+
+        return redirect()->back()->with('success', 'Updated agent type of ' . $agent->user->username);
+    }
+
     private function generateRandomString($length = 10)
     {
         return substr(str_shuffle(str_repeat($x = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length / strlen($x)))), 1, $length);

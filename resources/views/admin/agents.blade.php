@@ -55,7 +55,37 @@
           </div>
         </div>
       </div>
-
+    </div>
+  </div>
+  <!-- Edit Modal -->
+  <div class="modal fade" id="modal-center" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-top" role="document">
+      <div class="modal-content">
+        <div class="modal-header pb-3">
+          <h5 class="modal-title" id="exampleModalLongTitle">Agent Type</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="agent-type-form" action="/admin/agent-type" method="post">
+          @csrf
+          <div class="modal-body pt-0">
+            <input type="hidden" name="id" id="agent-id">
+            <div class="form-group mt-2">
+              <label for="agent-type">Type</label>
+              <select name="type" class="form-control" id="agent-type">
+                <option value="master-agent">MASTER-AGENT</option>
+                <option value="sub-agent">SUB-AGENT</option>
+                <option value="agent">AGENT</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</a>
+            <input type="submit" class="btn btn-primary bg-slate-900 btn-sm" value="Submit">
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 @endsection
