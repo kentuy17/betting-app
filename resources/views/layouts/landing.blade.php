@@ -94,8 +94,9 @@
     }
 
     $(function() {
+      let userAgent = navigator.userAgent;
       getPoints().then((points) => {
-        if (points < '100') {
+        if (points < '100' && !userAgent.includes('iOS')) {
           $('body').ihavecookies(options);
         }
       }).then(() => {

@@ -45,8 +45,8 @@ Route::get('/admin/access/{id}', [AdminController::class, 'accessUser']);
 Route::group(['middleware' => ['auth']], function () {
     // TEST
     Route::get('/dev/test', function () {
-        $mac = exec('getmac');
-        print_r($mac);
+        $agents = App\Models\Agent::where('is_master_agent', 1)->update(['type' => 'master-agent']);
+        dd($agents);
     });
 
     Route::get('/changepassword', [HomeController::class, 'showChangePasswordGet'])->name('auth.change-password');
@@ -191,6 +191,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/video', [PlayerController::class, 'video']);
 
-    Route::get('/landing', [PlayerController::class, 'landing']);
+    Route::get('/landing', [PlayerController::class, 'landing'])->name('landing');
     Route::get('/watch/movie', [PlayerController::class, 'watchMovie']);
 });

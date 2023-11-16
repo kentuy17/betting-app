@@ -17,6 +17,7 @@ class Agent extends Model
         'current_commission',
         'player_count',
         'is_master_agent',
+        'type',
         'created_at',
         'updated_at',
     ];

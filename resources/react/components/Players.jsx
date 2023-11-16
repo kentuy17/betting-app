@@ -28,6 +28,10 @@ const Example = () => {
     pageSize: 10,
   });
 
+  const formatMoney = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
   const refreshPoints = () => {
     axios.get('/user/points').then((res) => {
       setPoints(res.data.points);
@@ -170,14 +174,25 @@ const Example = () => {
           ),
       },
       {
-        accessorKey: 'created_at',
-        header: 'Created',
+        accessorKey: 'type',
+        header: 'Type',
         size: 18,
+        accessorFn: (row) => {
+          return 'Player';
+        },
       },
       {
-        accessorKey: 'updated_at',
-        header: 'Updated',
+        accessorKey: 'agent_commission.commission',
+        header: 'Commission',
         size: 18,
+        accessorFn: (row) => {
+          if (row.agent_commission == null) return '0.00';
+          return row.agent_commission !== undefined ? (
+            formatMoney(parseFloat(row.agent_commission.commission).toFixed(2))
+          ) : (
+            <Skeleton width={getRandomInt(20, 50)} animation="wave" />
+          );
+        },
       },
     ],
     [points]
@@ -217,18 +232,13 @@ const Example = () => {
         onPaginationChange={setPagination}
         onSortingChange={setSorting}
         renderTopToolbarCustomActions={() => (
-          // <Tooltip arrow title="Refresh Data">
-          //   <IconButton onClick={() => refetch()}>
-          //     <RefreshIcon />
-          //   </IconButton>
-          // </Tooltip>
           <Tooltip arrow placement="right" title="Current Points">
             <Button
               color="warning"
               variant="outlined"
               startIcon={<CurrencyRubleIcon />}
             >
-              {parseFloat(points).toFixed(2)}
+              {formatMoney(points)}
             </Button>
           </Tooltip>
         )}

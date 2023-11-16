@@ -46,6 +46,7 @@
                   <th>RID</th>
                   <th>COMMISSION</th>
                   <th>PLAYERS</th>
+                  <th>TYPE</th>
                   <th>START DATE</th>
                   <th>ACTION</th>
                 </tr>

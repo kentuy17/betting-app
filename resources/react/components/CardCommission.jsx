@@ -21,9 +21,13 @@ const CardCommission = ({
   const [value, setValue] = useState(0);
   const [iconLink, setIconLink] = useState(<WrenchIcon />);
 
+  const formatMoney = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
   useEffect(() => {
-    let txt = amount.toString();
-    let tmpAmount = txt.includes('.') ? `₱ ${amount}` : amount;
+    let tmpAmount =
+      typeof amount === 'number' ? `₱ ${formatMoney(amount)}` : amount;
 
     if (linkIcon) {
       setIconLink(linkIcon);
@@ -33,7 +37,7 @@ const CardCommission = ({
 
   return (
     <div className="card-commission col-lg-12 my-3 mx-1">
-      <div className="card-body">
+      <div className="card-body" onClick={handleClick}>
         <div className="row">
           <div className="col-8">
             <div className="numbers">

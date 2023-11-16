@@ -35,4 +35,9 @@ class Referral extends Model
     {
         return $this->hasMany(Bet::class, 'user_id', 'user_id');
     }
+
+    public function agent_commission()
+    {
+        return $this->belongsTo(AgentCommission::class, 'user_id', 'user_id');
+    }
 }

@@ -144,6 +144,7 @@
             @endif
 
             @if (Auth::user()->user_role->name == 'Player')
+              <li><a class="md:pl-4 py-2 block @if (Route::current()->getName() == 'landing') {{ 'active-nav' }} @endif py-2 block" href="{{ route('landing') }}">HOME</a></li>
               <li><a class="md:pl-4 py-2 block @if (Route::current()->getName() == 'play') {{ 'active-nav' }} @endif py-2 block" href="{{ route('play') }}">Play</a></li>
               <li><a class="md:pl-4 py-2 block @if (Route::current()->getName() == 'deposit') {{ 'active-nav' }} @endif py-2 block" href="{{ route('deposit') }}">CASH-IN</a></li>
               <li><a class="md:pl-4 py-2 block @if (Route::current()->getName() == 'withdraw') {{ 'active-nav' }} @endif py-2 block" href="{{ route('withdraw') }}">CASH-OUT</a></li>

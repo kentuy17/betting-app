@@ -11,13 +11,13 @@ $(document).ready(function () {
     "scrollX": true,
     "pageLength": 25,
     "columnDefs": [{
-        "targets": [3],
-        "className": 'dt-body-right',
-      },
-      {
-        "targets": [4],
-        "className": 'dt-body-center',
-      },
+      "targets": [3],
+      "className": 'dt-body-right',
+    },
+    {
+      "targets": [4],
+      "className": 'dt-body-center',
+    },
     ],
     "columns": [{
       "data": "user_id"
@@ -32,6 +32,8 @@ $(document).ready(function () {
       })
     }, {
       "data": "player_count",
+    }, {
+      "data": "type",
     }, {
       "data": "created_at",
     }, {

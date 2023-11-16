@@ -20,6 +20,7 @@ import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceW
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
+import { FileCopyRounded } from '@mui/icons-material';
 import { Avatar } from '@mui/material';
 import { Money } from '@mui/icons-material';
 
@@ -136,11 +137,19 @@ const Dashboard = () => {
             <div className="col-lg-12">
               <CardCommission
                 title={'Points'}
-                amount={parseFloat(points).toFixed(2)}
+                amount={points}
                 linkText={'Manage'}
                 icon={<PointsIcon />}
                 onClick={handlePointsClick}
                 tooltip="Manage Points"
+              />
+              <CardCommission
+                title={'Referral Link'}
+                amount={'https://sww23-go.live/register?rid=REFCJF6DL9N'}
+                linkText={'Copy Link'}
+                icon={<CopyIcon />}
+                // onClick={handlePointsClick}
+                tooltip="Copy Link"
               />
               <CardCommission
                 title={'Commission'}
@@ -158,7 +167,7 @@ const Dashboard = () => {
               />
               <CardCommission
                 title={'Players'}
-                amount={playerCnt}
+                amount={playerCnt.toString()}
                 linkText={'View'}
                 icon={<PlayerIcon />}
                 onClick={handlePlayerClick}
@@ -179,6 +188,14 @@ const CommissionIcon = () => {
   return (
     <Avatar sx={{ bgcolor: '#0d6efd', width: 60, height: 60 }}>
       <LocalOfferRoundedIcon />
+    </Avatar>
+  );
+};
+
+const CopyIcon = () => {
+  return (
+    <Avatar sx={{ bgcolor: '#0d6efd', width: 60, height: 60 }}>
+      <FileCopyRounded />
     </Avatar>
   );
 };

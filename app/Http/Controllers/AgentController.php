@@ -9,6 +9,7 @@ use App\Models\Referral;
 use App\Models\CommissionHistory;
 use App\Models\AgentCommission;
 use Illuminate\Http\Request;
+use Log;
 
 class AgentController extends Controller
 {
@@ -135,18 +136,35 @@ class AgentController extends Controller
     public function getPlayerList(Request $request)
     {
         $sort = json_decode($request->sorting);
-        $raw = Referral::with('user')->where('referrer_id', Auth::user()->id);
+        $aggrate_col = 'commission';
+        $aggrate_model = 'agent_commission';
+        $order_by = 'desc';
+
+        if (count($sort) > 0 && !empty($sort) && $sort[0]->id != 'type') {
+            $tmp = $sort[0]->id;
+            $aggregate = explode('.', $tmp);
+            $aggrate_col = $aggregate[1];
+            $aggrate_model = $aggregate[0] ?? 'user';
+            $order_by = $sort[0]->desc ? 'desc' : 'asc';
+        }
+
+        $this->logger([
+            'model' => $aggrate_model,
+            'col' => $aggrate_col,
+            'aggregate' => $aggrate_model . '_' . $aggrate_col,
+            'order_by' => $order_by,
+        ], 'agents');
+
+        $raw = Referral::withAggregate($aggrate_model, $aggrate_col)
+            ->with('user', 'agent_commission')
+            ->where('referrer_id', Auth::user()->id)
+            ->orderBy($aggrate_model . '_' . $aggrate_col, $order_by);
 
         $count = $raw->count();
 
 
         $filtered = $raw->offset($request->start ?? 0)
             ->limit($request->size ?? 10)->get();
-
-
-        if (count($sort) > 0 && !empty($sort) && $sort[0]->desc) {
-            $filtered->sortByDesc($sort[0]?->id ?? 'id');
-        }
 
         return response()->json([
             'data' => $filtered,
