@@ -10,6 +10,7 @@
 @endsection
 @section('content')
   <div class="container">
+    @include('layouts.flash-message')
     <div class="row col-md-12 justify-content-center pt-3">
       <div class="col-lg-6 m-auto px-3">
         <div class="card card-info mb-3">
