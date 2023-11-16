@@ -211,7 +211,7 @@ const Example = () => {
       <MaterialReactTable
         columns={columns}
         data={fakeData?.data ?? []} //data is undefined on first render
-        initialState={{ showColumnFilters: false }}
+        initialState={{ showColumnFilters: false, density: 'compact' }}
         muiTableBodyCellProps={() => {
           return {
             sx: {
