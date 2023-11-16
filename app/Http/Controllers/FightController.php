@@ -470,10 +470,35 @@ class FightController extends Controller
 
             if (!in_array($bet->referral->referrer_id, [10, 1])) {
                 $user_referrer = Agent::where('user_id', $bet->referral->referrer_id)->first();
+                $agent_comm = AgentCommission::where('user_id', $bet->user_id)->first();
+
+                if ($user_referrer->type == 'sub-agent') {
+                    $agent_commission_add = ($agent_commission_add / 3) * 2;
+
+                    $master_agent_referral = Referral::where('user_id', $user_referrer->user_id)->first();
+                    $master_agent = Agent::where('user_id', $master_agent_referral->referrer_id)->first();
+                    $master_agent_comm = AgentCommission::where('user_id', $user_referrer->user_id)->first();
+
+                    if ($master_agent) {
+                        $master_agent->current_commission += $agent_commission_add;
+                        $master_agent->save();
+                    }
+
+                    if (!$master_agent_comm) {
+                        AgentCommission::create([
+                            'user_id' => $bet->referral->referrer_id,
+                            'agent_id' => $master_agent->user_id,
+                            'commission' => $agent_commission_add,
+                        ]);
+                    } else {
+                        $master_agent_comm->commission += $agent_commission_add;
+                        $master_agent_comm->save();
+                    }
+                }
+
                 $user_referrer->current_commission += $agent_commission_add;
                 $user_referrer->save();
 
-                $agent_comm = AgentCommission::where('user_id', $bet->user_id)->first();
                 if (!$agent_comm) {
                     AgentCommission::create([
                         'user_id' => $bet->user_id,
