@@ -130,6 +130,7 @@ class AgentController extends Controller
             'points' => Auth::user()->points,
             'commission' => Auth::user()->agent->current_commission,
             'players' => Auth::user()->agent->player_count,
+            'ref_link' => 'https://sww23-go.live/register?rid=' . Auth::user()->rid,
         ]);
     }
 

@@ -37,6 +37,8 @@ const Dashboard = () => {
   const [points, setPoints] = useState('0.00');
   const [commission, setCommission] = useState('0.00');
   const [playerCnt, setPlayerCnt] = useState('0');
+  const [refLink, setRefLink] = useState('');
+
   const toggleDrawer = (open) => (event) => {
     if (
       event.type === 'keydown' &&
@@ -86,6 +88,7 @@ const Dashboard = () => {
       setPoints(res.data.points);
       setCommission(res.data.commission);
       setPlayerCnt(res.data.players);
+      setRefLink(res.data.ref_link);
     });
   }, []);
 
@@ -145,10 +148,10 @@ const Dashboard = () => {
               />
               <CardCommission
                 title={'Referral Link'}
-                amount={'https://sww23-go.live/register?rid=REFCJF6DL9N'}
+                amount={refLink}
                 linkText={'Copy Link'}
                 icon={<CopyIcon />}
-                // onClick={handlePointsClick}
+                onClick={() => console.log(refLink)}
                 tooltip="Copy Link"
               />
               <CardCommission
