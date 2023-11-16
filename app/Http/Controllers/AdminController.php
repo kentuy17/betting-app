@@ -323,6 +323,7 @@ class AdminController extends Controller
     {
         $agent = Agent::find($request->id);
         $agent->type = $request->type;
+        $agent->is_master_agent = $request->type == 'master-agent' ? 1 : 0;
         $agent->save();
 
         return redirect()->back()->with('success', 'Updated agent type of ' . $agent->user->username);
