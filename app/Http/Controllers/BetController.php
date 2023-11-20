@@ -124,23 +124,23 @@ class BetController extends Controller
             event(new BetEvent($bet));
             if (Auth::user()->id != 9) {
                 Auth::user()->decrement('points', $request->amount);
-            }
 
-            //Add in Bet History
-            BetHistory::create([
-                'bet_id' => $bet->bet_no,
-                'user_id' => Auth::user()->id,
-                'fight_id' => $bet['fight_id'],
-                'fight_no' => $bet['fight_no'],
-                'status' => 'P',
-                'side' => $bet['side'],
-                'percent' => 0,
-                'betamount' => $bet['amount'],
-                'winamount' => 0,
-                'points_before_bet' => $points_before_bet,
-                'points_after_bet' => Auth::user()->points,
-                'current_points' => Auth::user()->points,
-            ]);
+                //Add in Bet History
+                BetHistory::create([
+                    'bet_id' => $bet->bet_no,
+                    'user_id' => Auth::user()->id,
+                    'fight_id' => $bet['fight_id'],
+                    'fight_no' => $bet['fight_no'],
+                    'status' => 'P',
+                    'side' => $bet['side'],
+                    'percent' => 0,
+                    'betamount' => $bet['amount'],
+                    'winamount' => 0,
+                    'points_before_bet' => $points_before_bet,
+                    'points_after_bet' => Auth::user()->points,
+                    'current_points' => Auth::user()->points,
+                ]);
+            }
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'Error',

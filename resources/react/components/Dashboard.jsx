@@ -21,7 +21,7 @@ import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import { FileCopyRounded } from '@mui/icons-material';
-import { Avatar } from '@mui/material';
+import { Avatar, TextField } from '@mui/material';
 import { Money } from '@mui/icons-material';
 
 const drawerStyle = {
@@ -88,7 +88,16 @@ const Dashboard = () => {
       setPoints(res.data.points);
       setCommission(res.data.commission);
       setPlayerCnt(res.data.players);
-      setRefLink(res.data.ref_link);
+      setRefLink(
+        <TextField
+          disabled
+          id="outlined-disabled"
+          defaultValue={res.data.ref_link}
+          fullWidth
+          variant="standard"
+          sx={{ fontStyle: 'italic', cursor: 'pointer' }}
+        />
+      );
     });
   }, []);
 
@@ -151,7 +160,9 @@ const Dashboard = () => {
                 amount={refLink}
                 linkText={'Copy Link'}
                 icon={<CopyIcon />}
-                onClick={() => console.log(refLink)}
+                onClick={async () =>
+                  await navigator.clipboard.writeText(refLink)
+                }
                 tooltip="Copy Link"
               />
               <CardCommission

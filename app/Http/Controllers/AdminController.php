@@ -216,6 +216,12 @@ class AdminController extends Controller
     public function getUsers()
     {
         try {
+            if (request('search')['value'] && strlen(request('search')['value']) < 4) {
+                return DataTables::of([])
+                    ->addIndexColumn()
+                    ->make(true);
+            }
+
             if (request('order')[0]['column'] == 4) {
                 $users = User::orderBy('points', request('order')[0]['dir'])->get();
             } else {

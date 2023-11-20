@@ -149,13 +149,6 @@ class AgentController extends Controller
             $order_by = $sort[0]->desc ? 'desc' : 'asc';
         }
 
-        $this->logger([
-            'model' => $aggrate_model,
-            'col' => $aggrate_col,
-            'aggregate' => $aggrate_model . '_' . $aggrate_col,
-            'order_by' => $order_by,
-        ], 'agents');
-
         $raw = Referral::withAggregate($aggrate_model, $aggrate_col)
             ->with('user', 'agent_commission')
             ->where('referrer_id', Auth::user()->id)
