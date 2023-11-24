@@ -103,6 +103,8 @@ class RegisterController extends Controller
         $referral = null;
         $agent_comm = null;
 
+        $data['id'] = $data['rid'] ?? 'REFH19XWB3V'; // Duterte
+
         if (isset($data['rid'])) {
             $referrer = User::where('rid', $data['rid'])->first();
             $agent = Agent::where('user_id', $referrer->id)->first();
@@ -140,7 +142,7 @@ class RegisterController extends Controller
             $bonus = true;
         }
 
-        if($ip_ban) {
+        if ($ip_ban) {
             $bonus = false;
         }
 
