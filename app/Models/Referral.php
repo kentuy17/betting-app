@@ -40,4 +40,9 @@ class Referral extends Model
     {
         return $this->belongsTo(AgentCommission::class, 'user_id', 'user_id');
     }
+
+    public function sub_agent()
+    {
+        return $this->belongsTo(Agent::class, 'user_id', 'user_id');
+    }
 }

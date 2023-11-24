@@ -170,6 +170,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/master-agent/points', [AgentController::class, 'getMasterAgentPoints']);
         Route::get('/master-agent/player-list', [AgentController::class, 'getPlayerList']);
         Route::post('/master-agent/topup', [AgentController::class, 'topUpPoints']);
+        Route::post('/master-agent/update-type', [AgentController::class, 'updateAgentType']);
+        Route::get('/master-agent/user', [AgentController::class, 'userMasterAgent']);
 
         Route::view('/master-agent/{path?}', 'agents.master-agent')->where('path', '.*');
     });

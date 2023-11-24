@@ -150,7 +150,7 @@ class AgentController extends Controller
         }
 
         $raw = Referral::withAggregate($aggrate_model, $aggrate_col)
-            ->with('user', 'agent_commission')
+            ->with('user', 'agent_commission', 'sub_agent')
             ->where('referrer_id', Auth::user()->id)
             ->orderBy($aggrate_model . '_' . $aggrate_col, $order_by);
 
@@ -207,6 +207,54 @@ class AgentController extends Controller
             'status' => 200,
             'total' => $players->count(),
             'data' => $players,
+        ], 200);
+    }
+
+    public function updateAgentType(Request $request)
+    {
+        try {
+            $agent = Agent::where('user_id', $request->user_id)->first();
+            $rid = 'REF' . $this->generateRandomString(8);
+
+            if (!$agent) {
+                $agent = Agent::create([
+                    'rid' => Auth::user()->rid,
+                    'user_id' => $request->user_id,
+                    'player_count' => 0,
+                    'is_master_agent' => 1,
+                    'type' => $request->type,
+                ]);
+            } else {
+                $agent->type = $request->type;
+                $agent->save();
+            }
+
+            $user = User::find($request->user_id);
+            $user->rid = $rid;
+            $user->save();
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'status' => 500,
+            ], 500);
+        }
+
+        return response()->json([
+            'data' => $agent,
+            'status' => 200,
+        ], 200);
+    }
+
+    private function generateRandomString($length = 10)
+    {
+        return substr(str_shuffle(str_repeat($x = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length / strlen($x)))), 1, $length);
+    }
+
+    public function userMasterAgent()
+    {
+        $agent = Agent::where('user_id', Auth::user()->id)->first();
+        return response()->json([
+            'type' => $agent->type,
         ], 200);
     }
 }
