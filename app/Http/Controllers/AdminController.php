@@ -348,6 +348,7 @@ class AdminController extends Controller
             Agent::create([
                 'user_id' => $request->user_id,
                 'rid' => $rid,
+                'is_master_agent' => 1,
             ]);
 
             $user = User::find($request->user_id);
