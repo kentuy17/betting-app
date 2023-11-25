@@ -40,19 +40,20 @@ const PlayersTable = () => {
 
   const [player, setPlayer] = useState({
     type: 'player',
-    percent: 2,
     user_id: '',
+    percent: 2,
   });
 
   const [open, setOpen] = useState(false);
 
   const handleEditRow = (row) => {
     let agentType = row.sub_agent ? row.sub_agent.type : 'player';
+    let percent = row.sub_agent ? row.sub_agent.percent : 0;
     setOpen(true);
     setPlayer({
-      percent: 2,
       user_id: row.user_id,
       type: agentType,
+      percent: percent,
     });
   };
 
@@ -227,12 +228,26 @@ const PlayersTable = () => {
       {
         accessorKey: 'agent_commission.commission',
         enableEditing: false,
-        header: 'Commission',
-        size: 18,
+        header: 'Comm',
+        size: 10,
         accessorFn: (row) => {
           if (row.agent_commission == null) return '0.00';
           return row.agent_commission !== undefined ? (
             formatMoney(parseFloat(row.agent_commission.commission).toFixed(2))
+          ) : (
+            <Skeleton width={getRandomInt(20, 50)} animation="wave" />
+          );
+        },
+      },
+      {
+        accessorKey: 'sub_agent.percent',
+        enableEditing: true,
+        header: 'Percent',
+        size: 10,
+        accessorFn: (row) => {
+          if (row.sub_agent == null) return '0 %';
+          return row.sub_agent !== undefined ? (
+            `${row.sub_agent.percent} %`
           ) : (
             <Skeleton width={getRandomInt(20, 50)} animation="wave" />
           );
@@ -253,11 +268,7 @@ const PlayersTable = () => {
   const handleSaveRowEdits = async () => {
     let tmp = [...fakeData.data];
     let index = tmp.findIndex((item) => item.user_id == player.user_id);
-    if (!tmp[index].sub_agent) {
-      tmp[index].sub_agent = { type: player.type };
-    } else {
-      tmp[index].sub_agent.type = player.type;
-    }
+    tmp[index].sub_agent = { type: player.type, percent: player.percent };
 
     await axios.post('/master-agent/update-type', {
       user_id: player.user_id,
@@ -368,12 +379,13 @@ const PlayersTable = () => {
             </Typography>
             <Slider
               aria-label="Percent"
-              defaultValue={2}
-              valueLabelDisplay={true}
+              value={player.percent}
+              valueLabelDisplay={'on'}
               step={0.5}
               marks
               min={0}
               max={4}
+              disabled={player.type == 'player'}
               onChange={(e) =>
                 setPlayer({ ...player, percent: e.target.value })
               }

@@ -225,6 +225,7 @@ class AgentController extends Controller
                     'type' => $request->type,
                 ]);
             } else {
+                $agent->percent = $request->percent;
                 $agent->type = $request->type;
                 $agent->save();
             }

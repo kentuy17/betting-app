@@ -18,6 +18,7 @@ class Agent extends Model
         'player_count',
         'is_master_agent',
         'type',
+        'percent',
         'created_at',
         'updated_at',
     ];
