@@ -369,6 +369,7 @@ const PlayersTable = () => {
             <Slider
               aria-label="Percent"
               defaultValue={2}
+              valueLabelDisplay={true}
               step={0.5}
               marks
               min={0}
