@@ -6,6 +6,7 @@ const TYPE = {
 
 var transactionsTable = $("#deposit-trans-table");
 var pendingCount = 0;
+var unpaidCount = 0;
 
 transactionsTable.DataTable({
   ajax: "/transaction/deposits",
@@ -29,6 +30,7 @@ transactionsTable.DataTable({
     "<'row'<'col-md-12'p>>",
   preInit: function (e, settings) {
     pendingCount = 0;
+    unpaidCount = 0;
   },
   columnDefs: [
     {
@@ -111,6 +113,12 @@ transactionsTable.DataTable({
       $(row).find("td").eq(5).text(timeDiff);
     }
 
+    if (data.status == `completed` && data.reference_code == null) {
+      $(row).css({ "background-color": "var(--bs-yellow)" });
+      $(row).addClass("bg-warning");
+      unpaidCount++
+    }
+
     if (data.status == `failed`) {
       $(row).addClass("failed");
     }
@@ -120,6 +128,12 @@ transactionsTable.DataTable({
       $("#badge-deposit").show().text(pendingCount);
     } else {
       $("#badge-deposit").hide().text(pendingCount);
+    }
+
+    if (unpaidCount > 0) {
+      $("#badge-unpaid").show().text(unpaidCount);
+    } else {
+      $("#badge-unpaid").hide().text(unpaidCount);
     }
   },
 });

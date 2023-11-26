@@ -14,7 +14,7 @@
 
     #trans-receipt {
       /* max-width: 350px;
-                height: 800px; */
+                  height: 800px; */
       margin: -40px 0 0 0;
     }
   </style>
@@ -42,7 +42,8 @@
             @if (hasAccess('Cash-in Operator'))
               <li class="nav-item" role="presentation">
                 <button class="text-xs px-1 nav-link {{ $cashin }}" id="deposit-tab" data-bs-toggle="tab" data-bs-target="#deposit-panel" type="button" role="tab" aria-controls="deposit" aria-selected="true">
-                  DEPOSIT <span id="badge-deposit" style="display: none;" class="text-xs px-1 py-0 badge bg-danger">0</span></button> {{-- <button
+                  DEPOSIT <span id="badge-deposit" style="display: none;" class="text-xs px-1 py-0 badge bg-danger">0</span>
+                  <span id="badge-unpaid" style="display: none;" class="text-xs px-1 py-0 badge bg-warning">0</span></button> {{-- <button
             onclick="showNotification('fuck yeah!')">Show Notif</button> --}}
               </li>
             @endif
