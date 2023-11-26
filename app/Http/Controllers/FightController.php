@@ -337,7 +337,7 @@ class FightController extends Controller
                 $user->save();
 
                 $betHist = BetHistory::where('bet_id', $bet->bet_no)->first();
-                $betHist->percent = $percentage;
+                $betHist->percent = $percentage ?? 190;
                 $betHist->winamount = $update->win_amount;
                 $betHist->current_points = $user->points;
                 $betHist->status = 'W';
@@ -358,7 +358,7 @@ class FightController extends Controller
             foreach ($lose_bet as $lb) {
                 $user_2 = User::find($lb->user_id);
                 $betHistLB = BetHistory::where('bet_id', $lb->bet_no)->first();
-                $betHistLB->percent = $percentagelb;
+                $betHistLB->percent = $percentagelb  ?? 190;
                 $betHistLB->current_points = $user_2->points;
                 $betHistLB->status = 'L';
                 $betHistLB->save();
