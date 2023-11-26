@@ -62,6 +62,9 @@ class OperatorController extends Controller
 
         return DataTables::of($trans)
             ->addIndexColumn()
+            ->with('unpaid_count', $trans->where('status', 'completed')
+                ->where('reference_code', NULL)
+                ->count())
             ->make(true);
     }
 

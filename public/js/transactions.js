@@ -116,7 +116,6 @@ transactionsTable.DataTable({
     if (data.status == `completed` && data.reference_code == null) {
       $(row).css({ "background-color": "var(--bs-yellow)" });
       $(row).addClass("bg-warning");
-      unpaidCount++
     }
 
     if (data.status == `failed`) {
@@ -124,6 +123,7 @@ transactionsTable.DataTable({
     }
   },
   initComplete: function (settings, json) {
+    unpaidCount = json.unpaid_count
     if (pendingCount > 0) {
       $("#badge-deposit").show().text(pendingCount);
     } else {
