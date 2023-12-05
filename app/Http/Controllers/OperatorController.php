@@ -108,6 +108,13 @@ class OperatorController extends Controller
                 ], 400);
             }
 
+            if ($request->action == 'approve' && $request->amount == "") {
+                return response()->json([
+                    'msg' => 'Please add points Mea!',
+                    'status' => 'error',
+                ], 400);
+            }
+
             $check = Transactions::where('reference_code', $request->ref_code)->first();
             if ($check && $request->action == 'approve') {
                 return response()->json([
@@ -126,7 +133,17 @@ class OperatorController extends Controller
                 ], 400);
             }
 
-            $trans->status = $request->action == 'approve' ? 'completed' : 'failed';
+            $status = 'approve';
+            if ($request->action == 'reject') {
+                $status = 'failed';
+            }
+
+            if ($request->action == 'update') {
+                $status = $trans->status;
+                $request->amount = $trans->amount;
+            }
+
+            $trans->status =  $status;
             $trans->processedBy = Auth::user()->id;
             $trans->reference_code = $request->ref_code;
             $trans->amount = $request->amount;

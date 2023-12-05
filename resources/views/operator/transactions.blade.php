@@ -14,7 +14,7 @@
 
     #trans-receipt {
       /* max-width: 350px;
-                  height: 800px; */
+                    height: 800px; */
       margin: -40px 0 0 0;
     }
   </style>
@@ -146,6 +146,7 @@
               <select name="trans-action" class="form-control" id="trans-action">
                 <option value="approve">APPROVE</option>
                 <option value="reject">REJECT</option>
+                <option value="update">UPDATE</option>
               </select>
             </div>
             <div class="form-group mt-2" style="display: none">

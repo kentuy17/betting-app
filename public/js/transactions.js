@@ -265,10 +265,17 @@ $("#deposit-form").on("click", 'input[type="submit"]', function (e) {
 $("#trans-action").on("change", function (e) {
   e.preventDefault();
   let action = $(this).val();
+  console.log(action);
   if (action == "reject") {
     $("#trans-pts,#ref-code").prop("disabled", true);
     $("#trans-note").parent().show();
-  } else {
+  }
+  else if (action == "update") {
+    $("#ref-code").prop("disabled", false);
+    $("#trans-pts").prop("disabled", true);
+    $("#trans-note").parent().hide();
+  }
+  else {
     $("#trans-pts,#ref-code").prop("disabled", false);
     $("#trans-note").parent().hide();
   }
