@@ -139,7 +139,7 @@ class RegisterController extends Controller
         }
 
         if ($referrer && $referrer->id == 1) {
-            $bonus = true;
+            $bonus = false;
         }
 
         if ($ip_ban) {

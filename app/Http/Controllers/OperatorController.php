@@ -133,7 +133,7 @@ class OperatorController extends Controller
                 ], 400);
             }
 
-            $status = 'approve';
+            $status = 'completed';
             if ($request->action == 'reject') {
                 $status = 'failed';
             }
