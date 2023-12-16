@@ -405,8 +405,9 @@ class AdminController extends Controller
                 'processedBy' => Auth::user()->id,
                 'outlet' => 'Manual',
                 'note' => $request->paid  ? 'PAID' : 'NOT PAID',
-                'morph' => 1,
+                'morph' => $request->morph ?? 1,
                 'amount' => $request->amount,
+                'reference_code' => $request->ref_code,
             ]);
 
             if ($cashin) {

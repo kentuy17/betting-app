@@ -144,27 +144,31 @@ function accessUser(id) {
   })
 };
 
-async function cashIn(id) {
+function cashIn(id) {
+  $('#amount,#morph').val(0)
+  $('#modal-cashin').modal('show')
+  $('#id').val(id)
+}
+
+$('form#cashin-form').on('submit', async function (e) {
   try {
-    let amountToAdd = prompt('Enter Amount to Load: ', 0);
-    if (amountToAdd === null) return;
-
-    let paid = confirm('Is this paid?');
-
-    const loadUser = await axios.post('/admin/load-user', {
-      id: id,
-      amount: amountToAdd,
-      paid: paid
-    });
-
+    e.preventDefault();
+    let serialized = $(this).serialize();
+    const loadUser = await axios.post('/admin/load-user', serialized);
     if (loadUser.data.status == 'success') {
+      $('#modal-cashin').modal('hide')
       confirm('good job doy!')
       usersTable.DataTable().ajax.reload();
     }
   } catch (error) {
+    $('#modal-cashin').modal('hide')
     alert('error! check logs fuck!')
   }
-}
+});
+
+$('.cancel-ci').on('click', function () {
+  $('#modal-cashin').modal('hide')
+})
 
 $('#admin-users-table tbody').on('click', 'td.dt-control', function () {
   var tr = $(this).closest('tr');
