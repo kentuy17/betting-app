@@ -24,7 +24,7 @@ class FightController extends Controller
     public $current_event;
     public $prev_match;
     public $fight;
-    private $percent = 10;
+    private $percent = 13;
     private $botchok_id = 10;
     /**
      * Create a new controller instance.
@@ -337,7 +337,7 @@ class FightController extends Controller
                 $user->save();
 
                 $betHist = BetHistory::where('bet_id', $bet->bet_no)->first();
-                $betHist->percent = $percentage ?? 190;
+                $betHist->percent = $percentage ?? 187;
                 $betHist->winamount = $update->win_amount;
                 $betHist->current_points = $user->points;
                 $betHist->status = 'W';
@@ -358,7 +358,7 @@ class FightController extends Controller
             foreach ($lose_bet as $lb) {
                 $user_2 = User::find($lb->user_id);
                 $betHistLB = BetHistory::where('bet_id', $lb->bet_no)->first();
-                $betHistLB->percent = $percentagelb  ?? 190;
+                $betHistLB->percent = $percentagelb  ?? 187;
                 $betHistLB->current_points = $user_2->points;
                 $betHistLB->status = 'L';
                 $betHistLB->save();
@@ -460,7 +460,7 @@ class FightController extends Controller
             if ($bet->win_amount > 0) {
                 $agent_commission_add = ($bet->win_amount - $bet->amount) * $agent_commission_percent;
             } else {
-                $agent_commission_add = (0.9 * $bet->amount) * $agent_commission_percent;
+                $agent_commission_add = (0.87 * $bet->amount) * $agent_commission_percent;
             }
             // $agent_commission_add = ($bet->win_amount - $bet->amount) * 0.06;
             $total += $agent_commission_add;

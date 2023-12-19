@@ -190,8 +190,8 @@ export default ({
         wala: 0,
       },
       percentage: {
-        meron: 190,
-        wala: 190,
+        meron: 187,
+        wala: 187,
       },
       isDisabled: {
         open: false,
@@ -330,11 +330,11 @@ export default ({
 
     // GET FROM EACH SIDE
     meronComm() {
-      return this.total.meron * 10 / 100
+      return this.total.meron * 13 / 100
     },
 
     walaComm() {
-      return this.total.wala * 10 / 100
+      return this.total.wala * 13 / 100
     },
 
     meronPercentage() {
