@@ -232,6 +232,11 @@ class AgentController extends Controller
             $agent = Agent::where('user_id', $request->user_id)->first();
             $user = User::find($request->user_id);
 
+            if (!$user->rid) {
+                $user->rid = $this->generateRandomString(8);
+                $user->save();
+            }
+
             if ($request->type == '') {
                 return response()->json(['error' => 'Invalid type!'], 400);
             }
