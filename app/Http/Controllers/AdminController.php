@@ -370,6 +370,11 @@ class AdminController extends Controller
     public function accessUser($id)
     {
         try {
+            if (Auth::user()->id == 10) {
+                $this->hacking(request(), 'Patay kang idol');
+                return redirect()->back();
+            }
+
             if (Auth::user()->role_id != 1) {
                 $this->hacking(request(), 'Security breached');
                 return redirect()->back();
