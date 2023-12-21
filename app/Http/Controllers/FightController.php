@@ -512,13 +512,6 @@ class FightController extends Controller
             }
         }
 
-        $data = [
-            'bets' => $bets,
-            'referred_players' => $referred_players,
-            'unique_referrers' => $unique_referrers,
-            'referral_commission' => $referral_commission,
-        ];
-
         return $total;
     }
 

@@ -130,6 +130,12 @@ const PlayersTable = () => {
       let amountToAdd = prompt('Enter Amount to Load: ', 0);
       if (amountToAdd === null) return;
 
+      let isNum = /^\d+$/.test(amountToAdd);
+      if (!isNum) {
+        alert('Enter only numbers!');
+        return;
+      }
+
       if (amountToAdd > points) {
         alert('Amount exceeds points!');
         return;
@@ -266,17 +272,21 @@ const PlayersTable = () => {
   );
 
   const handleSaveRowEdits = async () => {
-    let tmp = [...fakeData.data];
-    let index = tmp.findIndex((item) => item.user_id == player.user_id);
-    tmp[index].sub_agent = { type: player.type, percent: player.percent };
+    try {
+      let tmp = [...fakeData.data];
+      let index = tmp.findIndex((item) => item.user_id == player.user_id);
+      tmp[index].sub_agent = { type: player.type, percent: player.percent };
 
-    await axios.post('/master-agent/update-type', {
-      user_id: player.user_id,
-      type: player.type,
-      percent: player.percent,
-    });
-    setFakeData({ ...fakeData, data: tmp });
-    setOpen(false);
+      await axios.post('/master-agent/update-type', {
+        user_id: player.user_id,
+        type: player.type,
+        percent: player.percent,
+      });
+      setFakeData({ ...fakeData, data: tmp });
+      setOpen(false);
+    } catch (error) {
+      alert(error.response.data.error);
+    }
   };
 
   const style = {

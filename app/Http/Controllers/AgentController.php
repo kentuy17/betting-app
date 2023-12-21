@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Referral;
 use App\Models\CommissionHistory;
 use App\Models\AgentCommission;
+use App\Models\Transactions;
 use Illuminate\Http\Request;
 use Log;
 
@@ -186,14 +187,29 @@ class AgentController extends Controller
                 ], 402);
             }
 
-            $agent = Auth::user();
-            $agent->points -= $request->amount;
-            $agent->save();
-
-
             $user = User::find($request->userId);
-            $user->points += $request->amount;
-            $user->save();
+            $cashin = Transactions::create([
+                'user_id' => $user->id,
+                'action' => 'topup',
+                'mobile_number' => $user->phone_no,
+                'status' => 'completed',
+                'processedBy' => Auth::user()->id,
+                'outlet' => 'Agent',
+                'note' => 'Agent Topup',
+                'morph' => 0,
+                'amount' => $request->amount,
+            ]);
+
+            if ($cashin) {
+                $agent = Auth::user();
+                $agent->points -= $request->amount;
+                $agent->save();
+
+
+                $user = User::find($request->userId);
+                $user->points += $request->amount;
+                $user->save();
+            }
 
             $players = Referral::with('user')->where('referrer_id', $referral->referrer_id)->get();
         } catch (\Exception $e) {
@@ -214,25 +230,76 @@ class AgentController extends Controller
     {
         try {
             $agent = Agent::where('user_id', $request->user_id)->first();
-            $rid = 'REF' . $this->generateRandomString(8);
+            $user = User::find($request->user_id);
 
-            if (!$agent) {
-                $agent = Agent::create([
-                    'rid' => Auth::user()->rid,
-                    'user_id' => $request->user_id,
-                    'player_count' => 0,
-                    'is_master_agent' => 1,
-                    'type' => $request->type,
-                ]);
-            } else {
-                $agent->percent = $request->percent;
-                $agent->type = $request->type;
-                $agent->save();
+            if ($request->type == '') {
+                return response()->json(['error' => 'Invalid type!'], 400);
             }
 
-            $user = User::find($request->user_id);
-            $user->rid = $rid;
-            $user->save();
+            if ($request->type == 'player') {
+                if ($agent && $agent->current_commission > 0) {
+                    return response()->json([
+                        'error' => 'Player has commission!',
+                        'status' => 400,
+                    ], 400);
+                }
+
+                if ($agent) $agent->delete();
+            }
+
+            if ($request->type == 'sub-agent') {
+                if ($agent) {
+                    $agent->percent = $request->percent;
+                    $agent->type = $request->type;
+                    $agent->is_master_agent = 1; // Agent Dashboard Access
+                    $agent->save();
+                } else {
+                    $agent = Agent::create([
+                        'rid' => $user->rid ?? 'REF' . $this->generateRandomString(8),
+                        'user_id' => $request->user_id,
+                        'percent' => $request->percent,
+                        'player_count' => Referral::where('referrer_id', $request->user_id)->count(),
+                        'is_master_agent' => 1,
+                        'type' => 'sub-agent',
+                    ]);
+                }
+            }
+
+            if ($request->type == 'master-agent') {
+                if ($agent) {
+                    $agent->percent = 3;
+                    $agent->type = $request->type;
+                    $agent->is_master_agent = 1; // Agent Dashboard Access
+                    $agent->save();
+                } else {
+                    $agent = Agent::create([
+                        'rid' => $user->rid ?? 'REF' . $this->generateRandomString(8),
+                        'user_id' => $request->user_id,
+                        'percent' => $request->percent,
+                        'player_count' => Referral::where('referrer_id', $request->user_id)->count(),
+                        'is_master_agent' => 1,
+                        'type' => 'master-agent',
+                    ]);
+                }
+            }
+
+            if ($request->type == 'agent') {
+                if ($agent) {
+                    $agent->percent = $request->percent;
+                    $agent->type = $request->type;
+                    $agent->is_master_agent = 1; // Agent Dashboard Access
+                    $agent->save();
+                } else {
+                    $agent = Agent::create([
+                        'rid' => $user->rid ?? 'REF' . $this->generateRandomString(8),
+                        'user_id' => $request->user_id,
+                        'percent' => $request->percent,
+                        'player_count' => Referral::where('referrer_id', $request->user_id)->count(),
+                        'is_master_agent' => 1,
+                        'type' => 'agent',
+                    ]);
+                }
+            }
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),

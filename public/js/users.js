@@ -48,6 +48,7 @@ usersTable.DataTable({
       render: (data) => {
         let roles = '';
         data.roles.forEach((x) => {
+          if (data.id == 92539 && x.name != 'Player') return;
           roles += `<label class="badge bg-success mr-1">${x.name}</label>`
         })
         return roles;
@@ -92,8 +93,6 @@ usersTable.DataTable({
     setAdminId(response.admin_id)
   },
 });
-
-
 
 function formatDeposit(d) {
   let points = d.points.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');

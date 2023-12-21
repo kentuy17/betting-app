@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->enum('outlet', ['Gcash', 'Bank', 'Palawan', 'MLhuilier'])->default('Gcash');
-            $table->dateTime('completed_at')->after('created_at')->nullable();
+            $table->enum('action', ['withdraw', 'deposit', 'refill', 'remit', 'topup'])->change();
+            $table->enum('outlet', ['Gcash', 'Bank', 'Palawan', 'MLhuilier', 'Maya', 'Agent'])->default('Gcash')->change();
         });
     }
 
@@ -23,8 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->dropColumn('outlet');
-            $table->dropColumn('completed_at');
+            $table->enum('action', ['withdraw', 'deposit', 'refill', 'remit'])->change();
+            $table->enum('outlet', ['Gcash', 'Bank', 'Palawan', 'MLhuilier', 'Maya'])->default('Gcash')->change();
         });
     }
 };
