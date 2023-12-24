@@ -23,13 +23,19 @@ import Pusher from 'pusher-js';
 window.Pusher = Pusher;
 
 window.Echo = new Echo({
-    broadcaster: 'pusher',
-    key: import.meta.env.VITE_PUSHER_APP_KEY,
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-    forceTLS: false,
-    encryption: true,
-    disableStats: true,
+  broadcaster: 'pusher',
+  key: import.meta.env.VITE_PUSHER_APP_KEY,
+  cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+  forceTLS: false,
+  encryption: true,
+  disableStats: true,
 });
+
+import { io } from 'socket.io-client';
+window.socket = io(import.meta.env.VITE_SOCKET_URL);
+window.socket.on('connect', () => {
+  console.log('connected');
+})
 
 // import VueLoadingButton from 'vue-loading-button/src/index';
 // window.VueLoadingButton = VueLoadingButton

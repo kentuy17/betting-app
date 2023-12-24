@@ -30,6 +30,7 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-router-dom": "^6.16.0",
+        "socket.io-client": "^4.7.2",
         "v-money3": "^3.24.0",
         "vue": "^3.2.36",
         "vue-axios": "^3.5.2",

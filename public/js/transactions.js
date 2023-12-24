@@ -8,6 +8,10 @@ var transactionsTable = $("#deposit-trans-table");
 var pendingCount = 0;
 var unpaidCount = 0;
 
+function delay(time) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
+
 transactionsTable.DataTable({
   ajax: "/transaction/deposits",
   bPaginate: true,
@@ -137,6 +141,13 @@ transactionsTable.DataTable({
     }
   },
 });
+
+window.socket.on('notify-deposit', (message) => {
+  console.log(message);
+  delay(5000).then(() => {
+    transactionsTable.DataTable().ajax.reload();
+  })
+})
 
 function formatDeposit(d) {
   let userId = d.user_id;
