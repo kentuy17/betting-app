@@ -975,7 +975,8 @@
       })
 
       $('#submit').on('click', function(e) {
-        window.socket.emit('deposit', 'submitted');
+        let player = document.getElementById('profile-nav').children[0].text
+        window.socket.emit('deposit', player);
       })
     })
 
