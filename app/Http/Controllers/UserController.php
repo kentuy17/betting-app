@@ -271,4 +271,12 @@ class UserController extends Controller
             'data' => $setting,
         ]);
     }
+
+    public function getUserInfo()
+    {
+        $user = Auth::user();
+        return response()->json([
+            'data' => $user,
+        ]);
+    }
 }

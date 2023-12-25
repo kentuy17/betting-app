@@ -180,6 +180,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/ghost', [GhostController::class, 'index'])->name('ghost');
     });
 
+    // Notif
+    Route::get('/user/info', [UserController::class, 'getUserInfo']);
+
     // Bets
     Route::get('/bet/total', [BetController::class, 'getTotalBetAmountPerFight']);
     Route::get('/bet/history', [BetController::class, 'getBetHistoryByUserController']);
