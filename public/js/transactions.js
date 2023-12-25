@@ -115,6 +115,11 @@ transactionsTable.DataTable({
 
       let timeDiff = moment(data.created_at, "MM-DD-YYYY hh:mm:ss").fromNow();
       $(row).find("td").eq(5).text(timeDiff);
+
+      setInterval(() => {
+        timeDiff = moment(data.created_at, "MM-DD-YYYY hh:mm:ss").fromNow();
+        $(row).find("td").eq(5).text(timeDiff);
+      }, 5000);
     }
 
     if (data.status == `completed` && data.reference_code == null) {
@@ -142,11 +147,14 @@ transactionsTable.DataTable({
   },
 });
 
-window.socket.on('notify-deposit', (message) => {
-  console.log(message);
+window.socket.on('notify-deposit', () => {
   delay(5000).then(() => {
     transactionsTable.DataTable().ajax.reload();
   })
+})
+
+window.socket.on('notify-deposit-processed', () => {
+  transactionsTable.DataTable().ajax.reload();
 })
 
 function formatDeposit(d) {
@@ -262,6 +270,9 @@ $("#deposit-form").on("click", 'input[type="submit"]', function (e) {
 
       transactionsTable.DataTable().ajax.reload();
       pendingCount = 0;
+    })
+    .then(() => {
+      window.socket.emit('deposit-processed', 'done');
     })
     .catch((err) => {
       Swal.fire({

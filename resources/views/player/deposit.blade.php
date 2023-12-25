@@ -975,7 +975,7 @@
       })
 
       $('#submit').on('click', function(e) {
-        window.socket.emit('deposit', 'testing123');
+        window.socket.emit('deposit', 'submitted');
       })
     })
 
