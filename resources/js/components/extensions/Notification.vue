@@ -1,6 +1,7 @@
 <template>
   <div>
-    <button class="nav-link icon-bell" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button class="nav-link icon-bell" @click='markAllAsRead()' role="button" data-bs-toggle="dropdown"
+      aria-haspopup="true" aria-expanded="false">
       <i class="far fa-bell"></i>
       <span class="badge bg-danger text-xs px-1 py-0 mr-0" v-if="unread_count > 0">{{ unread_count }}</span>
     </button>
@@ -63,7 +64,6 @@ export default {
     delay(time) {
       return new Promise(resolve => setTimeout(resolve, time));
     },
-
     redirectTrans() {
       if (this.unread_count > 0) {
         this.unread_count -= 1
@@ -71,13 +71,15 @@ export default {
       }
       window.location.href = '/transactions'
     },
-
     readAllNotif() {
       localStorage.setItem('unread', 0)
       this.unread_count = 0
       window.location.href = '/transactions'
     },
-
+    markAllAsRead() {
+      localStorage.setItem('unread', 0)
+      this.unread_count = 0
+    },
     testAlert() {
       navigator.serviceWorker.register('/js/ws.js');
       Notification.requestPermission(function (result) {
