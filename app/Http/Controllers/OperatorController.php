@@ -57,6 +57,7 @@ class OperatorController extends Controller
             ->whereIn('morph', [0, 2])
             ->with('user')
             ->with('operator')
+            ->whereYear('created_at', date('Y'))
             ->orderBy('created_at', 'desc')
             ->get();
 
