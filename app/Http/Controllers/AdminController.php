@@ -231,11 +231,8 @@ class AdminController extends Controller
             $users_with_roles = [];
             foreach ($users as $user) {
                 $users_with_roles[] = $user->getRoleNames();
-                // if ($user->active && !$user->isOnline()) {
-                //     $user->active = false;
-                //     $user->save();
-                // }
             }
+
             $users->roles = $users_with_roles;
         } catch (\Exception $e) {
             return response($e, 500);

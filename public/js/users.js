@@ -24,6 +24,7 @@ usersTable.DataTable({
   "serverSide": true,
   "processing": true,
   "order": [[5, 'desc']],
+  "searchDelay": 1500,
   "columnDefs": [
     {
       "targets": [4],
@@ -91,6 +92,13 @@ usersTable.DataTable({
     let response = settings.json;
     $('#badge-online-users').show().text(response.online_count);
     setAdminId(response.admin_id)
+  },
+  "preDrawCallback": function (settings) {
+    $('.dataTables_filter input').on('keydown', function () {
+      if (settings.jqXHR.readyState == 1) {
+        settings.jqXHR.abort();
+      }
+    })
   },
 });
 
