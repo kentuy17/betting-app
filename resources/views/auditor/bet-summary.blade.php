@@ -47,6 +47,7 @@
                 <th>RESULT</th>
                 <th>ACTUAL MERON</th>
                 <th>ACTUAL WALA</th>
+                <th>NET</th>
                 <th>DATE</th>
               </tr>
             </thead>

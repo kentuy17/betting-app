@@ -202,8 +202,14 @@ class OperatorController extends Controller
     public function processWithdraw(Request $request)
     {
         try {
+            if ($request->action == 'reject' || $request->action == 'cancel') {
+                $status = 'failed';
+            } else {
+                $status = 'completed';
+            }
+
             $trans = Transactions::find($request->id);
-            $trans->status = $request->action == 'reject' ? 'failed' : 'completed';
+            $trans->status = $status;
             $trans->processedBy = Auth::user()->id;
             $trans->reference_code = $request->ref_code;
             $trans->note = $request->action == 'reject' ? $request->note : 'DONE';
@@ -214,6 +220,12 @@ class OperatorController extends Controller
                 $operator = User::find(Auth::user()->id);
                 $operator->points += $trans->amount;
                 $operator->save();
+            }
+
+            if ($request->action == 'cancel') {
+                $player = User::find($trans->user_id);
+                $player->points += $trans->amount;
+                $player->save();
             }
         } catch (\Exception $e) {
             return response()->json([

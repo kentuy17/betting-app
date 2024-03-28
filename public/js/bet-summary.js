@@ -51,7 +51,7 @@ $(document).ready(function () {
           className: 'dt-body-center',
         },
         {
-          "targets": [3, 4],
+          "targets": [3, 4, 5],
           className: 'dt-body-right',
         },
       ],
@@ -74,6 +74,11 @@ $(document).ready(function () {
           render: (data) => {
             let totalWala = data.bet_legit_wala_sum_amount ?? 0
             return parseFloat(totalWala).toFixed(2)
+          }
+        }, {
+          "data": null,
+          render: (data) => {
+            return parseFloat(data.net).toFixed(2)
           }
         },
         {

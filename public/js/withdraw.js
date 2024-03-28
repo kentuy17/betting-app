@@ -285,7 +285,7 @@ $("#withdraw-action").on("change", function (e) {
   if (action == "update") {
     $("#withdraw-ref-code").prop("disabled", false);
     $('input[type="submit"]').prop("disabled", false).removeClass("disabled");
-  } else if (action == "reject") {
+  } else if (action == "reject" || action == "cancel") {
     $("#withdraw-ref-code").prop("disabled", true);
     $('input[type="submit"]').prop("disabled", false).removeClass("disabled");
     $("#withdraw-note").parent().show();

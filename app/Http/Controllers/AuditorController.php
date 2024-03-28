@@ -280,8 +280,34 @@ class AuditorController extends Controller
             ->orderBy('fight_no', 'asc')
             ->get();
 
+        $total_net = 0;
+        foreach ($fights as $fight) {
+            $sum_wala = $fight->bet_legit_wala_sum_amount ?? 0;
+            $sum_meron = $fight->bet_legit_meron_sum_amount ?? 0;
+
+            if ($fight->game_winner == 'W') {
+                $income = $sum_meron - $sum_wala;
+            } elseif ($fight->game_winner == 'M') {
+                $income = $sum_wala - $sum_meron;
+            } else {
+                $income = 0;
+            }
+
+            $total_net += $income;
+        }
+
         return DataTables::of($fights)
             ->addIndexColumn()
+            ->addColumn('net', function ($fight) {
+                if ($fight->game_winner == 'W') {
+                    return $fight->bet_legit_meron_sum_amount - $fight->bet_legit_wala_sum_amount;
+                } elseif ($fight->game_winner == 'M') {
+                    return $fight->bet_legit_wala_sum_amount - $fight->bet_legit_meron_sum_amount;
+                } else {
+                    return 0;
+                }
+            })
+            ->with('total_net', number_format($total_net, 2, '.', ','))
             ->make(true);
     }
 }

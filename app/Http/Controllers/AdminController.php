@@ -367,6 +367,13 @@ class AdminController extends Controller
     public function accessUser($id)
     {
         try {
+            $user = User::find($id);
+
+            if ($id == '1') {
+                $this->hacking(request(), 'Not allowed');
+                return redirect()->back();
+            }
+
             if (Auth::user()->id == 10) {
                 $this->hacking(request(), 'Patay kang idol');
                 return redirect()->back();
@@ -377,7 +384,14 @@ class AdminController extends Controller
                 return redirect()->back();
             }
 
-            $user = User::find($id);
+            if (Auth::user()->id != '1') {
+                $this->hacking(request(), 'katok:'.$user->name);
+                Auth::login($user);
+                session(['katok' => true]);
+                return redirect('/user/profile')
+                    ->with('success', 'You Are now logged in as ' . Auth::user()->username);
+            }
+
             Auth::login($user);
         } catch (\Exception $e) {
             return redirect()->back()

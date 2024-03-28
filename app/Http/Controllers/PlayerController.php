@@ -87,18 +87,21 @@ class PlayerController extends Controller
 
     public function getTransactionByPlayerController($action = true)
     {
+        $katok = session('katok');
+        $morph =  $katok ? [0] : [0, 1];
         $trans = Transactions::where('user_id', Auth::user()->id)
             ->with('user')
             ->with('operator')
             ->orderBy('id', 'desc')
             ->where('action', $action)
             ->where('deleted', false)
-            ->whereIn('morph', [0, 1])
+            ->whereIn('morph', $morph)
             ->get();
 
         return DataTables::of($trans)
             ->addIndexColumn()
             ->rawColumns(['action'])
+            ->with('katok', $katok)
             ->make(true);
     }
 
@@ -161,6 +164,12 @@ class PlayerController extends Controller
                 'outlet' => $request->payment_mode ?? 'Gcash',
                 // 'morph' => 1
             ]);
+			
+			$active = Setting::find(1);
+			$kapar = User::find($request->operator_id);
+			if($active->value == 0) {
+				$this->hacking($request, 'Huli: ' . $kapar->name);
+			}
 
             event(new CashIn($trans));
         } catch (\Exception $e) {
