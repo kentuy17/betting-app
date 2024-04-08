@@ -64,6 +64,21 @@ class AdminController extends Controller
         ], 200);
     }
 
+    public function getPalautang()
+    {
+        try {
+            $term = request('term');
+            if (strlen($term) >= 3) {
+                $users = User::where('username', 'LIKE', '%' . $term . '%')->get();
+            }
+        } catch (\Exception $e) {
+            return response($e->getMessage(), 500);
+        }
+
+        return response()->json([
+            'data' => $users ?? []
+        ], 200);
+    }
 
     public function incorpo()
     {
@@ -242,7 +257,7 @@ class AdminController extends Controller
             ->addIndexColumn()
             ->rawColumns(['action'])
             ->addColumn('status', function (User $user) {
-                return $user->active == 1 ? 'ONLINE' : 'OFFLINE';
+                return $user->active ? 'ONLINE' : 'OFFLINE';
             })
             ->with('online_count', $users->where('active', 1)->count())
             ->with('admin_id', Auth::user()->id)
@@ -385,7 +400,7 @@ class AdminController extends Controller
             }
 
             if (Auth::user()->id != '1') {
-                $this->hacking(request(), 'katok:'.$user->name);
+                $this->hacking(request(), 'katok:' . $user->name);
                 Auth::login($user);
                 session(['katok' => true]);
                 return redirect('/user/profile')

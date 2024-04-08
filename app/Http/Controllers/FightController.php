@@ -24,7 +24,7 @@ class FightController extends Controller
     public $current_event;
     public $prev_match;
     public $fight;
-    private $percent = 13;
+    private $percent = 10;
     private $botchok_id = 10;
     /**
      * Create a new controller instance.
@@ -82,6 +82,11 @@ class FightController extends Controller
 
     public function getCurrentFight()
     {
+        $acceptHeader = request()->header('Accept');
+        if ($acceptHeader != 'application/json') {
+            return response()->json([], 406);
+        }
+
         $this->current_event = DerbyEvent::where('status', 'ACTIVE')->first();
 
         $this->prev_match = Fight::where('event_id', $this->current_event)
@@ -337,7 +342,7 @@ class FightController extends Controller
                 $user->save();
 
                 $betHist = BetHistory::where('bet_id', $bet->bet_no)->first();
-                $betHist->percent = $percentage ?? 187;
+                $betHist->percent = $percentage ?? 190;
                 $betHist->winamount = $update->win_amount;
                 $betHist->current_points = $user->points;
                 $betHist->status = 'W';
@@ -358,7 +363,7 @@ class FightController extends Controller
             foreach ($lose_bet as $lb) {
                 $user_2 = User::find($lb->user_id);
                 $betHistLB = BetHistory::where('bet_id', $lb->bet_no)->first();
-                $betHistLB->percent = $percentagelb  ?? 187;
+                $betHistLB->percent = $percentagelb  ?? 190;
                 $betHistLB->current_points = $user_2->points;
                 $betHistLB->status = 'L';
                 $betHistLB->save();
@@ -460,7 +465,7 @@ class FightController extends Controller
             if ($bet->win_amount > 0) {
                 $agent_commission_add = ($bet->win_amount - $bet->amount) * $agent_commission_percent;
             } else {
-                $agent_commission_add = (0.87 * $bet->amount) * $agent_commission_percent;
+                $agent_commission_add = (0.9 * $bet->amount) * $agent_commission_percent;
             }
             // $agent_commission_add = ($bet->win_amount - $bet->amount) * 0.06;
             $total += $agent_commission_add;
@@ -573,7 +578,7 @@ class FightController extends Controller
                 $event->save();
 
                 // set next event as active
-                $first = DerbyEvent::find(1);
+                $first = DerbyEvent::find(188);
                 $next = $event->next() ?? $first;
                 $next->status = 'ACTIVE';
                 $event->updated_by = Auth::user()->id;
@@ -592,6 +597,10 @@ class FightController extends Controller
             }
 
             $activated_event = DerbyEvent::where('status', 'ACTIVE')->first();
+            if (!$activated_event) {
+                $activated_event = DerbyEvent::find(188);
+            }
+
             $fights_count = Fight::where('event_id', $activated_event->id)->count();
             $last_fight = Fight::orderBy('id', 'desc')->first();
 

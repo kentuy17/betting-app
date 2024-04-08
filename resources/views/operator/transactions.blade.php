@@ -1,5 +1,6 @@
 @extends('layouts.app') @section('additional-styles')
   <link rel="stylesheet" href="{{ asset('css/operator.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <style>
     .receipt-container {
       max-height: 400px;
@@ -14,8 +15,13 @@
 
     #trans-receipt {
       /* max-width: 350px;
-                      height: 800px; */
+                    height: 800px; */
       margin: -40px 0 0 0;
+    }
+
+    .modal-content .select2-search {
+      pointer-events: auto;
+      color: black !important;
     }
   </style>
 @endsection
@@ -55,20 +61,17 @@
               </li>
             @endif
             <li class="nav-item credit-nav-item">
-              <div class="nav-credits-wr w-25 w-sm-50 gold-text">
-                <a href="/refillpoints" class="d-flex align-items-center justify-content-end gp-credits">
-                  <div class="bg-success add-btn">
-                    <svg class="svg-inline--fa fa-coins fa-w-16" data-prefix="fas" data-icon="coins" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
-                      <path fill="currentColor"
-                        d="M0 405.3V448c0 35.3 86 64 192 64s192-28.7 192-64v-42.7C342.7 434.4 267.2 448 192 448S41.3 434.4 0 405.3zM320 128c106 0 192-28.7 192-64S426 0 320 0 128 28.7 128 64s86 64 192 64zM0 300.4V352c0 35.3 86 64 192 64s192-28.7 192-64v-51.6c-41.3 34-116.9 51.6-192 51.6S41.3 334.4 0 300.4zm416 11c57.3-11.1 96-31.7 96-55.4v-42.7c-23.2 16.4-57.3 27.6-96 34.5v63.6zM192 160C86 160 0 195.8 0 240s86 80 192 80 192-35.8 192-80-86-80-192-80zm219.3 56.3c60-10.8 100.7-32 100.7-56.3v-42.7c-35.5 25.1-96.5 38.6-160.7 41.8 29.5 14.3 51.2 33.5 60 57.2z">
-                      </path>
-                    </svg>
-                  </div>
-                  <div class="credits-data d-flex "><small class="mr-1">CREDITS:</small>
-                    <small class="pr-2 gp-yellow-text font-weight-bold" id="operator-pts">{{ number_format(Auth::user()->points, 2) }}</small>
-                  </div>
-                </a>
-              </div>
+              <button type="button" class="btn btn-block btn-sm btn-success active" data-bs-toggle="modal" data-bs-target="#manual-request-modal">ADD PTS</button>
+              {{-- <div class="nav-credits-wr w-25 w-sm-50 gold-text">
+                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#add-pts-modal">
+                  <svg class="svg-inline--fa fa-coins fa-w-16" data-prefix="fas" data-icon="coins" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+                    <path fill="currentColor"
+                      d="M0 405.3V448c0 35.3 86 64 192 64s192-28.7 192-64v-42.7C342.7 434.4 267.2 448 192 448S41.3 434.4 0 405.3zM320 128c106 0 192-28.7 192-64S426 0 320 0 128 28.7 128 64s86 64 192 64zM0 300.4V352c0 35.3 86 64 192 64s192-28.7 192-64v-51.6c-41.3 34-116.9 51.6-192 51.6S41.3 334.4 0 300.4zm416 11c57.3-11.1 96-31.7 96-55.4v-42.7c-23.2 16.4-57.3 27.6-96 34.5v63.6zM192 160C86 160 0 195.8 0 240s86 80 192 80 192-35.8 192-80-86-80-192-80zm219.3 56.3c60-10.8 100.7-32 100.7-56.3v-42.7c-35.5 25.1-96.5 38.6-160.7 41.8 29.5 14.3 51.2 33.5 60 57.2z">
+                    </path>
+                  </svg>
+                  ADD PTS
+                </button>
+              </div> --}}
             </li>
           </ul>
         </div>
@@ -204,6 +207,53 @@
       </div>
     </div>
   </div>
+  {{-- Request Utang Modal --}}
+  <div class="modal fade" id="manual-request-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-top" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Manual Cash-in</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="manual-request-form" method="post">
+          <div class="modal-body">
+            <div class="form-group row">
+              <label for="player-username">
+                Player:
+                <select class="player-username form-control" id="player-username" required></select>
+              </label>
+              {{-- <input type="text" class="form-control" id="player-username" placeholder="Player" required> --}}
+            </div>
+            <div class="form-group mt-2">
+              <label for="manual-request-amount">Amount:</label>
+              <input type="number" class="form-control" id="manual-request-amount" placeholder="0.00" required>
+            </div>
+            <div class="form-group mt-2">
+              <label for="manual-request-action">Action</label>
+              <select name="manual-request-action" class="form-control" id="manual-request-action">
+                <option value="utang">UTANG</option>
+                <option value="paid">PAID</option>
+              </select>
+            </div>
+            <div class="form-group mt-2" style="display: none">
+              <label for="manual-request-note">Ref-code:</label>
+              <input type="text" class="form-control" id="manual-request-ref" placeholder="REF-CODE" required>
+            </div>
+            <div class="form-group mt-2">
+              <label for="manual-request-note">Note:</label>
+              <textarea name="manual-request-note" class="form-control" id="manual-request-note" cols="30" rows="1"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</a>
+            <input type="submit" class="btn btn-primary bg-slate-900 btn-sm" value="Submit">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
   <!--revert points-->
   <div class="modal fade" id="modal-undo-points" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-top" role="document">
@@ -278,6 +328,7 @@
 @endsection
 @section('additional-scripts')
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script>
     function Comma(Num) { //function to add commas to textboxes
       Num += '';
@@ -300,6 +351,36 @@
     $('#trans-receipt').on('click', function() {
       $('.receipt-container').toggleClass('full-length');
     })
+
+    $(document).ready(function() {
+      $("#player-username").select2({
+        width: '100%',
+        dropdownParent: $("#manual-request-modal .modal-content"),
+        ajax: {
+          url: '/transaction/palautang',
+          dataType: 'json',
+          type: "GET",
+          data: function(params) {
+            var query = {
+              term: params.term,
+            }
+
+            // Query parameters will be ?search=[term]&type=public
+            return query;
+          },
+          processResults: function(data) {
+            return {
+              results: $.map(data.data, function(item) {
+                return {
+                  text: item.username,
+                  id: item.id
+                }
+              })
+            };
+          }
+        }
+      });
+    });
   </script>
   <script src="{{ asset('js/transactions.js') }}" defer></script>
   <script src="{{ asset('js/withdraw.js') }}" defer></script>

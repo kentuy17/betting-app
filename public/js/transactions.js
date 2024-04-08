@@ -284,6 +284,53 @@ $("#deposit-form").on("click", 'input[type="submit"]', function (e) {
     });
 });
 
+$("#manual-request-form").on("click", 'input[type="submit"]', function (e) {
+  e.preventDefault();
+  const amount = $("#manual-request-amount").val();
+  if (!isNumeric(amount)) {
+    Swal.fire({
+      icon: "error",
+      confirmButtonColor: "red",
+      title: "Invalid amount!",
+      timer: 1500,
+    });
+    return;
+  }
+
+  axios.post("/transaction/utang", {
+    id: $("#player-username").val(),
+    amount: amount.replace(",", ""),
+    ref_code: $("#manual-request-ref").val(),
+    action: $("#manual-request-action").val(),
+    note: $("#manual-request-note").val(),
+  })
+    .then((res) => {
+      Swal.fire({
+        icon: "success",
+        confirmButtonColor: "green",
+        title: res.data.msg,
+        timer: 1500,
+      }).then(() => {
+        $('#manual-request-modal').modal('hide');
+        clearFields();
+      });
+
+      transactionsTable.DataTable().ajax.reload();
+      pendingCount = 0;
+    })
+    .then(() => {
+      window.socket.emit('deposit-processed', 'done');
+    })
+    .catch((err) => {
+      Swal.fire({
+        icon: "error",
+        confirmButtonColor: "red",
+        title: err.response.data.msg,
+        timer: 1500,
+      });
+    });
+});
+
 $("#trans-action").on("change", function (e) {
   e.preventDefault();
   let action = $(this).val();
@@ -303,6 +350,12 @@ $("#trans-action").on("change", function (e) {
   }
 });
 
+$('#manual-request-action').on('change', function (e) {
+  e.preventDefault();
+  $('#manual-request-ref').parent().toggle();
+  $('#manual-request-note').parent().toggle();
+})
+
 function clearFields() {
   $("#trans-pts").val("");
   $("#ref-code").val("");
@@ -311,6 +364,10 @@ function clearFields() {
   $("#trans-note").parent().hide();
   $("#withdraw-note").val("");
   $("#withdraw-ref-code").val("");
+  $('#manual-request-ref').val('');
+  $('#manual-request-note').val('');
+  $('#manual-request-amount').val('');
+  $('#player-username').text('');
 }
 
 $('[data-dismiss="modal"]').on("click", function () {
@@ -408,6 +465,7 @@ function copyPhone(e) {
 
 $('[data-dismiss="modal"]').on("click", function () {
   $("#modal-undo-points").modal("hide");
+  $('#manual-request-modal').modal('hide');
 });
 
 function showNotification(message) {
@@ -418,6 +476,12 @@ function showNotification(message) {
     body: text,
     icon: img,
   });
+}
+
+function isNumeric(str) {
+  if (typeof str != "string") return false // we only process strings!  
+  return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+    !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
 }
 
 // $("#allow-notifications").on("click", () => {

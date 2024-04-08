@@ -79,9 +79,9 @@
           <img id="poster-img" style="display: none;" src="{{ asset('img/poster.png') }}" alt="10-streak-win-promo">
 
           {{-- DaCast --}}
-          {{-- <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
+          <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
             <script id="a3e4275e-c022-b1b4-c231-3bef437168da-live-11b41ea8-e33c-6818-4331-1cb7d38e87cf" width="100%" height="100%" src="https://player.dacast.com/js/player.js?contentId=a3e4275e-c022-b1b4-c231-3bef437168da-live-11b41ea8-e33c-6818-4331-1cb7d38e87cf" class="dacast-video"></script>
-          </div> --}}
+          </div>
 
           {{-- OneStream --}}
           {{-- <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
@@ -100,9 +100,9 @@
           </div> --}}
 
           {{-- 5cent --}}
-          <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
+          {{-- <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
             <iframe src="https://iframes.5centscdn.com/videojs/hls/aHR0cHM6Ly9vcWdkcmdhemw0cm0taGxzLWxpdmUuNWNlbnRzY2RuLmNvbS9zd3cvZDBkYmU5MTUwOTFkNDAwYmQ4ZWU3ZjI3ZjA3OTEzMDMuc2RwL3BsYXlsaXN0Lm0zdTg=" frameBorder="0" allow="autoplay; encrypted-media" allowfullscreen style="overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:100%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px"></iframe>
-          </div>
+          </div> --}}
         </div>
       </div>
     </div>

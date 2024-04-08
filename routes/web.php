@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\PlayerController;
@@ -157,6 +157,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/transaction/withdrawals', [OperatorController::class, 'getWithdrawTrans']);
         Route::post('/transaction/deposit', [OperatorController::class, 'processDeposit']);
         Route::post('/transaction/withdraw', [OperatorController::class, 'processWithdraw']);
+
+        Route::post('/transaction/utang', [OperatorController::class, 'processUtang']);
+        Route::get('/transaction/palautang', [AdminController::class, 'getPalautang']);
 
         Route::get('/player/bets/{id}', [PlayerController::class, 'getBetsByUserId']);
     });

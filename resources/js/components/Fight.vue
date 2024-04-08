@@ -4,36 +4,42 @@
       <div class="grid grid-cols-2 bg-os_bg">
         <div class="px-2 py-1 border border-black">
           <div>
-            <h3 class="font-extrabold text-center m-2 font-tally text-red-700 text-2xl">{{ formatMoney(ghost.meron) }}
-            </h3>
+            <h3
+              class="font-extrabold text-center m-2 font-tally text-red-700 text-2xl">
+              {{ formatMoney(ghost.meron) }} </h3>
           </div>
         </div>
         <div class="px-2 py-1 border border-black">
           <div>
-            <h3 class="font-extrabold text-center m-2 font-tally text-blue-700 text-2xl">{{ formatMoney(ghost.wala) }}
-            </h3>
+            <h3
+              class="font-extrabold text-center m-2 font-tally text-blue-700 text-2xl">
+              {{ formatMoney(ghost.wala) }} </h3>
           </div>
         </div>
       </div>
     </div>
     <div class="bet-bg-head items-center grid grid-cols-3">
-      <h6><b class="text-lg">FIGHT # </b> <b id="fight-no" class="text-lg">{{ fightNo }}</b></h6>
+      <h6><b class="text-lg">FIGHT # </b> <b id="fight-no" class="text-lg">{{
+      fightNo }}</b></h6>
       <div class="text-center">
-        <span class="font-bold btn btn-block btn-sm btn-lg vue-components" :class="fightStatusClass[message]">{{ message
-        }}</span>
+        <span class="font-bold btn btn-block btn-sm btn-lg vue-components"
+          :class="fightStatusClass[message]">{{ message }}</span>
       </div>
       <div class="nav-credits-wr w-25 w-sm-50 gold-text ml-auto">
-        <a href="/refillpoints" class="d-flex align-items-center justify-content-end gp-credits">
+        <a href="/refillpoints"
+          class="d-flex align-items-center justify-content-end gp-credits">
           <div class="bg-success add-btn p-1">
-            <svg class="svg-inline--fa fa-coins fa-w-16" data-prefix="fas" data-icon="coins" role="img"
-              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+            <svg class="svg-inline--fa fa-coins fa-w-16" data-prefix="fas"
+              data-icon="coins" role="img" xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512" data-fa-i2svg="">
               <path fill="currentColor"
                 d="M0 405.3V448c0 35.3 86 64 192 64s192-28.7 192-64v-42.7C342.7 434.4 267.2 448 192 448S41.3 434.4 0 405.3zM320 128c106 0 192-28.7 192-64S426 0 320 0 128 28.7 128 64s86 64 192 64zM0 300.4V352c0 35.3 86 64 192 64s192-28.7 192-64v-51.6c-41.3 34-116.9 51.6-192 51.6S41.3 334.4 0 300.4zm416 11c57.3-11.1 96-31.7 96-55.4v-42.7c-23.2 16.4-57.3 27.6-96 34.5v63.6zM192 160C86 160 0 195.8 0 240s86 80 192 80 192-35.8 192-80-86-80-192-80zm219.3 56.3c60-10.8 100.7-32 100.7-56.3v-42.7c-35.5 25.1-96.5 38.6-160.7 41.8 29.5 14.3 51.2 33.5 60 57.2z">
               </path>
             </svg>
           </div>
           <div class="credits-data d-flex ">
-            <span class="pr-2 gp-yellow-text font-weight-bold" id="operator-pts">{{ creditPoints }}</span>
+            <span class="pr-2 gp-yellow-text font-weight-bold"
+              id="operator-pts">{{ creditPoints }}</span>
           </div>
         </a>
       </div>
@@ -50,13 +56,17 @@
       <div class="grid grid-cols-2 bg-os_bg">
         <div class="px-2 py-1 border border-black">
           <div>
-            <h3 class="font-extrabold text-center m-2 font-tally text-2xl">{{ formatMoney(total.meron) }}</h3>
-            <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT = {{ formatMoney(meronPercentage) }}</h3>
+            <h3 class="font-extrabold text-center m-2 font-tally text-2xl">{{
+      formatMoney(total.meron) }}</h3>
+            <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT
+              = {{ formatMoney(meronPercentage) }}</h3>
             <div>
               <div class="flex justify-center items-center">
                 <h3 class="font-bold text-drawcolor text-center text-sm">
-                  <span class='text-player-bet'>{{ formatMoney(player.bets.meron) }}</span> = <span
-                    class='text-player-win'>{{ formatMoney(meronWinAmount) }}</span>
+                  <span class='text-player-bet'>{{
+      formatMoney(player.bets.meron) }}</span> = <span
+                    class='text-player-win'>{{ formatMoney(meronWinAmount)
+                    }}</span>
                 </h3>
               </div>
             </div>
@@ -64,13 +74,16 @@
         </div>
         <div class="px-2 py-1 border border-black">
           <div>
-            <h3 class="font-extrabold text-center m-2 font-tally text-2xl">{{ formatMoney(total.wala) }}</h3>
-            <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT = {{ formatMoney(walaPercentage) }}</h3>
+            <h3 class="font-extrabold text-center m-2 font-tally text-2xl">{{
+      formatMoney(total.wala) }}</h3>
+            <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT
+              = {{ formatMoney(walaPercentage) }}</h3>
             <div>
               <div class="flex justify-center items-center">
                 <h3 class="font-bold text-drawcolor text-center text-sm">
-                  <span class="text-player-bet">{{ formatMoney(player.bets.wala) }}</span> = <span
-                    class='text-player-win'>{{ formatMoney(walaWinAmount) }}</span>
+                  <span class="text-player-bet">{{ formatMoney(player.bets.wala)
+                    }}</span> = <span class='text-player-win'>{{
+      formatMoney(walaWinAmount) }}</span>
                 </h3>
               </div>
             </div>
@@ -82,7 +95,8 @@
       <div class="px-1 py-1">
         <button type="button" color="#00D7E7" @click="addBet('M')"
           class="button text-ellipsis overflow-clip uppercase bg-os_meron_btn text-sm font-bold is-info is-fullwidth">
-          <i class="fa-solid fa-circle-plus text-sm mr-1"></i> BET MERON</button>
+          <i class="fa-solid fa-circle-plus text-sm mr-1"></i> BET
+          MERON</button>
       </div>
       <div class="px-1 py-1">
         <button type="button" color="#00D7E7" @click="addBet('W')"
@@ -92,7 +106,8 @@
     </div>
     <div class="col-md-12">
       <div class="input-group px-4 py-2">
-        <money3 class="form-control" :model-modifiers="{ number: true }" v-model="betAmount" v-bind="money"></money3>
+        <money3 class="form-control" :model-modifiers="{ number: true }"
+          v-model="betAmount" v-bind="money"></money3>
         <div class="input-group-append">
           <button @click='clear' class="input-group-text">CLEAR</button>
         </div>
@@ -100,14 +115,16 @@
     </div>
     <div class="col-md-12">
       <div class="amounts-bet-btn py-2 flex-wrap">
-        <button v-for="(amnt, index) in amounts" v-bind:key="index" @click="betManual(amnt)"
-          class="btn btn-success btn-sm m-1"> {{ amnt }} </button>
+        <button v-for="(amnt, index) in amounts" v-bind:key="index"
+          @click="betManual(amnt)" class="btn btn-success btn-sm m-1"> {{ amnt
+          }} </button>
       </div>
     </div>
     <div class="self-end mr-2">
-      <a href="javascript:void(0)" data-id="1" id="settings-btn" class="btn btn-link text-primary btn-icon btn-sm play">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear"
-          viewBox="0 0 16 16">
+      <a href="javascript:void(0)" data-id="1" id="settings-btn"
+        class="btn btn-link text-primary btn-icon btn-sm play">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+          fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
           <path
             d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z">
           </path>
@@ -117,24 +134,29 @@
         </svg>
       </a>
     </div>
-    <div class="flex gap-2 mb-3" style="display: flex; justify-content: center; flex-wrap: nowrap;">
-      <button @click="updateFight('O')" :disabled="isDisabled.open" class="btn btn-success">
+    <div class="flex gap-2 mb-3"
+      style="display: flex; justify-content: center; flex-wrap: nowrap;">
+      <button @click="updateFight('O')" :disabled="isDisabled.open"
+        class="btn btn-success">
         <span v-show='!isLoading.open'>OPEN</span>
         <span v-show='isLoading.open'>Processing...</span></button>
-      <button @click="updateFight('C')" :disabled="isDisabled.close" class="btn btn-danger">
+      <button @click="updateFight('C')" :disabled="isDisabled.close"
+        class="btn btn-danger">
         <span v-show='!isLoading.close'>CLOSE</span>
         <span v-show='isLoading.close'>Processing...</span></button>
-      <button @click="doneFight()" :disabled="isDisabled.done" class="btn btn-secondary">
+      <button @click="doneFight()" :disabled="isDisabled.done"
+        class="btn btn-secondary">
         <span v-show='!isLoading.done'>DONE</span>
         <span v-show='isLoading.done'>Loading...</span></button>
-      <button @click="cancelFight()" :disabled='isLoading.cancel' class="btn btn-primary" v-show='!isLoading.cancel'>
+      <button @click="cancelFight()" :disabled='isLoading.cancel'
+        class="btn btn-primary" v-show='!isLoading.cancel'>
         <span v-show='!isLoading.cancel'>CANCEL</span>
         <span v-show='isLoading.cancel'>Loading...</span>
       </button>
     </div>
   </div>
-  <div class="modal fade" id="modal-undo-win" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-    aria-hidden="true">
+  <div class="modal fade" id="modal-undo-win" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-top">
       <div class="modal-content">
         <div class="modal-header">
@@ -147,13 +169,16 @@
           </div>
           <div class="revert-btn-group">
             <div class="form-group mt-2">
-              <button @click="revertFight('M')" class="btn btn-danger btn-sm">MERON</button>
+              <button @click="revertFight('M')"
+                class="btn btn-danger btn-sm">MERON</button>
             </div>
             <div class="form-group mt-2">
-              <button @click="revertFight('W')" class="btn btn-primary btn-sm">WALA</button>
+              <button @click="revertFight('W')"
+                class="btn btn-primary btn-sm">WALA</button>
             </div>
             <div class="form-group mt-2">
-              <button @click="revertFight('D')" class="btn btn-warning btn-sm">DRAW</button>
+              <button @click="revertFight('D')"
+                class="btn btn-warning btn-sm">DRAW</button>
             </div>
           </div>
         </div>
@@ -161,7 +186,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import { axios } from '@bundled-es-modules/axios';
 import { Money3Component } from 'v-money3'
@@ -180,7 +204,7 @@ export default ({
         CLOSE: 'gradient-status-close',
         '_____': 'gradient-status-pending',
       },
-      amounts: [20, 50, 100, 500, 1000, 5000, 10000],
+      amounts: [123, 775, 915, 3664, 4411, 5000, 10000],
       total: {
         meron: 0,
         wala: 0,
@@ -190,8 +214,8 @@ export default ({
         wala: 0,
       },
       percentage: {
-        meron: 187,
-        wala: 187,
+        meron: 190,
+        wala: 190,
       },
       isDisabled: {
         open: false,
@@ -237,8 +261,13 @@ export default ({
 
   },
   mounted() {
-    fetch('fight/current')
-      .then(resp => resp.json())
+    axios.defaults.headers = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    }
+
+    axios.get('api/fight/current')
+      .then(resp => resp.data)
       .then(json => {
         this.fight = json.current
         this.player.points = json.points
@@ -330,11 +359,11 @@ export default ({
 
     // GET FROM EACH SIDE
     meronComm() {
-      return this.total.meron * 13 / 100
+      return this.total.meron * 10 / 100
     },
 
     walaComm() {
-      return this.total.wala * 13 / 100
+      return this.total.wala * 10 / 100
     },
 
     meronPercentage() {
@@ -460,6 +489,8 @@ export default ({
 
     async updateFight(status, result = null) {
       try {
+        if (this.message == 'CLOSE' && status == 'O') return
+
         if (status == 'O') this.isLoading.open = true
         if (status == 'C') this.isLoading.close = true
 
@@ -546,7 +577,6 @@ export default ({
   }
 })
 </script>
-
 <style>
 .revert-btn-group {
   display: flex;
