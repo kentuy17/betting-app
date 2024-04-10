@@ -35,11 +35,18 @@ class HourlyCheck extends Command
     {
         Log::channel('cron')->info("Cron Job running at " . now());
 
-        $auth_key = 'e0c6c349e2fee92e00ca';
-        $secret_key = 'e4aa957c59f83b4f373e';
-        $app_id = '1618692';
+        $auth_key = env('PUSHER_APP_KEY', 'fb67b0d962d7feef73c4');
+        $secret_key = env('PUSHER_APP_SECRET', '3b35a2c2dc7f286a5885');
+        $app_id = env('PUSHER_APP_ID', '1785417');;
 
-        $pusher = new Pusher($auth_key, $secret_key, $app_id, ['cluster' => 'ap1']);
+
+        // PUSHER_APP_ID=1785417
+        // PUSHER_APP_KEY=fb67b0d962d7feef73c4
+        // PUSHER_APP_SECRET=3b35a2c2dc7f286a5885
+
+        $pusher = new Pusher($auth_key, $secret_key, $app_id, [
+            'cluster' => 'ap1'
+        ]);
 
         $users = User::whereNotIn('id', [9, 2])->get();
         foreach ($users as $key => $user) {
