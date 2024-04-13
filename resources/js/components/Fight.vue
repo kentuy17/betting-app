@@ -484,7 +484,10 @@ export default ({
           this.clear()
           return
         })
-        .then(() => this.isLoading.cancel = false)
+        .then(() => {
+          this.isLoading.cancel = false
+          this.isDisabled.open = false // fixed open button is disabled
+        })
     },
 
     async updateFight(status, result = null) {
