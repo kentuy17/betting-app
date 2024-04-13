@@ -15,7 +15,7 @@
 
     #trans-receipt {
       /* max-width: 350px;
-                    height: 800px; */
+                            height: 800px; */
       margin: -40px 0 0 0;
     }
 
@@ -58,6 +58,13 @@
                 <button class="text-xs px-1 nav-link {{ $cashout }}" id="withdraw-tab" data-bs-toggle="tab" data-bs-target="#withdraw" type="button" role="tab" aria-controls="withdraw" aria-selected="false">
                   WITHDRAW <span id="badge-withdraw" style="display: none;" class="text-xs px-1 py-0 badge bg-danger">0</span>
                   <span id="badge-withdraw-unverified" data-bs-toggle="tooltip" title="Missing Ref-code" style="display: none;" class="text-xs badge bg-warning">0</span></button>
+              </li>
+            @endif
+            @if (hasAccess('Cash-out Operator'))
+              <li class="nav-item hidden" role="presentation">
+                <button class="text-xs px-1 nav-link {{ $cashout }}" id="agent-tab" data-bs-toggle="tab" data-bs-target="#agent" type="button" role="tab" aria-controls="agent" aria-selected="false">
+                  AGENT CI <span id="badge-agent" style="display: none;" class="text-xs px-1 py-0 badge bg-danger">0</span>
+                  <span id="badge-agent-unverified" data-bs-toggle="tooltip" title="Missing Ref-code" style="display: none;" class="text-xs badge bg-warning">0</span></button>
               </li>
             @endif
             <li class="nav-item credit-nav-item">
@@ -108,6 +115,22 @@
                       <th>Ref Code</th>
                       <th>Date</th>
                       <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+              <div class="tab-pane fade hidden {{ $cashin }}" id="agent-panel" role="tabpanel" aria-labelledby="agent-tab">
+                <table class="table dt-responsive table-striped nowrap w-100" id="agent-trans-table">
+                  <thead>
+                    <tr>
+                      <th>Player</th>
+                      <th>Amount</th>
+                      <th>Mobile#</th>
+                      <th>Agent</th>
+                      {{-- <th>Ref Code</th> --}}
+                      <th>Date</th>
+                      {{-- <th>Status</th> --}}
                       <th>Action</th>
                     </tr>
                   </thead>

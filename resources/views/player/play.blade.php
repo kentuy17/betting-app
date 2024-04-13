@@ -26,7 +26,7 @@
 
     #sabong-aficionado {
       position: relative;
-      padding-bottom: 62.375%;
+      padding-bottom: 56.25%;
       /* 16:9 */
       /* padding-top: 25px; */
       height: 0;
@@ -52,7 +52,7 @@
     }
 
     /* #clappr{ width: 100%;height: 100%;position: relative; min-height: 320px; margin-bottom: 25px;}
-                                                                                    #clappr > div{ width:100%;height:100%;position: absolute;} */
+                        #clappr > div{ width:100%;height:100%;position: absolute;} */
     #play-container {
       display: flex;
       align-content: flex-start;
@@ -85,7 +85,7 @@
 
 @section('content')
   <div class="max-w-full min-w-full min-h-screen shadow-md bg-os_event_body_black row m-0 g-2" id="play-container">
-    <div class="col-md-12 my-0">
+    <div class="col-md-7 my-0">
       <div class="card mb-0">
         <div id="video-stream-container" class="embed-responsive">
           <input type="hidden" id="video-display" value="{{ $video_display }}">
@@ -98,12 +98,8 @@
           <img id="poster-img" style="display: none;" src="{{ asset('img/poster.png') }}" alt="10-streak-win-promo">
 
           {{-- DaCast --}}
-          {{-- <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
+          <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
             <script id="a3e4275e-c022-b1b4-c231-3bef437168da-live-11b41ea8-e33c-6818-4331-1cb7d38e87cf" width="100%" height="100%" src="https://player.dacast.com/js/player.js?contentId=a3e4275e-c022-b1b4-c231-3bef437168da-live-11b41ea8-e33c-6818-4331-1cb7d38e87cf" class="dacast-video"></script>
-          </div> --}}
-
-          <div id="mux-player" class="mx-[-2]" style="width:100%;height:0px;position:relative;padding-bottom:65.25%;">
-            <iframe src="https://player.onestream.live/embed?token=MjA3ODgwNA==&type=up" style="overflow:hidden; overflow-x:hidden; overflow-y:hidden; height:100%; width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px" scrolling="no" frameborder="0" allow="autoplay" allowfullscreen> </iframe>
           </div>
 
           {{-- Onestream --}}

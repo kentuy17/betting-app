@@ -274,7 +274,7 @@ class AuditorController extends Controller
         $event = DerbyEvent::whereDate('schedule_date', $request->event_date)->get();
 
         $fights = Fight::whereIn('event_id', $event->pluck('id'))
-            ->with('event')
+            ->with('event:id,schedule_date')
             ->withSum('bet_legit_meron', 'amount')
             ->withSum('bet_legit_wala', 'amount')
             ->orderBy('fight_no', 'asc')

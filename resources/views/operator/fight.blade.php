@@ -3,14 +3,14 @@
 @section('additional-styles')
   <link rel="stylesheet" href="{{ asset('css/play-sabong.css') }}" type="text/css">
   <link rel="stylesheet" href="{{ asset('css/operator.css') }}" type="text/css">
-  <link rel="stylesheet" href="https://vjs.zencdn.net/7.8.2/video-js.css" />
+  {{-- <link rel="stylesheet" href="https://vjs.zencdn.net/7.8.2/video-js.css" /> --}}
   <link href="https://unpkg.com/video.js@7/dist/video-js.min.css" rel="stylesheet">
   <link href="https://unpkg.com/silvermine-videojs-quality-selector@1.1.2/dist/css/quality-selector.css" rel="stylesheet">
   <style>
     .offline-embeds-channel-info-panel {
       background: rgba(0, 0, 0, .6);
       background: var(--color-background-overlay-alt);
-      width: 300px;
+      width: 320px;
       display: none !important;
     }
 
@@ -25,7 +25,7 @@
 
     #sabong-aficionado {
       position: relative;
-      padding-bottom: 50.25%;
+      padding-bottom: 56.25%;
       /* 16:9 */
       /* padding-top: 25px; */
       height: 0;
@@ -65,7 +65,7 @@
 
 @section('content')
   <div class="max-w-full min-w-full min-h-screen shadow-md bg-os_event_body_black row m-0 g-2" id="play-container">
-    <div class="col-md-12 my-1">
+    <div class="col-md-7 my-1">
       <div class="card mb-0">
         <div id="video-stream-container" class="embed-responsive">
           <div id="header-fight" class="bet-bg-head font-bold">
@@ -79,16 +79,14 @@
           <img id="poster-img" style="display: none;" src="{{ asset('img/poster.png') }}" alt="10-streak-win-promo">
 
           {{-- DaCast --}}
-          {{-- <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
+          <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
             <script id="a3e4275e-c022-b1b4-c231-3bef437168da-live-11b41ea8-e33c-6818-4331-1cb7d38e87cf" width="100%" height="100%" src="https://player.dacast.com/js/player.js?contentId=a3e4275e-c022-b1b4-c231-3bef437168da-live-11b41ea8-e33c-6818-4331-1cb7d38e87cf" class="dacast-video"></script>
-          </div> --}}
-
-          {{-- OneStream --}}
-          <div id="mux-player" style="width:100%;height:auto;position:relative;padding-bottom:65.25%;">
-            <iframe src="https://player.onestream.live/embed?token=MjA3ODgwNA==&type=up" style="position:absolute;width:100%;height:100%;overflow: hidden;" frameborder="0" allow="autoplay" allowfullscreen> </iframe>
           </div>
 
-
+          {{-- OneStream --}}
+          {{-- <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
+            <iframe src="https://player.onestream.live/embed?token=ZF9hdXRoXzIwNzg4MDRfMXR0NDJtZnM0&type=psk" style="position:absolute;width:100%;height:100%;" scrolling="no" frameborder="0" allow="autoplay" allowfullscreen> </iframe>
+          </div> --}}
 
           {{-- Wowza --}}
           {{-- <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
@@ -193,7 +191,7 @@
     .results .bet-result-chart {
       /* max-width: 720px; */
       overflow-x: auto;
-      max-height: 320px !important;
+      max-height: 300px !important;
       margin: 2rem 0;
     }
   </style>
