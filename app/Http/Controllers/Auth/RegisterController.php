@@ -103,7 +103,7 @@ class RegisterController extends Controller
         $referral = null;
         $agent_comm = null;
 
-        $data['id'] = $data['rid'] ?? 'REFH19XWB3V'; // Duterte
+        // $data['id'] = $data['rid'] ?? 'REFH19XWB3V'; // Duterte
 
         if (isset($data['rid'])) {
             $referrer = User::where('rid', $data['rid'])->first();

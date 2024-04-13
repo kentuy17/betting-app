@@ -83,10 +83,14 @@
           </div> --}}
 
 
+          <video-js id=example-video width=640 height=480 class="vjs-default-skin" controls>
+            <source src="https://player.onestream.live/embed?token=MjA3ODgwNA==" type="application/x-mpegURL">
+          </video-js>
+
           {{-- OneStream --}}
-          <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
+          {{-- <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
             <iframe src="https://172.105.115.222:8080/players/hls.html" style="position:absolute;width:100%;height:100%;" scrolling="no" frameborder="0" allow="autoplay" allowfullscreen> </iframe>
-          </div>
+          </div> --}}
         </div>
       </div>
     </div>
@@ -188,4 +192,9 @@
   <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
   <script src="https://vjs.zencdn.net/7.8.2/video.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mux/mux-player"></script>
+
+  <script>
+    var player = videojs('example-video');
+    player.play();
+  </script>
 @endsection

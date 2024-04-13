@@ -874,16 +874,16 @@
                     @elseif(Auth::user()->agent)
                       @if (Auth::user()->id == 10)
                         MASTER
-                        @endif COMMISSION <span class="text-black">(@if (Auth::user()->id == 92472)
-                            5
-                          @elseif(Auth::user()->agent->type == 'sub-agent')
-                            {{ Auth::user()->agent->percent }}
-                          @else
-                            3
-                          @endif % WIN/LOSE)</span>
-                      @else
-                        {{ Auth::user()->user_role->name }}
-                      @endif
+                      @endif COMMISSION <span class="text-black">
+                        @if (Auth::user()->agent->type == 'sub-agent')
+                          {{ Auth::user()->agent->percent }}%
+                        @else
+                          6%
+                        @endif
+                      </span>
+                    @else
+                      {{ Auth::user()->user_role->name }}
+                    @endif
                   </p>
                 </div>
               </div>

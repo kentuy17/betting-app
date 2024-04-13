@@ -27,7 +27,7 @@ $(document).ready(function () {
       "pagingType": 'numbers',
       "processing": true,
       "serverSide": true,
-      "pageLength": 15,
+      "pageLength": 10,
       "ajax": {
         "type": "GET",
         "url": "/summary-bet/filter-date",
@@ -44,7 +44,7 @@ $(document).ready(function () {
         "<'row'<'col-sm-12'tr>>" +
         "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
       "scrollX": true,
-      "order": [[0, 'DESC']],
+      "order": [[1, 'DESC']],
       "columnDefs": [
         {
           "targets": [1, 2],
@@ -57,7 +57,8 @@ $(document).ready(function () {
       ],
       "columns": [
         {
-          "data": "event.name"
+          "data": null,
+          render: (data) => moment(data.event.schedule_date).format('MMMM DD, YYYY').toUpperCase()
         }, {
           "data": "fight_no"
         }, {
@@ -85,7 +86,7 @@ $(document).ready(function () {
           "data": "created_at",
         }
       ],
-      "createdRow": function (row, data, dataIndex) {
+      "createdRow": function (row, data) {
         if (data.game_winner == 'M') {
           $(row).find('td').eq(2).attr('style', 'color: red !important');
         }
@@ -94,12 +95,8 @@ $(document).ready(function () {
           $(row).find('td').eq(2).attr('style', 'color: blue !important');
         }
 
-        if (data.bet_legit_meron_sum_amount) {
-          $(row).find('td').eq(3).attr('style', 'color: yellow !important');
-        }
-
-        if (data.bet_legit_wala_sum_amount) {
-          $(row).find('td').eq(4).attr('style', 'color: yellow !important');
+        if (data.net != 0) {
+          $(row).find('td').eq(5).attr('style', `color: ${data.net > 0 ? 'yellow' : 'red'} !important`);
         }
       }
     });

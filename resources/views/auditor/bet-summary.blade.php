@@ -42,7 +42,7 @@
           <table class="table table-striped w-100" id="bet-summary-table">
             <thead>
               <tr>
-                <th>EVENT NAME</th>
+                <th>EVENT DATE</th>
                 <th>FIGHT#</th>
                 <th>RESULT</th>
                 <th>ACTUAL MERON</th>

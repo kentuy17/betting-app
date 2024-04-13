@@ -183,6 +183,48 @@ class OperatorController extends Controller
         ], 200);
     }
 
+    public function processUtang(Request $request)
+    {
+        try {
+            $user = User::find($request->id);
+            if (!$user) {
+                return response()->json([
+                    'message' => 'User not found',
+                    'status' => 'error',
+                ], 400);
+            }
+            $utang_note = $request->action == 'utang' && $request->note == null ? 'Utang' : $request->note;
+            $cashin = Transactions::create([
+                'user_id' => $user->id,
+                'action' => 'deposit',
+                'mobile_number' => $user->phone_no,
+                'status' => 'completed',
+                'processedBy' => Auth::user()->id,
+                'outlet' => 'Utang',
+                'note' => $utang_note ?? 'PAID',
+                'morph' => $request->morph ?? 0,
+                'amount' => $request->amount,
+                'reference_code' => $request->action != 'utang' ? $request->ref_code : null,
+            ]);
+
+            if ($cashin) {
+                $user->points += $request->amount;
+                $user->save();
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'msg' => $e->getMessage(),
+                'status' => 'error',
+            ], 500);
+        }
+
+        return response()->json([
+            'msg' => 'Success!',
+            'status' => 'OK',
+            'points' => Auth::user()->points,
+        ], 200);
+    }
+
     public function getWithdrawTrans()
     {
         $trans = Transactions::where('action', 'withdraw')

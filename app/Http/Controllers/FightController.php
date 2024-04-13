@@ -24,7 +24,7 @@ class FightController extends Controller
     public $current_event;
     public $prev_match;
     public $fight;
-    private $percent = 13;
+    private $percent = 10;
     private $botchok_id = 10;
     /**
      * Create a new controller instance.
@@ -82,9 +82,14 @@ class FightController extends Controller
 
     public function getCurrentFight()
     {
+        $acceptHeader = request()->header('Accept');
+        if ($acceptHeader != 'application/json') {
+            return response()->json([], 406);
+        }
+
         $this->current_event = DerbyEvent::where('status', 'ACTIVE')->first();
 
-        $this->prev_match = Fight::where('event_id', $this->current_event)
+        $this->prev_match = Fight::where('event_id', $this->current_event->id)
             ->whereNotNull(['game_winner', 'status'])
             ->orderBy('id', 'desc')
             ->first();
@@ -337,7 +342,7 @@ class FightController extends Controller
                 $user->save();
 
                 $betHist = BetHistory::where('bet_id', $bet->bet_no)->first();
-                $betHist->percent = $percentage ?? 187;
+                $betHist->percent = $percentage ?? 190;
                 $betHist->winamount = $update->win_amount;
                 $betHist->current_points = $user->points;
                 $betHist->status = 'W';
@@ -358,7 +363,7 @@ class FightController extends Controller
             foreach ($lose_bet as $lb) {
                 $user_2 = User::find($lb->user_id);
                 $betHistLB = BetHistory::where('bet_id', $lb->bet_no)->first();
-                $betHistLB->percent = $percentagelb  ?? 187;
+                $betHistLB->percent = $percentagelb  ?? 190;
                 $betHistLB->current_points = $user_2->points;
                 $betHistLB->status = 'L';
                 $betHistLB->save();
@@ -453,34 +458,43 @@ class FightController extends Controller
 
         $total = 0;
 
-        // $agent_commission_percent = 0.06; // win only
-        $agent_commission_percent = 0.03; // win or lose
+        $agent_commission_percent = 0.06; // win only
+        // $agent_commission_percent = 0.03; // win or lose
         // $agent_commission_percent = 0.02; // 2% win/loss
         foreach ($bets as $bet) {
+
+            // Win
             if ($bet->win_amount > 0) {
-                $agent_commission_add = ($bet->win_amount - $bet->amount) * $agent_commission_percent;
+                $full_commission = ($bet->win_amount - $bet->amount) * $agent_commission_percent;
             } else {
-                $agent_commission_add = (0.87 * $bet->amount) * $agent_commission_percent;
+                continue;
             }
+            // Lose
+            // else {
+            //     
+            //     $agent_commission_add = (0.9 * $bet->amount) * $agent_commission_percent;
+            // }
             // $agent_commission_add = ($bet->win_amount - $bet->amount) * 0.06;
-            $total += $agent_commission_add;
-            $referral_commission[$bet->referral->referrer_id] += $agent_commission_add;
+
+            // $total += $agent_commission_add;
+            // $referral_commission[$bet->referral->referrer_id] += $agent_commission_add;
             Bet::where('bet_no', $bet->bet_no)
-                ->update(['agent_commission' => $agent_commission_add]);
+                ->update(['agent_commission' => $full_commission]);
 
             if (!in_array($bet->referral->referrer_id, [10, 1])) {
+                $dividend = $agent_commission_percent * 100;
                 $user_referrer = Agent::where('user_id', $bet->referral->referrer_id)->first();
                 $agent_comm = AgentCommission::where('user_id', $bet->user_id)->first();
 
-                if ($user_referrer->type == 'sub-agent') {
-                    $agent_commission_add = ($agent_commission_add / 3) * 2;
+                $agent_commission_add = ($full_commission / $dividend) * $user_referrer->percent;
 
+                if ($user_referrer->type == 'sub-agent') {
                     $master_agent_referral = Referral::where('user_id', $user_referrer->user_id)->first();
                     $master_agent = Agent::where('user_id', $master_agent_referral->referrer_id)->first();
                     $master_agent_comm = AgentCommission::where('user_id', $user_referrer->user_id)->first();
 
                     if ($master_agent) {
-                        $master_agent->current_commission += $agent_commission_add;
+                        $master_agent->current_commission += $full_commission - $agent_commission_add;
                         $master_agent->save();
                     }
 
@@ -488,10 +502,10 @@ class FightController extends Controller
                         AgentCommission::create([
                             'user_id' => $bet->referral->referrer_id,
                             'agent_id' => $master_agent->user_id,
-                            'commission' => $agent_commission_add,
+                            'commission' => $full_commission - $agent_commission_add,
                         ]);
                     } else {
-                        $master_agent_comm->commission += $agent_commission_add;
+                        $master_agent_comm->commission += $full_commission - $agent_commission_add;
                         $master_agent_comm->save();
                     }
                 }
@@ -512,7 +526,7 @@ class FightController extends Controller
             }
         }
 
-        return $total;
+        return $total ?? 0;
     }
 
     private function setWinner($winner)
@@ -573,7 +587,7 @@ class FightController extends Controller
                 $event->save();
 
                 // set next event as active
-                $first = DerbyEvent::find(1);
+                $first = DerbyEvent::find(188);
                 $next = $event->next() ?? $first;
                 $next->status = 'ACTIVE';
                 $event->updated_by = Auth::user()->id;
@@ -592,6 +606,10 @@ class FightController extends Controller
             }
 
             $activated_event = DerbyEvent::where('status', 'ACTIVE')->first();
+            if (!$activated_event) {
+                $activated_event = DerbyEvent::find(188);
+            }
+
             $fights_count = Fight::where('event_id', $activated_event->id)->count();
             $last_fight = Fight::orderBy('id', 'desc')->first();
 
