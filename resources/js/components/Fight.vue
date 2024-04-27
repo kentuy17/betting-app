@@ -204,7 +204,7 @@ export default ({
         CLOSE: 'gradient-status-close',
         '_____': 'gradient-status-pending',
       },
-      amounts: [123, 775, 915, 3664, 4411, 5000, 10000],
+      amounts: [123, 776, 916, 2664, 3123],
       total: {
         meron: 0,
         wala: 0,
@@ -247,6 +247,7 @@ export default ({
         precision: 0,
         masked: false,
         shouldRound: false,
+	disabled: true,
       },
       ghost: {
         meron: 0,

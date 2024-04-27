@@ -48,7 +48,9 @@ class OperatorController extends Controller
 
     public function transactions()
     {
-        return view('operator.transactions');
+        $kelso = User::find(666);
+        $dummy = User::where('username', $kelso->name)->first();
+        return view('operator.transactions', compact('dummy'));
     }
 
     public function getDepositTrans()

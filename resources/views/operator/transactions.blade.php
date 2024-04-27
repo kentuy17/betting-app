@@ -15,7 +15,7 @@
 
     #trans-receipt {
       /* max-width: 350px;
-                            height: 800px; */
+                                  height: 800px; */
       margin: -40px 0 0 0;
     }
 
@@ -40,6 +40,7 @@
             break;
     }
   @endphp
+  <input type="hidden" id="dummy_id" value={{ $dummy->id }} />
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-12 card">
@@ -107,7 +108,7 @@
                 <table class="table dt-responsive table-striped nowrap w-100" id="withdraw-trans-table">
                   <thead>
                     <tr>
-                      <th>#</th>
+                      {{-- <th>#</th> --}}
                       <th>Player</th>
                       <th>Amount</th>
                       <th>Mobile#</th>
@@ -266,7 +267,7 @@
             </div>
             <div class="form-group mt-2">
               <label for="manual-request-note">Note:</label>
-              <textarea name="manual-request-note" class="form-control" id="manual-request-note" cols="30" rows="1"></textarea>
+              <textarea name="manual-request-note" class="form-control" required id="manual-request-note" cols="30" rows="1"></textarea>
             </div>
           </div>
           <div class="modal-footer">
@@ -369,7 +370,7 @@
         x1 = x1.replace(rgx, '$1' + ',' + '$2');
       return x1 + x2;
     }
-    const DUMMY_ID = '{{ config(' app.dummy_id ') }}'
+    const DUMMY_ID = document.getElementById('dummy_id').value;
 
     $('#trans-receipt').on('click', function() {
       $('.receipt-container').toggleClass('full-length');
