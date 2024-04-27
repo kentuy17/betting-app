@@ -23,7 +23,7 @@ export default defineConfig({
         "public/js/play.js",
         "public/js/fight.js",
         "public/js/ghost.js",
-	"resources/react/master-agent.jsx",
+        "resources/react/master-agent.jsx",
       ],
       refresh: true,
     }),

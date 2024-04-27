@@ -1,26 +1,30 @@
 <template>
   <div>
-    <button class="nav-link icon-bell" @click='markAllAsRead()' role="button" data-bs-toggle="dropdown"
-      aria-haspopup="true" aria-expanded="false">
+    <button class="nav-link icon-bell" @click='markAllAsRead()' role="button"
+      data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="far fa-bell"></i>
-      <span class="badge bg-danger text-xs px-1 py-0 mr-0" v-if="unread_count > 0">{{ unread_count }}</span>
+      <span class="badge bg-danger text-xs px-1 py-0 mr-0"
+        v-if="unread_count > 0">{{ unread_count }}</span>
     </button>
-    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right hide max-h-80 overflow-scroll"
+    <div
+      class="dropdown-menu dropdown-menu-lg dropdown-menu-right hide max-h-80 overflow-scroll"
       style="left: inherit; right: 0px;">
-      <span class="dropdown-item dropdown-header">{{ unread_count ?? 0 }} Notifications</span>
+      <span class="dropdown-item dropdown-header">{{ unread_count ?? 0 }}
+        Notifications</span>
       <!-- <div class="dropdown-divider"></div> -->
-      <div v-show="users.length > 0" v-for='(user, index) in users' :key='index'>
+      <div v-show="users.length > 0" v-for='(user, index) in users'
+        :key='index'>
         <a href="#" @click='redirectTrans()' class="dropdown-item">
-          <i class="fas fa-envelope mr-2"></i> {{ user }} cash-in <span class="float-right text-muted text-sm">3
-            mins</span>
+          <i class="fas fa-envelope mr-2"></i> {{ user }} cash-in <span
+            class="float-right text-muted text-sm">3 mins</span>
         </a>
         <div class="dropdown-divider"></div>
       </div>
-      <a @click='readAllNotif()' id="allow-notifications" class="dropdown-item dropdown-footer">See All Notifications</a>
+      <a @click='readAllNotif()' id="allow-notifications"
+        class="dropdown-item dropdown-footer">See All Notifications</a>
     </div>
   </div>
 </template>
-
 <script>
 import { ref } from 'vue';
 export default {
@@ -54,12 +58,12 @@ export default {
       })
       .catch(err => console.log(err))
 
-    window.socket.on('notify-deposit', (player) => {
-      this.delay(5000).then(() => {
-        this.users.push(player)
-        this.unread_count = parseInt(this.unread_count) + 1
-      })
-    })
+    // window.socket.on('notify-deposit', (player) => {
+    //   this.delay(5000).then(() => {
+    //     this.users.push(player)
+    //     this.unread_count = parseInt(this.unread_count) + 1
+    //   })
+    // })
   },
   methods: {
     delay(time) {
@@ -124,7 +128,6 @@ export default {
   },
 }
 </script>
-
 <style>
 @media (max-width:767.98px) {
   #site-name {

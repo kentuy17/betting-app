@@ -25,6 +25,14 @@ Broadcast::channel('user.{id}', function ($user, $betUserId) {
     // return false;
 });
 
+Broadcast::channel('fight', function () {
+    return true;
+});
+
+Broadcast::channel('bet', function ($user) {
+    return true;
+});
+
 Broadcast::channel('cashin.{processedBy}', function ($user, $processedBy) {
     $trans = Transactions::where('processedBy', $processedBy)
         ->where('action', 'deposit')

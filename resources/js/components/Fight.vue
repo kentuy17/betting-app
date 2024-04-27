@@ -276,81 +276,83 @@ export default ({
         this.player.bets = json.player
         this.player.id = json.id
         this.player.legit = json.legit
-      });
+      }).then(() => {
+        Echo.channel('fight')
+          .listen('.fightUpdated', async (e) => {
+            if (e == null)
+              return
 
-    window.Echo.channel('fight')
-      .listen('.fight', async (e) => {
-        if (e == null)
-          return
+            if (e.fight.curr) {
+              if ((e.fight.prev.game_winner == 'D' || e.fight.prev.game_winner == 'C') && this.playerTotalBets > 0) {
+                if (this.player.legit) {
+                  alert(`Returned ${this.formatMoney(this.playerTotalBets)} points!`)
+                  this.tada()
+                }
+                this.daog = true
+                this.player.points += this.playerTotalBets
+              }
 
-        if (e.fight.curr) {
-          if ((e.fight.prev.game_winner == 'D' || e.fight.prev.game_winner == 'C') && this.playerTotalBets > 0) {
-            if (this.player.legit) {
-              alert(`Returned ${this.formatMoney(this.playerTotalBets)} points!`)
-              this.tada()
+              if (e.fight.prev.game_winner == 'M' && this.meronWinAmount > 0) {
+                if (this.player.legit) {
+                  alert(`Congratulations! MERON Wins ${this.formatMoney(this.meronWinAmount)}`)
+                  this.tada()
+                }
+                this.daog = true
+                this.player.points += this.meronWinAmount
+              }
+
+              if (e.fight.prev.game_winner == 'W' && this.walaWinAmount > 0) {
+                if (this.player.legit) {
+                  alert(`Congratulations! WALA Wins ${this.formatMoney(this.walaWinAmount)}`)
+                  this.tada()
+                }
+                this.daog = true
+                this.player.points += this.walaWinAmount
+              }
+
+              if (this.daog && !this.player.legit) {
+                this.tada()
+              }
+
+              this.daog = false
+              this.fight = e.fight.curr
+              this.total.meron = this.total.wala = 0
+              this.player.bets.meron = this.player.bets.wala = 0
             }
-            this.daog = true
-            this.player.points += this.playerTotalBets
-          }
-
-          if (e.fight.prev.game_winner == 'M' && this.meronWinAmount > 0) {
-            if (this.player.legit) {
-              alert(`Congratulations! MERON Wins ${this.formatMoney(this.meronWinAmount)}`)
-              this.tada()
+            else {
+              this.fight = e.fight
             }
-            this.daog = true
-            this.player.points += this.meronWinAmount
-          }
 
-          if (e.fight.prev.game_winner == 'W' && this.walaWinAmount > 0) {
-            if (this.player.legit) {
-              alert(`Congratulations! WALA Wins ${this.formatMoney(this.walaWinAmount)}`)
-              this.tada()
+            if (this.fight.status == null) {
+              this.ghost.meron = this.ghost.wala = 0
             }
-            this.daog = true
-            this.player.points += this.walaWinAmount
-          }
 
-          if (this.daog && !this.player.legit) {
-            this.tada()
-          }
+            this.message = this.setFightStatus(this.fight)
+          });
 
-          this.daog = false
-          this.fight = e.fight.curr
-          this.total.meron = this.total.wala = 0
-          this.player.bets.meron = this.player.bets.wala = 0
-        }
-        else {
-          this.fight = e.fight
-        }
+        Echo.private('bet')
+          .listen('Bet', async (e) => {
+            if (e.bet.side === 'M') {
+              this.total.meron = this.total.meron + e.bet.amount
+            } else {
+              this.total.wala = this.total.wala + e.bet.amount
+            }
 
-        if (this.fight.status == null) {
-          this.ghost.meron = this.ghost.wala = 0
-        }
+            if (e.bet.user_id == this.player.id && !this.player.legit) {
+              this.player.points -= e.bet.amount
+              this.betAmount = e.bet.amount
+              e.bet.side == 'M'
+                ? this.player.bets.meron += this.betAmount
+                : this.player.bets.wala += this.betAmount
+            } else {
+              e.bet.side == 'M'
+                ? this.ghost.meron += e.bet.amount
+                : this.ghost.wala += e.bet.amount
+            }
+          });
 
-        this.message = this.setFightStatus(this.fight)
-      });
+      })
 
-    window.Echo.channel('bet')
-      .listen('.bet', async (e) => {
-        if (e.bet.side === 'M') {
-          this.total.meron = this.total.meron + e.bet.amount
-        } else {
-          this.total.wala = this.total.wala + e.bet.amount
-        }
-
-        if (e.bet.user_id == this.player.id && !this.player.legit) {
-          this.player.points -= e.bet.amount
-          this.betAmount = e.bet.amount
-          e.bet.side == 'M'
-            ? this.player.bets.meron += this.betAmount
-            : this.player.bets.wala += this.betAmount
-        } else {
-          e.bet.side == 'M'
-            ? this.ghost.meron += e.bet.amount
-            : this.ghost.wala += e.bet.amount
-        }
-      });
   },
   computed: {
     totalSum() {

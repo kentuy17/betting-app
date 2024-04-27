@@ -13,7 +13,8 @@ use Illuminate\Queue\SerializesModels;
 class Fight implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    public $fight;
+
+    public  $fight;
 
     /**
      * Create a new event instance.
@@ -35,6 +36,6 @@ class Fight implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'fight';
+        return 'fightUpdated';
     }
 }

@@ -225,8 +225,8 @@ export default {
         }, 10000);
       })
 
-    window.Echo.channel('fight')
-      .listen('.fight', async (e) => {
+    Echo.channel('fight')
+      .listen('.fightUpdated', async (e) => {
         if (e == null)
           return
 
@@ -278,8 +278,8 @@ export default {
         this.message = this.setFightStatus(this.fight)
       });
 
-    window.Echo.channel('bet')
-      .listen('.bet', async (e) => {
+    window.Echo.private('bet')
+      .listen('Bet', async (e) => {
         if (e.bet.side === 'M') {
           this.total.meron = this.total.meron + e.bet.amount
         } else {

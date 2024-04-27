@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
   const useState = (defaultValue) => {
     let value = defaultValue;
     const getValue = () => value
@@ -15,7 +15,7 @@ $(function() {
   const [lastPostion, setLastPosition] = useState('');
 
 
-  if($('#switch-video-display').is(':checked')) {
+  if ($('#switch-video-display').is(':checked')) {
     // $('#event-name').show();
     $('#header-closed').hide();
     $('#poster-img').hide();
@@ -33,7 +33,7 @@ $(function() {
     try {
       let displayVideo = $('#switch-video-display').is(':checked') ? true : false;
       await axios.post('/settings/video-display', { screen: displayVideo });
-      if(displayVideo) {
+      if (displayVideo) {
         // $('#event-name').show();
         $('#header-closed').hide();
         $('#poster-img').hide();
@@ -74,25 +74,25 @@ $(function() {
         }
         if (dataArr[x - 1][0] == 'Meron Wins') {
           element.classList.add("circleRedAll");
-          element.innerHTML = dataArr[x-1][1];
+          element.innerHTML = dataArr[x - 1][1];
         } else if (dataArr[x - 1][0] == 'Wala Wins') {
           element.classList.add("circleBlueAll");
-          element.innerHTML = dataArr[x-1][1];
+          element.innerHTML = dataArr[x - 1][1];
         } else if (dataArr[x - 1][0] == 'Draw') {
           element.classList.add("circleGreenAll");
-          element.innerHTML = dataArr[x-1][1];
+          element.innerHTML = dataArr[x - 1][1];
         } else if (dataArr[x - 1][0] == 'Cancelled') {
           element.classList.add("circleCancelAll");
-          element.innerHTML = dataArr[x-1][1];
+          element.innerHTML = dataArr[x - 1][1];
         } else if (dataArr[x - 1][0] == 'Pending') {
           element.classList.add("circleCancelAll");
-          element.innerHTML = dataArr[x-1][1];
+          element.innerHTML = dataArr[x - 1][1];
         }
-        if(x == dataArr.length-1) {
-          setLastPosition({y:y,c:c});
+        if (x == dataArr.length - 1) {
+          setLastPosition({ y: y, c: c });
         }
-        if(dataArr[x - 1][0] == dataArr[x][0]){
-          if (y == 7){
+        if (dataArr[x - 1][0] == dataArr[x][0]) {
+          if (y == 7) {
             y = 1;
             c++;
           } else {
@@ -107,49 +107,49 @@ $(function() {
     });
 
   function getLastWinner(dataArr) {
-    if(dataArr[dataArr.length-2][0] == 'Meron Wins') {
+    if (dataArr[dataArr.length - 2][0] == 'Meron Wins') {
       setLastWinner('M');
     }
 
-    if(dataArr[dataArr.length-2][0] == 'Wala Wins') {
+    if (dataArr[dataArr.length - 2][0] == 'Wala Wins') {
       setLastWinner('W');
     }
 
-    if(dataArr[dataArr.length-2][0] == 'Draw') {
+    if (dataArr[dataArr.length - 2][0] == 'Draw') {
       setLastWinner('D');
     }
 
-    if(dataArr[dataArr.length-2][0] == 'Cancelled') {
+    if (dataArr[dataArr.length - 2][0] == 'Cancelled') {
       setLastWinner('C');
     }
   }
 
   window.Echo.channel('fight')
-  .listen('.fight', async (e)=>{
-    let prev = e.fight.prev;
-    if(prev) {
-      var pos, p;
-      if(lastWinner() == e.fight.prev.game_winner && lastPostion().y != 7) {
-        pos = $(`#tdBaccaratAllConsecutive-${lastPostion().y+1}${lastPostion().c}`)
-        p = {y:lastPostion().y+1, c:lastPostion().c}
-      } else {
-        pos = $(`#tdBaccaratAllConsecutive-1${lastPostion().c+1}`)
-        p = {y:1, c:lastPostion().c+1}
-      }
+    .listen('.fightUpdated', async (e) => {
+      let prev = e.fight.prev;
+      if (prev) {
+        var pos, p;
+        if (lastWinner() == e.fight.prev.game_winner && lastPostion().y != 7) {
+          pos = $(`#tdBaccaratAllConsecutive-${lastPostion().y + 1}${lastPostion().c}`)
+          p = { y: lastPostion().y + 1, c: lastPostion().c }
+        } else {
+          pos = $(`#tdBaccaratAllConsecutive-1${lastPostion().c + 1}`)
+          p = { y: 1, c: lastPostion().c + 1 }
+        }
 
-      pos.html(e.fight.prev.fight_no);
-      if(e.fight.prev.game_winner == 'M') {
-        pos.addClass('circleRedAll')
-      } else if(e.fight.prev.game_winner == 'W') {
-        pos.addClass('circleBlueAll')
-      } else if(e.fight.prev.game_winner == 'D') {
-        pos.addClass('circleGreenAll')
-      } else{
-        pos.addClass('circleCancelAll')
-      }
+        pos.html(e.fight.prev.fight_no);
+        if (e.fight.prev.game_winner == 'M') {
+          pos.addClass('circleRedAll')
+        } else if (e.fight.prev.game_winner == 'W') {
+          pos.addClass('circleBlueAll')
+        } else if (e.fight.prev.game_winner == 'D') {
+          pos.addClass('circleGreenAll')
+        } else {
+          pos.addClass('circleCancelAll')
+        }
 
-      setLastWinner(e.fight.prev.game_winner)
-      setLastPosition(p)
-    }
-  })
+        setLastWinner(e.fight.prev.game_winner)
+        setLastPosition(p)
+      }
+    })
 });

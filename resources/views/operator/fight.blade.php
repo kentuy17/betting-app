@@ -200,6 +200,7 @@
 @section('additional-scripts')
   @vite('resources/js/fight-vue.js')
   @vite('public/js/fight.js')
+  {{-- <script src="{{ asset('js/fight.js') }}" defer></script> --}}
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
   {{-- <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
   <script src="https://vjs.zencdn.net/7.8.2/video.js"></script> --}}

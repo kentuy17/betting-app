@@ -32,15 +32,15 @@ class Bet implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        // return [
-        //     new PrivateChannel('channel-name'),
-        // ];
+        return [
+            new PrivateChannel('bet'),
+        ];
         // return new Channel('betChannel');
-        return new Channel('bet');
+        // return new Channel('bet');
     }
 
-    public function broadcastAs()
-    {
-        return 'bet';
-    }
+    // public function broadcastAs()
+    // {
+    //     return 'bet';
+    // }
 }
