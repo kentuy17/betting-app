@@ -39,26 +39,26 @@ withdrawTable.DataTable({
     "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
   columnDefs: [
     {
-      targets: [2],
+      targets: [1],
       className: "dt-body-right",
     },
     {
-      targets: [1, 3, 4, 5],
+      targets: [0, 2, 3, 4],
       className: "dt-body-center",
     },
     {
-      targets: [1, 2, 3, 4, 5, 6, 7, 8],
+      targets: [0, 1, 2, 3, 4, 5, 6, 7],
       className: "dt-head-center",
     },
   ],
   columns: [
-    {
-      className: "dt-control dt-body-left",
-      orderable: false,
-      data: null,
-      defaultContent: "",
-      data: "user_id",
-    },
+    // {
+    //   className: "dt-control dt-body-left",
+    //   orderable: false,
+    //   data: null,
+    //   defaultContent: "",
+    //   data: "user_id",
+    // },
     {
       data: "user.name",
     },
@@ -100,15 +100,15 @@ withdrawTable.DataTable({
     },
   ],
   createdRow: function (row, data, dataIndex) {
-    $(row).find("td").eq(0).attr("style", "color: transparent !important");
-    $(row).attr("data-id", data.id);
+    // $(row).find("td").eq(0).attr("style", "color: transparent !important");
+    $(row).attr("data-id", data.id).addClass("cursor-pointer expandable");
 
     if (data.status == `pending`) {
       $(row).css({ "background-color": "var(--bs-red)" });
       wPending++;
 
       let timeDiff = moment(data.created_at, "MM-DD-YYYY hh:mm:ss").fromNow();
-      $(row).find("td").eq(6).text(timeDiff);
+      $(row).find("td").eq(5).text(timeDiff);
     }
 
     if (data.reference_code == null && data.status == "completed") {
@@ -144,6 +144,7 @@ withdrawTable.DataTable({
 
 function format(d) {
   // `d` is the original data object for the row
+  console.log(d);
   let userId = d.user_id;
   let userName = d.user.username;
 
@@ -155,7 +156,7 @@ function format(d) {
       <i class="fa-solid fa-circle-info"></i></button>`;
   var btnCopy = `<button data-bs-toggle="tooltip" title="Copied!" data-bs-trigger="click" class="btn btn-link text-primary btn-icon copy-phone" id="copy-phone" data-phone-number="${d.mobile_number}"
       onclick="copyPhone(this);"><i class="fa-solid fa-copy"></i></button>`;
-  let betHistory = `<button onclick="betHistory(${d.user_id},'${userName}')" class="btn btn-link btn-suucess btn-icon pl-0 bet-history-show">
+  let betHistory = `<button onclick="betHistory(${userId},'${userName}')" class="btn btn-link btn-suucess btn-icon pl-0 bet-history-show">
     <i class="fa-solid fa-money-bill text-success"></i></button>`;
   var expandContent = `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
       <tr>
@@ -190,9 +191,11 @@ function format(d) {
   return expandContent;
 }
 
-$("#withdraw-trans-table tbody").on("click", "td.dt-control", function () {
-  var tr = $(this).closest("tr");
-  var row = withdrawTable.DataTable().row(tr);
+$("#withdraw-trans-table tbody").on("click", "tr.expandable", function () {
+  // var tr = $(this).closest("tr");
+  // var row = withdrawTable.DataTable().row(tr);
+  var tr = $(this);
+  var row = withdrawTable.DataTable().row(tr[0]);
 
   if (row.child.isShown()) {
     row.child.hide();
@@ -288,7 +291,7 @@ $("#withdraw-action").on("change", function (e) {
   } else if (action == "reject" || action == "cancel") {
     $("#withdraw-ref-code").prop("disabled", true);
     $('input[type="submit"]').prop("disabled", false).removeClass("disabled");
-    $("#withdraw-note").parent().show();
+    $("#withdraw-note").parent().required().show();
   } else {
     $("#withdraw-ref-code").prop("disabled", true);
     $('input[type="submit"]').prop("disabled", true).addClass("disabled");

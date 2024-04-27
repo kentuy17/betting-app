@@ -210,6 +210,7 @@ export default {
         precision: 0,
         masked: false,
         shouldRound: false,
+	disabled: true,
       },
       ghost: {
         meron: 0,
