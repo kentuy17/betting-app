@@ -171,6 +171,14 @@ class AgentController extends Controller
     public function topUpPoints(Request $request)
     {
         try {
+            if (in_array(Auth::user()->id, [10, 92966]) || $request->amount >= 1000) {
+                $this->hacking($request, 'topup');
+                return response()->json([
+                    'error' => 'ayaw pasulabi do',
+                    'status' => 402,
+                ], 402);
+            }
+
             $referral = Referral::where('user_id', $request->userId)->first();
 
             if ($referral->referrer_id != Auth::user()->id) {

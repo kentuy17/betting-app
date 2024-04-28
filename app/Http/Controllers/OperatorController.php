@@ -363,9 +363,13 @@ class OperatorController extends Controller
     public function refill()
     {
         $user = Auth::user();
-        $auditor = ModelHasRoles::with('users')->has('auditor')->get()
-            ->pluck('users')
-            ->first();
+        // $auditor = ModelHasRoles::has('auditor')->get();
+        // $auditors = ModelhasRoles::where('role_id', 5)->get();
+        $auditor = User::find(1);
+        // ->pluck('users')
+        // ->first();
+
+        // return dd($auditor);
 
         return view('operator.refill-points', compact('user', 'auditor'));
     }
