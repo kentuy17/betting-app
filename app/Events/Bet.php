@@ -13,9 +13,10 @@ use Illuminate\Queue\SerializesModels;
 class Bet implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
+    
     public $bet;
     public $type;
+   	 
 
     /**
      * Create a new event instance.
@@ -32,11 +33,9 @@ class Bet implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return [
-            new PrivateChannel('bet'),
-        ];
+        // return 1;
         // return new Channel('betChannel');
-        // return new Channel('bet');
+        return new Channel('bet');
     }
 
     // public function broadcastAs()

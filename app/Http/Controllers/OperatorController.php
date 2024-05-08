@@ -367,6 +367,8 @@ class OperatorController extends Controller
             ->pluck('users')
             ->first();
 
+        return ddd($auditor);
+
         return view('operator.refill-points', compact('user', 'auditor'));
     }
 

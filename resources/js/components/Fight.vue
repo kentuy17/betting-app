@@ -247,7 +247,7 @@ export default ({
         precision: 0,
         masked: false,
         shouldRound: false,
-	disabled: true,
+        disabled: true,
       },
       ghost: {
         meron: 0,
@@ -331,7 +331,7 @@ export default ({
             this.message = this.setFightStatus(this.fight)
           });
 
-        Echo.private('bet')
+        Echo.channel('bet')
           .listen('Bet', async (e) => {
             if (e.bet.side === 'M') {
               this.total.meron = this.total.meron + e.bet.amount

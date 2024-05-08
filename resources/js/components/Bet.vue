@@ -278,7 +278,7 @@ export default {
         this.message = this.setFightStatus(this.fight)
       });
 
-    window.Echo.private('bet')
+    window.Echo.channel('bet')
       .listen('Bet', async (e) => {
         if (e.bet.side === 'M') {
           this.total.meron = this.total.meron + e.bet.amount
