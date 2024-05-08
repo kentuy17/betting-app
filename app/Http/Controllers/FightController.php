@@ -481,7 +481,7 @@ class FightController extends Controller
             Bet::where('bet_no', $bet->bet_no)
                 ->update(['agent_commission' => $full_commission]);
 
-            if (!in_array($bet->referral->referrer_id, [10, 1, 818, 92539,])) { // exclude referrers here
+            if (!in_array($bet->referral->referrer_id, [10, 1, 92539,])) { // exclude referrers here
                 $dividend = $agent_commission_percent * 100;
                 $user_referrer = Agent::where('user_id', $bet->referral->referrer_id)->first();
                 $agent_comm = AgentCommission::where('user_id', $bet->user_id)->first();
