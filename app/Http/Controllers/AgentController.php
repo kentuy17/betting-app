@@ -249,7 +249,7 @@ class AgentController extends Controller
             $user = User::find($request->user_id);
 
             if (!$user->rid) {
-                $user->rid = $this->generateRandomString(8);
+                $user->rid = 'REF' . $this->generateRandomString(8);
                 $user->save();
             }
 

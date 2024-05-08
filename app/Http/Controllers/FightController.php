@@ -24,7 +24,7 @@ class FightController extends Controller
     public $current_event;
     public $prev_match;
     public $fight;
-    private $percent = 10;
+    private $percent = 13;
     private $botchok_id = 10;
     /**
      * Create a new controller instance.
@@ -342,7 +342,7 @@ class FightController extends Controller
                 $user->save();
 
                 $betHist = BetHistory::where('bet_id', $bet->bet_no)->first();
-                $betHist->percent = $percentage ?? 190;
+                $betHist->percent = $percentage ?? 187;
                 $betHist->winamount = $update->win_amount;
                 $betHist->current_points = $user->points;
                 $betHist->status = 'W';
@@ -363,7 +363,7 @@ class FightController extends Controller
             foreach ($lose_bet as $lb) {
                 $user_2 = User::find($lb->user_id);
                 $betHistLB = BetHistory::where('bet_id', $lb->bet_no)->first();
-                $betHistLB->percent = $percentagelb  ?? 190;
+                $betHistLB->percent = $percentagelb  ?? 187;
                 $betHistLB->current_points = $user_2->points;
                 $betHistLB->status = 'L';
                 $betHistLB->save();
@@ -372,64 +372,128 @@ class FightController extends Controller
 
         }
 
-        if ($last_fight->game_winner == 'M' || $last_fight->game_winner == 'W') {
-            $kusgan = ShareHolder::get();
-            $data = [];
-            $per = 12;
-            $ghost_bettors = User::where('legit', false)->get()->pluck('id');
-            $total_win_amount = Bet::where('fight_id', $last_fight->id)
-                ->whereNotIn('user_id', $ghost_bettors)
-                ->sum('win_amount');
-            $_total_bets = Bet::where('fight_id', $last_fight->id)
-                ->whereNotIn('user_id', $ghost_bettors)
-                ->sum('amount');
-            $referral_commission = $this->calcRefCommission($last_fight->id);
-            $commission = ($_total_bets - $total_win_amount) - $referral_commission;
+        // if ($last_fight->game_winner == 'M' || $last_fight->game_winner == 'W') {
+        //     $kusgan = ShareHolder::get();
+        //     $data = [];
+        //     $per = 12;
+        //     $ghost_bettors = User::where('legit', false)->get()->pluck('id');
+        //     $total_win_amount = Bet::where('fight_id', $last_fight->id)
+        //         ->whereNotIn('user_id', $ghost_bettors)
+        //         ->sum('win_amount');
+        //     $_total_bets = Bet::where('fight_id', $last_fight->id)
+        //         ->whereNotIn('user_id', $ghost_bettors)
+        //         ->sum('amount');
+        //     $referral_commission = $this->calcRefComm($last_fight->id);
+        //     $commission = ($_total_bets - $total_win_amount) - $referral_commission;
 
-            if ($kusgan->sum('percentage') < $per) {
-                $unallocated = array(
-                    'id' => '-1',
-                    'user_id' => '-1',
-                    'percentage' => $per - $kusgan->sum('percentage')
-                );
+        //     if ($kusgan->sum('percentage') < $per) {
+        //         $unallocated = array(
+        //             'id' => '-1',
+        //             'user_id' => '-1',
+        //             'percentage' => $per - $kusgan->sum('percentage')
+        //         );
 
-                $kusgan->push($unallocated);
-                $kusgan->all();
-            }
+        //         $kusgan->push($unallocated);
+        //         $kusgan->all();
+        //     }
 
-            foreach ($kusgan as $key => $gwapo) {
-                if (gettype($gwapo) == 'array') {
-                    $gwapo = (object) $gwapo;
-                }
+        //     foreach ($kusgan as $key => $gwapo) {
+        //         if (gettype($gwapo) == 'array') {
+        //             $gwapo = (object) $gwapo;
+        //         }
 
-                $additional_pts = $commission / $per * $gwapo->percentage;
+        //         $additional_pts = $commission / $per * $gwapo->percentage;
 
-                $data[] = [
-                    'user_id' => $gwapo->user_id,
-                    'points' => $additional_pts,
-                    'percentage' => $gwapo->percentage,
-                    'total_win_amount' => $total_win_amount,
-                    'fight_id' => $last_fight->id,
-                    'event_id' => $this->current_event->id,
-                    'active' => true,
-                    'created_at' => now(),
-                ];
+        //         $data[] = [
+        //             'user_id' => $gwapo->user_id,
+        //             'points' => $additional_pts,
+        //             'percentage' => $gwapo->percentage,
+        //             'total_win_amount' => $total_win_amount,
+        //             'fight_id' => $last_fight->id,
+        //             'event_id' => $this->current_event->id,
+        //             'active' => true,
+        //             'created_at' => now(),
+        //         ];
 
-                if ($gwapo->id > 0 && $commission > 0) {
-                    $share_holder = ShareHolder::find($gwapo->id);
-                    $share_holder->current_commission += $additional_pts;
-                    $share_holder->save();
-                }
-            }
+        //         if ($gwapo->id > 0 && $commission > 0) {
+        //             $share_holder = ShareHolder::find($gwapo->id);
+        //             $share_holder->current_commission += $additional_pts;
+        //             $share_holder->save();
+        //         }
+        //     }
 
-            if ($commission > 0) {
-                Commission::insert($data);
-            }
-        }
+        //     if ($commission > 0) {
+        //         Commission::insert($data);
+        //     }
+        // }
 
         return response()->json([
             'data' => $new_fight
         ]);
+    }
+
+    public function calcRefComm($fight_id)
+    {
+        if (!$fight_id) return 0;
+
+        $ghost_bettors = User::where('legit', false)->get()->pluck('id');
+        $operators = [9];
+        $excluded_users = array_merge($ghost_bettors, $operators);
+        $bets = Bet::where('fight_id', $fight_id)
+            ->whereNotIn('user_id', $excluded_users)
+            ->where('status', 'D')
+            ->with('referral')
+            ->has('referral')
+            ->get();
+
+        foreach ($bets as $bet) {
+            // exclude agents
+            if (in_array($bet->referral->referrer_id, [0, 1, 92539]))
+                continue;
+
+            // espesyal
+            $tholits = 93008;
+            if (!$tholits == $bet->referral->referrer_id && $bet->win_amount == 0)
+                continue;
+
+            $base_amount = $bet->win_amount > 0 ? $bet->win_amount : 0.87 * $bet->amount;
+            $agent = Agent::where('user_id', $bet->referral->referrer_id)->first();
+            $commission = $this->commissionAmount($base_amount, $agent->percent);
+
+            $agent->current_commission += $commission;
+            $agent->save();
+
+            $agent_commission = AgentCommission::firstOrNew(['user_id' => $bet->user_id]);
+            $agent_commission->agent_id = $agent->user_id;
+            $agent_commission->commission += $commission;
+            $agent_commission->save();
+
+            if ($agent->type === 'sub-agent') {
+                $referral = Referral::where('user_id', $agent->user_id)->first();
+                $master_agent = Agent::where('user_id', $referral->referrer_id)->first();
+                $master_agent_percent = $master_agent->percent - $agent->percent;
+                $master_agent_comm = $this->commissionAmount($base_amount, $master_agent_percent);
+
+                $master_agent->current_commission += $master_agent_comm;
+                $master_agent->save();
+
+                $master_agent_commission = AgentCommission::firstOrNew(['user_id' => $agent->user_id]);
+                $master_agent_commission->agent_id = $master_agent->user_id;
+                $master_agent_commission->commission += $master_agent_comm;
+                $master_agent_commission->save();
+
+                $commission = $master_agent_comm + $commission;
+            }
+
+            Bet::find($bet->bet_no)->update([
+                'agent_commission' => $commission
+            ]);
+        }
+    }
+
+    private function commissionAmount($base_amount, $percent)
+    {
+        return ($base_amount * $percent) / 100;
     }
 
     public function calcRefCommission($fight_id)
@@ -466,12 +530,15 @@ class FightController extends Controller
             // Win
             if ($bet->win_amount > 0) {
                 $full_commission = ($bet->win_amount - $bet->amount) * $agent_commission_percent;
+            } elseif (in_array($bet->referral->referrer_id, [1])) {
+                //
+                $full_commission = (0.87 * $bet->amount) * $agent_commission_percent;
             } else {
                 continue;
             }
             // Lose
             // else {
-            //     
+            //
             //     $agent_commission_add = (0.9 * $bet->amount) * $agent_commission_percent;
             // }
             // $agent_commission_add = ($bet->win_amount - $bet->amount) * 0.06;
