@@ -42,8 +42,15 @@ class PlayerController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index(): View
+    public function index()
     {
+        // if (Auth::user() && Auth::user()->id !== 1) {
+        //     Auth::logout();
+        //     return redirect()
+        //         ->route('login')
+        //         ->with('error', 'System maintenance');
+        // }
+
         $role = $this->getUserRole();
         $fight = DerbyEvent::where('status', 'ACTIVE')->orderBy('id', 'desc')->first();
         $video_display = Setting::where('name', 'video_display')->first()->value ?? false;

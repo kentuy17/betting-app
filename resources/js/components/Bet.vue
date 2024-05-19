@@ -202,6 +202,7 @@ export default {
       .then(() => {
         window.Echo.private('user.' + this.player.id)
           .listen('Result', async (e) => {
+            // console.log(e, 'result-event');
             if (e.bet.user.legit) {
               if (e.bet.status == 'X') {
                 alert(`Returened ${this.formatMoney(e.bet.amount)} points!`);
@@ -227,6 +228,7 @@ export default {
 
     Echo.channel('fight')
       .listen('.fightUpdated', async (e) => {
+        // console.log(e, 'fightUpdated-event');
         if (e == null)
           return
 
@@ -280,6 +282,7 @@ export default {
 
     window.Echo.private('bet')
       .listen('Bet', async (e) => {
+        // console.log(e, 'bet-event');
         if (e.bet.side === 'M') {
           this.total.meron = this.total.meron + e.bet.amount
         } else {

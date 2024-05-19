@@ -50,7 +50,7 @@
               </div>
             </div>
           @endif
-          {{-- <h2>SITE MAINTENANCE</h2> --}}
+          {{-- <h1 class="flex justify-center"><span>SITE MAINTENANCE</span></h1> --}}
           <div class="auth-form-body mt-3">
             <form action="{{ route('login') }}" accept-charset="UTF-8" method="post">
               @csrf
