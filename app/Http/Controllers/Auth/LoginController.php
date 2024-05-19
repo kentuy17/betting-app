@@ -72,7 +72,7 @@ class LoginController extends Controller
         }
 
         if ($role->name == 'Cash-out Operator' || $role->name == 'Cash-in Operator') {
-            $this->redirectTo = '/transactions';
+            $this->redirectTo = '/landing';
         }
 
         if ($role->name == 'Admin') {

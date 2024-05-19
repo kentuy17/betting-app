@@ -10,6 +10,7 @@ use App\Models\CommissionHistory;
 use App\Models\AgentCommission;
 use App\Models\Transactions;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Log;
 
 class AgentController extends Controller
@@ -171,6 +172,21 @@ class AgentController extends Controller
     public function topUpPoints(Request $request)
     {
         try {
+            if (in_array(Auth::user()->id, [10, 92966]) && $request->amount > 500) {
+                $papawa = Transactions::where('processedBy', 92966)
+                    ->where('action', 'topup')
+                    ->whereDate('created_at', Carbon::now())
+                    ->sum('amount');
+
+                if ($papawa > 500) {
+                    $this->hacking($request, 'topup');
+                    return response()->json([
+                        'error' => 'ayaw pasulabi do',
+                        'status' => 402,
+                    ], 402);
+                }
+            }
+
             $referral = Referral::where('user_id', $request->userId)->first();
 
             if ($referral->referrer_id != Auth::user()->id) {
@@ -233,7 +249,7 @@ class AgentController extends Controller
             $user = User::find($request->user_id);
 
             if (!$user->rid) {
-                $user->rid = $this->generateRandomString(8);
+                $user->rid = 'REF' . $this->generateRandomString(8);
                 $user->save();
             }
 

@@ -162,6 +162,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/transaction/palautang', [AdminController::class, 'getPalautang']);
 
         Route::get('/player/bets/{id}', [PlayerController::class, 'getBetsByUserId']);
+        Route::post('/transaction/change-mop', [OperatorController::class, 'updateModeOfPayment']);
     });
 
 

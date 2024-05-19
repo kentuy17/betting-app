@@ -875,10 +875,8 @@
                       @if (Auth::user()->id == 10)
                         MASTER
                       @endif COMMISSION <span class="text-black">
-                        @if (Auth::user()->agent->type == 'sub-agent')
-                          {{ Auth::user()->agent->percent }}%
-                        @else
-                          6%
+                        {{ Auth::user()->agent->percent }}% @if (Auth::user()->id == 93008)
+                          WIN/LOSE
                         @endif
                       </span>
                     @else

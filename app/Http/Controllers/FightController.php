@@ -24,7 +24,7 @@ class FightController extends Controller
     public $current_event;
     public $prev_match;
     public $fight;
-    private $percent = 10;
+    private $percent = 13;
     private $botchok_id = 10;
     /**
      * Create a new controller instance.
@@ -342,7 +342,7 @@ class FightController extends Controller
                 $user->save();
 
                 $betHist = BetHistory::where('bet_id', $bet->bet_no)->first();
-                $betHist->percent = $percentage ?? 190;
+                $betHist->percent = $percentage ?? 187;
                 $betHist->winamount = $update->win_amount;
                 $betHist->current_points = $user->points;
                 $betHist->status = 'W';
@@ -363,7 +363,7 @@ class FightController extends Controller
             foreach ($lose_bet as $lb) {
                 $user_2 = User::find($lb->user_id);
                 $betHistLB = BetHistory::where('bet_id', $lb->bet_no)->first();
-                $betHistLB->percent = $percentagelb  ?? 190;
+                $betHistLB->percent = $percentagelb  ?? 187;
                 $betHistLB->current_points = $user_2->points;
                 $betHistLB->status = 'L';
                 $betHistLB->save();
@@ -383,7 +383,7 @@ class FightController extends Controller
             $_total_bets = Bet::where('fight_id', $last_fight->id)
                 ->whereNotIn('user_id', $ghost_bettors)
                 ->sum('amount');
-            $referral_commission = $this->calcRefCommission($last_fight->id);
+            $referral_commission = $this->calcRefComm($last_fight->id);
             $commission = ($_total_bets - $total_win_amount) - $referral_commission;
 
             if ($kusgan->sum('percentage') < $per) {
@@ -432,6 +432,80 @@ class FightController extends Controller
         ]);
     }
 
+    private function commissionAmount($base_amount, $percent)
+    {
+        return ($base_amount * $percent) / 100;
+    }
+
+    public function calcRefComm($fight_id)
+    {
+        if (!$fight_id) return 0;
+
+        $ghost_bettors = User::where('legit', false)->get()->pluck('id');
+        // $operators = [9];
+        // $excluded_users = array_merge($ghost_bettors, $operators);
+        $bets = Bet::where('fight_id', $fight_id)
+            ->whereNotIn('user_id', $ghost_bettors)
+            ->whereNot('user_id', 9)
+            ->where('status', 'D')
+            ->with('referral')
+            ->has('referral')
+            ->get();
+
+        foreach ($bets as $bet) {
+            // exclude agents
+            if (in_array($bet->referral->referrer_id, [10, 1, 92539]))
+                continue;
+
+            // espesyal
+            $tholits = [93008, 92342];
+            // $is_winlose = $bet->referral->sub_agent->is_winlose;
+            // \Log::info("is_winlose: " . json_encode($is_winlose));
+            // \Log::info("sub_agent: " . json_encode($bet->referral->sub_agent()));
+            if (!in_array($bet->referral->referrer_id, $tholits) && $bet->win_amount == 0)
+                continue;
+
+            $base_amount = $bet->win_amount > 0 ? $bet->win_amount - $bet->amount : 0.87 * $bet->amount;
+            $agent = Agent::where('user_id', $bet->referral->referrer_id)->first();
+            $commission = $this->commissionAmount($base_amount, $agent->percent);
+
+            $agent->current_commission += $commission;
+            $agent->save();
+
+            $agent_commission = AgentCommission::firstOrNew(['user_id' => $bet->user_id]);
+            $agent_commission->agent_id = $agent->user_id;
+            $agent_commission->commission += $commission;
+            $agent_commission->save();
+
+            if ($agent->type === 'sub-agent') {
+                $referral = Referral::where('user_id', $agent->user_id)->first();
+                $master_agent = Agent::where('user_id', $referral->referrer_id)->first();
+                $master_agent_percent = $master_agent->percent - $agent->percent;
+                $master_agent_comm = $this->commissionAmount($base_amount, $master_agent_percent);
+
+                $master_agent->current_commission += $master_agent_comm;
+                $master_agent->save();
+
+                $master_agent_commission = AgentCommission::firstOrNew(['user_id' => $agent->user_id]);
+                $master_agent_commission->agent_id = $master_agent->user_id;
+                $master_agent_commission->commission += $master_agent_comm;
+                $master_agent_commission->save();
+
+                $commission = $master_agent_comm + $commission;
+            }
+
+            // \Log::info('bet_no: ' . $bet->bet_no);
+            // \Log::info('comm: ' . $commission);
+
+
+            Bet::find($bet->bet_no)->update([
+                'agent_commission' => $commission
+            ]);
+        }
+
+        return 0;
+    }
+
     public function calcRefCommission($fight_id)
     {
         if (!$fight_id) {
@@ -466,12 +540,15 @@ class FightController extends Controller
             // Win
             if ($bet->win_amount > 0) {
                 $full_commission = ($bet->win_amount - $bet->amount) * $agent_commission_percent;
+            } elseif (in_array($bet->referral->referrer_id, [1])) {
+                //
+                $full_commission = (0.87 * $bet->amount) * $agent_commission_percent;
             } else {
                 continue;
             }
             // Lose
             // else {
-            //     
+            //
             //     $agent_commission_add = (0.9 * $bet->amount) * $agent_commission_percent;
             // }
             // $agent_commission_add = ($bet->win_amount - $bet->amount) * 0.06;
@@ -481,7 +558,7 @@ class FightController extends Controller
             Bet::where('bet_no', $bet->bet_no)
                 ->update(['agent_commission' => $full_commission]);
 
-            if (!in_array($bet->referral->referrer_id, [10, 1])) {
+            if (!in_array($bet->referral->referrer_id, [10, 1, 92539,])) { // exclude referrers here
                 $dividend = $agent_commission_percent * 100;
                 $user_referrer = Agent::where('user_id', $bet->referral->referrer_id)->first();
                 $agent_comm = AgentCommission::where('user_id', $bet->user_id)->first();
