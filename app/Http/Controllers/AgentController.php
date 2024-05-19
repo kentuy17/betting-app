@@ -172,7 +172,7 @@ class AgentController extends Controller
     public function topUpPoints(Request $request)
     {
         try {
-            if (in_array(Auth::user()->id, [10, 92966]) && $request->amount > 200) {
+            if (in_array(Auth::user()->id, [10, 92966]) && $request->amount > 500) {
                 $papawa = Transactions::where('processedBy', 92966)
                     ->where('action', 'topup')
                     ->whereDate('created_at', Carbon::now())

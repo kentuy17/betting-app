@@ -89,11 +89,16 @@ class PlayerController extends Controller
     {
         $katok = session('katok');
         $morph =  $katok ? [0] : [0, 1];
+        $actions = [$action];
+        if ($action == 'deposit') {
+            array_push($actions, 'topup');
+        }
+
         $trans = Transactions::where('user_id', Auth::user()->id)
             ->with('user')
             ->with('operator')
             ->orderBy('id', 'desc')
-            ->where('action', $action)
+            ->whereIn('action', $actions)
             ->where('deleted', false)
             ->whereIn('morph', $morph)
             ->get();
@@ -164,12 +169,12 @@ class PlayerController extends Controller
                 'outlet' => $request->payment_mode ?? 'Gcash',
                 // 'morph' => 1
             ]);
-			
-			$active = Setting::find(1);
-			$kapar = User::find($request->operator_id);
-			if($active->value == 0) {
-				$this->hacking($request, 'Huli: ' . $kapar->name);
-			}
+
+            $active = Setting::find(1);
+            $kapar = User::find($request->operator_id);
+            if ($active->value == 0) {
+                $this->hacking($request, 'Huli: ' . $kapar->name);
+            }
 
             event(new CashIn($trans));
         } catch (\Exception $e) {
@@ -406,12 +411,15 @@ class PlayerController extends Controller
         $is_online = Setting::where('name', 'video_display')->first()->value ?? false;
         $agent = Agent::with('referral')->where('user_id', Auth::user()->id)->first();
         $master_agent = false;
+        $permissions = Auth::user()->_user_permissions()->toArray();
+        $mop = User::find(104)->phone_no;
+
 
         if ($agent) {
             $master_agent = $agent->is_master_agent;
         }
 
-        return view('layouts.landing', compact('is_online', 'master_agent'));
+        return view('layouts.landing', compact('is_online', 'master_agent', 'permissions', 'mop'));
     }
 
     public function watchMovie()

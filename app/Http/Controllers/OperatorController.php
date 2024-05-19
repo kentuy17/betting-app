@@ -468,4 +468,28 @@ class OperatorController extends Controller
             ->rawColumns(['action'])
             ->make(true);
     }
+
+    public function updateModeOfPayment(Request $request)
+    {
+        $request->validate([
+            'change_mop' => 'in:nica,boyet'
+        ]);
+
+        $mop = User::find(104);
+        if ($request->change_mop == 'nica') {
+            $mop->name = "KY*E B.";
+            $mop->phone_no = "09272306987";
+            $mop->save();
+        }
+
+        if ($request->change_mop == 'boyet') {
+            $mop->name = "ME***R Z.";
+            $mop->phone_no = "09954775395";
+            $mop->save();
+        }
+
+        return redirect()
+            ->back()
+            ->with('success', 'MOP updated succesfully!');
+    }
 }

@@ -31,11 +31,14 @@ class HomeController extends Controller
     {
         $role = $this->getUserRole();
         if ($role->name == 'Player') {
-            if (Auth::user()->defaultpassword) {
-                $this->redirectTo = '/changepassword';
-            } else {
-                $this->redirectTo = '/landing';
-            }
+            # if (Auth::user()->defaultpassword) {
+            #     $this->redirectTo = '/changepassword';
+            # } else {
+            #     $this->redirectTo = '/landing';
+	    # }
+	    $this->redirectTo = Auth::user()->defaultpassword
+		    ? '/changepassword'
+		    : '/landing';
         }
 
         if ($role->name == 'Operator') {
@@ -43,7 +46,7 @@ class HomeController extends Controller
         }
 
         if ($role->name == 'Cash-out Operator' || $role->name == 'Cash-in Operator') {
-            $this->redirectTo = '/transactions';
+            $this->redirectTo = '/landing';
         }
 
         if ($role->name == 'Admin') {
@@ -62,8 +65,9 @@ class HomeController extends Controller
         return view('auth.change-password');
     }
 
-    public function changePasswordPost(Request $request) {
-        if($request->new_password !== $request->confirm_password) {
+    public function changePasswordPost(Request $request)
+    {
+        if ($request->new_password !== $request->confirm_password) {
             return redirect()->back()
                 ->with('error', 'Password does not match');
         }

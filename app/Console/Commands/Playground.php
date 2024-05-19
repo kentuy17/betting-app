@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Transactions;
+use App\Models\User;
 use Carbon\Carbon;
 
 class Playground extends Command
@@ -27,11 +28,12 @@ class Playground extends Command
      */
     public function handle()
     {
-       $papawa = Transactions::where('processedBy', 92966)
-                    ->where('action', 'topup')
-                    ->whereDate('created_at', Carbon::now())
-		    ->sum('amount');
+        //    $papawa = Transactions::where('processedBy', 92966)
+        //                 ->where('action', 'topup')
+        //                 ->whereDate('created_at', Carbon::now())
+        // 	    ->sum('amount');
+        $papawa = User::find(92342);
 
-      $this->info(json_encode($papawa)); 
+        $this->info(json_encode($papawa));
     }
 }
