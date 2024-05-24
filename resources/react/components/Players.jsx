@@ -57,7 +57,7 @@ const Example = () => {
       const fetchURL = new URL(
         '/master-agent/player-list',
         process.env.NODE_ENV === 'production'
-          ? 'https://sww23-go.live'
+          ? 'https://isp24.live'
           : 'http://127.0.0.1:8006'
       );
       fetchURL.searchParams.set(

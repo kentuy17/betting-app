@@ -95,18 +95,20 @@
         <form id="change-mop-form" method="post" action="/transaction/change-mop">
           <input type="hidden" name="_token" value="{{ csrf_token() }}" />
           <div class="modal-body">
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="change_mop" id="nica_radio" value="nica" @if ($mop == '09272306987') checked @endif>
-              <label class="form-check-label" for="nica_radio">
-                <span class="font-bold">KY*E B.</span> - <span class="font-light italic">09272306987</span>
-              </label>
-            </div>
-            <div class="form-check mt-2">
+            @foreach ($mops as $key => $value)
+              <div class="form-check m-2">
+                <input class="form-check-input" type="radio" name="change_mop" id="{{ $key }}" value="{{ $value->number }}" @if ($mop == $value->number) checked @endif>
+                <label class="form-check-label" for="{{ $key }}">
+                  <span class="font-light italic">{{ $value->number }}</span> => <span class="font-bold">{{ $value->name }}</span>
+                </label>
+              </div>
+            @endforeach
+            {{-- <div class="form-check mt-2">
               <input class="form-check-input" type="radio" name="change_mop" id="boyet_radio" value="boyet" @if ($mop == '09954775395') checked @endif>
               <label class="form-check-label" for="boyet_radio">
                 <span class="font-bold">ME***R Z.</span> - <span class="font-light italic">09954775395</span>
               </label>
-            </div>
+            </div> --}}
           </div>
           <div class="modal-footer">
             <a class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</a>

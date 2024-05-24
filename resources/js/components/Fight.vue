@@ -277,7 +277,8 @@ export default ({
         this.player.bets = json.player
         this.player.id = json.id
         this.player.legit = json.legit
-      }).then(() => {
+      })
+      .then(() => {
         Echo.channel('fight')
           .listen('.fightUpdated', async (e) => {
             if (e == null)
@@ -333,27 +334,36 @@ export default ({
 
         Echo.private('bet')
           .listen('Bet', async (e) => {
-            if (e.bet.side === 'M') {
-              this.total.meron = this.total.meron + e.bet.amount
-            } else {
-              this.total.wala = this.total.wala + e.bet.amount
-            }
-
-            if (e.bet.user_id == this.player.id && !this.player.legit) {
-              this.player.points -= e.bet.amount
-              this.betAmount = e.bet.amount
-              e.bet.side == 'M'
-                ? this.player.bets.meron += this.betAmount
-                : this.player.bets.wala += this.betAmount
-            } else {
+            if (e.bet.user_id !== this.player.id) {
+              if (e.bet.side === 'M') {
+                this.total.meron = this.total.meron + e.bet.amount
+              } else {
+                this.total.wala = this.total.wala + e.bet.amount
+              }
               e.bet.side == 'M'
                 ? this.ghost.meron += e.bet.amount
                 : this.ghost.wala += e.bet.amount
             }
+
+            // if (e.bet.user_id == this.player.id && !this.player.legit) {
+            //   this.player.points -= e.bet.amount
+            //   this.betAmount = e.bet.amount
+            //   e.bet.side == 'M'
+            //     ? this.player.bets.meron += this.betAmount
+            //     : this.player.bets.wala += this.betAmount
+            // } else {
+            //   e.bet.side == 'M'
+            //     ? this.ghost.meron += e.bet.amount
+            //     : this.ghost.wala += e.bet.amount
+            // }
           });
 
       })
+      .catch(() => {
+        alert('ERROR. Check imong connection')
+      })
 
+    this.refetchInfo()
   },
   computed: {
     totalSum() {
@@ -405,6 +415,28 @@ export default ({
 
     clear() {
       this.betAmount = 0
+    },
+
+    fetchFightInfo() {
+      axios.get('api/fight/current')
+        .then(resp => resp.data)
+        .then(json => {
+          this.fight = json.current
+          this.player.points = json.points
+          this.message = this.setFightStatus(json.current)
+          this.total = json.bets
+          this.player.bets = json.player
+          this.player.id = json.id
+          this.player.legit = json.legit
+        })
+        .catch(() => {
+          alert('ERROR! Refresh doy')
+        })
+    },
+
+    refetchInfo() {
+      setInterval(() => this.fetchFightInfo(), 5000)
+      return
     },
 
     setFightStatus(data) {
@@ -562,19 +594,36 @@ export default ({
           }
         }
 
-        const { data } = await axios.post('/bet/add', {
+        if (!['M', 'W'].includes(betSide)) {
+          alert('Invalid bet!')
+          return
+        }
+
+        // this.player.points -= this.betAmount
+
+        if (betSide === 'M') {
+          this.player.bets.meron += this.betAmount
+          this.total.meron += this.betAmount
+        }
+
+        if (betSide === 'W') {
+          this.player.bets.wala += this.betAmount
+          this.total.wala += this.betAmount
+        }
+
+        axios.post('/bet/add', {
           fight_no: this.fightNo,
           amount: this.betAmount,
           side: betSide
         });
 
-        if (data.status == 'OK' && this.player.legit) {
-          this.player.points -= this.betAmount
-          betSide == 'M'
-            ? this.player.bets.meron += this.betAmount
-            : this.player.bets.wala += this.betAmount
-          this.clear()
-        }
+        // if (data.status == 'OK' && this.player.legit) {
+        //   this.player.points -= this.betAmount
+        //   betSide == 'M'
+        //     ? this.player.bets.meron += this.betAmount
+        //     : this.player.bets.wala += this.betAmount
+        //   this.clear()
+        // }
 
       } catch (err) {
         alert(err.response.data.error);

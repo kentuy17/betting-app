@@ -18,11 +18,13 @@ use App\Models\Chat;
 use App\Models\Setting;
 use App\Events\CashIn;
 use App\Models\Agent;
+use ArrayObject;
 use \Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response as FacadeResponse;
 use Carbon\Carbon;
+use stdClass;
 use Yajra\DataTables\DataTables;
 
 class PlayerController extends Controller
@@ -421,12 +423,32 @@ class PlayerController extends Controller
         $permissions = Auth::user()->_user_permissions()->toArray();
         $mop = User::find(104)->phone_no;
 
+        $mops = array();
+        $mops[0] =  (object)[
+            'name' => 'ME****L EM*******E G.',
+            'number' => '09563559858'
+        ];
+
+        $mops[1] = (object)[
+            'name' => 'JE*O AN****O A.',
+            'number' => '09364969298'
+        ];
+
+        $mops[2] = (object)[
+            'name' => 'KE****H C.',
+            'number' => '09163377896'
+        ];
+
+        $mops[3] = (object)[
+            'name' => 'KY*E B.',
+            'number' => '09272306987',
+        ];
 
         if ($agent) {
             $master_agent = $agent->is_master_agent;
         }
 
-        return view('layouts.landing', compact('is_online', 'master_agent', 'permissions', 'mop'));
+        return view('layouts.landing', compact('is_online', 'master_agent', 'permissions', 'mop', 'mops'));
     }
 
     public function watchMovie()

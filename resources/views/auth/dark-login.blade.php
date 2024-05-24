@@ -50,7 +50,6 @@
               </div>
             </div>
           @endif
-          {{-- <h1 class="flex justify-center"><span>SITE MAINTENANCE</span></h1> --}}
           <div class="auth-form-body mt-3">
             <form action="{{ route('login') }}" accept-charset="UTF-8" method="post">
               @csrf
@@ -65,6 +64,9 @@
             </form>
           </div>
           <p class="login-callout mt-3">New Player? <a href="/register">Create an account</a>.</p>
+          {{-- <div class="login-callout mt-3">
+            <h2>SITE MAINTENANCE</h1>
+          </div> --}}
         </div>
       </main>
     </div>

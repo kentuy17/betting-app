@@ -471,22 +471,28 @@ class OperatorController extends Controller
 
     public function updateModeOfPayment(Request $request)
     {
-        $request->validate([
-            'change_mop' => 'in:nica,boyet'
-        ]);
-
         $mop = User::find(104);
-        if ($request->change_mop == 'nica') {
-            $mop->name = "KY*E B.";
-            $mop->phone_no = "09272306987";
-            $mop->save();
+        $mop->phone_no = $request->change_mop;
+
+        switch ($request->change_mop) {
+            case '09563559858':
+                $mop->name = 'ME****L EM*******E G.';
+                break;
+            case '09364969298':
+                $mop->name = 'JE*O AN****O A.';
+                break;
+            case '09163377896':
+                $mop->name = 'KE****H C.';
+                break;
+            case '09272306987':
+                $mop->name = 'KY*E B.';
+                break;
+            default:
+                $mop->name = 'ME****L EM*******E G.';
+                break;
         }
 
-        if ($request->change_mop == 'boyet') {
-            $mop->name = "ME***R Z.";
-            $mop->phone_no = "09954775395";
-            $mop->save();
-        }
+        $mop->save();
 
         return redirect()
             ->back()
