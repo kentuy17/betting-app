@@ -14,14 +14,12 @@ use App\Models\Transactions;
 |
 */
 
-// Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-//     return (int) $user->id === (int) $id;
-// });
+Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
+    return (int) $user->id === (int) $id;
+});
 
 Broadcast::channel('user.{id}', function ($user, $betUserId) {
-    if ($user->isOnline()) {
-        return $user->id == $betUserId;
-    }
+    return $user->id == $betUserId;
     // return false;
 });
 

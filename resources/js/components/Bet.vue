@@ -200,14 +200,14 @@ export default {
           this.player.bets = json.player
       })
       .then(() => {
-        window.Echo.private('user.' + this.player.id)
+        Echo.private('user.' + this.player.id)
           .listen('Result', async (e) => {
             if (e.bet.user.legit) {
               if (e.bet.status == 'X') {
                 alert(`Returened ${this.formatMoney(e.bet.amount)} points!`);
               }
               else {
-                alert(`Congratulationsss! You win ${this.formatMoney(e.bet.win_amount)}`)
+                alert(`Congratulations! You win ${this.formatMoney(e.bet.win_amount)}`)
               }
             }
 
@@ -278,7 +278,7 @@ export default {
         this.message = this.setFightStatus(this.fight)
       });
 
-    window.Echo.private('bet')
+    Echo.channel('bet')
       .listen('Bet', async (e) => {
         if (e.bet.side === 'M') {
           this.total.meron = this.total.meron + e.bet.amount

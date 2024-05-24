@@ -13,12 +13,11 @@ use App\Models\ModelHasRoles;
 use App\Models\Roles;
 use App\Models\Referral;
 use App\Models\Agent;
-use Shetabit\Visitor\Traits\Visitor;
 use DateTimeInterface;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, Visitor;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * @var string
@@ -82,7 +81,7 @@ class User extends Authenticatable
      * @param string $iUserId
      * @return array
      */
-    public function getProfileByUserID(string $iUserId) : array
+    public function getProfileByUserID(string $iUserId): array
     {
         return $this->where('id', $iUserId)->get()->toArray();
     }
@@ -93,7 +92,7 @@ class User extends Authenticatable
      * @param array $aParameters
      * @return int
      */
-    public function updateContactNumber(int $userID, array $aParameters) : int
+    public function updateContactNumber(int $userID, array $aParameters): int
     {
         return $this->where('id', $userID)->update($aParameters);
     }
@@ -105,7 +104,7 @@ class User extends Authenticatable
 
     public function active_commission()
     {
-        return $this->hasMany(Commission::class, 'user_id')->where('active',true);
+        return $this->hasMany(Commission::class, 'user_id')->where('active', true);
     }
 
     public function model_has_roles()

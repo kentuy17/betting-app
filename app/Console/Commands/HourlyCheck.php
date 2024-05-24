@@ -33,54 +33,54 @@ class HourlyCheck extends Command
      */
     public function handle()
     {
-        Log::channel('cron')->info("Cron Job running at " . now());
+        // Log::channel('cron')->info("Cron Job running at " . now());
 
-        $auth_key = env('PUSHER_APP_KEY', 'fb67b0d962d7feef73c4');
-        $secret_key = env('PUSHER_APP_SECRET', '3b35a2c2dc7f286a5885');
-        $app_id = env('PUSHER_APP_ID', '1785417');;
+        // $auth_key = env('PUSHER_APP_KEY', 'fb67b0d962d7feef73c4');
+        // $secret_key = env('PUSHER_APP_SECRET', '3b35a2c2dc7f286a5885');
+        // $app_id = env('PUSHER_APP_ID', '1785417');;
 
 
         // PUSHER_APP_ID=1785417
         // PUSHER_APP_KEY=fb67b0d962d7feef73c4
         // PUSHER_APP_SECRET=3b35a2c2dc7f286a5885
 
-        $pusher = new Pusher($auth_key, $secret_key, $app_id, [
-            'cluster' => 'ap1'
-        ]);
+        // $pusher = new Pusher($auth_key, $secret_key, $app_id, [
+        //     'cluster' => 'ap1'
+        // ]);
 
-        $users = User::whereNotIn('id', [9, 2])->get();
-        foreach ($users as $key => $user) {
-            # code...
-            if (!$user->isOnline() && $user->active) {
-                $pusher->terminateUserConnections($user->id);
-                $user->update([
-                    'active' => false,
-                    'timestamps' => false,
-                ]);
-            }
-        }
+        // $users = User::whereNotIn('id', [9, 2])->get();
+        // foreach ($users as $key => $user) {
+        //     # code...
+        //     if (!$user->isOnline() && $user->active) {
+        //         $pusher->terminateUserConnections($user->id);
+        //         $user->update([
+        //             'active' => false,
+        //             'timestamps' => false,
+        //         ]);
+        //     }
+        // }
 
-        $date = Carbon::now()->subHours(1);
-        $delete = Visit::where('created_at', '<=', $date)->delete();
+        // $date = Carbon::now()->subHours(1);
+        // $delete = Visit::where('created_at', '<=', $date)->delete();
 
-        $ghost = User::find(9);
-        if ($ghost->points < 2000000) {
-            $ghost->points += 7000000;
-            $ghost->save();
-            Log::channel('cron')->info("Ghost added pts: " . $ghost->points);
-        }
+        // $ghost = User::find(9);
+        // if ($ghost->points < 2000000) {
+        //     $ghost->points += 7000000;
+        //     $ghost->save();
+        //     Log::channel('cron')->info("Ghost added pts: " . $ghost->points);
+        // }
 
-        $event = DerbyEvent::where('status', 'ACTIVE')->first();
-        if ($event) {
-            $fight = Fight::where('event_id', $event->id)
-                ->orderBy('id', 'desc')->first();
+        // $event = DerbyEvent::where('status', 'ACTIVE')->first();
+        // if ($event) {
+        //     $fight = Fight::where('event_id', $event->id)
+        //         ->orderBy('id', 'desc')->first();
 
-            $bets = Bet::where('fight_id', '<', $fight->id - 5)
-                ->where('user_id', 9)->delete();
+        //     $bets = Bet::where('fight_id', '<', $fight->id - 5)
+        //         ->where('user_id', 9)->delete();
 
-            Log::channel('bet')->info('Delete: ' . $bets);
-        }
+        //     Log::channel('bet')->info('Delete: ' . $bets);
+        // }
 
-        Log::channel('cron')->info("Delete: " . $delete);
+        // Log::channel('cron')->info("Delete: " . $delete);
     }
 }

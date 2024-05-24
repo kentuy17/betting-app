@@ -288,7 +288,8 @@ class FightController extends Controller
             'curr' => $new_fight,
         ];
 
-        event(new FightEvent($fight));
+        // event(new FightEvent($fight));
+        FightEvent::dispatch($fight);
 
         if ($winner == 'C' || $winner == 'D') {
             $this->fight = $last_fight;

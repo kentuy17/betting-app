@@ -64,6 +64,11 @@
 @endsection
 
 @section('content')
+  <script>
+    window.Laravel = {
+      csrfToken: '{{ csrf_token() }}'
+    }
+  </script>
   <div class="max-w-full min-w-full min-h-screen shadow-md bg-os_event_body_black row m-0 g-2" id="play-container">
     <div class="col-md-7 my-1">
       <div class="card mb-0">

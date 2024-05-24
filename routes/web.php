@@ -67,7 +67,7 @@ Route::group(['middleware' => ['auth']], function () {
     // Admin
     Route::group(['middleware' => ['admin']], function () {
         Route::get('/admin/share-allocation', [AdminController::class, 'shareHolders'])->name('admin.shares');
-        Route::get('/visitor', [AdminController::class, 'getOnlineUsers']);
+        // Route::get('/visitor', [AdminController::class, 'getOnlineUsers']);
         Route::get('/admin/users', [AdminController::class, 'getUsers']);
         Route::get('/admin', [AdminController::class, 'index']);
         Route::post('/admin/users-create', [AdminController::class, 'createUser']);

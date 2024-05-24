@@ -1,5 +1,5 @@
 <template>
-  <div class='card bet-boxed-area mb-1'>
+  <div class="card bet-boxed-area mb-1">
     <div v-if="!player.legit" class="mx-2">
       <div class="grid grid-cols-2 bg-os_bg">
         <div class="px-2 py-1 border border-black">
@@ -19,8 +19,10 @@
       </div>
     </div>
     <div class="bet-bg-head items-center grid grid-cols-3">
-      <h6><b class="text-lg">FIGHT # </b> <b id="fight-no" class="text-lg">{{
-      fightNo }}</b></h6>
+      <h6>
+        <b class="text-lg">FIGHT # </b>
+        <b id="fight-no" class="text-lg">{{ fightNo }}</b>
+      </h6>
       <div class="text-center">
         <span class="font-bold btn btn-block btn-sm btn-lg vue-components"
           :class="fightStatusClass[message]">{{ message }}</span>
@@ -37,7 +39,7 @@
               </path>
             </svg>
           </div>
-          <div class="credits-data d-flex ">
+          <div class="credits-data d-flex">
             <span class="pr-2 gp-yellow-text font-weight-bold"
               id="operator-pts">{{ creditPoints }}</span>
           </div>
@@ -56,16 +58,16 @@
       <div class="grid grid-cols-2 bg-os_bg">
         <div class="px-2 py-1 border border-black">
           <div>
-            <h3 class="font-extrabold text-center m-2 font-tally text-2xl">{{
-      formatMoney(total.meron) }}</h3>
+            <h3 class="font-extrabold text-center m-2 font-tally text-2xl"> {{
+      formatMoney(total.meron) }} </h3>
             <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT
-              = {{ formatMoney(meronPercentage) }}</h3>
+              = {{ formatMoney(meronPercentage) }} </h3>
             <div>
               <div class="flex justify-center items-center">
                 <h3 class="font-bold text-drawcolor text-center text-sm">
-                  <span class='text-player-bet'>{{
+                  <span class="text-player-bet">{{
       formatMoney(player.bets.meron) }}</span> = <span
-                    class='text-player-win'>{{ formatMoney(meronWinAmount)
+                    class="text-player-win">{{ formatMoney(meronWinAmount)
                     }}</span>
                 </h3>
               </div>
@@ -74,15 +76,15 @@
         </div>
         <div class="px-2 py-1 border border-black">
           <div>
-            <h3 class="font-extrabold text-center m-2 font-tally text-2xl">{{
-      formatMoney(total.wala) }}</h3>
+            <h3 class="font-extrabold text-center m-2 font-tally text-2xl"> {{
+      formatMoney(total.wala) }} </h3>
             <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT
-              = {{ formatMoney(walaPercentage) }}</h3>
+              = {{ formatMoney(walaPercentage) }} </h3>
             <div>
               <div class="flex justify-center items-center">
                 <h3 class="font-bold text-drawcolor text-center text-sm">
                   <span class="text-player-bet">{{ formatMoney(player.bets.wala)
-                    }}</span> = <span class='text-player-win'>{{
+                    }}</span> = <span class="text-player-win">{{
       formatMoney(walaWinAmount) }}</span>
                 </h3>
               </div>
@@ -95,13 +97,14 @@
       <div class="px-1 py-1">
         <button type="button" color="#00D7E7" @click="addBet('M')"
           class="button text-ellipsis overflow-clip uppercase bg-os_meron_btn text-sm font-bold is-info is-fullwidth">
-          <i class="fa-solid fa-circle-plus text-sm mr-1"></i> BET
-          MERON</button>
+          <i class="fa-solid fa-circle-plus text-sm mr-1"></i> BET MERON
+        </button>
       </div>
       <div class="px-1 py-1">
         <button type="button" color="#00D7E7" @click="addBet('W')"
           class="button text-ellipsis overflow-clip uppercase bg-os_wala_btn text-sm font-bold is-info is-fullwidth">
-          <i class="fa-solid fa-circle-plus text-sm mr-1"></i> BET WALA</button>
+          <i class="fa-solid fa-circle-plus text-sm mr-1"></i> BET WALA
+        </button>
       </div>
     </div>
     <div class="col-md-12">
@@ -109,7 +112,7 @@
         <money3 class="form-control" :model-modifiers="{ number: true }"
           v-model="betAmount" v-bind="money"></money3>
         <div class="input-group-append">
-          <button @click='clear' class="input-group-text">CLEAR</button>
+          <button @click="clear" class="input-group-text">CLEAR</button>
         </div>
       </div>
     </div>
@@ -135,23 +138,26 @@
       </a>
     </div>
     <div class="flex gap-2 mb-3"
-      style="display: flex; justify-content: center; flex-wrap: nowrap;">
+      style="display: flex; justify-content: center; flex-wrap: nowrap">
       <button @click="updateFight('O')" :disabled="isDisabled.open"
         class="btn btn-success">
-        <span v-show='!isLoading.open'>OPEN</span>
-        <span v-show='isLoading.open'>Processing...</span></button>
+        <span v-show="!isLoading.open">OPEN</span>
+        <span v-show="isLoading.open">Processing...</span>
+      </button>
       <button @click="updateFight('C')" :disabled="isDisabled.close"
         class="btn btn-danger">
-        <span v-show='!isLoading.close'>CLOSE</span>
-        <span v-show='isLoading.close'>Processing...</span></button>
+        <span v-show="!isLoading.close">CLOSE</span>
+        <span v-show="isLoading.close">Processing...</span>
+      </button>
       <button @click="doneFight()" :disabled="isDisabled.done"
         class="btn btn-secondary">
-        <span v-show='!isLoading.done'>DONE</span>
-        <span v-show='isLoading.done'>Loading...</span></button>
-      <button @click="cancelFight()" :disabled='isLoading.cancel'
-        class="btn btn-primary" v-show='!isLoading.cancel'>
-        <span v-show='!isLoading.cancel'>CANCEL</span>
-        <span v-show='isLoading.cancel'>Loading...</span>
+        <span v-show="!isLoading.done">DONE</span>
+        <span v-show="isLoading.done">Loading...</span>
+      </button>
+      <button @click="cancelFight()" :disabled="isLoading.cancel"
+        class="btn btn-primary" v-show="!isLoading.cancel">
+        <span v-show="!isLoading.cancel">CANCEL</span>
+        <span v-show="isLoading.cancel">Loading...</span>
       </button>
     </div>
   </div>
@@ -165,20 +171,20 @@
         <div class="modal-body">
           <div class="form-group mt-2">
             <label>Fight #</label>
-            <input type="number" class="form-control disabled" id="fight_no">
+            <input type="number" class="form-control disabled" id="fight_no" />
           </div>
           <div class="revert-btn-group">
             <div class="form-group mt-2">
-              <button @click="revertFight('M')"
-                class="btn btn-danger btn-sm">MERON</button>
+              <button @click="revertFight('M')" class="btn btn-danger btn-sm">
+                MERON </button>
             </div>
             <div class="form-group mt-2">
-              <button @click="revertFight('W')"
-                class="btn btn-primary btn-sm">WALA</button>
+              <button @click="revertFight('W')" class="btn btn-primary btn-sm">
+                WALA </button>
             </div>
             <div class="form-group mt-2">
-              <button @click="revertFight('D')"
-                class="btn btn-warning btn-sm">DRAW</button>
+              <button @click="revertFight('D')" class="btn btn-warning btn-sm">
+                DRAW </button>
             </div>
           </div>
         </div>
@@ -187,10 +193,10 @@
   </div>
 </template>
 <script>
-import { axios } from '@bundled-es-modules/axios';
-import { Money3Component } from 'v-money3'
+import { axios } from "@bundled-es-modules/axios";
+import { Money3Component } from "v-money3";
 
-export default ({
+export default {
   components: {
     money3: Money3Component,
   },
@@ -198,11 +204,11 @@ export default ({
     return {
       fightNo: 0,
       betAmount: 0,
-      message: '____',
+      message: "____",
       fightStatusClass: {
-        OPEN: 'gradient-status-open',
-        CLOSE: 'gradient-status-close',
-        '_____': 'gradient-status-pending',
+        OPEN: "gradient-status-open",
+        CLOSE: "gradient-status-close",
+        _____: "gradient-status-pending",
       },
       amounts: [123, 776, 916, 2664, 3123],
       total: {
@@ -234,7 +240,7 @@ export default ({
       },
       player: {
         points: 0,
-        id: '',
+        id: "",
         legit: true,
         bets: {
           meron: 0,
@@ -242,24 +248,23 @@ export default ({
         },
       },
       money: {
-        decimal: '.',
-        thousands: ',',
+        decimal: ".",
+        thousands: ",",
         precision: 0,
         masked: false,
         shouldRound: false,
-	disabled: true,
+        disabled: true,
       },
       ghost: {
         meron: 0,
         wala: 0,
-        points: 'UNLIMITED',
+        points: "UNLIMITED",
       },
       autobots: {
         meron: 0,
         wala: 0,
-      }
-    }
-
+      },
+    };
   },
   mounted() {
     axios.defaults.headers = {
@@ -268,320 +273,331 @@ export default ({
     }
 
     axios.get('api/fight/current')
-      .then(resp => resp.data)
-      .then(json => {
-        this.fight = json.current
-        this.player.points = json.points
-        this.message = this.setFightStatus(json.current)
-        this.total = json.bets
-        this.player.bets = json.player
-        this.player.id = json.id
-        this.player.legit = json.legit
-      }).then(() => {
-        Echo.channel('fight')
-          .listen('.fightUpdated', async (e) => {
-            if (e == null)
-              return
-
-            if (e.fight.curr) {
-              if ((e.fight.prev.game_winner == 'D' || e.fight.prev.game_winner == 'C') && this.playerTotalBets > 0) {
-                if (this.player.legit) {
-                  alert(`Returned ${this.formatMoney(this.playerTotalBets)} points!`)
-                  this.tada()
-                }
-                this.daog = true
-                this.player.points += this.playerTotalBets
-              }
-
-              if (e.fight.prev.game_winner == 'M' && this.meronWinAmount > 0) {
-                if (this.player.legit) {
-                  alert(`Congratulations! MERON Wins ${this.formatMoney(this.meronWinAmount)}`)
-                  this.tada()
-                }
-                this.daog = true
-                this.player.points += this.meronWinAmount
-              }
-
-              if (e.fight.prev.game_winner == 'W' && this.walaWinAmount > 0) {
-                if (this.player.legit) {
-                  alert(`Congratulations! WALA Wins ${this.formatMoney(this.walaWinAmount)}`)
-                  this.tada()
-                }
-                this.daog = true
-                this.player.points += this.walaWinAmount
-              }
-
-              if (this.daog && !this.player.legit) {
-                this.tada()
-              }
-
-              this.daog = false
-              this.fight = e.fight.curr
-              this.total.meron = this.total.wala = 0
-              this.player.bets.meron = this.player.bets.wala = 0
-            }
-            else {
-              this.fight = e.fight
-            }
-
-            if (this.fight.status == null) {
-              this.ghost.meron = this.ghost.wala = 0
-            }
-
-            this.message = this.setFightStatus(this.fight)
-          });
-
-        Echo.private('bet')
-          .listen('Bet', async (e) => {
-            if (e.bet.side === 'M') {
-              this.total.meron = this.total.meron + e.bet.amount
-            } else {
-              this.total.wala = this.total.wala + e.bet.amount
-            }
-
-            if (e.bet.user_id == this.player.id && !this.player.legit) {
-              this.player.points -= e.bet.amount
-              this.betAmount = e.bet.amount
-              e.bet.side == 'M'
-                ? this.player.bets.meron += this.betAmount
-                : this.player.bets.wala += this.betAmount
-            } else {
-              e.bet.side == 'M'
-                ? this.ghost.meron += e.bet.amount
-                : this.ghost.wala += e.bet.amount
-            }
-          });
-
+      .then((resp) => resp.data)
+      .then((json) => {
+        this.fight = json.current;
+        this.player.points = json.points;
+        this.message = this.setFightStatus(json.current);
+        this.total = json.bets;
+        this.player.bets = json.player;
+        this.player.id = json.id;
+        this.player.legit = json.legit;
       })
+      .then(() => {
+        Echo.channel("fight").listen(".fightUpdated", async (e) => {
+          if (e == null) return;
 
+          if (e.fight.curr) {
+            if (
+              (e.fight.prev.game_winner == "D" ||
+                e.fight.prev.game_winner == "C") &&
+              this.playerTotalBets > 0
+            ) {
+              if (this.player.legit) {
+                alert(
+                  `Returned ${this.formatMoney(this.playerTotalBets)} points!`
+                );
+                this.tada();
+              }
+              this.daog = true;
+              this.player.points += this.playerTotalBets;
+            }
+
+            if (e.fight.prev.game_winner == "M" && this.meronWinAmount > 0) {
+              if (this.player.legit) {
+                alert(
+                  `Congratulations! MERON Wins ${this.formatMoney(
+                    this.meronWinAmount
+                  )}`
+                );
+                this.tada();
+              }
+              this.daog = true;
+              this.player.points += this.meronWinAmount;
+            }
+
+            if (e.fight.prev.game_winner == "W" && this.walaWinAmount > 0) {
+              if (this.player.legit) {
+                alert(
+                  `Congratulations! WALA Wins ${this.formatMoney(
+                    this.walaWinAmount
+                  )}`
+                );
+                this.tada();
+              }
+              this.daog = true;
+              this.player.points += this.walaWinAmount;
+            }
+
+            if (this.daog && !this.player.legit) {
+              this.tada();
+            }
+
+            this.daog = false;
+            this.fight = e.fight.curr;
+            this.total.meron = this.total.wala = 0;
+            this.player.bets.meron = this.player.bets.wala = 0;
+          } else {
+            this.fight = e.fight;
+          }
+
+          if (this.fight.status == null) {
+            this.ghost.meron = this.ghost.wala = 0;
+          }
+
+          this.message = this.setFightStatus(this.fight);
+        });
+
+        Echo.channel("bet").listen("Bet", async (e) => {
+	  alert(JSON.stringify(e))
+          if (e.bet.side === "M") {
+            this.total.meron = this.total.meron + e.bet.amount;
+          } else {
+            this.total.wala = this.total.wala + e.bet.amount;
+          }
+
+          if (e.bet.user_id == this.player.id && !this.player.legit) {
+            this.player.points -= e.bet.amount;
+            this.betAmount = e.bet.amount;
+            e.bet.side == "M"
+              ? (this.player.bets.meron += this.betAmount)
+              : (this.player.bets.wala += this.betAmount);
+          } else {
+            e.bet.side == "M"
+              ? (this.ghost.meron += e.bet.amount)
+              : (this.ghost.wala += e.bet.amount);
+          }
+        });
+      });
   },
   computed: {
     totalSum() {
-      return this.total.meron + this.total.wala
+      return this.total.meron + this.total.wala;
     },
 
     // GET FROM EACH SIDE
     meronComm() {
-      return this.total.meron * 10 / 100
+      return (this.total.meron * 10) / 100;
     },
 
     walaComm() {
-      return this.total.wala * 10 / 100
+      return (this.total.wala * 10) / 100;
     },
 
     meronPercentage() {
-      let win = this.totalSum - this.meronComm
-      return win / this.total.meron * 100
+      let win = this.totalSum - this.meronComm;
+      return (win / this.total.meron) * 100;
     },
 
     walaPercentage() {
-      let win = this.totalSum - this.walaComm
-      return win / this.total.wala * 100
+      let win = this.totalSum - this.walaComm;
+      return (win / this.total.wala) * 100;
     },
 
     meronWinAmount() {
-      return (this.player.bets.meron * this.meronPercentage) / 100
+      return (this.player.bets.meron * this.meronPercentage) / 100;
     },
 
     walaWinAmount() {
-      return (this.player.bets.wala * this.walaPercentage) / 100
+      return (this.player.bets.wala * this.walaPercentage) / 100;
     },
 
     playerTotalBets() {
-      return this.player.bets.meron + this.player.bets.wala
+      return this.player.bets.meron + this.player.bets.wala;
     },
 
     creditPoints() {
-      return this.player.legit ? this.formatMoney(this.player.points) : this.ghost.points
+      return this.player.legit
+        ? this.formatMoney(this.player.points)
+        : this.ghost.points;
     },
-
   },
 
   methods: {
     formatMoney(value) {
-      return isNaN(value) ? '0.00' : new Intl.NumberFormat('en-US')
-        .format(value.toFixed(2));
+      return isNaN(value)
+        ? "0.00"
+        : new Intl.NumberFormat("en-US").format(value.toFixed(2));
     },
 
     clear() {
-      this.betAmount = 0
+      this.betAmount = 0;
     },
 
     setFightStatus(data) {
-      this.fightNo = data.fight_no
+      this.fightNo = data.fight_no;
       if (data.status == null) {
-        return '_____'
+        return "_____";
       }
-      if (data.status == 'O') {
-        this.isDisabled.open = true
-        this.isDisabled.close = false
-        this.isDisabled.done = true
-        return 'OPEN'
+      if (data.status == "O") {
+        this.isDisabled.open = true;
+        this.isDisabled.close = false;
+        this.isDisabled.done = true;
+        return "OPEN";
       }
-      if (data.status == 'C') {
-        this.isDisabled.open = false
-        this.isDisabled.close = true
-        this.isDisabled.done = false
-        return 'CLOSE'
+      if (data.status == "C") {
+        this.isDisabled.open = false;
+        this.isDisabled.close = true;
+        this.isDisabled.done = false;
+        return "CLOSE";
       }
     },
 
     betManual(amount) {
-      this.betAmount = amount == 'ALL-IN' ? this.player.points : amount
+      this.betAmount = amount == "ALL-IN" ? this.player.points : amount;
     },
 
     tada() {
-      var audio = new Audio('/music/tada.mp3');
+      var audio = new Audio("/music/tada.mp3");
       return audio.play();
     },
 
     doneFight() {
       Swal.fire({
-        title: 'RESULT:',
+        title: "RESULT:",
         showCancelButton: true,
         showCloseButton: false,
         showDenyButton: true,
         allowOutsideClick: false,
-        confirmButtonText: 'MERON',
-        confirmButtonColor: 'red',
-        denyButtonText: 'WALA',
-        denyButtonColor: 'blue',
-        cancelButtonText: 'DRAW',
-        cancelButtonColor: 'green',
-        allowEscapeKey: false
+        confirmButtonText: "MERON",
+        confirmButtonColor: "red",
+        denyButtonText: "WALA",
+        denyButtonColor: "blue",
+        cancelButtonText: "DRAW",
+        cancelButtonColor: "green",
+        allowEscapeKey: false,
       })
         .then((result) => {
           if (result.isConfirmed) {
-            alert('MERON WINS')
-            return 'M';
+            alert("MERON WINS");
+            return "M";
           } else if (result.isDenied) {
-            alert('WALA WINS');
-            return 'W';
+            alert("WALA WINS");
+            return "W";
           } else {
-            alert('DRAW');
-            return 'D';
+            alert("DRAW");
+            return "D";
           }
         })
         .then((result) => {
-          Swal.showLoading()
-          this.updateFight('D', result)
-          this.clear()
+          Swal.showLoading();
+          this.updateFight("D", result);
+          this.clear();
         });
     },
 
     cancelFight() {
       Swal.fire({
-        title: 'CANCEL FIGHT?',
+        title: "CANCEL FIGHT?",
         showCancelButton: true,
         showCloseButton: false,
         allowOutsideClick: false,
-        confirmButtonText: 'YES',
-        cancelButtonText: 'NO',
-        allowEscapeKey: false
+        confirmButtonText: "YES",
+        cancelButtonText: "NO",
+        allowEscapeKey: false,
       })
         .then(async (res) => {
           if (res.isConfirmed) {
-            this.isLoading.cancel = true
-            await this.updateFight('D', 'C')
+            this.isLoading.cancel = true;
+            await this.updateFight("D", "C");
           }
-          this.clear()
-          return
+          this.clear();
+          return;
         })
         .then(() => {
-          this.isLoading.cancel = false
-          this.isDisabled.open = false // fixed open button is disabled
-        })
+          this.isLoading.cancel = false;
+          this.isDisabled.open = false; // fixed open button is disabled
+        });
     },
 
     async updateFight(status, result = null) {
       try {
-        if (this.message == 'CLOSE' && status == 'O') return
+        if (this.message == "CLOSE" && status == "O") return;
 
-        if (status == 'O') this.isLoading.open = true
-        if (status == 'C') this.isLoading.close = true
+        if (status == "O") this.isLoading.open = true;
+        if (status == "C") this.isLoading.close = true;
 
-        const { data } = await axios.post('/fight/update-status', {
+        const { data } = await axios.post("/fight/update-status", {
           status: status,
           result: result,
-        })
+        });
 
-        this.message = status === 'D'
-          ? this.setFightStatus(data.data)
-          : this.setFightStatus(data)
+        this.message =
+          status === "D"
+            ? this.setFightStatus(data.data)
+            : this.setFightStatus(data);
 
-        if (status == 'O') this.isLoading.open = false
-        if (status == 'C') this.isLoading.close = false
+        if (status == "O") this.isLoading.open = false;
+        if (status == "C") this.isLoading.close = false;
 
-        return
+        return;
       } catch (error) {
         console.error(error);
       }
     },
 
     revertWinFight() {
-      $('#modal-undo-win').modal('show')
+      $("#modal-undo-win").modal("show");
     },
 
     async revertFight(result) {
       try {
-        const { data } = await axios.post('/fight/revertresult', {
-          fight_no: $('#fight_no').val(),
+        const { data } = await axios.post("/fight/revertresult", {
+          fight_no: $("#fight_no").val(),
           result: result,
-        })
-        $('#modal-undo-win').modal('hide');
+        });
+        $("#modal-undo-win").modal("hide");
       } catch (error) {
         console.error(error);
       }
-
     },
     async addBet(betSide) {
       try {
-        if (this.message !== 'OPEN') {
-          alert('Cannot Bet')
-          return
+        if (this.message !== "OPEN") {
+          alert("Cannot Bet");
+          return;
         }
 
         if (this.betAmount < 10) {
-          alert('Minimum bet is 10.00')
-          return
+          alert("Minimum bet is 10.00");
+          return;
         }
 
         if (this.betAmount > this.player.points) {
-          alert('Insuficient Points')
-          return
+          alert("Insuficient Points");
+          return;
         }
 
         if (this.betAmount > 1500 && this.player.legit) {
-          alert('Maximum bet is 1,500.00')
-          return
+          alert("Maximum bet is 1,500.00");
+          return;
         }
 
         if (this.player.legit) {
           if (!confirm(`Bet ${this.betAmount.toFixed(2)}?`)) {
-            return
+            return;
           }
         }
 
-        const { data } = await axios.post('/bet/add', {
+        const { data } = await axios.post("/bet/add", {
           fight_no: this.fightNo,
           amount: this.betAmount,
-          side: betSide
+          side: betSide,
         });
 
-        if (data.status == 'OK' && this.player.legit) {
-          this.player.points -= this.betAmount
-          betSide == 'M'
-            ? this.player.bets.meron += this.betAmount
-            : this.player.bets.wala += this.betAmount
-          this.clear()
+        if (data.status == "OK" && this.player.legit) {
+          this.player.points -= this.betAmount;
+          betSide == "M"
+            ? (this.player.bets.meron += this.betAmount)
+            : (this.player.bets.wala += this.betAmount);
+          this.clear();
         }
-
       } catch (err) {
         alert(err.response.data.error);
       }
-    }
-  }
-})
+    },
+  },
+};
 </script>
 <style>
 .revert-btn-group {

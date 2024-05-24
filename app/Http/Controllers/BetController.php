@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\DerbyEvent;
 use App\Models\Fight;
 use Yajra\DataTables\DataTables;
+use Event;
 
 class BetController extends Controller
 {
@@ -121,7 +122,8 @@ class BetController extends Controller
                 'status' => 'F',
             ]);
 
-            event(new BetEvent($bet));
+            // event(new BetEvent($bet));
+            Event::dispatch(new BetEvent($bet));
             if (Auth::user()->id != 9) {
                 Auth::user()->decrement('points', $request->amount);
 
