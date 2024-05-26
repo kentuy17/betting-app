@@ -19,7 +19,7 @@ const UsersList = () => {
 
   return (
     <Routes>
-      <Route path="/master-agent" element={<Dashboard />} />
+      <Route path="/users-list" element={<Dashboard />} />
       <Route path="/master-agent/cashin" element={<CashIn />} />
       <Route
         path="/master-agent/players"
