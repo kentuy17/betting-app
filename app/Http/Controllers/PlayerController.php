@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Response as FacadeResponse;
 use Carbon\Carbon;
 use stdClass;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Http as Client;
 
 class PlayerController extends Controller
 {
@@ -37,6 +38,7 @@ class PlayerController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        // $this->middleware('maintenance');
     }
 
     /**
@@ -91,6 +93,8 @@ class PlayerController extends Controller
             ->first();
 
         $operators = $active_operators ?? $low_pts;
+        // dd($operators);
+
         return view('player.deposit', compact('user', 'operators'));
     }
 
@@ -136,6 +140,52 @@ class PlayerController extends Controller
         return view('player.withdraw-form', compact('availed'));
     }
 
+    public function sendGotify($deposit = null)
+    {
+        try {
+            $curl = curl_init();
+            $player = $deposit->action . '::' . $deposit->user->username . '::' . $deposit->amount;
+            $recibo = "https://isp24.live/storage/" . $deposit->filename;
+            $iyak = "https://i.pinimg.com/736x/6d/26/a2/6d26a28e9269843a0103da816b83457f.jpg";
+            $img = $deposit->action == 'deposit' ? $recibo : $iyak;
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => 'http://192.46.230.32:8080/message?token=AIo5fLAiBXEcMkm',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => '{
+                "extras": {
+                "client::display": {
+                "contentType": "text/markdown"
+                }
+            },
+            "message": "![](' . $img . ')",
+            "priority": 10,
+            "title": "' . $player . '"
+            }',
+                CURLOPT_HTTPHEADER => array(
+                    'Content-Type: application/json'
+                ),
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            // echo $response;
+
+        } catch (\Throwable $th) {
+            \Log::info("CI: " . json_encode($th->getMessage()));
+        }
+
+        \Log::info("CI: " . json_encode($response));
+        return response()->noContent();
+    }
+
     public function depositSubmit(Request $request)
     {
         try {
@@ -150,18 +200,6 @@ class PlayerController extends Controller
                 return redirect()->back()
                     ->with('danger', 'Duplicate receipt!');
             }
-
-            // $trimPhone = $request->phone_no;
-            // if (Str::startsWith($request->phone_no, ['+63', '63'])) {
-            //      $trimPhone = preg_replace('/^\+?63/', '0', $trimPhone);
-            // }
-            // else if (Str::startsWith($request->phone_no, ['9'])) {
-            //     $trimPhone = '0' . $request->phone_no;
-            // }
-
-            // $this->validate($request, [
-            //     'phone_no' => ['regex:/(0?9|\+?63)[0-9]{9}/'],
-            // ]);
 
             $imageName = time() . '.' . $request->formFile->extension();
             $path = 'public/' . $imageName;
@@ -185,6 +223,7 @@ class PlayerController extends Controller
                 $this->hacking($request, 'Huli: ' . $kapar->name);
             }
 
+            $this->sendGotify($trans);
             event(new CashIn($trans));
         } catch (\Exception $e) {
             return redirect()->back()->with('danger', $e->getMessage());
@@ -233,7 +272,7 @@ class PlayerController extends Controller
             $user->points -= $amount;
             $user->save();
 
-            Transactions::create([
+            $trans = Transactions::create([
                 'user_id' => $user->id,
                 'amount' => $amount,
                 'mobile_number' => $request->phone_no,
@@ -241,6 +280,11 @@ class PlayerController extends Controller
                 'status' => 'pending',
                 'processedBy' => null,
             ]);
+
+            if ($trans) {
+                event(new CashIn($trans));
+                $this->sendGotify($trans);
+            }
         } catch (\Exception $e) {
             return redirect()->back()->with('danger', $e->getMessage());
         }
@@ -417,6 +461,8 @@ class PlayerController extends Controller
 
     public function landing()
     {
+        // $co = Transactions::find(22911);
+        // $this->sendGotify($co);
         $is_online = Setting::where('name', 'video_display')->first()->value ?? false;
         $agent = Agent::with('referral')->where('user_id', Auth::user()->id)->first();
         $master_agent = false;

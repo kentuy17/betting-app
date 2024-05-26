@@ -71,6 +71,21 @@ class OperatorController extends Controller
             ->make(true);
     }
 
+    public function getTopupTrans()
+    {
+        $topup = Transactions::where('action', 'topup')
+            ->whereIn('morph', [0, 2])
+            ->with('user')
+            ->with('operator')
+            ->whereYear('created_at', date('Y'))
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return DataTables::of($topup)
+            ->addIndexColumn()
+            ->make(true);
+    }
+
     public function processDepositRevert(Request $request)
     {
         try {

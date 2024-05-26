@@ -20,6 +20,7 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        // $this->middleware('maintenance');
     }
 
     /**
@@ -35,10 +36,10 @@ class HomeController extends Controller
             #     $this->redirectTo = '/changepassword';
             # } else {
             #     $this->redirectTo = '/landing';
-	    # }
-	    $this->redirectTo = Auth::user()->defaultpassword
-		    ? '/changepassword'
-		    : '/landing';
+            # }
+            $this->redirectTo = Auth::user()->defaultpassword
+                ? '/changepassword'
+                : '/landing';
         }
 
         if ($role->name == 'Operator') {

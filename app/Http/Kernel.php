@@ -64,10 +64,10 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
-        'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
-        'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
-        'visitor' => \Shetabit\Visitor\Middlewares\LogVisits::class,
+        // 'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+        // 'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
+        // 'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
+        // 'visitor' => \Shetabit\Visitor\Middlewares\LogVisits::class,
         'operator' => \App\Http\Middleware\EnsureUserIsOperator::class,
         'player' => \App\Http\Middleware\EnsureUserIsPlayer::class,
         'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
@@ -79,5 +79,6 @@ class Kernel extends HttpKernel
         'bossing' => \App\Http\Middleware\EnsureTheBossing::class,
         'agent' => \App\Http\Middleware\EnsurePlayerIsAgent::class,
         'ghost' => \App\Http\Middleware\EnsurePlayerIsGhost::class,
+        'maintenance' => \App\Http\Middleware\MaintenanceMiddleware::class,
     ];
 }

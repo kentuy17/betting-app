@@ -79,6 +79,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/admin/add-agent', [AdminController::class, 'addAgent']);
         Route::get('/admin/non-agents', [AdminController::class, 'getNotAgents']);
 
+        Route::get('/users-list', [AdminController::class, 'usersList']);
+
         // Corpo
         Route::get('/admin/incorpo', [AdminController::class, 'incorpo']);
         Route::get('/admin/incorpo-list', [AdminController::class, 'getCorpos']);
@@ -152,6 +154,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['auditor_csr']], function () {
         Route::get('/transactions', [OperatorController::class, 'transactions'])->name('operator.transactions');
         Route::get('/transaction/deposits', [OperatorController::class, 'getDepositTrans']);
+        Route::get('/transaction/topups', [OperatorController::class, 'getTopupTrans']);
+
         Route::post('/transaction/deposit/revert', [OperatorController::class, 'processDepositRevert']);
 
         Route::get('/transaction/withdrawals', [OperatorController::class, 'getWithdrawTrans']);
@@ -203,4 +207,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/landing', [PlayerController::class, 'landing'])->name('landing');
     Route::get('/watch/movie', [PlayerController::class, 'watchMovie']);
+});
+
+Route::get('/tests', function () {
+    echo phpinfo();
+    return;
 });

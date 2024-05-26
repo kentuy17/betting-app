@@ -242,13 +242,6 @@ class AdminController extends Controller
             } else {
                 $users = User::orderBy('updated_at', 'desc')->get();
             }
-
-            $users_with_roles = [];
-            foreach ($users as $user) {
-                $users_with_roles[] = $user->getRoleNames();
-            }
-
-            $users->roles = $users_with_roles;
         } catch (\Exception $e) {
             return response($e, 500);
         }
@@ -258,6 +251,9 @@ class AdminController extends Controller
             ->rawColumns(['action'])
             ->addColumn('status', function (User $user) {
                 return $user->active ? 'ONLINE' : 'OFFLINE';
+            })
+            ->addColumn('roles', function (User $user) {
+                return $user->roles->pluck('name')->implode(',');
             })
             ->with('online_count', $users->where('active', 1)->count())
             ->with('admin_id', Auth::user()->id)
@@ -335,6 +331,11 @@ class AdminController extends Controller
         return response()->json([
             'data' => $agents
         ]);
+    }
+
+    public function usersList()
+    {
+        return view('admin.users-list');
     }
 
     public function updateAgentType(Request $request)

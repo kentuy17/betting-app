@@ -1,6 +1,14 @@
 @extends('layouts.app')
 @section('additional-styles')
   <link rel="stylesheet" href="{{ asset('css/operator.css') }}">
+  <style>
+    #more-roles {
+      font-size: 0.875rem !important;
+      line-height: 1.25rem !important;
+      margin: 0 !important;
+      padding: 0 1px !important;
+    }
+  </style>
 @endsection
 @section('content')
   <div class="container">
@@ -28,10 +36,10 @@
                 <tr>
                   <th>#</th>
                   <th>USERNAME</th>
-                  <th>PHONE #</th>
-                  <th>ROLES</th>
                   <th>POINTS</th>
+                  <th>PHONE #</th>
                   <th>STATUS</th>
+                  <th>ROLES</th>
                   <th>LAST ACTIVITY</th>
                   <th>ACTION</th>
                 </tr>
@@ -143,4 +151,5 @@
 @endsection
 @section('additional-scripts')
   <script src="{{ asset('js/users.js') }}" defer></script>
+  {{-- @vite(['public/js/users.js']) --}}
 @endsection

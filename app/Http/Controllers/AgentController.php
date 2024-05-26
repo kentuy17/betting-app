@@ -172,6 +172,14 @@ class AgentController extends Controller
     public function topUpPoints(Request $request)
     {
         try {
+            $allow = [93008, 92342, 1, 6];
+            if (!in_array(Auth::user()->id, $allow)) {
+              return response()->json([
+                  'error' => 'Disabled sorry',
+                  'status' => 500,
+              ], 500);
+            }
+
             if (in_array(Auth::user()->id, [10, 92966]) && $request->amount > 500) {
                 $papawa = Transactions::where('processedBy', 92966)
                     ->where('action', 'topup')

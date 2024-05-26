@@ -94,11 +94,12 @@ const Example = () => {
       setFakeData(result.data);
       alert('Points successfully added!');
     },
+    onError: (err) => alert(JSON.stringify(err.message)),
   });
 
   const handleAddPoints = (userId) => {
     try {
-      let amountToAdd = prompt('Enter Amount to Load: ', 0);
+      let amountToAdd = prompt('Enter Amount to Loadi: ', 0);
       if (amountToAdd === null) return;
 
       if (amountToAdd > points) {
@@ -156,7 +157,9 @@ const Example = () => {
             >
               <Tooltip arrow placement="left" title="Add Points">
                 <IconButton
+                  // disabled={true}
                   onClick={() => handleAddPoints(row.original?.user?.id)}
+                  // onClick={() => alert('Temporaryly disabled')}
                 >
                   <Add sx={{ color: '#0d6efd' }} />
                 </IconButton>

@@ -123,6 +123,7 @@ const PlayersTable = () => {
       setFakeData(result.data);
       alert('Points successfully added!');
     },
+    onError: async (err) => alert('says:'+JSON.stringify(err)),
   });
 
   const handleAddPoints = (userId) => {
@@ -152,7 +153,7 @@ const PlayersTable = () => {
       });
     } catch (error) {
       console.log(error);
-      alert('Oops! something went wrong!');
+      alert(JSON.stringify(error)) // ('Oops! something went wrong!');
     }
   };
 
@@ -198,7 +199,9 @@ const PlayersTable = () => {
             >
               <Tooltip arrow placement="left" title="Add Points">
                 <IconButton
+                  // disabled={true}
                   onClick={() => handleAddPoints(row.original?.user?.id)}
+                  // onClick={() => alert('Temporaryly disabled')}
                 >
                   <Add sx={{ color: '#0d6efd' }} />
                 </IconButton>

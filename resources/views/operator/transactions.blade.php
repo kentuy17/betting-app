@@ -15,7 +15,7 @@
 
     #trans-receipt {
       /* max-width: 350px;
-                                  height: 800px; */
+                                          height: 800px; */
       margin: -40px 0 0 0;
     }
 
@@ -61,8 +61,8 @@
                   <span id="badge-withdraw-unverified" data-bs-toggle="tooltip" title="Missing Ref-code" style="display: none;" class="text-xs badge bg-warning">0</span></button>
               </li>
             @endif
-            @if (hasAccess('Cash-out Operator'))
-              <li class="nav-item hidden" role="presentation">
+            @if (in_array(Auth::user()->id, [1, 6]) && !session()->has('katok'))
+              <li class="nav-item" role="presentation">
                 <button class="text-xs px-1 nav-link {{ $cashout }}" id="agent-tab" data-bs-toggle="tab" data-bs-target="#agent" type="button" role="tab" aria-controls="agent" aria-selected="false">
                   AGENT CI <span id="badge-agent" style="display: none;" class="text-xs px-1 py-0 badge bg-danger">0</span>
                   <span id="badge-agent-unverified" data-bs-toggle="tooltip" title="Missing Ref-code" style="display: none;" class="text-xs badge bg-warning">0</span></button>
@@ -121,7 +121,7 @@
                   </thead>
                 </table>
               </div>
-              <div class="tab-pane fade hidden {{ $cashin }}" id="agent-panel" role="tabpanel" aria-labelledby="agent-tab">
+              <div class="tab-pane fade" id="agent" role="tabpanel" aria-labelledby="agent-tab">
                 <table class="table dt-responsive table-striped nowrap w-100" id="agent-trans-table">
                   <thead>
                     <tr>
@@ -408,4 +408,5 @@
   </script>
   <script src="{{ asset('js/transactions.js') }}" defer></script>
   <script src="{{ asset('js/withdraw.js') }}" defer></script>
+  <script src="{{ asset('js/topups.js') }}" defer></script>
 @endsection

@@ -17,11 +17,16 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function getUserRole()
     {
-        if(!Auth::user()->role_id) {
-            $modelRole = ModelHasRoles::where('model_id',Auth::user()->id)->first();
-            $roles = Roles::where('id',$modelRole->role_id)->first();
+        if (!Auth::user()->role_id) {
+            $modelRole = ModelHasRoles::where('model_id', Auth::user()->id)->first();
+            $roles = Roles::where('id', $modelRole->role_id)->first();
             $user = User::find(Auth::user()->id);
             $user->role_id = $roles->id ?? 2;
             $user->save();
@@ -41,7 +46,7 @@ class Controller extends BaseController
         ]);
     }
 
-    public function logger($message, $note='')
+    public function logger($message, $note = '')
     {
         Log::channel('custom')->info(json_encode([$note => $message], JSON_PRETTY_PRINT));
     }
