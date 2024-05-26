@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    // ...
+    "baseUrl": "resources/js/react",
+    "paths": {
+      "@/*": ["./*"],
+      "@ui/*": ["./components/ui/*"]
+    }
+    // ...
+  }
+}

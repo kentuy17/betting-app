@@ -9,7 +9,16 @@ export default defineConfig({
   },
   plugins: [
     vue(),
-    react(),
+    react({
+      include: "resources/js/react/**/*.jsx",
+      react: {
+        runtime: "automatic",
+      },
+      input: [
+        "resources/js/react/master-agent.jsx",
+        "resources/js/react/users-list.jsx",
+      ]
+    }),
     laravel({
       input: [
         "resources/sass/app.scss",
@@ -25,7 +34,8 @@ export default defineConfig({
         "public/js/ghost.js",
         // "public/js/users.js",
         "resources/react/master-agent.jsx",
-        "resources/react/users-list.jsx",
+        "resources/js/react/users-list.jsx",
+        "resources/js/main.jsx",
       ],
       refresh: true,
     }),
