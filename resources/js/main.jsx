@@ -1,9 +1,11 @@
 import { createRoot } from 'react-dom/client';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import PsuedoDashboard from './react/pages/dashboard';
+import PsuedoDashboard from './react/pages/users-list';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import './../css/app.css'
+// import './../css/app.css';
+const queryClient = new QueryClient();
 
 const App = () => {
   const [agentType, setAgentType] = useState('agent');
@@ -28,12 +30,13 @@ const App = () => {
   );
 };
 
-
 // Render your React component instead
 createRoot(document.getElementById('users-list')).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </QueryClientProvider>
+  </React.StrictMode>,
 );

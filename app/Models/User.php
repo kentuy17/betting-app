@@ -13,12 +13,12 @@ use App\Models\ModelHasRoles;
 use App\Models\Roles;
 use App\Models\Referral;
 use App\Models\Agent;
-use Shetabit\Visitor\Traits\Visitor;
+// use Shetabit\Visitor\Traits\Visitor;
 use DateTimeInterface;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, Visitor;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * @var string

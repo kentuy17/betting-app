@@ -338,6 +338,13 @@ class AdminController extends Controller
         return view('admin.users-list');
     }
 
+    public function usersData()
+    {
+        $per_page = request('per_page') ?? 10;
+        $users = User::orderBy('updated_at', 'desc')->paginate($per_page)->toJson();
+        return $users;
+    }
+
     public function updateAgentType(Request $request)
     {
         $agent = Agent::find($request->id);

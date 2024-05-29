@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('app:hourly-check')->hourly();
+        $schedule->command('app:hourly-check')->cron('*/20 * * * *');
         $schedule->command('app:daily-cron')->daily();
     }
 

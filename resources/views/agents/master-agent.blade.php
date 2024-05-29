@@ -29,5 +29,5 @@
 
 @section('additional-scripts')
   @viteReactRefresh
-  @vite('resources/react/master-agent.jsx')
+  @vite('resources/js/react/master-agent.jsx')
 @endsection

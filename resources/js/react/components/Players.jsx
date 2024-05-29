@@ -58,11 +58,11 @@ const Example = () => {
         '/master-agent/player-list',
         process.env.NODE_ENV === 'production'
           ? 'https://isp24.live'
-          : 'http://127.0.0.1:8006'
+          : 'http://127.0.0.1:8000',
       );
       fetchURL.searchParams.set(
         'start',
-        `${pagination.pageIndex * pagination.pageSize}`
+        `${pagination.pageIndex * pagination.pageSize}`,
       );
       fetchURL.searchParams.set('size', `${pagination.pageSize}`);
       fetchURL.searchParams.set('filters', JSON.stringify(columnFilters ?? []));
@@ -168,7 +168,7 @@ const Example = () => {
                 {parseFloat(
                   row.original.user !== undefined
                     ? row.original.user.points
-                    : '0'
+                    : '0',
                 ).toFixed(2)}
               </Typography>
             </Box>
@@ -198,7 +198,7 @@ const Example = () => {
         },
       },
     ],
-    [points]
+    [points],
   );
 
   const theme = useMemo(
@@ -206,7 +206,7 @@ const Example = () => {
       createTheme({
         palette: { mode: 'dark' },
       }),
-    []
+    [],
   );
 
   return (

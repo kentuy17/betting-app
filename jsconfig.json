@@ -3,7 +3,7 @@
     // ...
     "baseUrl": "resources/js/react",
     "paths": {
-      "@/*": ["./*"],
+      "@/*": ["./react/*"],
       "@ui/*": ["./components/ui/*"]
     }
     // ...

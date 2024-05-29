@@ -7,8 +7,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import CashIn from './components/CashIn';
 import Players from './components/Players';
 import MastersPlayers from './components/MastersPlayers';
-import { Badge } from './src/components/ui/badge';
-import { PsuedoDashboard } from './pages/dashboard';
+// import { PsuedoDashboard } from './pages/dashboard';
 
 const UsersList = () => {
   const [agentType, setAgentType] = useState('agent');
@@ -31,15 +30,11 @@ const UsersList = () => {
   );
 };
 
-const TestBadge = () => {
-  return <Badge >FUCK THE WORLD</Badge>;
-}
-
 // Render your React component instead
 createRoot(document.getElementById('users-list')).render(
   <React.StrictMode>
     <BrowserRouter>
       <UsersList />
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

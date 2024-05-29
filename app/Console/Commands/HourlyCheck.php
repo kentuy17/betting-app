@@ -10,7 +10,6 @@ use App\Models\Fight;
 use Pusher\Pusher;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
-use Shetabit\Visitor\Models\Visit;
 
 class HourlyCheck extends Command
 {
@@ -35,33 +34,29 @@ class HourlyCheck extends Command
     {
         Log::channel('cron')->info("Cron Job running at " . now());
 
-        $auth_key = env('PUSHER_APP_KEY', 'fb67b0d962d7feef73c4');
-        $secret_key = env('PUSHER_APP_SECRET', '3b35a2c2dc7f286a5885');
-        $app_id = env('PUSHER_APP_ID', '1785417');;
+        // $auth_key = env('PUSHER_APP_KEY', 'fb67b0d962d7feef73c4');
+        // $secret_key = env('PUSHER_APP_SECRET', '3b35a2c2dc7f286a5885');
+        // $app_id = env('PUSHER_APP_ID', '1785417');;
 
 
         // PUSHER_APP_ID=1785417
         // PUSHER_APP_KEY=fb67b0d962d7feef73c4
         // PUSHER_APP_SECRET=3b35a2c2dc7f286a5885
 
-        $pusher = new Pusher($auth_key, $secret_key, $app_id, [
-            'cluster' => 'ap1'
-        ]);
+        // $pusher = new Pusher($auth_key, $secret_key, $app_id, [
+        //     'cluster' => 'ap1'
+        // ]);
 
         $users = User::whereNotIn('id', [9, 2])->get();
-        foreach ($users as $key => $user) {
+        foreach ($users as $user) {
             # code...
-            if (!$user->isOnline() && $user->active) {
-                $pusher->terminateUserConnections($user->id);
+            if ($user->active && $user->updated_at < Carbon::now()->subHour()) {
                 $user->update([
                     'active' => false,
                     'timestamps' => false,
                 ]);
             }
         }
-
-        $date = Carbon::now()->subHours(1);
-        $delete = Visit::where('created_at', '<=', $date)->delete();
 
         $ghost = User::find(9);
         if ($ghost->points < 2000000) {

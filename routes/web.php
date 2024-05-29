@@ -80,6 +80,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/admin/non-agents', [AdminController::class, 'getNotAgents']);
 
         Route::get('/users-list', [AdminController::class, 'usersList']);
+        Route::get('/users-data', [AdminController::class, 'usersData']);
 
         // Corpo
         Route::get('/admin/incorpo', [AdminController::class, 'incorpo']);

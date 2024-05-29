@@ -10,6 +10,8 @@ use App\Models\User;
 use Cache;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redis;
+// use Redis;
+// use Clue\React\Redis\Client;
 
 class Playground extends Command
 {
@@ -32,6 +34,8 @@ class Playground extends Command
      */
     public function handle()
     {
+        $user = User::find(1);
+        $this->info(json_encode($user));
         $start = microtime(true);
 
         // Normal Query
@@ -56,7 +60,7 @@ class Playground extends Command
 
     public function redisEnabled()
     {
-        $fight = Fight::find(79878);
+        $fight = Fight::find(73984);
 
         Redis::set('meron:' . $fight->id, 0);
         Redis::set('wala:' . $fight->id, 0);

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark" style="color-scheme: dark;">
 
 <head>
   <meta charset="UTF-8">
@@ -7,7 +7,8 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="icon" href="{{ asset('img/sabong-aficionado.ico') }}" type="image/x-icon">
   <title>{{ config('app.name', 'Sabong Aficionado') }}</title>
-  @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
+  @vite(['resources/js/app.js', 'resources/css/app.css'])
+  {{-- 'resources/sass/app.scss',  --}}
   @yield('additional-styles')
 </head>
 

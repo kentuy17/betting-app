@@ -12,11 +12,11 @@ return [
     'default' => 'jenssegers',
 
     //except save request or route names
-    'except' =>  ['login', 'register','player.bet'],
+    'except' =>  ['login', 'register', 'player.bet'],
 
 
     //name of the table which visit records should save in
-    'table_name' =>  'shetabit_visits',
+    'table_name' =>  'visitor_visits',
 
     /*
     |--------------------------------------------------------------------------
