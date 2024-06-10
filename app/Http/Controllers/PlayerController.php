@@ -470,25 +470,24 @@ class PlayerController extends Controller
         $mop = User::find(104)->phone_no;
 
         $mops = array();
-        $mops[0] =  (object)[
-            'name' => 'ME****L EM*******E G.',
-            'number' => '09563559858'
-        ];
-
-        $mops[1] = (object)[
-            'name' => 'JE*O AN****O A.',
-            'number' => '09364969298'
-        ];
-
-        $mops[2] = (object)[
-            'name' => 'KE****H C.',
-            'number' => '09163377896'
-        ];
-
-        $mops[3] = (object)[
-            'name' => 'KY*E B.',
-            'number' => '09272306987',
-        ];
+        $mops = collect([
+            (object)[
+                'name' => 'ME****L EM*******E G.',
+                'number' => '09563559858'
+            ],
+            // (object)[
+            //     'name' => 'JE*O AN****O A.',
+            //     'number' => '09364969298'
+            // ],
+            (object)[
+                'name' => 'KE****H C.',
+                'number' => '09163377896'
+            ],
+            // (object)[
+            //     'name' => 'KY*E B.',
+            //     'number' => '09272306987',
+            // ],
+        ]);
 
         if ($agent) {
             $master_agent = $agent->is_master_agent;
