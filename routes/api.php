@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\BotController;
+use App\Http\Controllers\FightController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\FightController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['middleware' => ['auth']], function () {
+Route::middleware('auth:sanctum')->group(function () {
+    // Auth
+    Route::get('/tokens/user', [BotController::class, 'getUserTokens']);
+    Route::get('/tokens/create/{id?}', [BotController::class, 'issueToken']);
+
+    // Fight
     Route::get('/fight/current', [FightController::class, 'getCurrentFight']);
+    Route::post('/fight/update', [FightController::class, 'updateFight']);
+
+    Route::post('/bet/add', [BotController::class, 'addBet']);
 });

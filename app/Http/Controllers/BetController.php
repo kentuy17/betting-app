@@ -93,6 +93,8 @@ class BetController extends Controller
                 return response()->json([
                     'status' => 400,
                     'error' => 'Invalid Fight number!!!',
+                    'request' => $request->all(),
+                    'current' => $this->current_fight
                 ], 400);
             }
 

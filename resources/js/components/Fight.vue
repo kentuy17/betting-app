@@ -267,7 +267,7 @@ export default ({
       Accept: 'application/json',
     }
 
-    axios.get('api/fight/current')
+    axios.get('/fight/current')
       .then(resp => resp.data)
       .then(json => {
         this.fight = json.current
@@ -418,7 +418,7 @@ export default ({
     },
 
     fetchFightInfo() {
-      axios.get('api/fight/current')
+      axios.get('/fight/current')
         .then(resp => resp.data)
         .then(json => {
           this.fight = json.current

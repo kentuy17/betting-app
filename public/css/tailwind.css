@@ -723,6 +723,10 @@ body{
   margin: 0px;
 }
 
+.m-1{
+  margin: 0.25rem;
+}
+
 .m-2{
   margin: 0.5rem;
 }
@@ -837,6 +841,10 @@ body{
 
 .ml-auto{
   margin-left: auto;
+}
+
+.mr-0{
+  margin-right: 0px;
 }
 
 .mr-1{
@@ -985,6 +993,10 @@ body{
 
 .h-px{
   height: 1px;
+}
+
+.max-h-80{
+  max-height: 20rem;
 }
 
 .max-h-96{
@@ -1191,6 +1203,10 @@ body{
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.grid-cols-3{
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .flex-row-reverse{
   flex-direction: row-reverse;
 }
@@ -1293,6 +1309,10 @@ body{
   margin-bottom: calc(1rem * var(--tw-space-y-reverse));
 }
 
+.self-end{
+  align-self: flex-end;
+}
+
 .self-center{
   align-self: center;
 }
@@ -1303,6 +1323,14 @@ body{
 
 .overflow-hidden{
   overflow: hidden;
+}
+
+.overflow-clip{
+  overflow: clip;
+}
+
+.overflow-scroll{
+  overflow: scroll;
 }
 
 .overflow-y-auto{
@@ -1317,6 +1345,10 @@ body{
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.text-ellipsis{
+  text-overflow: ellipsis;
 }
 
 .whitespace-nowrap{
@@ -1373,6 +1405,11 @@ body{
 
 .border-dashed{
   border-style: dashed;
+}
+
+.border-black{
+  --tw-border-opacity: 1;
+  border-color: rgb(0 0 0 / var(--tw-border-opacity));
 }
 
 .border-input{
@@ -1721,6 +1758,11 @@ body{
   font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
+.text-2xl{
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
 .text-3xl{
   font-size: 1.875rem;
   line-height: 2.25rem;
@@ -1753,6 +1795,10 @@ body{
 
 .font-bold{
   font-weight: 700;
+}
+
+.font-extrabold{
+  font-weight: 800;
 }
 
 .font-light{
@@ -1806,6 +1852,11 @@ body{
 .text-black{
   --tw-text-opacity: 1;
   color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+
+.text-blue-700{
+  --tw-text-opacity: 1;
+  color: rgb(29 78 216 / var(--tw-text-opacity));
 }
 
 .text-card-foreground{
@@ -1872,6 +1923,11 @@ body{
 .text-red-500{
   --tw-text-opacity: 1;
   color: rgb(239 68 68 / var(--tw-text-opacity));
+}
+
+.text-red-700{
+  --tw-text-opacity: 1;
+  color: rgb(185 28 28 / var(--tw-text-opacity));
 }
 
 .text-secondary-foreground{
@@ -2796,10 +2852,6 @@ body{
 }
 
 @media (min-width: 1024px){
-  .lg\:mr-10{
-    margin-right: 2.5rem;
-  }
-
   .lg\:flex{
     display: flex;
   }
@@ -2833,10 +2885,6 @@ body{
   .lg\:px-3{
     padding-left: 0.75rem;
     padding-right: 0.75rem;
-  }
-
-  .lg\:pr-10{
-    padding-right: 2.5rem;
   }
 }
 
