@@ -82,6 +82,10 @@ $(document).ready(function () {
             return parseFloat(data.net).toFixed(2)
           }
         },
+        // {
+        //   'data': null,
+        //   render: (data) => data.
+        // }
         {
           "data": "created_at",
         }

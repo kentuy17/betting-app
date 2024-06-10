@@ -15,34 +15,38 @@ const ButtonComponent = ({ row }) => {
   };
 
   return (
-    <div className="flex">
-      <Button size="3" variant="outline" onClick={() => console.log('clicked')}>
-        <CheckIcon className="h-4 w-4" color="green" />
+    <div className='flex'>
+      <Button size='3' variant='outline' onClick={() => console.log('clicked')}>
+        <CheckIcon className='h-4 w-4' color='green' />
       </Button>
-      <Button size="3" variant="outline" onClick={() => handleReject(row)}>
-        <Cross1Icon className="h-4 w-4" color="red" />
+      <Button size='3' variant='outline' onClick={() => handleReject(row)}>
+        <Cross1Icon className='h-4 w-4' color='red' />
       </Button>
     </div>
   );
+};
+
+const moneyFormat = (value) => {
+  return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 };
 
 export const columns = [
   {
     accessorKey: 'id',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ID" />
+      <DataTableColumnHeader column={column} title='ID' />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue('id')}</div>,
+    cell: ({ row }) => <div className='w-[80px]'>{row.getValue('id')}</div>,
   },
   {
     accessorKey: 'username',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Username" />
+      <DataTableColumnHeader column={column} title='Username' />
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate">
+        <div className='flex space-x-2'>
+          <span className='max-w-[500px] truncate'>
             {row.getValue('username')}
           </span>
         </div>
@@ -52,13 +56,13 @@ export const columns = [
   {
     accessorKey: 'points',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Points" />
+      <DataTableColumnHeader column={column} title='Points' />
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex space-x-2 flex-row-reverse">
-          <span className="max-w-[500px] truncate">
-            {parseFloat(row.getValue('points')).toFixed(2)}
+        <div className='flex space-x-2 flex-row-reverse'>
+          <span className='max-w-[500px] truncate'>
+            {moneyFormat(row.getValue('points'))}
           </span>
         </div>
       );

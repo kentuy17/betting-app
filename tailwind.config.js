@@ -2,7 +2,7 @@
 const { fontFamily } = require("tailwindcss/defaultTheme")
 
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   darkMode: ["class"],
   content: [
     './pages/**/*.{js,jsx}',
@@ -10,7 +10,7 @@ export default {
     './app/**/*.{js,jsx}',
     "./resources/react/**/*.jsx",
     "./resources/views/**/*.blade.php",
-    './resources/js/**/*.jsx',
+    './resources/js/**/*.{jsx,vue}',
   ],
   prefix: "",
   theme: {

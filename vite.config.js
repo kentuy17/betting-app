@@ -16,7 +16,7 @@ export default defineConfig({
       },
       input: [
         "resources/js/react/master-agent.jsx",
-        "resources/js/react/users-list.jsx",
+        // "resources/js/react/users-list.jsx",
         "resources/js/main.jsx",
       ]
     }),
@@ -33,9 +33,9 @@ export default defineConfig({
         "public/js/play.js",
         "public/js/fight.js",
         "public/js/ghost.js",
-        // "resources/js/react/master-agent.jsx",
+        "resources/js/react/master-agent.jsx",
         // "resources/js/react/users-list.jsx",
-        // "resources/js/main.jsx",
+        "resources/js/main.jsx",
       ],
       refresh: true,
     }),

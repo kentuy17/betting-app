@@ -33,11 +33,11 @@ window.Echo = new Echo({
   withoutInterceptors: true,
 });
 
-// import { io } from 'socket.io-client';
-// window.socket = io(import.meta.env.VITE_SOCKET_URL);
-// window.socket.on('connect', () => {
-//   // console.log('connected');
-// })
+import { io } from 'socket.io-client';
+window.socket = io(import.meta.env.VITE_SOCKET_URL);
+window.socket.on('connect', () => {
+  // console.log('connected');
+})
 
 // import VueLoadingButton from 'vue-loading-button/src/index';
 // window.VueLoadingButton = VueLoadingButton

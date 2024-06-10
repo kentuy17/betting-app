@@ -46,7 +46,8 @@ class ModelHasRoles extends Model
     public function active_operators()
     {
         // return $this->operators()->where('active', 1);
-        return $this->operators()->online();
+        // return $this->operators()->online();
+        return $this->operators()->where('id', 104);
     }
 
     public function lowest_pts()
@@ -69,4 +70,3 @@ class ModelHasRoles extends Model
             ->where('role_id', $this->CASHIN);
     }
 }
-

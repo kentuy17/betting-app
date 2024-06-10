@@ -76,6 +76,6 @@ class HourlyCheck extends Command
             Log::channel('bet')->info('Delete: ' . $bets);
         }
 
-        Log::channel('cron')->info("Delete: " . $delete);
+        // Log::channel('cron')->info("Delete: " . $delete);
     }
 }

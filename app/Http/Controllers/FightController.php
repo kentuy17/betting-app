@@ -452,13 +452,14 @@ class FightController extends Controller
             ->has('referral')
             ->get();
 
+        // espesyal
+        $tholits = [93008];
+
         foreach ($bets as $bet) {
             // exclude agents
             if (in_array($bet->referral->referrer_id, [10, 1, 92539]))
                 continue;
 
-            // espesyal
-            $tholits = [93008, 92342];
             // $is_winlose = $bet->referral->sub_agent->is_winlose;
             // \Log::info("is_winlose: " . json_encode($is_winlose));
             // \Log::info("sub_agent: " . json_encode($bet->referral->sub_agent()));

@@ -19,9 +19,9 @@ use App\Models\Transactions;
 // });
 
 Broadcast::channel('user.{id}', function ($user, $betUserId) {
-    if ($user->isOnline()) {
-        return $user->id == $betUserId;
-    }
+    // if ($user->isOnline()) {
+    return $user->id == $betUserId;
+    // }
     // return false;
 });
 
