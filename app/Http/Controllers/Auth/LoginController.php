@@ -52,6 +52,11 @@ class LoginController extends Controller
         return view('auth.dark-login');
     }
 
+    public function secritLogin()
+    {
+	return view('auth.dark-secrit-login');
+    }
+
     public function redirectTo()
     {
         $role = $this->getUserRole();

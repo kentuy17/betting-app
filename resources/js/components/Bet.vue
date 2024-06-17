@@ -20,7 +20,7 @@
     </div>
     <div class="bet-bg-head items-center grid grid-cols-3">
       <h6><b class="text-lg">FIGHT # </b> <b id="fight-no" class="text-lg">{{
-      fightNo }}</b></h6>
+        fightNo }}</b></h6>
       <div class="text-center">
         <span class="font-bold btn btn-block btn-sm btn-lg vue-components"
           :class="fightStatusClass[message]">{{ message }}</span>
@@ -57,14 +57,14 @@
         <div class="px-2 py-1 border border-black">
           <div>
             <h3 class="font-extrabold text-center m-2 font-tally text-2xl">{{
-      formatMoney(total.meron) }}</h3>
+              formatMoney(total.meron) }}</h3>
             <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT
               = {{ formatMoney(meronPercentage) }}</h3>
             <div>
               <div class="flex justify-center items-center">
                 <h3 class="font-bold text-drawcolor text-center text-sm">
                   <span class='text-player-bet'>{{
-      formatMoney(player.bets.meron) }}</span> = <span
+                    formatMoney(player.bets.meron) }}</span> = <span
                     class='text-player-win'>{{ formatMoney(meronWinAmount)
                     }}</span>
                 </h3>
@@ -75,7 +75,7 @@
         <div class="px-2 py-1 border border-black">
           <div>
             <h3 class="font-extrabold text-center m-2 font-tally text-2xl">{{
-      formatMoney(total.wala) }}</h3>
+              formatMoney(total.wala) }}</h3>
             <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT
               = {{ formatMoney(walaPercentage) }}</h3>
             <div>
@@ -83,7 +83,7 @@
                 <h3 class="font-bold text-drawcolor text-center text-sm">
                   <span class="text-player-bet">{{ formatMoney(player.bets.wala)
                     }}</span> = <span class='text-player-win'>{{
-      formatMoney(walaWinAmount) }}</span>
+                      formatMoney(walaWinAmount) }}</span>
                 </h3>
               </div>
             </div>
@@ -135,7 +135,7 @@ export default {
       message: '_____',
       fightStatusClass: {
         OPEN: 'gradient-status-open',
-        CLOSE: 'gradient-status-close',
+        CLOSED: 'gradient-status-close',
         '_____': 'gradient-status-pending',
       },
       fight: [],
@@ -208,7 +208,7 @@ export default {
                 alert(`Returened ${this.formatMoney(e.bet.amount)} points!`);
               }
               else {
-                alert(`Congratulationsss! You win ${this.formatMoney(e.bet.win_amount)}`)
+                alert(`Congratulations! You win ${this.formatMoney(e.bet.win_amount)}`)
               }
             }
 
@@ -302,6 +302,20 @@ export default {
         }
       });
 
+    window.Echo.private('secured-bet')
+      .listen('SecuredBet', async (data) => {
+        if (!data.securedBet)
+          return
+
+        const { total, side } = data.securedBet
+
+        if (side === 'M')
+          this.total.meron = parseInt(total)
+
+        if (side === 'W')
+          this.total.wala = parseInt(total)
+      });
+
   },
   watch: {
     // betAmount: function(newValue, oldValue) {
@@ -366,7 +380,7 @@ export default {
         return 'OPEN'
       }
       if (data.status == 'C') {
-        return 'CLOSE'
+        return 'CLOSED'
       }
     },
 

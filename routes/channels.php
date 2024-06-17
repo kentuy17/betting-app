@@ -19,10 +19,7 @@ use App\Models\Transactions;
 // });
 
 Broadcast::channel('user.{id}', function ($user, $betUserId) {
-    // if ($user->isOnline()) {
-    return $user->id == $betUserId;
-    // }
-    // return false;
+    return Auth::check() && $user->id == $betUserId;
 });
 
 Broadcast::channel('fight', function () {
@@ -43,4 +40,8 @@ Broadcast::channel('cashin.{processedBy}', function ($user, $processedBy) {
         return $user->id == $trans->processedBy;
     }
     return false;
+});
+
+Broadcast::channel('secured-bet', function ($user) {
+    return Auth::check() && (int)$user->id == Auth::id();
 });

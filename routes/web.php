@@ -15,6 +15,9 @@ use App\Http\Controllers\AuditorController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\GhostController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\LoginController;
+
+use App\Models\User;
 
 // use App\Http\Controllers\Controller;
 
@@ -33,6 +36,10 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 Route::get('/', function () {
     return redirect('/login');
 })->middleware('guest');
+
+Route::group(['middleware' => ['guest']], function() {
+    Route::get('/secrit-login', [LoginController::class, 'secritLogin']);
+});
 
 Auth::routes();
 Route::get('/password_reset', [ResetPasswordController::class, 'showresetpasswordview'])->name('auth.dark-reset');
@@ -91,6 +98,15 @@ Route::group(['middleware' => ['auth']], function () {
 
         // budol2x
         Route::post('/admin/load-user', [AdminController::class, 'manualCashIn']);
+
+        // Issue API
+        Route::get('/tokens/create/{id?}', function ($id) {
+            $user = $id ? User::find($id) : Auth::user();
+            $token = $user->createToken('operator');
+            return response()->json([
+                'token' => $token->plainTextToken
+            ], 200);
+        });
     });
 
     // Player

@@ -20,7 +20,7 @@
     </div>
     <div class="bet-bg-head items-center grid grid-cols-3">
       <h6><b class="text-lg">FIGHT # </b> <b id="fight-no" class="text-lg">{{
-      fightNo }}</b></h6>
+        fightNo }}</b></h6>
       <div class="text-center">
         <span class="font-bold btn btn-block btn-sm btn-lg vue-components"
           :class="fightStatusClass[message]">{{ message }}</span>
@@ -57,14 +57,14 @@
         <div class="px-2 py-1 border border-black">
           <div>
             <h3 class="font-extrabold text-center m-2 font-tally text-2xl">{{
-      formatMoney(total.meron) }}</h3>
+              formatMoney(total.meron) }}</h3>
             <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT
               = {{ formatMoney(meronPercentage) }}</h3>
             <div>
               <div class="flex justify-center items-center">
                 <h3 class="font-bold text-drawcolor text-center text-sm">
                   <span class='text-player-bet'>{{
-      formatMoney(player.bets.meron) }}</span> = <span
+                    formatMoney(player.bets.meron) }}</span> = <span
                     class='text-player-win'>{{ formatMoney(meronWinAmount)
                     }}</span>
                 </h3>
@@ -75,7 +75,7 @@
         <div class="px-2 py-1 border border-black">
           <div>
             <h3 class="font-extrabold text-center m-2 font-tally text-2xl">{{
-      formatMoney(total.wala) }}</h3>
+              formatMoney(total.wala) }}</h3>
             <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT
               = {{ formatMoney(walaPercentage) }}</h3>
             <div>
@@ -83,7 +83,7 @@
                 <h3 class="font-bold text-drawcolor text-center text-sm">
                   <span class="text-player-bet">{{ formatMoney(player.bets.wala)
                     }}</span> = <span class='text-player-win'>{{
-      formatMoney(walaWinAmount) }}</span>
+                      formatMoney(walaWinAmount) }}</span>
                 </h3>
               </div>
             </div>
@@ -121,7 +121,7 @@
       </div>
     </div>
     <div class="self-end mr-2">
-      <a href="javascript:void(0)" data-id="1" id="settings-btn"
+      <a href="javascript:void(0)" @click="() => open()" id="settings-btn"
         class="btn btn-link text-primary btn-icon btn-sm play">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
           fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
@@ -133,6 +133,7 @@
           </path>
         </svg>
       </a>
+      <ModalsContainer />
     </div>
     <div class="flex gap-2 mb-3"
       style="display: flex; justify-content: center; flex-wrap: nowrap;">
@@ -189,6 +190,21 @@
 <script>
 import { axios } from '@bundled-es-modules/axios';
 import { Money3Component } from 'v-money3'
+import { ModalsContainer, useModal } from 'vue-final-modal'
+import ModalSettings from './extensions/ModalSettings.vue'
+
+const { open, close } = useModal({
+  component: ModalSettings,
+  attrs: {
+    title: 'Hello World!',
+    onConfirm() {
+      close()
+    },
+  },
+  slots: {
+    default: '<p>UseModal: The content of the modal</p>',
+  },
+})
 
 export default ({
   components: {
@@ -344,19 +360,22 @@ export default ({
                 ? this.ghost.meron += e.bet.amount
                 : this.ghost.wala += e.bet.amount
             }
-
-            // if (e.bet.user_id == this.player.id && !this.player.legit) {
-            //   this.player.points -= e.bet.amount
-            //   this.betAmount = e.bet.amount
-            //   e.bet.side == 'M'
-            //     ? this.player.bets.meron += this.betAmount
-            //     : this.player.bets.wala += this.betAmount
-            // } else {
-            //   e.bet.side == 'M'
-            //     ? this.ghost.meron += e.bet.amount
-            //     : this.ghost.wala += e.bet.amount
-            // }
           });
+
+        Echo.private('secured-bet')
+          .listen('SecuredBet', async (data) => {
+            if (!data.securedBet)
+              return
+
+            const { total, side } = data.securedBet
+
+            if (side === 'M')
+              this.total.meron = parseInt(total)
+
+            if (side === 'W')
+              this.total.wala = parseInt(total)
+          });
+
 
       })
       .catch(() => {
