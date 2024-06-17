@@ -69,8 +69,8 @@ class BotController extends Controller
         $total = Redis::get($request->side);
 
         // broadcast SecuredBet
-        // uuid, side, total, 
-        // 
+        // uuid, side, total,
+        //
         $securedBet = collect([
             'uuid' => Str::uuid(),
             'side' => $request->side,
@@ -157,5 +157,11 @@ class BotController extends Controller
 
         $update = $fight_controller->updateFight($fight_request);
         return $update;
+    }
+
+    public function updateDelay(Request $request)
+    {
+        Redis::set('delay', $request->delay);
+        return response()->noContent();
     }
 }

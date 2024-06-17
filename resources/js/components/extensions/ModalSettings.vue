@@ -1,20 +1,44 @@
-<script setup lang="ts">
-import { VueFinalModal } from 'vue-final-modal'
+<script setup>
+import { VueFinalModal } from "vue-final-modal";
+import { ref, watch } from "vue";
+import store from "store2";
 
-defineProps<{
-  title?: string
-}>()
+const storedSecs = store("delay");
+const delay = ref(storedSecs ?? 0);
 
-const emit = defineEmits<{
-  (e: 'confirm'): void
-}>()
+function incrDelay() {
+  delay.value++;
+}
+
+function decrDelay() {
+  delay.value--;
+}
+
+watch(delay, (newDelay) => {
+  store("delay", newDelay);
+});
+
+defineProps({
+  title: String,
+});
+
+const emit = defineEmits(["confirm"]);
+
+console.log("dodot buang");
 </script>
 <template>
-  <VueFinalModal class="flex justify-center items-center"
-    content-class="flex flex-col max-w-xl mx-4 p-4 bg-white dark:bg-gray-900 border dark:border-gray-700 rounded-lg space-y-2">
-    <h1 class="text-xl"> {{ title }} </h1>
-    <slot />
-    <button class="mt-1 ml-auto px-2 border rounded-lg"
-      @click="emit('confirm')"> Confirm </button>
+  <VueFinalModal
+    class="flex justify-center items-center"
+    content-class="flex flex-col max-w-xl mx-4 p-4 bg-white dark:bg-gray-900 border dark:border-gray-700 rounded-lg space-y-2"
+  >
+    <span class="text-l">{{ title }}</span>
+    <div class="flex col justify-center gap-2">
+      <button :disabled="!delay" type="button" @click="decrDelay">-</button>
+      <span class="delay">{{ delay }}</span>
+      <button type="button" @click="incrDelay">+</button>
+    </div>
+    <button class="mt-4 center px-2 border rounded-lg" @click="emit('confirm')">
+      OK
+    </button>
   </VueFinalModal>
 </template>

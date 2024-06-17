@@ -1,5 +1,8 @@
-import {createApp} from 'vue'
+import { createApp } from 'vue'
+import { createVfm } from 'vue-final-modal'
 import Fight from './components/Fight.vue'
 
 const app = createApp(Fight)
-app.mount("#fight-component")
+const vfm = createVfm()
+
+app.use(vfm).mount("#fight-component")
