@@ -15,13 +15,27 @@
 
     #trans-receipt {
       /* max-width: 350px;
-                                            height: 800px; */
+                                                height: 800px; */
       margin: -40px 0 0 0;
     }
 
     .modal-content .select2-search {
       pointer-events: auto;
       color: black !important;
+    }
+
+    .nav-orig {
+      --bs-nav-link-padding-x: 1rem;
+      --bs-nav-link-padding-y: .5rem;
+      --bs-nav-link-font-weight: ;
+      --bs-nav-link-color: var(--bs-link-color);
+      --bs-nav-link-hover-color: var(--bs-link-hover-color);
+      --bs-nav-link-disabled-color: #6c757d;
+      display: flex;
+      flex-wrap: wrap;
+      padding-left: 0;
+      margin-bottom: 0;
+      list-style: none;
     }
   </style>
 @endsection
@@ -45,7 +59,7 @@
     <div class="row justify-content-center">
       <div class="col-md-12 card">
         <div class="card-header" style="padding: 5px 5px 0 !important;">
-          <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <ul class="nav-orig nav-tabs" id="myTab" role="tablist">
             @if (hasAccess('Cash-in Operator'))
               <li class="nav-item" role="presentation">
                 <button class="text-xs px-1 nav-link {{ $cashin }}" id="deposit-tab" data-bs-toggle="tab" data-bs-target="#deposit-panel" type="button" role="tab" aria-controls="deposit" aria-selected="true">
