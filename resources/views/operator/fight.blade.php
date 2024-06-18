@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app-sub')
 
 @section('additional-styles')
   <link rel="stylesheet" href="{{ asset('css/play-sabong.css') }}" type="text/css">

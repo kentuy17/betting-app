@@ -1,10 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.app-sub')
 @section('additional-styles')
   <link rel="stylesheet" href="{{ asset('plugins/welome-popup.css') }}">
 @endsection
 
 @section('content')
-  <div class="bg-os_bg min-h-full mt-4">
+  <div class="bg-os_bg min-h-full mt-4 col-lg-8">
     <div class="px-4">
       @include('layouts.flash-message')
       <div class="bg-os_black border p-2 mb-8">

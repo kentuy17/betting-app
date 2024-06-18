@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app-sub')
 @section('additional-styles')
   <style>
     /*! CSS Used from: https://argon-dashboard-pro-laravel.creative-tim.com/assets/css/argon-dashboard.css */
@@ -842,7 +842,7 @@
 @section('content')
   <div class="container">
     <!-- Gateway -->
-    <div class="mb-5 d-flex justify-content-center">
+    <div class="mb-5 mt-3 d-flex justify-content-center">
       <div class="card col-md-6 px-4">
         <div class="card-header">
           <h5>Deposit Form</h5>

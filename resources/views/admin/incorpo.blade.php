@@ -1,4 +1,4 @@
-@extends('layouts.app') @section('additional-styles')
+@extends('layouts.app-sub') @section('additional-styles')
   <style>
     .select2-container {
       width: 100% !important;

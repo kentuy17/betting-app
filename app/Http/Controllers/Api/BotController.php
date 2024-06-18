@@ -68,6 +68,7 @@ class BotController extends Controller
             }
 
             Redis::set('fight', $current_fight->fight_no);
+            Redis::set($request->side, 0);
         }
 
         // Redis::incr($request->side, $request->amount);

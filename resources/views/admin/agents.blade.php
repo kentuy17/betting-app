@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app-sub')
 @section('additional-styles')
   <style>
     .select2-container {

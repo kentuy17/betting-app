@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app-sub')
 
 @section('additional-styles')
   {{-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> --}}

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app-sub')
 @section('additional-styles')
   <style>
     /*! CSS Used from: https://argon-dashboard-pro-laravel.creative-tim.com/assets/css/argon-dashboard.css */
