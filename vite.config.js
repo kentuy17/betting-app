@@ -24,6 +24,7 @@ export default defineConfig({
       input: [
         "resources/sass/app.scss",
         "public/css/chat.scss",
+        "public/css/app-sub.scss",
         "resources/css/app.css",
         "resources/js/app.js",
         "resources/js/play-vue.js",
