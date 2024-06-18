@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\ClosingBetEvent;
 use App\Events\SecuredBet;
 use App\Http\Controllers\BetController;
 use App\Http\Controllers\Controller;
@@ -12,7 +13,6 @@ use App\Models\Fight;
 use App\Models\User;
 use Auth;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use Str;
@@ -26,6 +26,12 @@ class BotController extends Controller
         // $this->middleware('auth:sanctum');
         $this->fightController = $fightController;
         $this->betController = $betController;
+    }
+
+    private function cleanup()
+    {
+        Redis::set('M', 0);
+        Redis::set('W', 0);
     }
 
     public function addBet(Request $request)
@@ -51,17 +57,17 @@ class BotController extends Controller
                 ->orderBy('id', 'DESC')
                 ->first();
 
-            // if ($current_fight) {
-            //     $current_fight->status = 'O';
-            //     $current_fight->save();
-            // }
             if ($current_fight) {
+                // Open fight
                 $fight_request = new Request(['status' => 'O']);
-                $this->fightController->updateFight($fight_request);
+                $fight_controller = new \App\Http\Controllers\FightController;
+
+                sleep(5);
+                $fight_controller->updateFight($fight_request);
+                sleep(2);
             }
 
             Redis::set('fight', $current_fight->fight_no);
-            Redis::set($request->side, 0);
         }
 
         // Redis::incr($request->side, $request->amount);
@@ -77,6 +83,7 @@ class BotController extends Controller
             'total' => $total
         ]);
 
+        // event(new SecuredBet($securedBet));
         if ($securedBet) {
             event(new SecuredBet($securedBet));
         }
@@ -88,9 +95,19 @@ class BotController extends Controller
     {
         $fight = Fight::orderBy('id', 'DESC')->first();
 
+        if ($fight->status == 'C' && $fight->fight_no == $request->fight_no) {
+            throw new Exception('Fight already closed',  402);
+        }
+
         if ($fight->fight_no != $request->fight_no) {
             throw new Exception('Invalid fight', 402);
         }
+
+        // send closing signal
+        // event(new ClosingBetEvent());
+
+        // delay
+        sleep(5);
 
         // calculate meron
         $meron = Redis::get('M') ?? 0;
@@ -155,7 +172,9 @@ class BotController extends Controller
             'result' => $request->result
         ]);
 
-        $update = $fight_controller->updateFight($fight_request);
+        // padaog
+        sleep(20);
+        $update = $this->fightController->updateFight($fight_request);
         return $update;
     }
 
@@ -163,5 +182,16 @@ class BotController extends Controller
     {
         Redis::set('delay', $request->delay);
         return response()->noContent();
+    }
+
+    public function fuse()
+    {
+        $cancel_request = new Request([
+            'status' => 'D',
+            'result' => 'CANCEL'
+        ]);
+
+        $update = $this->fightController->updateFight($cancel_request);
+        return $update;
     }
 }

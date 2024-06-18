@@ -50,7 +50,7 @@
               </div>
             </div>
           @endif
-	  {{-- <div class="auth-form-body mt-3">
+	  <div class="auth-form-body mt-3">
             <form action="{{ route('login') }}" accept-charset="UTF-8" method="post">
               @csrf
               <label for="username">Username</label>
@@ -62,11 +62,11 @@
                 <a class="label-link position-absolute top-0 right-0" tabindex="0" href="/password_reset">Forgot password?</a>
               </div>
             </form>
-          </div> --}}
-	  {{-- <p class="login-callout mt-3">New Player? <a href="/register">Create an account</a>.</p> --}}
-          <div class="login-callout mt-3">
-            <h2>SITE MAINTENANCE</h1>
           </div>
+	  <p class="login-callout mt-3">New Player? <a href="/register">Create an account</a>.</p>
+	  {{-- <div class="login-callout mt-3">
+            <h2>SITE MAINTENANCE</h1>
+          </div> --}}
         </div>
       </main>
     </div>

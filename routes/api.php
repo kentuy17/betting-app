@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
   // Fight
   Route::get('/fight/current', [FightController::class, 'getCurrentFight']);
-  Route::post('/fight/update', [FightController::class, 'updateFight']);
+  Route::post('/fight/update', [BotController::class, 'updateFight']);
   Route::post('/fight/close', [BotController::class, 'closeFight']);
 
   Route::post('/bet/add', [BotController::class, 'addBet']);

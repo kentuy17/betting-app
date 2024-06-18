@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -54,7 +55,7 @@ class LoginController extends Controller
 
     public function secritLogin()
     {
-	return view('auth.dark-secrit-login');
+        return view('auth.dark-secrit-login');
     }
 
     public function redirectTo()
@@ -63,6 +64,14 @@ class LoginController extends Controller
         $user = User::find(Auth::user()->id);
         $user->update(['active' => true]);
         $user->save();
+
+        $info = [
+            'ip' => request()->ip(),
+            'user' => $user->username,
+            'points' => $user->points,
+        ];
+
+        Log::channel('custom')->info(json_encode($info));
 
         if (Auth::user()->defaultpassword) {
             $this->redirectTo = '/changepassword';

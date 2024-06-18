@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Auth\Events\Registered;
 use App\Events\Bet;
+use App\Events\SecuredBet;
 use App\Listeners\LoggedOutListener;
+use App\Listeners\SendBetInfo;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -26,6 +28,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         Logout::class => [
             LoggedOutListener::class,
+        ],
+        SecuredBet::class => [
+            SendBetInfo::class,
         ]
     ];
 

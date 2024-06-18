@@ -1,9 +1,9 @@
 <script setup>
-import { VueFinalModal } from "vue-final-modal";
-import { ref, watch } from "vue";
-import store from "store2";
+import { VueFinalModal } from 'vue-final-modal';
+import { ref, watch } from 'vue';
+import store from 'store2';
 
-const storedSecs = store("delay");
+const storedSecs = store('delay');
 const delay = ref(storedSecs ?? 0);
 
 function incrDelay() {
@@ -15,16 +15,14 @@ function decrDelay() {
 }
 
 watch(delay, (newDelay) => {
-  store("delay", newDelay);
+  store('delay', newDelay);
 });
 
 defineProps({
   title: String,
 });
 
-const emit = defineEmits(["confirm"]);
-
-console.log("dodot buang");
+const emit = defineEmits(['confirm']);
 </script>
 <template>
   <VueFinalModal

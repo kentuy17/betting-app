@@ -11,18 +11,16 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class SecuredBet implements ShouldBroadcastNow
+class ClosingBetEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    public $securedBet;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($securedBet)
+    public function __construct()
     {
-        $this->securedBet = $securedBet;
+        //
     }
 
     /**
@@ -33,7 +31,7 @@ class SecuredBet implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('secured-bet'),
+            new PrivateChannel('closing-bet'),
         ];
     }
 }

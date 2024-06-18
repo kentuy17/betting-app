@@ -281,9 +281,13 @@ class AuditorController extends Controller
             ->get();
 
         $total_net = 0;
+        $filtered_fights = [];
         foreach ($fights as $fight) {
             $sum_wala = $fight->bet_legit_wala_sum_amount ?? 0;
             $sum_meron = $fight->bet_legit_meron_sum_amount ?? 0;
+
+            if ($sum_meron === 0 && $sum_wala === 0)
+                continue;
 
             if ($fight->game_winner == 'W') {
                 $income = $sum_meron - $sum_wala;
@@ -294,9 +298,10 @@ class AuditorController extends Controller
             }
 
             $total_net += $income;
+            $filtered_fights[] = $fight;
         }
 
-        return DataTables::of($fights)
+        return DataTables::of($filtered_fights)
             ->addIndexColumn()
             ->addColumn('net', function ($fight) {
                 if ($fight->game_winner == 'W') {

@@ -18,6 +18,7 @@ use App\Models\Referral;
 use App\Models\Agent;
 use App\Models\AgentCommission;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 
 class FightController extends Controller
 {
@@ -115,7 +116,10 @@ class FightController extends Controller
             'current' => $this->fight ?? $dummy_fight,
             'points' => Auth::user()->points,
             'event' => $this->current_event,
-            'bets' => $this->getTotalBets(),
+            'bets' => [
+                'meron' => (int)Redis::get('M'),
+                'wala' => (int)Redis::get('W'),
+            ],
             'player' => $this->getTotalPlayerBet(),
             'id' => Auth::user()->id,
             'legit' => Auth::user()->legit,
@@ -153,11 +157,19 @@ class FightController extends Controller
         ];
     }
 
+    private function cleanup($fight_no)
+    {
+        Redis::set('fight', $fight_no);
+        Redis::set('M', 0);
+        Redis::set('W', 0);
+    }
+
     public function updateFight(Request $request)
     {
         try {
             $fight = $this->currenctMatch();
             if ($request->status == 'D') {
+                $this->cleanup($fight->fight_no);
                 return $this->fightDone($fight, $request->result);
             }
 

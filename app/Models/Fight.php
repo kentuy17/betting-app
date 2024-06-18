@@ -47,14 +47,14 @@ class Fight extends Model
     public function bet_legit_meron()
     {
         return $this->hasMany(Bet::class, 'fight_id')
-            ->whereNotIn('user_id', [9])
+            ->whereNotIn('user_id', [9,1,6])
             ->where('side', 'M');
     }
 
     public function bet_legit_wala()
     {
         return $this->hasMany(Bet::class, 'fight_id')
-            ->whereNotIn('user_id', [9])
+            ->whereNotIn('user_id', [9,1,6])
             ->where('side', 'W');
     }
 

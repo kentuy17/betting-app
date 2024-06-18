@@ -253,10 +253,10 @@
   </div>
 </template>
 <script>
-import { axios } from "@bundled-es-modules/axios";
-import { Money3Component } from "v-money3";
-import { ModalsContainer, useModal } from "vue-final-modal";
-import ButtonSettings from "./extensions/ButtonSettings.vue";
+import { axios } from '@bundled-es-modules/axios';
+import { Money3Component } from 'v-money3';
+import { ModalsContainer, useModal } from 'vue-final-modal';
+import ButtonSettings from './extensions/ButtonSettings.vue';
 
 export default {
   components: {
@@ -267,11 +267,11 @@ export default {
     return {
       fightNo: 0,
       betAmount: 0,
-      message: "____",
+      message: '____',
       fightStatusClass: {
-        OPEN: "gradient-status-open",
-        CLOSE: "gradient-status-close",
-        _____: "gradient-status-pending",
+        OPEN: 'gradient-status-open',
+        CLOSE: 'gradient-status-close',
+        _____: 'gradient-status-pending',
       },
       amounts: [123, 776, 916, 2664, 3123],
       total: {
@@ -303,7 +303,7 @@ export default {
       },
       player: {
         points: 0,
-        id: "",
+        id: '',
         legit: true,
         bets: {
           meron: 0,
@@ -311,8 +311,8 @@ export default {
         },
       },
       money: {
-        decimal: ".",
-        thousands: ",",
+        decimal: '.',
+        thousands: ',',
         precision: 0,
         masked: false,
         shouldRound: false,
@@ -321,7 +321,7 @@ export default {
       ghost: {
         meron: 0,
         wala: 0,
-        points: "UNLIMITED",
+        points: 'UNLIMITED',
       },
       autobots: {
         meron: 0,
@@ -331,12 +331,12 @@ export default {
   },
   mounted() {
     axios.defaults.headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
     };
 
     axios
-      .get("/fight/current")
+      .get('/fight/current')
       .then((resp) => resp.data)
       .then((json) => {
         this.fight = json.current;
@@ -348,18 +348,18 @@ export default {
         this.player.legit = json.legit;
       })
       .then(() => {
-        Echo.channel("fight").listen(".fightUpdated", async (e) => {
+        Echo.channel('fight').listen('.fightUpdated', async (e) => {
           if (e == null) return;
 
           if (e.fight.curr) {
             if (
-              (e.fight.prev.game_winner == "D" ||
-                e.fight.prev.game_winner == "C") &&
+              (e.fight.prev.game_winner == 'D' ||
+                e.fight.prev.game_winner == 'C') &&
               this.playerTotalBets > 0
             ) {
               if (this.player.legit) {
                 alert(
-                  `Returned ${this.formatMoney(this.playerTotalBets)} points!`,
+                  `Returned ${this.formatMoney(this.playerTotalBets)} points!`
                 );
                 this.tada();
               }
@@ -367,10 +367,12 @@ export default {
               this.player.points += this.playerTotalBets;
             }
 
-            if (e.fight.prev.game_winner == "M" && this.meronWinAmount > 0) {
+            if (e.fight.prev.game_winner == 'M' && this.meronWinAmount > 0) {
               if (this.player.legit) {
                 alert(
-                  `Congratulations! MERON Wins ${this.formatMoney(this.meronWinAmount)}`,
+                  `Congratulations! MERON Wins ${this.formatMoney(
+                    this.meronWinAmount
+                  )}`
                 );
                 this.tada();
               }
@@ -378,10 +380,12 @@ export default {
               this.player.points += this.meronWinAmount;
             }
 
-            if (e.fight.prev.game_winner == "W" && this.walaWinAmount > 0) {
+            if (e.fight.prev.game_winner == 'W' && this.walaWinAmount > 0) {
               if (this.player.legit) {
                 alert(
-                  `Congratulations! WALA Wins ${this.formatMoney(this.walaWinAmount)}`,
+                  `Congratulations! WALA Wins ${this.formatMoney(
+                    this.walaWinAmount
+                  )}`
                 );
                 this.tada();
               }
@@ -408,31 +412,40 @@ export default {
           this.message = this.setFightStatus(this.fight);
         });
 
-        Echo.private("bet").listen("Bet", async (e) => {
+        Echo.private('bet').listen('Bet', async (e) => {
           if (e.bet.user_id !== this.player.id) {
-            if (e.bet.side === "M") {
+            if (e.bet.side === 'M') {
               this.total.meron = this.total.meron + e.bet.amount;
             } else {
               this.total.wala = this.total.wala + e.bet.amount;
             }
-            e.bet.side == "M"
+            e.bet.side == 'M'
               ? (this.ghost.meron += e.bet.amount)
               : (this.ghost.wala += e.bet.amount);
           }
         });
 
-        Echo.private("secured-bet").listen("SecuredBet", async (data) => {
+        Echo.private('secured-bet').listen('SecuredBet', async (data) => {
           if (!data.securedBet) return;
 
           const { total, side } = data.securedBet;
 
-          if (side === "M") this.total.meron = parseInt(total);
+          if (side === 'M') this.total.meron = parseInt(total);
 
-          if (side === "W") this.total.wala = parseInt(total);
+          if (side === 'W') this.total.wala = parseInt(total);
+        });
+
+        Echo.private('closing-bet').listen(() => {
+          let i = 1;
+          let countDown = setInterval(() => {
+            this.message = i;
+            i++;
+            if (i > 3) clearInterval(countDown);
+          }, 1000);
         });
       })
       .catch(() => {
-        alert("ERROR. Check imong connection");
+        alert('ERROR. Check imong connection');
       });
 
     this.refetchInfo();
@@ -483,8 +496,8 @@ export default {
   methods: {
     formatMoney(value) {
       return isNaN(value)
-        ? "0.00"
-        : new Intl.NumberFormat("en-US").format(value.toFixed(2));
+        ? '0.00'
+        : new Intl.NumberFormat('en-US').format(value.toFixed(2));
     },
 
     clear() {
@@ -493,7 +506,7 @@ export default {
 
     fetchFightInfo() {
       axios
-        .get("/fight/current")
+        .get('/fight/current')
         .then((resp) => resp.data)
         .then((json) => {
           this.fight = json.current;
@@ -505,7 +518,7 @@ export default {
           this.player.legit = json.legit;
         })
         .catch(() => {
-          alert("ERROR! Refresh doy");
+          alert('ERROR! Refresh doy');
         });
     },
 
@@ -517,79 +530,79 @@ export default {
     setFightStatus(data) {
       this.fightNo = data.fight_no;
       if (data.status == null) {
-        return "_____";
+        return '_____';
       }
-      if (data.status == "O") {
+      if (data.status == 'O') {
         this.isDisabled.open = true;
         this.isDisabled.close = false;
         this.isDisabled.done = true;
-        return "OPEN";
+        return 'OPEN';
       }
-      if (data.status == "C") {
+      if (data.status == 'C') {
         this.isDisabled.open = false;
         this.isDisabled.close = true;
         this.isDisabled.done = false;
-        return "CLOSE";
+        return 'CLOSE';
       }
     },
 
     betManual(amount) {
-      this.betAmount = amount == "ALL-IN" ? this.player.points : amount;
+      this.betAmount = amount == 'ALL-IN' ? this.player.points : amount;
     },
 
     tada() {
-      var audio = new Audio("/music/tada.mp3");
+      var audio = new Audio('/music/tada.mp3');
       return audio.play();
     },
 
     doneFight() {
       Swal.fire({
-        title: "RESULT:",
+        title: 'RESULT:',
         showCancelButton: true,
         showCloseButton: false,
         showDenyButton: true,
         allowOutsideClick: false,
-        confirmButtonText: "MERON",
-        confirmButtonColor: "red",
-        denyButtonText: "WALA",
-        denyButtonColor: "blue",
-        cancelButtonText: "DRAW",
-        cancelButtonColor: "green",
+        confirmButtonText: 'MERON',
+        confirmButtonColor: 'red',
+        denyButtonText: 'WALA',
+        denyButtonColor: 'blue',
+        cancelButtonText: 'DRAW',
+        cancelButtonColor: 'green',
         allowEscapeKey: false,
       })
         .then((result) => {
           if (result.isConfirmed) {
-            alert("MERON WINS");
-            return "M";
+            alert('MERON WINS');
+            return 'M';
           } else if (result.isDenied) {
-            alert("WALA WINS");
-            return "W";
+            alert('WALA WINS');
+            return 'W';
           } else {
-            alert("DRAW");
-            return "D";
+            alert('DRAW');
+            return 'D';
           }
         })
         .then((result) => {
           Swal.showLoading();
-          this.updateFight("D", result);
+          this.updateFight('D', result);
           this.clear();
         });
     },
 
     cancelFight() {
       Swal.fire({
-        title: "CANCEL FIGHT?",
+        title: 'CANCEL FIGHT?',
         showCancelButton: true,
         showCloseButton: false,
         allowOutsideClick: false,
-        confirmButtonText: "YES",
-        cancelButtonText: "NO",
+        confirmButtonText: 'YES',
+        cancelButtonText: 'NO',
         allowEscapeKey: false,
       })
         .then(async (res) => {
           if (res.isConfirmed) {
             this.isLoading.cancel = true;
-            await this.updateFight("D", "C");
+            await this.updateFight('D', 'C');
           }
           this.clear();
           return;
@@ -602,23 +615,23 @@ export default {
 
     async updateFight(status, result = null) {
       try {
-        if (this.message == "CLOSE" && status == "O") return;
+        if (this.message == 'CLOSE' && status == 'O') return;
 
-        if (status == "O") this.isLoading.open = true;
-        if (status == "C") this.isLoading.close = true;
+        if (status == 'O') this.isLoading.open = true;
+        if (status == 'C') this.isLoading.close = true;
 
-        const { data } = await axios.post("/fight/update-status", {
+        const { data } = await axios.post('/fight/update-status', {
           status: status,
           result: result,
         });
 
         this.message =
-          status === "D"
+          status === 'D'
             ? this.setFightStatus(data.data)
             : this.setFightStatus(data);
 
-        if (status == "O") this.isLoading.open = false;
-        if (status == "C") this.isLoading.close = false;
+        if (status == 'O') this.isLoading.open = false;
+        if (status == 'C') this.isLoading.close = false;
 
         return;
       } catch (error) {
@@ -627,39 +640,39 @@ export default {
     },
 
     revertWinFight() {
-      $("#modal-undo-win").modal("show");
+      $('#modal-undo-win').modal('show');
     },
 
     async revertFight(result) {
       try {
-        const { data } = await axios.post("/fight/revertresult", {
-          fight_no: $("#fight_no").val(),
+        const { data } = await axios.post('/fight/revertresult', {
+          fight_no: $('#fight_no').val(),
           result: result,
         });
-        $("#modal-undo-win").modal("hide");
+        $('#modal-undo-win').modal('hide');
       } catch (error) {
         console.error(error);
       }
     },
     async addBet(betSide) {
       try {
-        if (this.message !== "OPEN") {
-          alert("Cannot Bet");
+        if (this.message !== 'OPEN') {
+          alert('Cannot Bet');
           return;
         }
 
         if (this.betAmount < 10) {
-          alert("Minimum bet is 10.00");
+          alert('Minimum bet is 10.00');
           return;
         }
 
         if (this.betAmount > this.player.points) {
-          alert("Insuficient Points");
+          alert('Insuficient Points');
           return;
         }
 
         if (this.betAmount > 1500 && this.player.legit) {
-          alert("Maximum bet is 1,500.00");
+          alert('Maximum bet is 1,500.00');
           return;
         }
 
@@ -669,24 +682,24 @@ export default {
           }
         }
 
-        if (!["M", "W"].includes(betSide)) {
-          alert("Invalid bet!");
+        if (!['M', 'W'].includes(betSide)) {
+          alert('Invalid bet!');
           return;
         }
 
         // this.player.points -= this.betAmount
 
-        if (betSide === "M") {
+        if (betSide === 'M') {
           this.player.bets.meron += this.betAmount;
           this.total.meron += this.betAmount;
         }
 
-        if (betSide === "W") {
+        if (betSide === 'W') {
           this.player.bets.wala += this.betAmount;
           this.total.wala += this.betAmount;
         }
 
-        axios.post("/bet/add", {
+        axios.post('/bet/moderator', {
           fight_no: this.fightNo,
           amount: this.betAmount,
           side: betSide,

@@ -37,7 +37,7 @@ Route::get('/', function () {
     return redirect('/login');
 })->middleware('guest');
 
-Route::group(['middleware' => ['guest']], function() {
+Route::group(['middleware' => ['guest']], function () {
     Route::get('/secrit-login', [LoginController::class, 'secritLogin']);
 });
 
@@ -141,6 +141,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/event/create', [OperatorController::class, 'addNewEvent']);
         Route::get('/fight', [OperatorController::class, 'fight'])->name('operator.fight');
         Route::post('/event/activate', [FightController::class, 'setGameEvent']);
+        Route::post('/bet/moderator', [OperatorController::class, 'betModerator']);
     });
 
     Route::group(['middleware' => ['auditor']], function () {
