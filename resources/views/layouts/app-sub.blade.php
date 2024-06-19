@@ -98,78 +98,76 @@
       </div>
       @if (hasAccess('Admin'))
         <label class="nav__label">Admin</label>
-        <div class="nav__item">
+        <a class="nav__item" href="/admin">
           <i class="fa fa-users" aria-hidden="true"></i>
-          <a href="/admin"><span>USERS</span></a>
-        </div>
-        <div class="nav__item">
+          <span>USERS</span>
+        </a>
+        <a class="nav__item" href="/fight">
           <i class="fa-solid fa-gamepad" aria-hidden="true"></i>
-          <a href="/fight"><span>Fight</span></a>
-        </div>
-        <div class="nav__item">
+          <span>Fight</span>
+        </a>
+        <a class="nav__item" href="/transactions">
           <i class="fa-solid fa-hand-holding-dollar" aria-hidden="true"></i>
-          <a href="/transactions"><span>CI/CO</span></a>
-        </div>
-        <div class="nav__item">
+          <span>CI/CO</span>
+        </a>
+        <a class="nav__item" href="/summary-bet">
           <i class="fa-solid fa-chart-pie" aria-hidden="true"></i>
-          <a href="/summary-bet"><span>Bets Summary</span></a>
-        </div>
-        <div class="nav__item">
+          <span>Bets Summary</span>
+        </a>
+        <a class="nav__item" href="/agents">
           <i class="fa-solid fa-person-harassing" aria-hidden="true"></i>
-          <a href="/agents"><span>Agents</span></a>
-        </div>
-        <div class="nav__item">
+          <span>Agents</span>
+        </a>
+        <a class="nav__item" href="/event">
           <i class="fa-solid fa-table-cells" aria-hidden="true"></i>
-          <a href="/event"><span>Events</span></a>
-        </div>
+          <span>Events</span>
+        </a>
       @endif
 
       @if (Auth::user()->agent)
         <label class="nav__label">Agent</label>
-        <div class="nav__item">
+        <a class="nav__item" href="/agent/players">
           <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
-          <a href="/agent/players"><span>Dashboard</span></a>
-        </div>
+          <span>Dashboard</span>
+        </a>
       @endif
 
       <label class="nav__label">Player</label>
-      <div class="nav__item @if (Route::current()->getName() == 'landing') {{ 'overview' }} @endif">
+      <a class="nav__item" href="/landing">
         <i class="fas fa-home" aria-hidden="true"></i>
-        <a href="/landing"><span>Home</span></a>
-      </div>
-      <div class="nav__item @if (Route::current()->getName() == 'play') {{ 'overview' }} @endif">
+        <span>Home</span>
+      </a>
+      <a class="nav__item" href="/play">
         <i class="fa-solid fa-play" aria-hidden="true"></i>
-        <a href="/play"><span>Play</span></a>
-      </div>
-      <div class="nav__item">
+        <span>Play</span>
+      </a>
+      <a class="nav__item" href="/user/profile">
         <i class="fa fa-link" aria-hidden="true"></i>
-        <a href="/user/profile"><span>Profile</span></a>
-      </div>
-      <div class="nav__item">
+        <span>Profile</span>
+      </a>
+      <a class="nav__item" href="/deposit">
         <i class="fa-solid fa-money-bill-transfer" aria-hidden="true"></i>
-        <a href="/deposit"><span>Cashin</span></a>
-      </div>
-      <div class="nav__item">
+        <span>Cashin</span>
+      </a>
+      <a class="nav__item" href="/withdraw">
         <i class="fa-solid fa-sack-dollar" aria-hidden="true"></i>
-        <a href="/withdraw"><span>Cashout</span></a>
-      </div>
-      <div class="nav__item">
+        <span>Cashout</span>
+      </a>
+      <a class="nav__item" href="/play/history">
         <i class="fa-regular fa-chart-bar" aria-hidden="true"></i>
-        <a href="/play/history"><span>Bet history</span></a>
-      </div>
-      <div class="nav__item">
+        <span>Bet history</span>
+      </a>
+      <a class="nav__item" href="/playertransaction">
         <i class="fas fa-coins" aria-hidden="true"></i>
-        <a href="/playertransaction"><span>Transactions</span></a>
-      </div>
-      <div class="nav__item">
+        <span>Transactions</span>
+      </a>
+      <a class="nav__item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
         <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
-        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-          <span>{{ __('Logout') }}</span></a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-          @csrf
-        </form>
-      </div>
 
+        <span>{{ __('Logout') }}</span></a>
+      <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+        @csrf
+      </form>
     </nav>
   </header>
   <div class="nav-footer">

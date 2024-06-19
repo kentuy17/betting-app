@@ -364,17 +364,18 @@ export default {
           if (side === "W") this.total.wala = parseInt(total);
         });
 
-        Echo.private("closing-bet").listen(() => {
-          let i = 1;
-          let countDown = setInterval(() => {
-            this.message = i;
-            i++;
-            if (i > 3) clearInterval(countDown);
-          }, 1000);
-        });
+        // Echo.private("closing-bet").listen(() => {
+        //   let i = 1;
+        //   let countDown = setInterval(() => {
+        //     this.message = i;
+        //     i++;
+        //     if (i > 3) clearInterval(countDown);
+        //   }, 1000);
+        // });
       })
-      .catch(() => {
-        alert("ERROR. Check imong connection");
+      .catch((e) => {
+        // alert("ERROR. Check imong connection");
+        console.log(e, 'ektol');
       });
 
     this.refetchInfo();

@@ -8,13 +8,27 @@
       margin: 0 !important;
       padding: 0 1px !important;
     }
+
+    .nav-orig {
+      --bs-nav-link-padding-x: 1rem;
+      --bs-nav-link-padding-y: .5rem;
+      --bs-nav-link-font-weight: ;
+      --bs-nav-link-color: var(--bs-link-color);
+      --bs-nav-link-hover-color: var(--bs-link-hover-color);
+      --bs-nav-link-disabled-color: #6c757d;
+      display: flex;
+      flex-wrap: wrap;
+      padding-left: 0;
+      margin-bottom: 0;
+      list-style: none;
+    }
   </style>
 @endsection
 @section('content')
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-12">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <ul class="nav-orig nav-tabs" id="myTab" role="tablist">
           <li class="nav-item" role="presentation">
             <button class="nav-link active" id="admin-users-tab" data-bs-toggle="tab" data-bs-target="#users-panel" type="button" role="tab" aria-controls="deposit" aria-selected="true">
               USERS <span id="badge-online-users" style="display: none;" class="badge bg-success">0</span></button>
