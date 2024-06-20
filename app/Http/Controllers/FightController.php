@@ -25,7 +25,7 @@ class FightController extends Controller
     public $current_event;
     public $prev_match;
     public $fight;
-    private $percent = 13;
+    private $percent = 16;
     private $botchok_id = 10;
     /**
      * Create a new controller instance.
@@ -164,7 +164,6 @@ class FightController extends Controller
         Redis::set('W', 0);
         Redis::set('extra:M', 0);
         Redis::set('extra:W', 0);
-        
     }
 
     public function updateFight(Request $request)
@@ -233,6 +232,7 @@ class FightController extends Controller
 
         $fightDetail = Fight::where('fight_no', $request->fight_no)
             ->where('event_id', $this->current_event->id)
+            ->orderBy('id', 'DESC')
             ->first();
 
         if (!$fightDetail) {
@@ -269,6 +269,27 @@ class FightController extends Controller
 
                 $to_revert->save();
                 $affected_user->save();
+            }
+        }
+
+        if ($faultWinner == 'D' || $faultWinner == 'C' && !in_array($request->result, ['D', 'C'])) {
+            $bets = BetHistory::with('user')
+                ->where('fight_id', $fightDetail->id)->get();
+
+            foreach ($bets as $bet) {
+                # code...
+                $status = $request->result == $bet->side ? 'W' : 'L';
+                $percent = (184 * 2) - $bet->percent > 184 ? 180.00 : (184 * 2) - $bet->percent;
+                $win = $status == 'W' ? ($percent * 0.01) * $bet->betamount : 0;
+
+                $bet->status = $status;
+                $bet->percent = $percent;
+                $bet->winamount =  $win;
+                $bet->save();
+
+                $player = User::find($bet->user_id);
+                $player->points = ($player->points - $bet->betamount) - $win;
+                $player->save();
             }
         }
 
@@ -357,7 +378,7 @@ class FightController extends Controller
                 $user->save();
 
                 $betHist = BetHistory::where('bet_id', $bet->bet_no)->first();
-                $betHist->percent = $percentage ?? 187;
+                $betHist->percent = $percentage ?? 184;
                 $betHist->winamount = $update->win_amount;
                 $betHist->current_points = $user->points;
                 $betHist->status = 'W';
@@ -378,7 +399,7 @@ class FightController extends Controller
             foreach ($lose_bet as $lb) {
                 $user_2 = User::find($lb->user_id);
                 $betHistLB = BetHistory::where('bet_id', $lb->bet_no)->first();
-                $betHistLB->percent = $percentagelb  ?? 187;
+                $betHistLB->percent = $percentagelb  ?? 184;
                 $betHistLB->current_points = $user_2->points;
                 $betHistLB->status = 'L';
                 $betHistLB->save();
@@ -481,7 +502,7 @@ class FightController extends Controller
             if (!in_array($bet->referral->referrer_id, $tholits) && $bet->win_amount == 0)
                 continue;
 
-            $base_amount = $bet->win_amount > 0 ? $bet->win_amount - $bet->amount : 0.87 * $bet->amount;
+            $base_amount = $bet->win_amount > 0 ? $bet->win_amount - $bet->amount : 0.84 * $bet->amount;
             $agent = Agent::where('user_id', $bet->referral->referrer_id)->first();
             $commission = $this->commissionAmount($base_amount, $agent->percent);
 
@@ -558,7 +579,7 @@ class FightController extends Controller
                 $full_commission = ($bet->win_amount - $bet->amount) * $agent_commission_percent;
             } elseif (in_array($bet->referral->referrer_id, [1])) {
                 //
-                $full_commission = (0.87 * $bet->amount) * $agent_commission_percent;
+                $full_commission = (0.84 * $bet->amount) * $agent_commission_percent;
             } else {
                 continue;
             }
