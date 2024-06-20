@@ -550,10 +550,18 @@ export default {
         if (status == "O") this.isLoading.open = true;
         if (status == "C") this.isLoading.close = true;
 
-        const { data } = await axios.post("/fight/update-status", {
+        let endpoint = "/fight/update-status"
+
+        if (status == "C") {
+          endpoint = "/fight/close"
+        }
+
+        const { data } = await axios.post(endpoint, {
           status: status,
           result: result,
+          fight_no: this.fightNo
         });
+
 
         this.message =
           status === "D"
@@ -629,7 +637,7 @@ export default {
           this.total.wala += this.betAmount;
         }
 
-        axios.post("/bet/moderator", {
+        axios.post("/bet/extra", {
           fight_no: this.fightNo,
           amount: this.betAmount,
           side: betSide,

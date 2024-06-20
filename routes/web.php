@@ -17,6 +17,8 @@ use App\Http\Controllers\GhostController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 
+use App\Http\Controllers\Api\BotController;
+
 use App\Models\User;
 
 // use App\Http\Controllers\Controller;
@@ -142,6 +144,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/fight', [OperatorController::class, 'fight'])->name('operator.fight');
         Route::post('/event/activate', [FightController::class, 'setGameEvent']);
         Route::post('/bet/moderator', [OperatorController::class, 'betModerator']);
+
+        // Addbot
+        Route::post('/bet/extra', [BotController::class, 'addExtraBet']);
+        Route::post('/fight/close', [BotController::class, 'closeFight']);
     });
 
     Route::group(['middleware' => ['auditor']], function () {

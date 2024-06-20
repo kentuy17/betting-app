@@ -47,7 +47,7 @@ class HourlyCheck extends Command
         //     'cluster' => 'ap1'
         // ]);
 
-        $users = User::whereNotIn('id', [9, 2])->get();
+        $users = User::whereNotIn('id', [9])->get();
         foreach ($users as $user) {
             # code...
             if ($user->active && $user->updated_at < Carbon::now()->subHour()) {
@@ -58,23 +58,23 @@ class HourlyCheck extends Command
             }
         }
 
-        $ghost = User::find(9);
-        if ($ghost->points < 2000000) {
-            $ghost->points += 7000000;
-            $ghost->save();
-            Log::channel('cron')->info("Ghost added pts: " . $ghost->points);
-        }
+        // $ghost = User::find(9);
+        // if ($ghost->points < 2000000) {
+        //     $ghost->points += 7000000;
+        //     $ghost->save();
+        //     Log::channel('cron')->info("Ghost added pts: " . $ghost->points);
+        // }
 
-        $event = DerbyEvent::where('status', 'ACTIVE')->first();
-        if ($event) {
-            $fight = Fight::where('event_id', $event->id)
-                ->orderBy('id', 'desc')->first();
+        // $event = DerbyEvent::where('status', 'ACTIVE')->first();
+        // if ($event) {
+        //     $fight = Fight::where('event_id', $event->id)
+        //         ->orderBy('id', 'desc')->first();
 
-            $bets = Bet::where('fight_id', '<', $fight->id - 5)
-                ->where('user_id', 9)->delete();
+        //     $bets = Bet::where('fight_id', '<', $fight->id - 5)
+        //         ->where('user_id', 9)->delete();
 
-            Log::channel('bet')->info('Delete: ' . $bets);
-        }
+        //     Log::channel('bet')->info('Delete: ' . $bets);
+        // }
 
         // Log::channel('cron')->info("Delete: " . $delete);
     }

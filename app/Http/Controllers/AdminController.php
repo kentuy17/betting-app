@@ -237,10 +237,10 @@ class AdminController extends Controller
                     ->make(true);
             }
 
-            if (request('order')[0]['column'] == 4) {
+            if (request('order')[0]['column'] == 2) {
                 $users = User::orderBy('points', request('order')[0]['dir'])->get();
             } else {
-                $users = User::orderBy('updated_at', 'desc')->get();
+                $users = User::orderBy('last_activity', 'desc')->get();
             }
         } catch (\Exception $e) {
             return response($e, 500);

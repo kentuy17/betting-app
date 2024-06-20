@@ -32,6 +32,8 @@ class BotController extends Controller
     {
         Redis::set('M', 0);
         Redis::set('W', 0);
+        Redis::set('extra:M', 0);
+        Redis::set('extra:W', 0);
     }
 
     public function addBet(Request $request)
@@ -68,23 +70,53 @@ class BotController extends Controller
             }
 
             Redis::set('fight', $current_fight->fight_no);
-            Redis::set($request->side, 0);
+            // Redis::set($request->side, 0);
+            $this->cleanup();
         }
 
         // Redis::incr($request->side, $request->amount);
-        Redis::set($request->side, $request->total);
-        $total = Redis::get($request->side);
+        // switch
+        // $switch = $request->side == 'M' ? 'W' : 'M';
+        $switch = $request->side;
+
+        // Redis::set($request->side, $request->total);
+        // $extra = Redis::get('extra:' . $request->side);
+        // $total = Redis::get($request->side) + $extra;
+
+        Redis::set($switch, $request->total);
+        $extra = Redis::get('extra:' . $switch);
+        $total = Redis::get($switch) + $extra;
 
         // broadcast SecuredBet
         // uuid, side, total,
         //
         $securedBet = collect([
             'uuid' => Str::uuid(),
-            'side' => $request->side,
+            // 'side' => $request->side,
+            'side' => $switch,
             'total' => $total
         ]);
 
         // event(new SecuredBet($securedBet));
+        if ($securedBet) {
+            event(new SecuredBet($securedBet));
+        }
+
+        return $securedBet;
+    }
+
+    public function addExtraBet(Request $request)
+    {
+        Redis::incr('extra:' . $request->side, $request->amount);
+        $extra = Redis::get('extra:' . $request->side);
+        $total = $extra + Redis::get($request->side);
+
+        $securedBet = collect([
+            'uuid' => Str::uuid(),
+            'side' => $request->side,
+            'total' => $total
+        ]);
+
         if ($securedBet) {
             event(new SecuredBet($securedBet));
         }
@@ -112,6 +144,7 @@ class BotController extends Controller
 
         // calculate meron
         $meron = Redis::get('M') ?? 0;
+        $extra_m = Redis::get('extra:M') ?? 0;
         $legit_meron = Bet::where('fight_id', $fight->id)
             ->where('side', 'M')
             ->whereNotIn('user_id', [9])
@@ -119,7 +152,7 @@ class BotController extends Controller
 
         Bet::create([
             'side' => 'M',
-            'amount' => $meron - $legit_meron,
+            'amount' => ($meron + $extra_m) - $legit_meron,
             'fight_no' => $request->fight_no,
             'user_id' => 9,
             'fight_id' => $fight->id,
@@ -128,6 +161,7 @@ class BotController extends Controller
 
         // calculate meron
         $wala = Redis::get('W') ?? 0;
+        $extra_w = Redis::get('extra:W') ?? 0;
         $legit_wala = Bet::where('fight_id', $fight->id)
             ->where('side', 'W')
             ->whereNotIn('user_id', [9])
@@ -135,7 +169,7 @@ class BotController extends Controller
 
         Bet::create([
             'side' => 'W',
-            'amount' => $wala - $legit_wala,
+            'amount' => ($wala - $legit_wala) + $extra_w,
             'fight_no' => $request->fight_no,
             'user_id' => 9,
             'fight_id' => $fight->id,
@@ -174,7 +208,7 @@ class BotController extends Controller
         ]);
 
         // padaog
-        sleep(20);
+        sleep(10);
         $update = $this->fightController->updateFight($fight_request);
         return $update;
     }

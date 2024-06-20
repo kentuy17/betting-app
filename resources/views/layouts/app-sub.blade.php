@@ -26,7 +26,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   {{--
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
-
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-L6BFWJNTWB">
+  </script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-L6BFWJNTWB');
+  </script>
   @vite(['resources/sass/app.scss', 'public/css/app-sub.scss', 'resources/js/app.js', 'resources/css/app.css'])
 
   <!-- Custom -->
@@ -114,7 +122,7 @@
           <i class="fa-solid fa-chart-pie" aria-hidden="true"></i>
           <span>Bets Summary</span>
         </a>
-        <a class="nav__item" href="/agents">
+        <a class="nav__item" href="/admin/agents">
           <i class="fa-solid fa-person-harassing" aria-hidden="true"></i>
           <span>Agents</span>
         </a>
@@ -235,5 +243,9 @@
     $('.mobile-mask').on('click', function() {
       $('.nav, .mobile-mask').removeClass('show');
     });
+
+    var route = window.location.pathname
+    var link = document.querySelector('[href="' + route + '"]')
+    link.classList.add('overview')
   });
 </script>

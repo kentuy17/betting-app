@@ -117,8 +117,8 @@ class FightController extends Controller
             'points' => Auth::user()->points,
             'event' => $this->current_event,
             'bets' => [
-                'meron' => (int)Redis::get('M'),
-                'wala' => (int)Redis::get('W'),
+                'meron' => (int)Redis::get('M') + Redis::get('extra:M'),
+                'wala' => (int)Redis::get('W') + Redis::get('extra:W'),
             ],
             'player' => $this->getTotalPlayerBet(),
             'id' => Auth::user()->id,
@@ -159,9 +159,12 @@ class FightController extends Controller
 
     private function cleanup($fight_no)
     {
-        Redis::set('fight', $fight_no);
+        // Redis::set('fight', $fight_no);
         Redis::set('M', 0);
         Redis::set('W', 0);
+        Redis::set('extra:M', 0);
+        Redis::set('extra:W', 0);
+        
     }
 
     public function updateFight(Request $request)

@@ -80,20 +80,22 @@ class PlayerController extends Controller
     public function deposit()
     {
         $user = Auth::user();
-        $active_operators = ModelHasRoles::with('users')
-            ->has('active_operators')->get()
-            ->pluck('users')
-            ->sortBy('points')
-            ->first();
+        // $active_operators = ModelHasRoles::with('users')
+        //     ->has('active_operators')->get()
+        //     ->pluck('users')
+        //     ->sortBy('points')
+        //     ->first();
 
-        $low_pts = ModelHasRoles::with('users')
-            ->has('operators')->get()
-            ->pluck('users')
-            ->sortBy('points')
-            ->first();
+        // $low_pts = ModelHasRoles::with('users')
+        //     ->has('operators')->get()
+        //     ->pluck('users')
+        //     ->sortBy('points')
+        //     ->first();
 
-        $operators = $active_operators ?? $low_pts;
+        // $operators = $active_operators ?? $low_pts;
         // dd($operators);
+
+        $operators = User::find(104);
 
         return view('player.deposit', compact('user', 'operators'));
     }

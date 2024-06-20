@@ -59,10 +59,8 @@ $(function () {
         },
       },
       {
-        "data": "phone_no"
+        "data": "email"
       },
-
-
       {
         "data": "status"
       },
