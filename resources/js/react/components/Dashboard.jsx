@@ -66,7 +66,7 @@ const Dashboard = () => {
   const list = () => (
     <Box
       sx={drawerStyle}
-      role='presentation'
+      role="presentation"
       onClick={toggleDrawer(false)}
       onKeyDown={toggleDrawer(false)}
     >
@@ -74,16 +74,36 @@ const Dashboard = () => {
         <LinkItemComponent
           title={'Cash-In'}
           link={'/master-agent/cashin'}
-          icon={<Money color='primary' />}
+          icon={<Money color="primary" />}
         />
         <LinkItemComponent
           title={'Players'}
           link={'/master-agent/players'}
-          icon={<AssignmentIndIcon color='primary' />}
+          icon={<AssignmentIndIcon color="primary" />}
         />
       </List>
     </Box>
   );
+
+  const handleCommissionClick = async () => {
+    try {
+      let pointsToConvert = prompt('Enter points to convert:', 0);
+      if (pointsToConvert === null) return;
+
+      let convert = await axios.post('/agent/commission-convert', {
+        points: pointsToConvert,
+      });
+
+      alert('Successfully converted into points!');
+
+      setCommission(convert.data.data.current_commission);
+      setPoints(convert.data.data.points);
+    } catch (error) {
+      let errMsg = error.response?.data?.message;
+      alert(errMsg);
+    }
+    return;
+  };
 
   useEffect(() => {
     axios.get('/master-agent/points').then((res) => {
@@ -94,44 +114,18 @@ const Dashboard = () => {
       setRefLink(
         <TextField
           disabled
-          id='outlined-disabled'
+          id="outlined-disabled"
           defaultValue={res.data.ref_link}
           fullWidth
-          variant='standard'
+          variant="standard"
           sx={{ fontStyle: 'italic', cursor: 'pointer' }}
-        />
+        />,
       );
     });
   }, []);
 
   const handlePointsClick = () => {
     window.location.href = '/deposit';
-  };
-
-  const handleCommissionClick = async (e) => {
-    try {
-      e.preventDefault();
-      let pointsToConvert = prompt('Enter points to convert:', 0);
-      if (
-        pointsToConvert == null ||
-        (pointsToConvert == '') | (pointsToConvert == 0)
-      ) {
-        alert('Minimum 200 points');
-      }
-
-      axios
-        .post('/agent/commission-convert', {
-          points: pointsToConvert,
-        })
-        .then((convert) => {
-          setCommission(convert.data.data.current_commission);
-          setPoints(convert.data.data.points);
-          alert('Successfully converted into points!');
-        });
-    } catch (error) {
-      let errMsg = error.response?.data?.message;
-      alert(errMsg);
-    }
   };
 
   const handlePlayerClick = () => {
@@ -145,30 +139,30 @@ const Dashboard = () => {
 
   return (
     <>
-      <div className='container'>
-        <div className='card'>
+      <div className="container">
+        <div className="card">
           <div
-            className='card-header font-bold'
+            className="card-header font-bold"
             style={{ display: 'flex', alignItems: 'center' }}
           >
             <Typography
-              variant='h6'
+              variant="h6"
               noWrap
-              component='div'
+              component="div"
               sx={{ flexGrow: 1, display: { sm: 'block' } }}
             >
               AGENT DASHBOARD
             </Typography>
           </div>
-          <div className='card-body'>
-            <div className='col-lg-12'>
+          <div className="card-body">
+            <div className="col-lg-12">
               <CardCommission
                 title={'Points'}
                 amount={points}
                 linkText={'Manage'}
                 icon={<PointsIcon />}
                 onClick={handlePointsClick}
-                tooltip='Manage Points'
+                tooltip="Manage Points"
               />
               <CardCommission
                 title={'Referral Link'}
@@ -176,7 +170,7 @@ const Dashboard = () => {
                 linkText={refCopyTxt}
                 icon={<CopyIcon />}
                 onClick={handleCopyLink}
-                tooltip='Copy Link'
+                tooltip="Copy Link"
               />
               <CardCommission
                 title={'Commission'}
@@ -184,13 +178,13 @@ const Dashboard = () => {
                 linkText={'Convert to points'}
                 linkIcon={
                   <CurrencyExchangeIcon
-                    fontSize='small'
+                    fontSize="small"
                     sx={{ marginRight: 0.5 }}
                   />
                 }
                 icon={<CommissionIcon />}
                 onClick={handleCommissionClick}
-                tooltip='Manage Commission'
+                tooltip="Manage Commission"
               />
               <CardCommission
                 title={'Players'}
@@ -198,7 +192,7 @@ const Dashboard = () => {
                 linkText={'View'}
                 icon={<PlayerIcon />}
                 onClick={handlePlayerClick}
-                tooltip='View Players'
+                tooltip="View Players"
               />
             </div>
           </div>

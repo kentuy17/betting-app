@@ -10,9 +10,9 @@ const CardCommission = ({
   tooltip = '',
   linkIcon,
 }) => {
-  const handleClick = () => {
-    onClick();
-  };
+  // const handleClick = () => {
+  //   onClick();
+  // };
 
   const WrenchIcon = () => {
     return <i className="fa-solid fa-wrench mr-1"></i>;
@@ -37,7 +37,7 @@ const CardCommission = ({
 
   return (
     <div className="card-commission col-lg-12 my-3 mx-1">
-      <div className="card-body" onClick={handleClick}>
+      <div className="card-body">
         <div className="row">
           <div className="col-8">
             <div className="numbers">
@@ -48,7 +48,7 @@ const CardCommission = ({
               <p className="mb-0">
                 <Tooltip arrow placement="top" title={tooltip}>
                   <span
-                    onClick={handleClick}
+                    onClick={onClick}
                     className="text-success text-sm font-weight-bolder cursor-pointer"
                   >
                     {iconLink}
@@ -60,7 +60,7 @@ const CardCommission = ({
           </div>
           <div
             className="col-4 flex"
-            onClick={handleClick}
+            // onClick={handleClick}
             style={{ justifyContent: 'end' }}
           >
             {/* <div className="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
