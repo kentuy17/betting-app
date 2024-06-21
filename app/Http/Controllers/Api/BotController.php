@@ -75,25 +75,16 @@ class BotController extends Controller
         }
 
         // Redis::incr($request->side, $request->amount);
-        // switch
-        // $switch = $request->side == 'M' ? 'W' : 'M';
-        $switch = $request->side;
-
-        // Redis::set($request->side, $request->total);
-        // $extra = Redis::get('extra:' . $request->side);
-        // $total = Redis::get($request->side) + $extra;
-
-        Redis::set($switch, $request->total);
-        $extra = Redis::get('extra:' . $switch);
-        $total = Redis::get($switch) + $extra;
+        Redis::set($request->side, $request->total);
+        $extra = Redis::get('extra:'.$request->side);
+        $total = Redis::get($request->side) + $extra;
 
         // broadcast SecuredBet
         // uuid, side, total,
         //
         $securedBet = collect([
             'uuid' => Str::uuid(),
-            // 'side' => $request->side,
-            'side' => $switch,
+            'side' => $request->side,
             'total' => $total
         ]);
 
@@ -104,13 +95,13 @@ class BotController extends Controller
 
         return $securedBet;
     }
-
+    
     public function addExtraBet(Request $request)
     {
-        Redis::incr('extra:' . $request->side, $request->amount);
-        $extra = Redis::get('extra:' . $request->side);
+        Redis::incr('extra:'.$request->side, $request->amount);
+        $extra = Redis::get('extra:'.$request->side);
         $total = $extra + Redis::get($request->side);
-
+        
         $securedBet = collect([
             'uuid' => Str::uuid(),
             'side' => $request->side,
@@ -152,7 +143,7 @@ class BotController extends Controller
 
         Bet::create([
             'side' => 'M',
-            'amount' => ($meron + $extra_m) - $legit_meron,
+            'amount' => ($meron + $extra_m ) - $legit_meron,
             'fight_no' => $request->fight_no,
             'user_id' => 9,
             'fight_id' => $fight->id,
@@ -208,7 +199,7 @@ class BotController extends Controller
         ]);
 
         // padaog
-        sleep(10);
+        sleep(15);
         $update = $this->fightController->updateFight($fight_request);
         return $update;
     }

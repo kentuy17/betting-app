@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\BotController;
+use App\Http\Controllers\Api\SecretController;
 use App\Http\Controllers\FightController;
 
 use App\Models\User;
@@ -35,6 +36,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
   Route::post('/bet/add', [BotController::class, 'addBet']);
   Route::post('/bet/cache', [BotController::class, 'addBetCached']);
+
+  Route::get('/encrypt/data', [SecretController::class, 'encryptData']);
 });
 
         // $user = $id ? User::find($id) : Auth::user();

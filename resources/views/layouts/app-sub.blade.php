@@ -27,11 +27,13 @@
   {{--
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-L6BFWJNTWB">
-  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-L6BFWJNTWB"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
     gtag('js', new Date());
     gtag('config', 'G-L6BFWJNTWB');
   </script>
@@ -134,9 +136,9 @@
 
       @if (Auth::user()->agent)
         <label class="nav__label">Agent</label>
-        <a class="nav__item" href="/agent/players">
+        <a class="nav__item" href="/master-agent">
           <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
-          <span>Dashboard</span>
+          <span>Dashboard</span><span style="color: red" class="badge badge-danger text-red">New</span>
         </a>
       @endif
 

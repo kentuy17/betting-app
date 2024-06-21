@@ -408,61 +408,6 @@ class FightController extends Controller
 
         }
 
-        if ($last_fight->game_winner == 'M' || $last_fight->game_winner == 'W') {
-            $kusgan = ShareHolder::get();
-            $data = [];
-            $per = 12;
-            $ghost_bettors = User::where('legit', false)->get()->pluck('id');
-            $total_win_amount = Bet::where('fight_id', $last_fight->id)
-                ->whereNotIn('user_id', $ghost_bettors)
-                ->sum('win_amount');
-            $_total_bets = Bet::where('fight_id', $last_fight->id)
-                ->whereNotIn('user_id', $ghost_bettors)
-                ->sum('amount');
-            $referral_commission = $this->calcRefComm($last_fight->id);
-            $commission = ($_total_bets - $total_win_amount) - $referral_commission;
-
-            if ($kusgan->sum('percentage') < $per) {
-                $unallocated = array(
-                    'id' => '-1',
-                    'user_id' => '-1',
-                    'percentage' => $per - $kusgan->sum('percentage')
-                );
-
-                $kusgan->push($unallocated);
-                $kusgan->all();
-            }
-
-            foreach ($kusgan as $key => $gwapo) {
-                if (gettype($gwapo) == 'array') {
-                    $gwapo = (object) $gwapo;
-                }
-
-                $additional_pts = $commission / $per * $gwapo->percentage;
-
-                $data[] = [
-                    'user_id' => $gwapo->user_id,
-                    'points' => $additional_pts,
-                    'percentage' => $gwapo->percentage,
-                    'total_win_amount' => $total_win_amount,
-                    'fight_id' => $last_fight->id,
-                    'event_id' => $this->current_event->id,
-                    'active' => true,
-                    'created_at' => now(),
-                ];
-
-                if ($gwapo->id > 0 && $commission > 0) {
-                    $share_holder = ShareHolder::find($gwapo->id);
-                    $share_holder->current_commission += $additional_pts;
-                    $share_holder->save();
-                }
-            }
-
-            if ($commission > 0) {
-                Commission::insert($data);
-            }
-        }
-
         return response()->json([
             'data' => $new_fight
         ]);

@@ -2,9 +2,11 @@
 import { VueFinalModal } from "vue-final-modal";
 import { ref, watch } from "vue";
 import store from "store2";
+import { axios } from "@bundled-es-modules/axios";
 
 const storedSecs = store("delay");
 const delay = ref(storedSecs ?? 0);
+// const isReversed = ref(false);
 
 function incrDelay() {
   delay.value++;
@@ -13,6 +15,10 @@ function incrDelay() {
 function decrDelay() {
   delay.value--;
 }
+
+// function toggle() {
+  // isReversed.value = !isReversed
+// }
 
 watch(delay, (newDelay) => {
   store("delay", newDelay);
@@ -45,7 +51,8 @@ const emit = defineEmits({
     <div class="flex col justify-between">
       <!-- Rounded switch -->
       <label class="switch">
-        <input type="checkbox">
+       <!-- <input type="checkbox" @toggle="toggle" :checked="isReversed"> -->
+       <input type="checkbox">
         <span class="slider round"></span>
       </label>
     </div>

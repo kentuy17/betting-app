@@ -172,28 +172,34 @@ class AgentController extends Controller
     public function topUpPoints(Request $request)
     {
         try {
-            $allow = [93008, 92342, 1, 6];
-            if (!in_array(Auth::user()->id, $allow)) {
-              return response()->json([
-                  'error' => 'Disabled sorry',
-                  'status' => 500,
-              ], 500);
+            /**
+             * JohnWick => 818
+             * Papawa   => 92966
+             * 
+             */
+            $prohibited = [818, 92966];
+            // $allow = [93008, 92342, 1, 6];
+            if (in_array(Auth::user()->id, $prohibited)) {
+                return response()->json([
+                    'error' => 'Disabled sorry',
+                    'status' => 500,
+                ], 500);
             }
 
-            if (in_array(Auth::user()->id, [10, 92966]) && $request->amount > 500) {
-                $papawa = Transactions::where('processedBy', 92966)
-                    ->where('action', 'topup')
-                    ->whereDate('created_at', Carbon::now())
-                    ->sum('amount');
+            // if (in_array(Auth::user()->id, [10, 92966]) && $request->amount > 500) {
+            //     $papawa = Transactions::where('processedBy', 92966)
+            //         ->where('action', 'topup')
+            //         ->whereDate('created_at', Carbon::now())
+            //         ->sum('amount');
 
-                if ($papawa > 500) {
-                    $this->hacking($request, 'topup');
-                    return response()->json([
-                        'error' => 'ayaw pasulabi do',
-                        'status' => 402,
-                    ], 402);
-                }
-            }
+            //     if ($papawa > 500) {
+            //         $this->hacking($request, 'topup');
+            //         return response()->json([
+            //             'error' => 'ayaw pasulabi do',
+            //             'status' => 402,
+            //         ], 402);
+            //     }
+            // }
 
             $referral = Referral::where('user_id', $request->userId)->first();
 
@@ -228,7 +234,6 @@ class AgentController extends Controller
                 $agent = Auth::user();
                 $agent->points -= $request->amount;
                 $agent->save();
-
 
                 $user = User::find($request->userId);
                 $user->points += $request->amount;

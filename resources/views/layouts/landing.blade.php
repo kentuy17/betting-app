@@ -55,7 +55,7 @@
         <div class="bg-os_black border p-2 mb-8">
           <div class="flex px-2 justify-between">
             <h3 class="text-white text-sm">MASTER AGENT</h3>
-            <i class="fa-solid fa-circle-dot text-xs animate-pulse-fast"></i>
+            <i class="fa-solid fa-circle-dot text-xs text-os_blinking_green animate-pulse-fast"></i>
           </div>
           <h3 class="text-white font-bold text-3xl text-center mb-4">
             DASHBOARD

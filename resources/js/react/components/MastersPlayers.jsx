@@ -87,7 +87,7 @@ const PlayersTable = () => {
         '/master-agent/player-list',
         process.env.NODE_ENV === 'production'
           ? 'https://isp24.live'
-          : 'http://127.0.0.1:8006'
+          : 'http://127.0.0.1:8000'
       );
       fetchURL.searchParams.set(
         'start',
@@ -123,7 +123,7 @@ const PlayersTable = () => {
       setFakeData(result.data);
       alert('Points successfully added!');
     },
-    onError: async (err) => alert('says:'+JSON.stringify(err)),
+    onError: async (err) => alert('says:' + JSON.stringify(err)),
   });
 
   const handleAddPoints = (userId) => {
@@ -153,7 +153,7 @@ const PlayersTable = () => {
       });
     } catch (error) {
       console.log(error);
-      alert(JSON.stringify(error)) // ('Oops! something went wrong!');
+      alert(JSON.stringify(error)); // ('Oops! something went wrong!');
     }
   };
 
@@ -186,9 +186,9 @@ const PlayersTable = () => {
         Cell: ({ _, row }) =>
           row.original.user !== undefined ? (
             <Box
-              display="flex"
-              pl="0"
-              justifyContent="flex-start"
+              display='flex'
+              pl='0'
+              justifyContent='flex-start'
               style={{
                 marginLeft: 0,
                 marginRight: 20,
@@ -197,7 +197,7 @@ const PlayersTable = () => {
                 justifyContent: 'space-between',
               }}
             >
-              <Tooltip arrow placement="left" title="Add Points">
+              <Tooltip arrow placement='left' title='Add Points'>
                 <IconButton
                   // disabled={true}
                   onClick={() => handleAddPoints(row.original?.user?.id)}
@@ -206,7 +206,7 @@ const PlayersTable = () => {
                   <Add sx={{ color: '#0d6efd' }} />
                 </IconButton>
               </Tooltip>
-              <Typography align="right" sx={{ color: 'yellow', mt: 1 }}>
+              <Typography align='right' sx={{ color: 'yellow', mt: 1 }}>
                 {parseFloat(
                   row.original.user !== undefined
                     ? row.original.user.points
@@ -215,7 +215,7 @@ const PlayersTable = () => {
               </Typography>
             </Box>
           ) : (
-            <Skeleton width={getRandomInt(20, 50)} animation="wave" />
+            <Skeleton width={getRandomInt(20, 50)} animation='wave' />
           ),
       },
       {
@@ -244,7 +244,7 @@ const PlayersTable = () => {
           return row.agent_commission !== undefined ? (
             formatMoney(parseFloat(row.agent_commission.commission).toFixed(2))
           ) : (
-            <Skeleton width={getRandomInt(20, 50)} animation="wave" />
+            <Skeleton width={getRandomInt(20, 50)} animation='wave' />
           );
         },
       },
@@ -258,7 +258,7 @@ const PlayersTable = () => {
           return row.sub_agent !== undefined ? (
             `${row.sub_agent.percent} %`
           ) : (
-            <Skeleton width={getRandomInt(20, 50)} animation="wave" />
+            <Skeleton width={getRandomInt(20, 50)} animation='wave' />
           );
         },
       },
@@ -326,7 +326,7 @@ const PlayersTable = () => {
         onSortingChange={setSorting}
         renderRowActions={({ row, table }) => (
           <Box sx={{ display: 'flex', gap: '1rem' }}>
-            <Tooltip arrow placement="left" title="Edit">
+            <Tooltip arrow placement='left' title='Edit'>
               <IconButton onClick={() => handleEditRow(row.original)}>
                 <Edit />
               </IconButton>
@@ -334,10 +334,10 @@ const PlayersTable = () => {
           </Box>
         )}
         renderTopToolbarCustomActions={() => (
-          <Tooltip arrow placement="right" title="Current Points">
+          <Tooltip arrow placement='right' title='Current Points'>
             <Button
-              color="warning"
-              variant="outlined"
+              color='warning'
+              variant='outlined'
               startIcon={<CurrencyRubleIcon />}
             >
               {formatMoney(points)}
@@ -358,25 +358,25 @@ const PlayersTable = () => {
       <Modal
         open={open}
         onClose={() => setOpen(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby='modal-modal-title'
+        aria-describedby='modal-modal-description'
       >
         <Box sx={style}>
           <Typography
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
+            id='modal-modal-title'
+            variant='h6'
+            component='h2'
             sx={{ marginBottom: 2 }}
           >
             Edit Item
           </Typography>
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Type</InputLabel>
+            <InputLabel id='demo-simple-select-label'>Type</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
+              labelId='demo-simple-select-label'
+              id='demo-simple-select'
               value={player.type}
-              label="Type"
+              label='Type'
               onChange={(e) => setPlayer({ ...player, type: e.target.value })}
             >
               {types.map((type) => (
@@ -387,11 +387,11 @@ const PlayersTable = () => {
             </Select>
           </FormControl>
           <FormControl sx={{ marginTop: 2 }} fullWidth>
-            <Typography id="input-slider" gutterBottom>
+            <Typography id='input-slider' gutterBottom>
               Percent
             </Typography>
             <Slider
-              aria-label="Percent"
+              aria-label='Percent'
               value={player.percent}
               valueLabelDisplay={'on'}
               step={0.5}
@@ -407,7 +407,7 @@ const PlayersTable = () => {
           <FormControl
             sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}
           >
-            <Button variant="contained" onClick={handleSaveRowEdits}>
+            <Button variant='contained' onClick={handleSaveRowEdits}>
               Save
             </Button>
           </FormControl>

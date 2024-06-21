@@ -15,7 +15,7 @@ const CardCommission = ({
   };
 
   const WrenchIcon = () => {
-    return <i className="fa-solid fa-wrench mr-1"></i>;
+    return <i className='fa-solid fa-wrench mr-1'></i>;
   };
 
   const [value, setValue] = useState(0);
@@ -36,20 +36,20 @@ const CardCommission = ({
   }, [amount]);
 
   return (
-    <div className="card-commission col-lg-12 my-3 mx-1">
-      <div className="card-body" onClick={handleClick}>
-        <div className="row">
-          <div className="col-8">
-            <div className="numbers">
-              <p className="text-sm mb-0 text-uppercase font-weight-bold">
-                {title}
+    <div className='card-commission col-lg-12 my-3 mx-1'>
+      <div className='card-body' onClick={handleClick}>
+        <div className='row'>
+          <div className='col-8'>
+            <div className='numbers'>
+              <p className='text-sm mb-0 text-uppercase font-weight-bold'>
+                {title} {title === 'COMMISSION' && '(4% win/lose)'}
               </p>
-              <h5 className="font-weight-bolder">{value}</h5>
-              <p className="mb-0">
-                <Tooltip arrow placement="top" title={tooltip}>
+              <h5 className='font-weight-bolder'>{value}</h5>
+              <p className='mb-0'>
+                <Tooltip arrow placement='top' title={tooltip}>
                   <span
                     onClick={handleClick}
-                    className="text-success text-sm font-weight-bolder cursor-pointer"
+                    className='text-success text-sm font-weight-bolder cursor-pointer'
                   >
                     {iconLink}
                     {linkText}
@@ -59,7 +59,7 @@ const CardCommission = ({
             </div>
           </div>
           <div
-            className="col-4 flex"
+            className='col-4 flex'
             onClick={handleClick}
             style={{ justifyContent: 'end' }}
           >

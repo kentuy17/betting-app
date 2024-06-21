@@ -58,11 +58,11 @@ const Example = () => {
         '/master-agent/player-list',
         process.env.NODE_ENV === 'production'
           ? 'https://isp24.live'
-          : 'http://127.0.0.1:8000',
+          : 'http://127.0.0.1:8000'
       );
       fetchURL.searchParams.set(
         'start',
-        `${pagination.pageIndex * pagination.pageSize}`,
+        `${pagination.pageIndex * pagination.pageSize}`
       );
       fetchURL.searchParams.set('size', `${pagination.pageSize}`);
       fetchURL.searchParams.set('filters', JSON.stringify(columnFilters ?? []));
@@ -99,7 +99,7 @@ const Example = () => {
 
   const handleAddPoints = (userId) => {
     try {
-      let amountToAdd = prompt('Enter Amount to Loadi: ', 0);
+      let amountToAdd = prompt('Enter Amount to Load: ', 0);
       if (amountToAdd === null) return;
 
       if (amountToAdd > points) {
@@ -144,9 +144,9 @@ const Example = () => {
         Cell: ({ _, row }) =>
           row.original.user !== undefined ? (
             <Box
-              display="flex"
-              pl="0"
-              justifyContent="flex-start"
+              display='flex'
+              pl='0'
+              justifyContent='flex-start'
               style={{
                 marginLeft: 0,
                 marginRight: 20,
@@ -155,7 +155,7 @@ const Example = () => {
                 justifyContent: 'space-between',
               }}
             >
-              <Tooltip arrow placement="left" title="Add Points">
+              <Tooltip arrow placement='left' title='Add Points'>
                 <IconButton
                   // disabled={true}
                   onClick={() => handleAddPoints(row.original?.user?.id)}
@@ -164,16 +164,16 @@ const Example = () => {
                   <Add sx={{ color: '#0d6efd' }} />
                 </IconButton>
               </Tooltip>
-              <Typography align="right" sx={{ color: 'yellow', mt: 1 }}>
+              <Typography align='right' sx={{ color: 'yellow', mt: 1 }}>
                 {parseFloat(
                   row.original.user !== undefined
                     ? row.original.user.points
-                    : '0',
+                    : '0'
                 ).toFixed(2)}
               </Typography>
             </Box>
           ) : (
-            <Skeleton width={getRandomInt(20, 50)} animation="wave" />
+            <Skeleton width={getRandomInt(20, 50)} animation='wave' />
           ),
       },
       {
@@ -193,12 +193,12 @@ const Example = () => {
           return row.agent_commission !== undefined ? (
             formatMoney(parseFloat(row.agent_commission.commission).toFixed(2))
           ) : (
-            <Skeleton width={getRandomInt(20, 50)} animation="wave" />
+            <Skeleton width={getRandomInt(20, 50)} animation='wave' />
           );
         },
       },
     ],
-    [points],
+    [points]
   );
 
   const theme = useMemo(
@@ -206,7 +206,7 @@ const Example = () => {
       createTheme({
         palette: { mode: 'dark' },
       }),
-    [],
+    []
   );
 
   return (
@@ -235,10 +235,10 @@ const Example = () => {
         onPaginationChange={setPagination}
         onSortingChange={setSorting}
         renderTopToolbarCustomActions={() => (
-          <Tooltip arrow placement="right" title="Current Points">
+          <Tooltip arrow placement='right' title='Current Points'>
             <Button
-              color="warning"
-              variant="outlined"
+              color='warning'
+              variant='outlined'
               startIcon={<CurrencyRubleIcon />}
             >
               {formatMoney(points)}
