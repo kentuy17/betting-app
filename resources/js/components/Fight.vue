@@ -6,14 +6,17 @@
           <div>
             <h3
               class="font-extrabold text-center m-2 font-tally text-red-700 text-2xl">
-              {{ formatMoney(ghost.meron) }} </h3>
+              {{ formatMoney(ghost.meron) }} → <span class='text-gree-600'>{{
+                formatMoney(pildeBradM) }}</span>
+            </h3>
           </div>
         </div>
         <div class="px-2 py-1 border border-black">
           <div>
             <h3
               class="font-extrabold text-center m-2 font-tally text-blue-700 text-2xl">
-              {{ formatMoney(ghost.wala) }} </h3>
+              {{ formatMoney(ghost.wala) }} → <span class='text-gree-600'>{{
+                formatMoney(pildeBradW) }}</span></h3>
           </div>
         </div>
       </div>
@@ -275,6 +278,7 @@ export default {
         this.player.bets = json.player;
         this.player.id = json.id;
         this.player.legit = json.legit;
+
       })
       .then(() => {
         Echo.channel("fight").listen(".fightUpdated", async (e) => {
@@ -421,6 +425,14 @@ export default {
         ? this.formatMoney(this.player.points)
         : this.ghost.points;
     },
+
+    pildeBradW() {
+      return (this.ghost.wala * this.walaPercentage) / 100;
+    },
+
+    pildeBradM() {
+      return (this.ghost.meron * this.meronPercentage) / 100;
+    }
   },
 
   methods: {
@@ -446,7 +458,8 @@ export default {
           this.player.bets = json.player;
           this.player.id = json.id;
           this.player.legit = json.legit;
-          this.ghost = json.tokein
+          this.ghost.meron = json.tokein.meron
+          this.ghost.wala = json.tokein.wala
         })
         .catch(() => {
           // alert('ERROR! Refresh doy');

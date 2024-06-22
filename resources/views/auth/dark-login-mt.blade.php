@@ -77,7 +77,7 @@
           </div> --}}
           {{-- <p class="login-callout mt-3">New Player? <a href="/register">Create an account</a>.</p> --}}
           <div class="login-callout mt-3">
-            <h2>SITE MAINTENANCE</h1>
+            <h2>EVENT CLOSED</h1>
           </div>
         </div>
       </main>

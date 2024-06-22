@@ -50,9 +50,9 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
-        return  env('APP_MT', false) ?
-            view('auth.dark-mt-login') :
-            view('auth.dark-login');
+        return config('app.under_construction')
+            ? view('auth.dark-login-mt')
+            : view('auth.dark-login');
     }
 
     public function secritLogin()

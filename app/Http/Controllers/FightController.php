@@ -115,8 +115,8 @@ class FightController extends Controller
 
         if ($this->fight && $type == 'operator') {
             $actual_bets = [
-                'meron' => $this->fight->bet_legit_meron,
-                'wala' => $this->fight->bet_legit_wala
+                'meron' => $this->fight->bet_legit_meron->sum('amount'),
+                'wala' => $this->fight->bet_legit_wala->sum('amount'),
             ];
         } else {
             $actual_bets = Str::uuid();
