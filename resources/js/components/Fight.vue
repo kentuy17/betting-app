@@ -436,7 +436,7 @@ export default {
 
     fetchFightInfo() {
       axios
-        .get("/fight/current")
+        .get("/fight/current/operator")
         .then((resp) => resp.data)
         .then((json) => {
           this.fight = json.current;
@@ -446,6 +446,7 @@ export default {
           this.player.bets = json.player;
           this.player.id = json.id;
           this.player.legit = json.legit;
+          this.ghost = json.tokein
         })
         .catch(() => {
           // alert('ERROR! Refresh doy');

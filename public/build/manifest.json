@@ -1,0 +1,150 @@
+{
+  "__commonjsHelpers-de833af9.js": {
+    "file": "assets/_commonjsHelpers-de833af9.js"
+  },
+  "__plugin-vue_export-helper-65a45c99.js": {
+    "file": "assets/_plugin-vue_export-helper-65a45c99.js"
+  },
+  "_axios-28bc18a3.js": {
+    "file": "assets/axios-28bc18a3.js"
+  },
+  "_index-7e860ab5.js": {
+    "file": "assets/index-7e860ab5.js"
+  },
+  "_popper-b924b727.js": {
+    "file": "assets/popper-b924b727.js"
+  },
+  "_useQuery-10ef31aa.js": {
+    "file": "assets/useQuery-10ef31aa.js",
+    "imports": [
+      "__commonjsHelpers-de833af9.js"
+    ]
+  },
+  "_v-money3-f95dca5c.js": {
+    "file": "assets/v-money3-f95dca5c.js",
+    "imports": [
+      "__plugin-vue_export-helper-65a45c99.js"
+    ]
+  },
+  "public/css/app-sub.scss": {
+    "file": "assets/app-sub-2b663062.css",
+    "isEntry": true,
+    "src": "public/css/app-sub.scss"
+  },
+  "public/css/chat.scss": {
+    "file": "assets/chat-71e13e88.css",
+    "isEntry": true,
+    "src": "public/css/chat.scss"
+  },
+  "public/img/operator-logo.png": {
+    "file": "assets/operator-logo-bea2c7b8.png",
+    "src": "public/img/operator-logo.png"
+  },
+  "public/js/fight.js": {
+    "file": "assets/fight-fc2fbb61.js",
+    "isEntry": true,
+    "src": "public/js/fight.js"
+  },
+  "public/js/ghost.js": {
+    "file": "assets/ghost-d4d50ce7.js",
+    "isEntry": true,
+    "src": "public/js/ghost.js"
+  },
+  "public/js/play.js": {
+    "file": "assets/play-b2bf7089.js",
+    "isEntry": true,
+    "src": "public/js/play.js"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-c29d8080.css",
+    "isEntry": true,
+    "src": "resources/css/app.css"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-c1e8423d.js",
+    "imports": [
+      "_popper-b924b727.js",
+      "_axios-28bc18a3.js",
+      "__commonjsHelpers-de833af9.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/app.js"
+  },
+  "resources/js/fight-vue.css": {
+    "file": "assets/fight-vue-74840cfc.css",
+    "src": "resources/js/fight-vue.css"
+  },
+  "resources/js/fight-vue.js": {
+    "css": [
+      "assets/fight-vue-74840cfc.css"
+    ],
+    "file": "assets/fight-vue-f7d5c018.js",
+    "imports": [
+      "__plugin-vue_export-helper-65a45c99.js",
+      "_index-7e860ab5.js",
+      "_v-money3-f95dca5c.js",
+      "__commonjsHelpers-de833af9.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/fight-vue.js"
+  },
+  "resources/js/ghost-vue.js": {
+    "file": "assets/ghost-vue-ca667f3c.js",
+    "imports": [
+      "__plugin-vue_export-helper-65a45c99.js",
+      "_v-money3-f95dca5c.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/ghost-vue.js"
+  },
+  "resources/js/main.jsx": {
+    "file": "assets/main-c408c98c.js",
+    "imports": [
+      "_useQuery-10ef31aa.js",
+      "__commonjsHelpers-de833af9.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/main.jsx"
+  },
+  "resources/js/notif-vue.css": {
+    "file": "assets/notif-vue-0e85a542.css",
+    "src": "resources/js/notif-vue.css"
+  },
+  "resources/js/notif-vue.js": {
+    "css": [
+      "assets/notif-vue-0e85a542.css"
+    ],
+    "file": "assets/notif-vue-1ab13cdd.js",
+    "imports": [
+      "__plugin-vue_export-helper-65a45c99.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/notif-vue.js"
+  },
+  "resources/js/play-vue.js": {
+    "file": "assets/play-vue-7209580a.js",
+    "imports": [
+      "__plugin-vue_export-helper-65a45c99.js",
+      "_axios-28bc18a3.js",
+      "_v-money3-f95dca5c.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/play-vue.js"
+  },
+  "resources/js/react/master-agent.jsx": {
+    "file": "assets/master-agent-2013a574.js",
+    "imports": [
+      "_useQuery-10ef31aa.js",
+      "_popper-b924b727.js",
+      "_index-7e860ab5.js",
+      "__commonjsHelpers-de833af9.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/react/master-agent.jsx"
+  },
+  "resources/sass/app.scss": {
+    "file": "assets/app-72bea5fb.css",
+    "isEntry": true,
+    "src": "resources/sass/app.scss"
+  }
+}

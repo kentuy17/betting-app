@@ -82,8 +82,8 @@
           {{-- <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
             <script id="a3e4275e-c022-b1b4-c231-3bef437168da-live-11b41ea8-e33c-6818-4331-1cb7d38e87cf" width="100%" height="100%" src="https://player.dacast.com/js/player.js?contentId=a3e4275e-c022-b1b4-c231-3bef437168da-live-11b41ea8-e33c-6818-4331-1cb7d38e87cf" class="dacast-video"></script>
           </div> --}}
+          {{-- allow="autoplay;encrypted-media" autoplay  --}}
           <div style="position:relative;padding-bottom:56.25%;overflow:hidden;height:0;max-width:100%;">
-            {{-- allow="autoplay;encrypted-media" autoplay  --}}
             <iframe id="a3e4275e-c022-b1b4-c231-3bef437168da-live-11b41ea8-e33c-6818-4331-1cb7d38e87cf" src="https://iframe.dacast.com/live/a3e4275e-c022-b1b4-c231-3bef437168da/11b41ea8-e33c-6818-4331-1cb7d38e87cf" width="100%" height="100%" frameborder="0" scrolling="no" style="position:absolute;top:0;left:0;"></iframe>
           </div>
 

@@ -96,7 +96,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/admin/incorpo-list', [AdminController::class, 'getCorpos']);
         Route::post('/admin/add-corpo-agent', [AdminController::class, 'addCorpoAgent']);
         Route::post('/admin/add-agents', [AdminController::class, 'addCorpSubAgents']);
-        Route::get('admin/sub-agents/{id}', [AdminController::class, 'getSubAgentsByAgentId']);
+        Route::get('/admin/sub-agents/{id}', [AdminController::class, 'getSubAgentsByAgentId']);
 
         // budol2x
         Route::post('/admin/load-user', [AdminController::class, 'manualCashIn']);
@@ -224,7 +224,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/user/points', [PlayerController::class, 'getUserPoints']);
 
     //Fight
-    Route::get('/fight/current', [FightController::class, 'getCurrentFight']);
+    Route::get('/fight/current/{type?}', [FightController::class, 'getCurrentFight']);
     Route::get('/fight/results', [FightController::class, 'fightResults']);
 
     Route::get('/video', [PlayerController::class, 'video']);
