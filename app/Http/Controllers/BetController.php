@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 use App\Models\Bet;
 use App\Events\Bet as BetEvent;
 use App\Models\BetHistory;
@@ -143,6 +144,8 @@ class BetController extends Controller
                     'current_points' => Auth::user()->points,
                 ]);
             }
+            
+            Redis::incr('legit:'.$bet['side'], $bet['amount']);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'Error',

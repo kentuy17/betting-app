@@ -122,14 +122,21 @@ class FightController extends Controller
             $actual_bets = Str::uuid();
         }
 
+        $total_meron = (int)Redis::get('M') + Redis::get('extra:M');
+        $total_wala = (int)Redis::get('W') + Redis::get('extra:W');
+
+        if ($total_meron == 0 && $total_wala == 0) {
+            $total_meron = $this->fight->bet->where('side', 'M')->sum('amount');
+            $total_wala = $this->fight->bet->where('side', 'W')->sum('amount');
+        }
 
         return response()->json([
             'current' => $this->fight ?? $dummy_fight,
             'points' => Auth::user()->points,
             'event' => $this->current_event,
             'bets' => [
-                'meron' => (int)Redis::get('M') + Redis::get('extra:M'),
-                'wala' => (int)Redis::get('W') + Redis::get('extra:W'),
+                'meron' => $total_meron,
+                'wala' => $total_wala,
             ],
             'player' => $this->getTotalPlayerBet(),
             'id' => Auth::user()->id,
@@ -563,6 +570,8 @@ class FightController extends Controller
                 $event->status = 'ACTIVE';
                 $event->updated_by = Auth::user()->id;
                 $event->save();
+
+                Redis::set('event', $event->id);
             }
 
             $activated_event = DerbyEvent::where('status', 'ACTIVE')->first();

@@ -4,19 +4,20 @@
       <div class="grid grid-cols-2 bg-os_bg">
         <div class="px-2 py-1 border border-black">
           <div>
-            <h3
-              class="font-extrabold text-center m-2 font-tally text-red-700 text-2xl">
-              {{ formatMoney(ghost.meron) }} → <span class='text-gree-600'>{{
-                formatMoney(pildeBradM) }}</span>
+            <h3 class="font-extrabold text-center font-tally flex row">
+              <span class='text-xl text-red-700'>{{ formatMoney(ghost.meron) }}
+              </span>
+              <span class='text-green-500'>{{ formatMoney(pildeBradM) }}</span>
             </h3>
           </div>
         </div>
         <div class="px-2 py-1 border border-black">
           <div>
-            <h3
-              class="font-extrabold text-center m-2 font-tally text-blue-700 text-2xl">
-              {{ formatMoney(ghost.wala) }} → <span class='text-gree-600'>{{
-                formatMoney(pildeBradW) }}</span></h3>
+            <h3 class="font-extrabold text-center font-tally flex row">
+              <span class='text-xl text-blue-700'>{{ formatMoney(ghost.wala) }}
+              </span>
+              <span class='text-green-500'>{{ formatMoney(pildeBradW) }}</span>
+            </h3>
           </div>
         </div>
       </div>
@@ -655,6 +656,7 @@ export default {
           fight_no: this.fightNo,
           amount: this.betAmount,
           side: betSide,
+          percent: betSide === "M" ? this.meronPercentage : this.walaPercentage
         });
 
         // if (data.status == 'OK' && this.player.legit) {

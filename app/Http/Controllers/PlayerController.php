@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DerbyEvent;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
-use App\Models\ModelHasRoles;
-use App\Models\Roles;
 use App\Models\User;
 use App\Models\Transactions;
 use App\Models\BetHistory;
@@ -18,15 +15,12 @@ use App\Models\Chat;
 use App\Models\Setting;
 use App\Events\CashIn;
 use App\Models\Agent;
-use ArrayObject;
 use \Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response as FacadeResponse;
 use Carbon\Carbon;
-use stdClass;
 use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\Http as Client;
 
 class PlayerController extends Controller
 {
@@ -231,6 +225,9 @@ class PlayerController extends Controller
             return redirect()->back()->with('danger', $e->getMessage());
         }
 
+        // promo
+        // session()->flash('warning', 'Note: Minimum turnover should be 5x the cashin amount.');
+
         return redirect()->back()->with('success', 'Submitted Successfully!');
     }
 
@@ -255,6 +252,8 @@ class PlayerController extends Controller
                 return redirect()->back()
                     ->with('danger', 'Insuficient points!');
             }
+
+            // promo rebate
 
             $referral = Referral::where('user_id', Auth::user()->id)->first();
             $promo = Promo::where('user_id', Auth::user()->id)->first();

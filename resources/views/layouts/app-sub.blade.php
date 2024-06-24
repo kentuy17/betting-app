@@ -136,10 +136,10 @@
 
       @if (Auth::user()->agent)
         <label class="nav__label">Agent</label>
-        <a class="nav__item" href="/master-agent">
+        <button class="nav__item read-only:text-slate-100" disabled href="/master-agent">
           <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
-          <span>Dashboard</span><span style="color: red" class="badge badge-danger text-red">New</span>
-        </a>
+          <span>Dashboard</span><!-- span style="color: red" class="hidden badge badge-danger text-red">New</span -->
+        </button>
       @endif
 
       <label class="nav__label">Player</label>

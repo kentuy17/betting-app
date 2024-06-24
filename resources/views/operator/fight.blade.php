@@ -82,10 +82,15 @@
           {{-- <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
             <script id="a3e4275e-c022-b1b4-c231-3bef437168da-live-11b41ea8-e33c-6818-4331-1cb7d38e87cf" width="100%" height="100%" src="https://player.dacast.com/js/player.js?contentId=a3e4275e-c022-b1b4-c231-3bef437168da-live-11b41ea8-e33c-6818-4331-1cb7d38e87cf" class="dacast-video"></script>
           </div> --}}
-          {{-- allow="autoplay;encrypted-media" autoplay  --}}
+
           <div style="position:relative;padding-bottom:56.25%;overflow:hidden;height:0;max-width:100%;">
             <iframe id="a3e4275e-c022-b1b4-c231-3bef437168da-live-11b41ea8-e33c-6818-4331-1cb7d38e87cf" src="https://iframe.dacast.com/live/a3e4275e-c022-b1b4-c231-3bef437168da/11b41ea8-e33c-6818-4331-1cb7d38e87cf" width="100%" height="100%" frameborder="0" scrolling="no" style="position:absolute;top:0;left:0;"></iframe>
           </div>
+
+          {{-- <div style="position:relative;padding-bottom:56.25%;overflow:hidden;height:0;max-width:100%;">
+            <iframe src="https://swc-1.net/Console/Arena?aid=3769" style="border:0px #ffffff none;" name="sabong world cup" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="100%" width="100%" allowfullscreen="" allow="autoplay">
+            </iframe>
+          </div> --}}
 
           {{-- OneStream --}}
           {{-- <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
