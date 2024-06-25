@@ -18,18 +18,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use Str;
 
-class BotController extends Controller 
+class BotController extends Controller
 {
     public function __construct(
         FightController $fightController,
         BetController $betController,
+        SecretController $secretController,
     ) {
         // $this->middleware('auth:sanctum');
         $this->fightController = $fightController;
         $this->betController = $betController;
+        $this->secretController = $secretController;
     }
 
-    private function cleanup() 
+    private function cleanup()
     {
         Redis::set('M', 0);
         Redis::set('W', 0);
@@ -39,42 +41,7 @@ class BotController extends Controller
         Redis::set('legit:W', 0);
     }
 
-    /**private function testPersonal() 
-    {
-        $meron = Redis::get('M') + Redis::get('extra:M');
-        $wala = Redis::get('W') + Redis::get('extra:W');
-        $secret_fan = User::find(666);
-        
-        if ($meron > 0 && $wala > 0) {
-            $maloi_nag_iisa = $meron > $wala ? 'M' : 'W';
-
-            $kiyod = BetHistory::where('user_id', 666)
-                ->orderBy('bethistory_no', 'desc')
-                ->first();
-
-            
-            if($kiyod->status === 'L')
-                $pusta = $kiyod->betamount *2.5;
-            if($kiyod->status === 'W') {
-                $pusta = ($secret_fan->points/16) >= 10
-                    ? ($secret_fan->points/16)
-                    : $secret_fan->points;
-            }
-            if(in_array($kiyod->status, ['C','D'])){
-            }  $pusta = $kiyod->betamount;
-            }
-                
-            $log = [
-                'idol' => $maloi_nag_iisa,
-                // 'kiyod' => $kiyod,
-                'pusta' => $pusta
-            ];
-
-            \Log::channel('custom')->info(json_encode($log));
-        }
-    }**/
-
-    public function addBet(Request $request) 
+    public function addBet(Request $request)
     {
         $bet_request = new Request([
             'fight_no' => (int) $request->fight_no,
@@ -86,7 +53,7 @@ class BotController extends Controller
         return $add_bet;
     }
 
-    private function getEvent() 
+    private function getEvent()
     {
         $event = Redis::get('event');
 
@@ -100,7 +67,7 @@ class BotController extends Controller
         return $event;
     }
 
-    public function addBetCached(Request $request) 
+    public function addBetCached(Request $request)
     {
         try {
             $fight = Redis::get('fight');
@@ -162,7 +129,7 @@ class BotController extends Controller
         return $securedBet;
     }
 
-    private function allowManual($side) 
+    private function allowManual($side)
     {
         $abay = Redis::get($side) + Redis::get('extra:' . $side);
         $pikas =
@@ -177,7 +144,7 @@ class BotController extends Controller
         $extra = Redis::get('extra:' . $request->side);
         $total = $extra + Redis::get($request->side);
 
-        if ($request->percent >= 175) {
+        if ($request->percent >= 165) {
             Redis::incr('extra:' . $request->side, $request->amount);
             $total += $request->amount;
         }
@@ -195,7 +162,7 @@ class BotController extends Controller
         return $securedBet;
     }
 
-    public function closeFight(Request $request) 
+    public function closeFight(Request $request)
     {
         $fight = Fight::orderBy('id', 'DESC')->first();
 
@@ -246,9 +213,9 @@ class BotController extends Controller
             'fight_id' => $fight->id,
             'status' => 'F',
         ]);
-        
+
         // maloi nag-iisa
-        // $this->testPersonal();
+        $this->secretController->testPersonal($request->fight_no);
 
         // close the fight
         $fight_request = new Request([
@@ -260,7 +227,7 @@ class BotController extends Controller
         return $update;
     }
 
-    public function issueToken($id = null) 
+    public function issueToken($id = null)
     {
         $user = $id ? User::find($id) : Auth::user();
         $token = $user->createToken('operator');
@@ -272,12 +239,12 @@ class BotController extends Controller
         );
     }
 
-    public function getUserTokens(Request $request) 
+    public function getUserTokens(Request $request)
     {
         return $request->user()->tokens;
     }
 
-    public function updateFight(Request $request) 
+    public function updateFight(Request $request)
     {
         $fight_request = new Request([
             'status' => $request->status,
@@ -291,13 +258,13 @@ class BotController extends Controller
         return $update;
     }
 
-    public function updateDelay(Request $request) 
+    public function updateDelay(Request $request)
     {
         Redis::set('delay', $request->delay);
         return response()->noContent();
     }
 
-    public function fuse() 
+    public function fuse()
     {
         $cancel_request = new Request([
             'status' => 'D',
@@ -308,7 +275,7 @@ class BotController extends Controller
         return $update;
     }
 
-    public function cancelAlert($fight_no = null) 
+    public function cancelAlert($fight_no = null)
     {
         try {
             $alert_enabled = Redis::get('alert:cancel');
@@ -330,7 +297,7 @@ class BotController extends Controller
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_POSTFIELDS =>
-                    '{
+                '{
                     "message": "' .
                     $fight .
                     '",

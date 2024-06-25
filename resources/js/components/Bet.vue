@@ -43,7 +43,7 @@
             <h3 class="font-extrabold text-center m-2 font-tally text-2xl"> {{
               formatMoney(total.meron) }} </h3>
             <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT
-              = {{ formatMoney(meronPercentage) }} </h3>
+              = {{ formatMoney(meronPercentage) }}% </h3>
             <div>
               <div class="flex justify-center items-center">
                 <h3 class="font-bold text-drawcolor text-center text-sm">
@@ -61,7 +61,7 @@
             <h3 class="font-extrabold text-center m-2 font-tally text-2xl"> {{
               formatMoney(total.wala) }} </h3>
             <h3 class="font-bold text-black text-center m-2 font-tally"> PAYOUT
-              = {{ formatMoney(walaPercentage) }} </h3>
+              = {{ formatMoney(walaPercentage) }}% </h3>
             <div>
               <div class="flex justify-center items-center">
                 <h3 class="font-bold text-drawcolor text-center text-sm">

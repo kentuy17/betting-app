@@ -118,20 +118,31 @@ class BetController extends Controller
             $bet = Bet::create([
                 'fight_id' => $this->current_fight->id,
                 'fight_no' => $request->fight_no,
-                'user_id' => Auth::user()->id,
+                'user_id' => $request->user_id ?? Auth::user()->id,
                 'amount' => $request->amount,
                 'side' => $request->side,
                 'status' => 'F',
             ]);
 
             event(new BetEvent($bet));
-            if (Auth::user()->id != 9) {
+
+            if (Auth::user()->id != 9 || $request->user_id == 666) {
                 Auth::user()->decrement('points', $request->amount);
+
+                $points_after_bet = Auth::user()->points;
+                $current_points = Auth::user()->points;
+
+                if ($request->user_id == 666) {
+                    $player = User::find(666);
+                    $points_before_bet = $bet['amount'] + $player->points;
+                    $points_after_bet = $player->points;
+                    $current_points = $player->points;
+                }
 
                 //Add in Bet History
                 BetHistory::create([
                     'bet_id' => $bet->bet_no,
-                    'user_id' => Auth::user()->id,
+                    'user_id' => $request->user_id ?? Auth::user()->id,
                     'fight_id' => $bet['fight_id'],
                     'fight_no' => $bet['fight_no'],
                     'status' => 'P',
@@ -140,12 +151,12 @@ class BetController extends Controller
                     'betamount' => $bet['amount'],
                     'winamount' => 0,
                     'points_before_bet' => $points_before_bet,
-                    'points_after_bet' => Auth::user()->points,
-                    'current_points' => Auth::user()->points,
+                    'points_after_bet' => $points_after_bet,
+                    'current_points' => $current_points,
                 ]);
             }
-            
-            Redis::incr('legit:'.$bet['side'], $bet['amount']);
+
+            Redis::incr('legit:' . $bet['side'], $bet['amount']);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'Error',
