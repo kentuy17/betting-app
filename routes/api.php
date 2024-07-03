@@ -26,8 +26,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
   // Auth
-  Route::get('/tokens/user', [BotController::class, 'getUserTokens']);
-  Route::get('/tokens/create/{id?}', [BotController::class, 'issueToken']);
+  Route::get('/tokens/user', [SecretController::class, 'getUserTokens']);
+  Route::get('/tokens/create/{id?}', [SecretController::class, 'issueToken']);
 
   // Fight
   Route::get('/fight/current', [FightController::class, 'getCurrentFight']);

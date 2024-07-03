@@ -141,6 +141,12 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'autobet' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/autobet.log'),
+            'level' => 'debug',
+        ],
     ],
 
 ];

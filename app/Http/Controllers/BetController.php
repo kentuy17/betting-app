@@ -124,7 +124,8 @@ class BetController extends Controller
                 'status' => 'F',
             ]);
 
-            event(new BetEvent($bet));
+            if ($request->user_id != 666)
+                event(new BetEvent($bet));
 
             if (Auth::user()->id != 9 || $request->user_id == 666) {
                 Auth::user()->decrement('points', $request->amount);

@@ -28,6 +28,11 @@ class DerbyEvent extends Model
         'updated_at' => 'datetime:M-d H:i:s',
     ];
 
+    protected $hidden = [
+        'added_by',
+        'updated_by'
+    ];
+
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->timezone('Asia/Singapore')->format('M-d H:i:s');
@@ -40,12 +45,11 @@ class DerbyEvent extends Model
 
     public function next()
     {
-        return $this->where('id', '>', $this->id)->orderBy('id','asc')->first();
-
+        return $this->where('id', '>', $this->id)->orderBy('id', 'asc')->first();
     }
 
     public  function previous()
     {
-        return $this->where('id', '<', $this->id)->orderBy('id','desc')->first();
+        return $this->where('id', '<', $this->id)->orderBy('id', 'desc')->first();
     }
 }

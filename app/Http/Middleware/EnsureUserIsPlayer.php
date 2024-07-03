@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class EnsureUserIsPlayer
 {
@@ -17,6 +18,9 @@ class EnsureUserIsPlayer
     public function handle(Request $request, Closure $next): Response
     {
         if(hasAccess('Player')) {
+            $request->user()->update([
+                  'last_activity' => Carbon::now()
+              ]);
             return $next($request);
         }
 

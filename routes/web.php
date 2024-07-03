@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
@@ -113,6 +114,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Player
     Route::group(['middleware' => ['player']], function () {
+        Route::get('/profile/test', function(Request $request){
+            return $request->user();
+        });
         Route::get('/play', [PlayerController::class, 'index'])->name('play');
         Route::get('/play/history', [PlayerController::class, 'bethistory'])->name('player.bethistory');
         Route::get('/reports', [PlayerController::class, 'reports'])->name('player.reports');
@@ -159,6 +163,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/summary-bet', [AuditorController::class, 'betSummary'])->name('auditor.bet-summary');
         Route::get('/summary-bet/event', [AuditorController::class, 'betSummaryEvent']);
         Route::get('/summary-bet/filter-date', [AuditorController::class, 'getBetSummaryByDate']);
+
+        Route::get('/reports/betso', [AuditorController::class, 'betSo']);
+        Route::get('/reports/data', [AuditorController::class, 'getBetSummary']);
     });
 
     Route::group(['middleware' => ['csr']], function () {

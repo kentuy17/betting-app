@@ -124,6 +124,10 @@
           <i class="fa-solid fa-chart-pie" aria-hidden="true"></i>
           <span>Bets Summary</span>
         </a>
+        <a class="nav__item" href="/reports/betso">
+          <i class="fa-solid fa-chart-pie" aria-hidden="true"></i>
+          <span>Betso88</span>
+        </a>
         <a class="nav__item" href="/admin/agents">
           <i class="fa-solid fa-person-harassing" aria-hidden="true"></i>
           <span>Agents</span>
@@ -142,47 +146,50 @@
         </a>
       @endif
 
-      <label class="nav__label">Player</label>
-      <a class="nav__item" href="/landing">
-        <i class="fas fa-home" aria-hidden="true"></i>
-        <span>Home</span>
-      </a>
-      <a class="nav__item" href="/play">
-        <i class="fa-solid fa-play" aria-hidden="true"></i>
-        <span>Play</span>
-      </a>
-      <a class="nav__item" href="/user/profile">
-        <i class="fa fa-link" aria-hidden="true"></i>
-        <span>Profile</span>
-      </a>
-      <a class="nav__item" href="/deposit">
-        <i class="fa-solid fa-money-bill-transfer" aria-hidden="true"></i>
-        <span>Cashin</span>
-      </a>
-      <a class="nav__item" href="/withdraw">
-        <i class="fa-solid fa-sack-dollar" aria-hidden="true"></i>
-        <span>Cashout</span>
-      </a>
-      <a class="nav__item" href="/play/history">
-        <i class="fa-regular fa-chart-bar" aria-hidden="true"></i>
-        <span>Bet history</span>
-      </a>
-      <a class="nav__item" href="/playertransaction">
-        <i class="fas fa-coins" aria-hidden="true"></i>
-        <span>Transactions</span>
-      </a>
-      <a class="nav__item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-        <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
+      <label data-toggle="collapse" data-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample" class="nav__label">Player</label>
+      <div class="visible show" id="collapseExample">
+        <a class="nav__item" href="/landing">
+          <i class="fas fa-home" aria-hidden="true"></i>
+          <span>Home</span>
+        </a>
+        <a class="nav__item" href="/play">
+          <i class="fa-solid fa-play" aria-hidden="true"></i>
+          <span>Play</span>
+        </a>
+        <a class="nav__item" href="/user/profile">
+          <i class="fa fa-link" aria-hidden="true"></i>
+          <span>Profile</span>
+        </a>
+        <a class="nav__item" href="/deposit">
+          <i class="fa-solid fa-money-bill-transfer" aria-hidden="true"></i>
+          <span>Cashin</span>
+        </a>
+        <a class="nav__item" href="/withdraw">
+          <i class="fa-solid fa-sack-dollar" aria-hidden="true"></i>
+          <span>Cashout</span>
+        </a>
+        <a class="nav__item" href="/play/history">
+          <i class="fa-regular fa-chart-bar" aria-hidden="true"></i>
+          <span>Bet history</span>
+        </a>
+        <a class="nav__item" href="/playertransaction">
+          <i class="fas fa-coins" aria-hidden="true"></i>
+          <span>Transactions</span>
+        </a>
+        <a class="nav__item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+          <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
 
-        <span>{{ __('Logout') }}</span></a>
-      <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-        @csrf
-      </form>
+          <span>{{ __('Logout') }}</span></a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+          @csrf
+        </form>
+      </div>
+
     </nav>
   </header>
-  <div class="nav-footer">
+  {{-- <div class="nav-footer">
     <i class="fa fa-angle-left" aria-hidden="true"></i>
-  </div>
+  </div> --}}
   <div id="app">
     {{-- <main>
       @yield('content')

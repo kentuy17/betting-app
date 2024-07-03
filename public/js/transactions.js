@@ -1,19 +1,19 @@
 const TYPE = {
-  pending: "PENDING",
-  completed: "COMPLETED",
-  failed: "FAILED",
+  pending: 'PENDING',
+  completed: 'COMPLETED',
+  failed: 'FAILED',
 };
 
-var transactionsTable = $("#deposit-trans-table");
+var transactionsTable = $('#deposit-trans-table');
 var pendingCount = 0;
 var unpaidCount = 0;
 
 function delay(time) {
-  return new Promise(resolve => setTimeout(resolve, time));
+  return new Promise((resolve) => setTimeout(resolve, time));
 }
 
 transactionsTable.DataTable({
-  ajax: "/transaction/deposits",
+  ajax: '/transaction/deposits',
   bPaginate: true,
   bLengthChange: true,
   bFilter: true,
@@ -22,12 +22,12 @@ transactionsTable.DataTable({
   scrollX: true,
   processing: true,
   serverSide: true,
-  pagingType: "numbers",
+  pagingType: 'numbers',
   language: {
-    search: "",
-    lengthMenu: "_MENU_",
+    search: '',
+    lengthMenu: '_MENU_',
   },
-  order: [[5, "DESC"]],
+  order: [[5, 'DESC']],
   dom:
     "<'row'<'col-4'l><'col-8'f>>" +
     "<'row'<'col-sm-12'tr>>" +
@@ -39,15 +39,15 @@ transactionsTable.DataTable({
   columnDefs: [
     {
       targets: [1],
-      className: "dt-body-right",
+      className: 'dt-body-right',
     },
     {
       targets: [0, 2, 3, 4],
-      className: "dt-body-center",
+      className: 'dt-body-center',
     },
     {
       targets: [0, 2, 3, 4, 5],
-      className: "dt-head-center",
+      className: 'dt-head-center',
     },
   ],
   columns: [
@@ -59,7 +59,7 @@ transactionsTable.DataTable({
     //   data: "user_id",
     // },
     {
-      data: "user.name",
+      data: 'user.name',
     },
     // {
     //   "data": "outlet"
@@ -67,25 +67,25 @@ transactionsTable.DataTable({
     {
       data: null,
       render: (data) => {
-        return data.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
+        return data.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
       },
     },
     {
-      data: "mobile_number",
+      data: 'mobile_number',
     },
 
     {
       data: null,
       render: (data) => {
-        return data.operator != null ? data.operator.username : "--";
+        return data.operator != null ? data.operator.username : '--';
       },
     },
     {
-      data: "reference_code",
+      data: 'reference_code',
     },
 
     {
-      data: "created_at",
+      data: 'created_at',
     },
     {
       data: null,
@@ -108,41 +108,41 @@ transactionsTable.DataTable({
     },
   ],
   createdRow: function (row, data, dataIndex) {
-    $(row).attr("data-id", data.id).addClass("cursor-pointer expandable");
+    $(row).attr('data-id', data.id).addClass('cursor-pointer expandable');
     if (data.status == `pending`) {
-      $(row).css({ "background-color": "var(--bs-red)" });
+      $(row).css({ 'background-color': 'var(--bs-red)' });
       pendingCount++;
 
-      let timeDiff = moment(data.created_at, "MM-DD-YYYY hh:mm:ss").fromNow();
-      $(row).find("td").eq(5).text(timeDiff);
+      let timeDiff = moment(data.created_at, 'MM-DD-YYYY hh:mm:ss').fromNow();
+      $(row).find('td').eq(5).text(timeDiff);
 
       setInterval(() => {
-        timeDiff = moment(data.created_at, "MM-DD-YYYY hh:mm:ss").fromNow();
-        $(row).find("td").eq(5).text(timeDiff);
+        timeDiff = moment(data.created_at, 'MM-DD-YYYY hh:mm:ss').fromNow();
+        $(row).find('td').eq(5).text(timeDiff);
       }, 5000);
     }
 
     if (data.status == `completed` && data.reference_code == null) {
-      $(row).css({ "background-color": "var(--bs-yellow)" });
-      $(row).addClass("bg-warning");
+      $(row).css({ 'background-color': 'var(--bs-yellow)' });
+      $(row).addClass('bg-warning');
     }
 
     if (data.status == `failed`) {
-      $(row).addClass("failed");
+      $(row).addClass('failed');
     }
   },
   initComplete: function (settings, json) {
-    unpaidCount = json.unpaid_count
+    unpaidCount = json.unpaid_count;
     if (pendingCount > 0) {
-      $("#badge-deposit").show().text(pendingCount);
+      $('#badge-deposit').show().text(pendingCount);
     } else {
-      $("#badge-deposit").hide().text(pendingCount);
+      $('#badge-deposit').hide().text(pendingCount);
     }
 
     if (unpaidCount > 0) {
-      $("#badge-unpaid").show().text(unpaidCount);
+      $('#badge-unpaid').show().text(unpaidCount);
     } else {
-      $("#badge-unpaid").hide().text(unpaidCount);
+      $('#badge-unpaid').hide().text(unpaidCount);
     }
   },
 });
@@ -150,12 +150,12 @@ transactionsTable.DataTable({
 window.socket.on('notify-deposit', () => {
   delay(5000).then(() => {
     transactionsTable.DataTable().ajax.reload();
-  })
-})
+  });
+});
 
 window.socket.on('notify-deposit-processed', () => {
   transactionsTable.DataTable().ajax.reload();
-})
+});
 
 function formatDeposit(d) {
   let userId = d.user_id;
@@ -168,11 +168,11 @@ function formatDeposit(d) {
 
   let copyRefCode = `<button data-bs-toggle="tooltip" title="Copied!" data-bs-trigger="click" class="btn btn-link text-primary btn-icon copy-ref-code py-0" id="copy-ref-code" data-ref-code="${d.reference_code}"
       onclick="copyRefCode(this);"><i class="fa-solid fa-copy"></i></button>`;
-  let note = d.note ? `<tr><td>NOTE:</td><td>${d.note}</td></tr>` : "";
+  let note = d.note ? `<tr><td>NOTE:</td><td>${d.note}</td></tr>` : '';
   let refCode =
     d.reference_code && d.reference_code != null
       ? `<tr><td>REFCODE:</td><td>${d.reference_code} ${copyRefCode}</td></tr>`
-      : "";
+      : '';
   let btnCopy = `<button data-bs-toggle="tooltip" title="Copied!" data-bs-trigger="click" class="btn btn-link text-primary btn-icon copy-phone" id="copy-phone" data-phone-number="${d.mobile_number}"
       onclick="copyPhone(this);"><i class="fa-solid fa-copy"></i></button>`;
   let action = `<tr><td>ACTION:</td><td><button onclick="viewDeposit(${d.id});" class="btn btn-link text-primary btn-icon" style="padding-left:0;">
@@ -192,7 +192,7 @@ function formatDeposit(d) {
       </tr>
       <tr>
         <td>AMOUNT:</td>
-        <td>${d.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}</td>
+        <td>${d.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
       </tr>
       ${note}
       ${refCode}
@@ -200,71 +200,71 @@ function formatDeposit(d) {
     </table>`;
 }
 
-$("#deposit-trans-table tbody").on("click", "tr.expandable", function () {
+$('#deposit-trans-table tbody').on('click', 'tr.expandable', function () {
   var tr = $(this);
   var row = transactionsTable.DataTable().row(tr[0]);
   if (row.child.isShown()) {
     row.child.hide();
-    tr.removeClass("shown");
+    tr.removeClass('shown');
   } else {
     row.child(formatDeposit(row.data())).show();
-    tr.addClass("shown");
+    tr.addClass('shown');
   }
 });
 
-transactionsTable.on("click", "tbody td .view", async function () {
-  var tr = $(this).closest("tr");
+transactionsTable.on('click', 'tbody td .view', async function () {
+  var tr = $(this).closest('tr');
   var row = transactionsTable.DataTable().row(tr);
-  $("#modal-center").modal("show");
-  $(".modal-title").text(row.data().action.toUpperCase());
-  $("input#trans-id").val($(this).data("id"));
+  $('#modal-center').modal('show');
+  $('.modal-title').text(row.data().action.toUpperCase());
+  $('input#trans-id').val($(this).data('id'));
 
-  let storage = $("#trans-receipt").data("storage");
+  let storage = $('#trans-receipt').data('storage');
   if (row.data().filename) {
-    $("#trans-receipt").attr("src", storage + "/" + row.data().filename);
+    $('#trans-receipt').attr('src', storage + '/' + row.data().filename);
   }
 
-  if (row.data().status != "pending") {
-    $('input[type="submit"]').prop("disabled", true).addClass("disabled");
+  if (row.data().status != 'pending') {
+    $('input[type="submit"]').prop('disabled', true).addClass('disabled');
   } else {
-    $('input[type="submit"]').prop("disabled", false).removeClass("disabled");
+    $('input[type="submit"]').prop('disabled', false).removeClass('disabled');
   }
 });
 
 async function viewDeposit(id) {
   clearFields();
-  var tr = $("tbody").find(`tr[data-id='${id}']`);
+  var tr = $('tbody').find(`tr[data-id='${id}']`);
   var row = transactionsTable.DataTable().row(tr[0]);
-  $("#modal-center").modal("show");
-  $(".modal-title").text(row.data().action.toUpperCase());
-  $("input#trans-id").val(row.data().id);
+  $('#modal-center').modal('show');
+  $('.modal-title').text(row.data().action.toUpperCase());
+  $('input#trans-id').val(row.data().id);
 
-  let storage = $("#trans-receipt").data("storage");
+  let storage = $('#trans-receipt').data('storage');
   if (row.data().filename) {
-    $("#trans-receipt").attr("src", storage + "/" + row.data().filename);
+    $('#trans-receipt').attr('src', storage + '/' + row.data().filename);
   }
 }
 
-$("#deposit-form").on("click", 'input[type="submit"]', function (e) {
+$('#deposit-form').on('click', 'input[type="submit"]', function (e) {
   e.preventDefault();
   axios
-    .post("/transaction/deposit", {
-      id: $("#trans-id").val(),
-      amount: $("#trans-pts").val().replace(",", ""),
-      ref_code: $("#ref-code").val(),
-      action: $("#trans-action").val(),
-      note: $("#trans-note").val(),
+    .post('/transaction/deposit', {
+      id: $('#trans-id').val(),
+      amount: $('#trans-pts').val().replace(',', ''),
+      ref_code: $('#ref-code').val(),
+      action: $('#trans-action').val(),
+      note: $('#trans-note').val(),
     })
     .then((res) => {
       Swal.fire({
-        icon: "success",
-        confirmButtonColor: "green",
+        icon: 'success',
+        confirmButtonColor: 'green',
         title: res.data.msg,
         timer: 1500,
       }).then(() => {
         console.log(res);
-        $("#modal-center").modal("hide");
-        $("#operator-pts").html(res.data.points);
+        $('#modal-center').modal('hide');
+        $('#operator-pts').html(res.data.points);
         clearFields();
       });
 
@@ -276,38 +276,39 @@ $("#deposit-form").on("click", 'input[type="submit"]', function (e) {
     })
     .catch((err) => {
       Swal.fire({
-        icon: "error",
-        confirmButtonColor: "red",
+        icon: 'error',
+        confirmButtonColor: 'red',
         title: err.response.data.msg,
         timer: 1500,
       });
     });
 });
 
-$("#manual-request-form").on("click", 'input[type="submit"]', function (e) {
+$('#manual-request-form').on('click', 'input[type="submit"]', function (e) {
   e.preventDefault();
-  const amount = $("#manual-request-amount").val();
+  const amount = $('#manual-request-amount').val();
   if (!isNumeric(amount)) {
     Swal.fire({
-      icon: "error",
-      confirmButtonColor: "red",
-      title: "Invalid amount!",
+      icon: 'error',
+      confirmButtonColor: 'red',
+      title: 'Invalid amount!',
       timer: 1500,
     });
     return;
   }
 
-  axios.post("/transaction/utang", {
-    id: $("#player-username").val(),
-    amount: amount.replace(",", ""),
-    ref_code: $("#manual-request-ref").val(),
-    action: $("#manual-request-action").val(),
-    note: $("#manual-request-note").val(),
-  })
+  axios
+    .post('/transaction/utang', {
+      id: $('#player-username').val(),
+      amount: amount.replace(',', ''),
+      ref_code: $('#manual-request-ref').val(),
+      action: $('#manual-request-action').val(),
+      note: $('#manual-request-note').val(),
+    })
     .then((res) => {
       Swal.fire({
-        icon: "success",
-        confirmButtonColor: "green",
+        icon: 'success',
+        confirmButtonColor: 'green',
         title: res.data.msg,
         timer: 1500,
       }).then(() => {
@@ -323,30 +324,28 @@ $("#manual-request-form").on("click", 'input[type="submit"]', function (e) {
     })
     .catch((err) => {
       Swal.fire({
-        icon: "error",
-        confirmButtonColor: "red",
+        icon: 'error',
+        confirmButtonColor: 'red',
         title: err.response.data.msg,
         timer: 1500,
       });
     });
 });
 
-$("#trans-action").on("change", function (e) {
+$('#trans-action').on('change', function (e) {
   e.preventDefault();
   let action = $(this).val();
   console.log(action);
-  if (action == "reject") {
-    $("#trans-pts,#ref-code").prop("disabled", true);
-    $("#trans-note").parent().show();
-  }
-  else if (action == "update") {
-    $("#ref-code").prop("disabled", false);
-    $("#trans-pts").prop("disabled", true);
-    $("#trans-note").parent().hide();
-  }
-  else {
-    $("#trans-pts,#ref-code").prop("disabled", false);
-    $("#trans-note").parent().hide();
+  if (action == 'reject') {
+    $('#trans-pts,#ref-code').prop('disabled', true);
+    $('#trans-note').parent().show();
+  } else if (action == 'update') {
+    $('#ref-code').prop('disabled', false);
+    $('#trans-pts').prop('disabled', true);
+    $('#trans-note').parent().hide();
+  } else {
+    $('#trans-pts,#ref-code').prop('disabled', false);
+    $('#trans-note').parent().hide();
   }
 });
 
@@ -354,72 +353,72 @@ $('#manual-request-action').on('change', function (e) {
   e.preventDefault();
   $('#manual-request-ref').parent().toggle();
   $('#manual-request-note').parent().toggle();
-})
+});
 
 function clearFields() {
-  $("#trans-pts").val("");
-  $("#ref-code").val("");
-  $("#trans-note").val("");
-  $("#trans-action").val("approve");
-  $("#trans-note").parent().hide();
-  $("#withdraw-note").val("");
-  $("#withdraw-ref-code").val("");
+  $('#trans-pts').val('');
+  $('#ref-code').val('');
+  $('#trans-note').val('');
+  $('#trans-action').val('approve');
+  $('#trans-note').parent().hide();
+  $('#withdraw-note').val('');
+  $('#withdraw-ref-code').val('');
   $('#manual-request-ref').val('');
   $('#manual-request-note').val('');
   $('#manual-request-amount').val('');
   $('#player-username').text('');
 }
 
-$('[data-dismiss="modal"]').on("click", function () {
-  $("#modal-center").modal("hide");
+$('[data-dismiss="modal"]').on('click', function () {
+  $('#modal-center').modal('hide');
 });
 
 //Revert Points
-transactionsTable.on("click", "tbody td .view-undo", async function () {
+transactionsTable.on('click', 'tbody td .view-undo', async function () {
   clearFields();
-  var tr = $(this).closest("tr");
+  var tr = $(this).closest('tr');
   var row = transactionsTable.DataTable().row(tr);
-  $("#modal-undo-points").modal("show");
-  $("input#undo-id").val($(this).data("id"));
+  $('#modal-undo-points').modal('show');
+  $('input#undo-id').val($(this).data('id'));
 
-  let storage = $("#trans-receipt-und").data("storage");
+  let storage = $('#trans-receipt-und').data('storage');
   if (row.data().filename) {
-    $("#trans-receipt-undo").attr("src", storage + "/" + row.data().filename);
+    $('#trans-receipt-undo').attr('src', storage + '/' + row.data().filename);
   }
   if (row.data().amount) {
-    $("#trans-pts-undo").val(row.data().amount);
+    $('#trans-pts-undo').val(row.data().amount);
   }
   if (row.data().reference_code) {
-    $("#ref-code-undo").val(row.data().reference_code);
+    $('#ref-code-undo').val(row.data().reference_code);
   }
 
-  if (row.data().status != "completed") {
-    $('input[type="submit"]').prop("disabled", true).addClass("disabled");
+  if (row.data().status != 'completed') {
+    $('input[type="submit"]').prop('disabled', true).addClass('disabled');
   } else {
-    $('input[type="submit"]').prop("disabled", false).removeClass("disabled");
+    $('input[type="submit"]').prop('disabled', false).removeClass('disabled');
   }
 });
 
-$("#deposit-undo-form").on("click", 'input[type="submit"]', function (e) {
+$('#deposit-undo-form').on('click', 'input[type="submit"]', function (e) {
   e.preventDefault();
   axios
-    .post("/transaction/deposit/revert", {
-      id: $("#undo-id").val(),
-      curr_amount: $("#trans-pts-undo").val(),
-      amount: $("#updated-trans-pts").val(),
-      ref_code: $("#ref-code-undo").val(),
-      note: $("#trans-note-undo").val(),
+    .post('/transaction/deposit/revert', {
+      id: $('#undo-id').val(),
+      curr_amount: $('#trans-pts-undo').val(),
+      amount: $('#updated-trans-pts').val(),
+      ref_code: $('#ref-code-undo').val(),
+      note: $('#trans-note-undo').val(),
     })
     .then((res) => {
       Swal.fire({
-        icon: "success",
-        confirmButtonColor: "green",
+        icon: 'success',
+        confirmButtonColor: 'green',
         title: res.data.msg,
         timer: 1500,
       }).then(() => {
         console.log(res);
-        $("#modal-undo-points").modal("hide");
-        $("#operator-pts").html(res.data.points);
+        $('#modal-undo-points').modal('hide');
+        $('#operator-pts').html(res.data.points);
         clearFields();
       });
 
@@ -432,56 +431,58 @@ $("#deposit-undo-form").on("click", 'input[type="submit"]', function (e) {
 });
 
 function copyRefCode(e) {
-  const num = $(e).data("ref-code");
-  var $temp = $("<input>");
-  $("body").append($temp);
+  const num = $(e).data('ref-code');
+  var $temp = $('<input>');
+  $('body').append($temp);
   $temp.val(num).select();
-  document.execCommand("copy");
+  document.execCommand('copy');
   $temp.remove();
-  $(e).removeClass("text-primary").addClass("text-success");
-  $(e).find("i").removeClass("fa-copy").addClass("fa-check");
+  $(e).removeClass('text-primary').addClass('text-success');
+  $(e).find('i').removeClass('fa-copy').addClass('fa-check');
   setTimeout(() => {
-    $(e).tooltip("hide");
-    $(e).removeClass("text-success").addClass("text-primary");
-    $(e).find("i").removeClass("fa-check").addClass("fa-copy");
+    $(e).tooltip('hide');
+    $(e).removeClass('text-success').addClass('text-primary');
+    $(e).find('i').removeClass('fa-check').addClass('fa-copy');
   }, 3000);
 }
 
 function copyPhone(e) {
-  const num = $(e).data("phone-number");
-  var $temp = $("<input>");
-  $("body").append($temp);
+  const num = $(e).data('phone-number');
+  var $temp = $('<input>');
+  $('body').append($temp);
   $temp.val(num).select();
-  document.execCommand("copy");
+  document.execCommand('copy');
   $temp.remove();
-  $(e).removeClass("text-primary").addClass("text-success");
-  $(e).find("i").removeClass("fa-copy").addClass("fa-check");
+  $(e).removeClass('text-primary').addClass('text-success');
+  $(e).find('i').removeClass('fa-copy').addClass('fa-check');
   setTimeout(() => {
-    $(e).tooltip("hide");
-    $(e).removeClass("text-success").addClass("text-primary");
-    $(e).find("i").removeClass("fa-check").addClass("fa-copy");
+    $(e).tooltip('hide');
+    $(e).removeClass('text-success').addClass('text-primary');
+    $(e).find('i').removeClass('fa-check').addClass('fa-copy');
   }, 3000);
 }
 
-$('[data-dismiss="modal"]').on("click", function () {
-  $("#modal-undo-points").modal("hide");
+$('[data-dismiss="modal"]').on('click', function () {
+  $('#modal-undo-points').modal('hide');
   $('#manual-request-modal').modal('hide');
 });
 
 function showNotification(message) {
-  const img = "img/sabong-aficionado-icon.png";
+  const img = 'img/sabong-aficionado-icon.png';
   console.log(img);
   const text = message;
-  new Notification("Sabong Aficionado", {
+  new Notification('Sabong Aficionado', {
     body: text,
     icon: img,
   });
 }
 
 function isNumeric(str) {
-  if (typeof str != "string") return false // we only process strings!
-  return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-    !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+  if (typeof str != 'string') return false; // we only process strings!
+  return (
+    !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+    !isNaN(parseFloat(str))
+  ); // ...and ensure strings of whitespace fail
 }
 
 // $("#allow-notifications").on("click", () => {

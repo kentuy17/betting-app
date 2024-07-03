@@ -11,6 +11,7 @@ use App\Models\Transactions;
 use App\Models\DerbyEvent;
 use App\Models\Fight;
 use App\Models\User;
+use App\Models\BetHistory;
 use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
 
@@ -314,5 +315,44 @@ class AuditorController extends Controller
             })
             ->with('total_net', number_format($total_net, 2, '.', ','))
             ->make(true);
+    }
+
+    public function getBetSummary()
+    {
+        $count = Fight::count();
+        $fights = Fight::has('bethistory')
+            ->with('bethistory')
+            ->orderBy('id', 'desc')
+            ->limit(100)
+            ->get();
+
+        return DataTables::of($fights)
+            ->addIndexColumn()
+            ->with('item_count', $count)
+            ->addColumn('player', function ($fights) {
+                $items = [];
+                foreach ($fights->bethistory as $bet) {
+                    if (Auth::user()->id !== 1 && $bet->user_id === 666)
+                        continue;
+                    # code...
+                    $items[] = [
+                        'username' => $bet->user->username,
+                        'amount' => $bet->betamount,
+                        'win' => $bet->winamount,
+                        'percent' => intval($bet->percent) . '%',
+                        'side' => $bet->side,
+                        'bal' => $bet->status === 'P'
+                            ? $bet->points_after_bet
+                            : $bet->current_points
+                    ];
+                }
+                return $items;
+            })
+            ->make(true);
+    }
+
+    public function betSo()
+    {
+        return view('auditor.betso');
     }
 }

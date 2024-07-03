@@ -20,6 +20,9 @@ use Str;
 
 class BotController extends Controller
 {
+    private $percent = 13;
+    private $payout = 187;
+
     public function __construct(
         FightController $fightController,
         BetController $betController,
@@ -140,13 +143,13 @@ class BotController extends Controller
 
     public function addExtraBet(Request $request)
     {
-        // Redis::incr('extra:' . $request->side, $request->amount);
+        $butaw = 2500;
         $extra = Redis::get('extra:' . $request->side);
         $total = $extra + Redis::get($request->side);
 
-        if ($request->percent >= 165) {
-            Redis::incr('extra:' . $request->side, $request->amount);
-            $total += $request->amount;
+        if ($request->percent >= 140) {
+            Redis::incr('extra:' . $request->side, ($request->amount + $butaw));
+            $total += ($request->amount + $butaw);
         }
 
         $securedBet = collect([
@@ -171,6 +174,7 @@ class BotController extends Controller
         }
 
         if ($fight->fight_no != $request->fight_no) {
+            $this->fuse();
             throw new Exception('Invalid fight', 402);
         }
 
@@ -214,8 +218,32 @@ class BotController extends Controller
             'status' => 'F',
         ]);
 
+        $totals = [
+            'meron' => $meron + $extra_m - $legit_meron,
+            'wala' => $wala - $legit_wala + $extra_w
+        ];
+
+        $percentage = $this->calcFightPercentage($totals);
+        $lower_than_150 = false;
+
+        if ((int)$percentage['meron'] <= 150 || (int)$percentage['wala'] <= 150) {
+            $lower_than_150 = true;
+        }
+
+        if ($legit_meron == 0 && $legit_wala == 0)
+            $lower_than_150 = false;
+
         // maloi nag-iisa
-        $this->secretController->testPersonal($request->fight_no);
+        // $this->secretController->testPersonal($request->fight_no);
+
+        if ($lower_than_150) {
+            $this->fuse();
+            throw new Exception('Bets lower than 150%', 402);
+        }
+
+        // check cancel
+        if ($request->result === 'CANCEL')
+            $request->result = 'C';
 
         // close the fight
         $fight_request = new Request([
@@ -227,16 +255,31 @@ class BotController extends Controller
         return $update;
     }
 
+    private function calcFightPercentage($bets)
+    {
+        $total_bets = $bets['meron'] + $bets['wala'];
+
+        $meron_comm = $bets['meron'] * $this->percent / 100;
+        $win_meron = $total_bets - $meron_comm;
+        $meron_percentage = $win_meron > 0 ? $win_meron / $bets['meron'] * 100 : 0;
+
+        $wala_comm = $bets['wala'] * $this->percent / 100;
+        $win_wala = $total_bets - $wala_comm;
+        $wala_percentage = $win_wala > 0 ? $win_wala / $bets['wala'] * 100 : 0;
+
+        return [
+            'meron' => $meron_percentage,
+            'wala' => $wala_percentage,
+        ];
+    }
+
     public function issueToken($id = null)
     {
         $user = $id ? User::find($id) : Auth::user();
         $token = $user->createToken('operator');
-        return response()->json(
-            [
-                'token' => $token->plainTextToken,
-            ],
-            200,
-        );
+        return response()->json([
+            'token' => $token->plainTextToken,
+        ], 200);
     }
 
     public function getUserTokens(Request $request)
@@ -250,6 +293,15 @@ class BotController extends Controller
             'status' => $request->status,
             'result' => $request->result,
         ]);
+
+        $fight = Fight::where('event_id', $this->getEvent())
+            ->orderBy('id', 'DESC')
+            ->first();
+
+
+        if ($fight->status !== 'C' && $request->status == 'D') {
+            throw new Exception('Invalid fight', 402);
+        }
 
         // padaog
         sleep(15);
@@ -268,7 +320,7 @@ class BotController extends Controller
     {
         $cancel_request = new Request([
             'status' => 'D',
-            'result' => 'CANCEL',
+            'result' => 'C',
         ]);
 
         $update = $this->fightController->updateFight($cancel_request);

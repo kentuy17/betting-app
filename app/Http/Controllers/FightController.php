@@ -26,8 +26,9 @@ class FightController extends Controller
     public $current_event;
     public $prev_match;
     public $fight;
-    private $percent = 16;
+    private $percent = 13;
     private $botchok_id = 10;
+    private $payout = 187;
     /**
      * Create a new controller instance.
      *
@@ -299,7 +300,9 @@ class FightController extends Controller
             foreach ($bets as $bet) {
                 # code...
                 $status = $request->result == $bet->side ? 'W' : 'L';
-                $percent = (184 * 2) - $bet->percent > 184 ? 180.00 : (184 * 2) - $bet->percent;
+                $percent = ($this->payout * 2) - $bet->percent > $this->payout
+                    ? 180.00
+                    : ($this->payout * 2) - $bet->percent;
                 $win = $status == 'W' ? ($percent * 0.01) * $bet->betamount : 0;
 
                 $bet->status = $status;
@@ -398,7 +401,7 @@ class FightController extends Controller
                 $user->save();
 
                 $betHist = BetHistory::where('bet_id', $bet->bet_no)->first();
-                $betHist->percent = $percentage ?? 184;
+                $betHist->percent = $percentage ?? $this->payout;
                 $betHist->winamount = $update->win_amount;
                 $betHist->current_points = $user->points;
                 $betHist->status = 'W';
@@ -421,7 +424,7 @@ class FightController extends Controller
             foreach ($lose_bet as $lb) {
                 $user_2 = User::find($lb->user_id);
                 $betHistLB = BetHistory::where('bet_id', $lb->bet_no)->first();
-                $betHistLB->percent = $percentagelb  ?? 184;
+                $betHistLB->percent = $percentagelb  ?? $this->payout;
                 $betHistLB->current_points = $user_2->points;
                 $betHistLB->status = 'L';
                 $betHistLB->save();
@@ -459,7 +462,9 @@ class FightController extends Controller
             if (in_array($bet->referral->referrer_id, [10, 1, 92539, 818]))
                 continue;
 
-            $base_amount = $bet->win_amount > 0 ? $bet->win_amount - $bet->amount : 0.84 * $bet->amount;
+            $base_amount = $bet->win_amount > 0
+                ? $bet->win_amount - $bet->amount
+                : $bet->amount;
             $agent = Agent::where('user_id', $bet->referral->referrer_id)->first();
             $commission = $this->commissionAmount($base_amount, $agent->percent);
 
