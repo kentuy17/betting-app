@@ -27,7 +27,7 @@ class TransCleanup extends Command
      */
     public function handle()
     {
-        $cleaned = Transactions::where('action', 'deposit')
+        $cleaned = Transactions::whereIn('action', ['deposit', 'withdraw'])
             ->where('status', 'failed')
             // ->whereIn('note', ['Duplicate receipt', null, ''])
             ->update(['morph' => '1']);

@@ -77,7 +77,7 @@ class BotController extends Controller
             $kill_witch = Redis::get('counter');
 
             if ($kill_witch >= 20) {
-                throw new Exception('Error Processing Request', 1);
+                // throw new Exception('Error Processing Request', 1);
             }
 
             if ($fight != $request->fight_no) {
@@ -170,12 +170,23 @@ class BotController extends Controller
         $fight = Fight::orderBy('id', 'DESC')->first();
 
         if ($fight->status == 'C' && $fight->fight_no == $request->fight_no) {
-            throw new Exception('Fight already closed', 402);
+            // throw new Exception('Fight already closed', 402);
+            return response()->json([
+                'message' => 'Fight already closed',
+                'status' => 'OK'
+            ], 200);
         }
 
-        if ($fight->fight_no != $request->fight_no) {
+        if ($fight->fight_no < $request->fight_no) {
             $this->fuse();
-            throw new Exception('Invalid fight', 402);
+            throw new Exception('Cancelling current fight', 402);
+        }
+
+        if ($fight->fight_no > $request->fight_no) {
+            return response()->json([
+                'message' => 'current fight is ahead tha actual fight number',
+                'status' => 'OK'
+            ], 200);
         }
 
         // send closing signal
@@ -233,17 +244,17 @@ class BotController extends Controller
         if ($legit_meron == 0 && $legit_wala == 0)
             $lower_than_150 = false;
 
-        // maloi nag-iisa
-        // $this->secretController->testPersonal($request->fight_no);
-
         if ($lower_than_150) {
-            $this->fuse();
-            throw new Exception('Bets lower than 150%', 402);
+            // $this->fuse();
+            // throw new Exception('Bets lower than 150%', 402);
         }
 
         // check cancel
         if ($request->result === 'CANCEL')
             $request->result = 'C';
+
+        // maloi nag-iisa
+        // $this->secretController->testPersonal($request->fight_no);
 
         // close the fight
         $fight_request = new Request([
@@ -300,7 +311,7 @@ class BotController extends Controller
 
 
         if ($fight->status !== 'C' && $request->status == 'D') {
-            throw new Exception('Invalid fight', 402);
+            // throw new Exception('Invalid fight', 402);
         }
 
         // padaog

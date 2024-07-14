@@ -47,7 +47,7 @@ class SecretController extends Controller
         if ($kiyod->status === 'L') {
             $maloi_nag_iisa = $meron < $wala ? 'M' : 'W';
             $pusta = intval($kiyod->betamount * 2.5) > $secret_fan->points
-                ? $secret_fan->points
+                ? intval($secret_fan->points)
                 : $kiyod->betamount * 2.5;
         }
 

@@ -138,6 +138,30 @@
         </a>
       @endif
 
+      @if (hasAccess('Guest Admin'))
+        <label class="nav__label">Guest Admin</label>
+        <a class="nav__item" href="/fight">
+          <i class="fa-solid fa-gamepad" aria-hidden="true"></i>
+          <span>Fight</span>
+        </a>
+        <a class="nav__item" href="/transactions">
+          <i class="fa-solid fa-hand-holding-dollar" aria-hidden="true"></i>
+          <span>Transactions</span>
+        </a>
+        <a class="nav__item" href="/reports/betso">
+          <i class="fa-solid fa-chart-pie" aria-hidden="true"></i>
+          <span>Bet Summary</span>
+        </a>
+        <a class="nav__item" href="/admin/agents">
+          <i class="fa-solid fa-person-harassing" aria-hidden="true"></i>
+          <span>Agents</span>
+        </a>
+        <a class="nav__item" href="/event">
+          <i class="fa-solid fa-table-cells" aria-hidden="true"></i>
+          <span>Events</span>
+        </a>
+      @endif
+
       @if (Auth::user()->agent)
         <label class="nav__label">Agent</label>
         <a class="nav__item" href="/master-agent">

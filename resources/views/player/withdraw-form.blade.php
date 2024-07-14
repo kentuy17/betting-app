@@ -920,9 +920,11 @@
     })
 
     function redirectToTrans() {
+      let player = document.getElementsByClassName('nav__username')[0].text
       var success = $('.alert-success').length;
       if (success) {
         setTimeout(() => {
+          window.socket.emit('withdraw', player);
           window.location.href = 'playertransaction';
         }, 2000);
       }
