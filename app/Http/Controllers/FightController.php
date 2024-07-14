@@ -17,6 +17,7 @@ use App\Models\ShareHolder;
 use App\Models\Referral;
 use App\Models\Agent;
 use App\Models\AgentCommission;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Str;
@@ -190,6 +191,11 @@ class FightController extends Controller
     {
         try {
             $fight = $this->currenctMatch();
+
+            if (request()->has('is_operator') && $request->is_operator) {
+                throw new Exception('Manual update is disabled', 401);
+            }
+
             if ($request->status == 'D') {
                 $this->cleanup($fight->fight_no);
                 return $this->fightDone($fight, $request->result);

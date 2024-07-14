@@ -16,7 +16,7 @@
 
     #trans-receipt {
       /* max-width: 350px;
-        height: 800px; */
+              height: 800px; */
       margin: -40px 0 0 0;
     }
 
@@ -421,7 +421,11 @@
       });
     });
   </script>
-  <script src="{{ asset('js/transactions.js') }}" defer></script>
+  @vite('public/js/transactions.js')
+  {{-- @vite('public/js/withdraw.js') --}}
+  @vite('public/js/topups.js')
+
+  {{-- <script src="{{ asset('js/transactions.js') }}" defer></script> --}}
   <script src="{{ asset('js/withdraw.js') }}" defer></script>
-  <script src="{{ asset('js/topups.js') }}" defer></script>
+  {{-- <script src="{{ asset('js/topups.js') }}" defer></script> --}}
 @endsection

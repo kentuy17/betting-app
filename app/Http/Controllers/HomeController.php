@@ -58,6 +58,10 @@ class HomeController extends Controller
             $this->redirectTo = '/transactions-auditor';
         }
 
+        if ($role->name == 'Guest Admin') {
+            $this->redirectTo = '/transactions';
+        }
+
         return redirect($this->redirectTo);
     }
 

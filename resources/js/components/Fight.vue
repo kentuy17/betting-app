@@ -137,13 +137,13 @@
         <span v-show="!isLoading.open">OPEN</span>
         <span v-show="isLoading.open">Processing...</span>
       </button>
-      <button @click="updateFight('C')" :disabled="isDisabled.close"
-        class="btn btn-danger">
+      <!-- <button @click="updateFight('C')" :disabled="isDisabled.close" -->
+      <button :disabled="true" class="btn btn-danger">
         <span v-show="!isLoading.close">CLOSE</span>
         <span v-show="isLoading.close">Processing...</span>
       </button>
-      <button @click="doneFight()" :disabled="isDisabled.done"
-        class="btn btn-secondary">
+      <!-- <button @click="doneFight()" :disabled="isDisabled.done" -->
+      <button :disabled="true" class="btn btn-secondary">
         <span v-show="!isLoading.done">DONE</span>
         <span v-show="isLoading.done">Loading...</span>
       </button>

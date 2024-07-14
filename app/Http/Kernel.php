@@ -79,6 +79,7 @@ class Kernel extends HttpKernel
         'bossing' => \App\Http\Middleware\EnsureTheBossing::class,
         'agent' => \App\Http\Middleware\EnsurePlayerIsAgent::class,
         'ghost' => \App\Http\Middleware\EnsurePlayerIsGhost::class,
+        'guest_admin' => \App\Http\Middleware\EnsureUserIsGuestAdmin::class,
         'maintenance' => \App\Http\Middleware\MaintenanceMiddleware::class,
     ];
 }

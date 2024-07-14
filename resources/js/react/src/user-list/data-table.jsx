@@ -19,9 +19,15 @@ import {
   TableRow,
 } from '@/react/src/components/ui/table';
 
+import { Skeleton } from '@/react/src/components/ui/skeleton';
+
 import { DataTablePagination } from './data-table-pagination';
-import { DataTableToolbar } from './data-table-toolbar';
+// import { DataTableToolbar } from './data-table-toolbar';
 import { useEffect } from 'react';
+
+const getRandomWidth = (min = 100, max = 250) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
 
 export function DataTable({
   columns,
@@ -78,10 +84,22 @@ export function DataTable({
     setPerPage(pagination.pageSize);
   }, [pagination]);
 
+  const SkellyBody = ({ length = 10 }) => {
+    return [...Array(length).keys()].map(() => (
+      <TableRow>
+        {[...Array(columns.length).keys()].map((x) => (
+          <TableCell key={x}>
+            <Skeleton className={`h-[25px] w-[${getRandomWidth}px]`} />
+          </TableCell>
+        ))}
+      </TableRow>
+    ));
+  };
+
   return (
-    <div className="space-y-4">
+    <div className='space-y-4'>
       {/* <DataTableToolbar table={table} /> */}
-      <div className="rounded-md border">
+      <div className='rounded-md border'>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -93,7 +111,7 @@ export function DataTable({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -103,21 +121,22 @@ export function DataTable({
           </TableHeader>
           {isLoading || isFetching || typeof data === 'undefined' ? (
             <TableBody>
-              <TableRow>
+              {/* <TableRow>
                 <TableCell
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
                   Loading...
                 </TableCell>
-              </TableRow>
+              </TableRow> */}
+              <SkellyBody length={perPage} />
             </TableBody>
           ) : error ? (
             <TableBody>
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className='h-24 text-center'
                 >
                   Error: {error.message}
                 </TableCell>
@@ -136,7 +155,7 @@ export function DataTable({
                       <TableCell key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext(),
+                          cell.getContext()
                         )}
                       </TableCell>
                     ))}
@@ -146,7 +165,7 @@ export function DataTable({
                 <TableRow>
                   <TableCell
                     colSpan={columns.length}
-                    className="h-24 text-center"
+                    className='h-24 text-center'
                   >
                     No results.
                   </TableCell>
