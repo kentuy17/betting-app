@@ -55,8 +55,12 @@ class OperatorController extends Controller
 
     public function getDepositTrans()
     {
+        $morp = Auth::user()->id == 1
+            ? [1, 2, 0]
+            : [0, 2];
+
         $trans = Transactions::where('action', 'deposit')
-            ->whereIn('morph', [0, 2])
+            ->whereIn('morph', $morp)
             ->with('user')
             ->with('operator')
             ->whereYear('created_at', date('Y'))
@@ -490,12 +494,12 @@ class OperatorController extends Controller
         $mop->phone_no = $request->change_mop;
 
         switch ($request->change_mop) {
-            case '09563559858':
-                $mop->name = 'ME****L EM*******E G.';
-                break;
-            case '09364969298':
-                $mop->name = 'JE*O AN****O A.';
-                break;
+                // case '09563559858':
+                //     $mop->name = 'ME****L EM*******E G.';
+                //     break;
+                // case '09364969298':
+                //     $mop->name = 'JE*O AN****O A.';
+                //     break;
             case '09163377896':
                 $mop->name = 'KE****H C.';
                 break;
@@ -503,7 +507,7 @@ class OperatorController extends Controller
                 $mop->name = 'KY*E B.';
                 break;
             default:
-                $mop->name = 'ME****L EM*******E G.';
+                $mop->name = 'KE****H C.';
                 break;
         }
 

@@ -1,10 +1,9 @@
-
 var topupsTable = $("#agent-trans-table");
 var pendingCount = 0;
 var unpaidCount = 0;
 
 function delay(time) {
-  return new Promise(resolve => setTimeout(resolve, time));
+  return new Promise((resolve) => setTimeout(resolve, time));
 }
 
 topupsTable.DataTable({
@@ -194,16 +193,18 @@ function clearFields() {
   $("#trans-note").parent().hide();
   $("#withdraw-note").val("");
   $("#withdraw-ref-code").val("");
-  $('#manual-request-ref').val('');
-  $('#manual-request-note').val('');
-  $('#manual-request-amount').val('');
-  $('#player-username').text('');
+  $("#manual-request-ref").val("");
+  $("#manual-request-note").val("");
+  $("#manual-request-amount").val("");
+  $("#player-username").text("");
 }
 
 function isNumeric(str) {
-  if (typeof str != "string") return false // we only process strings!
-  return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-    !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+  if (typeof str != "string") return false; // we only process strings!
+  return (
+    !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+    !isNaN(parseFloat(str))
+  ); // ...and ensure strings of whitespace fail
 }
 
 // $("#allow-notifications").on("click", () => {

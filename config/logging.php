@@ -147,6 +147,12 @@ return [
             'path' => storage_path('logs/autobet.log'),
             'level' => 'debug',
         ],
+
+        'authenticated' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/auth.log'),
+            'level' => 'debug',
+        ],
     ],
 
 ];

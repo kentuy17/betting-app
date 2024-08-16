@@ -27,9 +27,9 @@ class FightController extends Controller
     public $current_event;
     public $prev_match;
     public $fight;
-    private $percent = 13;
+    private $percent = 15;
     private $botchok_id = 10;
-    private $payout = 187;
+    private $payout = 185;
     /**
      * Create a new controller instance.
      *
@@ -127,10 +127,10 @@ class FightController extends Controller
         $total_meron = (int)Redis::get('M') + Redis::get('extra:M');
         $total_wala = (int)Redis::get('W') + Redis::get('extra:W');
 
-        if ($total_meron == 0 && $total_wala == 0) {
-            $total_meron = $this->fight->bet->where('side', 'M')->sum('amount');
-            $total_wala = $this->fight->bet->where('side', 'W')->sum('amount');
-        }
+        // if ($total_meron == 0 && $total_wala == 0) {
+        //     $total_meron = $this->fight->bet->where('side', 'M')->sum('amount');
+        //     $total_wala = $this->fight->bet->where('side', 'W')->sum('amount');
+        // }
 
         return response()->json([
             'current' => $this->fight ?? $dummy_fight,
@@ -465,7 +465,7 @@ class FightController extends Controller
 
         foreach ($bets as $bet) {
             // exclude agents
-            if (in_array($bet->referral->referrer_id, [10, 1, 92539, 818]))
+            if (in_array($bet->referral->referrer_id, [10, 92539, 818]))
                 continue;
 
             $base_amount = $bet->win_amount > 0

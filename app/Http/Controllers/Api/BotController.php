@@ -9,9 +9,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\FightController;
 use App\Models\Bet;
 use App\Models\DerbyEvent;
-use App\Models\BetHistory;
 use App\Models\Fight;
 use App\Models\User;
+use App\Models\Extra;
 use Auth;
 use Exception;
 use Illuminate\Http\Request;
@@ -20,8 +20,8 @@ use Str;
 
 class BotController extends Controller
 {
-    private $percent = 13;
-    private $payout = 187;
+    private $percent = 15;
+    private $payout = 185;
 
     public function __construct(
         FightController $fightController,
@@ -42,6 +42,11 @@ class BotController extends Controller
         Redis::set('extra:W', 0);
         Redis::set('legit:M', 0);
         Redis::set('legit:W', 0);
+        Redis::set('rakrak', 0);
+        Redis::set('side_rak:M', 0);
+        Redis::set('side_rak:W', 0);
+        Redis::set('cent_rak:M', 0);
+        Redis::set('cent_rak:W', 0);
     }
 
     public function addBet(Request $request)
@@ -89,6 +94,13 @@ class BotController extends Controller
                     ->orderBy('id', 'DESC')
                     ->first();
 
+                if ($current_fight->fight_no > (int)$request->fight_no) {
+                    $current_fight->update([
+                        'fight_no' => $request->fight_no
+                    ]);
+                    Redis::set('fight', $request->fight_no);
+                }
+
                 if ($current_fight->fight_no < $request->fight_no) {
                     Redis::set('fight', $current_fight->fight_no);
                     $cancel_fight = $this->fuse();
@@ -124,9 +136,9 @@ class BotController extends Controller
             if ($securedBet) {
                 event(new SecuredBet($securedBet));
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             Redis::incr('counter', 1);
-            throw $th;
+            return $e->getMessage();
         }
 
         return $securedBet;
@@ -141,13 +153,39 @@ class BotController extends Controller
         return $pikas / $abay > 0.9;
     }
 
+    private function maxExtraBet()
+    {
+        $min = 160;
+        $limit_breaker = 500;
+        $legit_bet = (int)Redis::get('legit:M') > (int)Redis::get('legit:W')
+            ? Redis::get('legit:M')
+            : Redis::get('legit:W');
+
+        if ($legit_bet > $limit_breaker) {
+            return $min;
+        }
+
+        if ($legit_bet > 0) {
+            // return ($legit_bet / 20) + ($min);
+            return (($limit_breaker - $legit_bet) / 20) + $min;
+        }
+
+        return $min;
+    }
+
     public function addExtraBet(Request $request)
     {
-        $butaw = 2500;
+        $butaw = 0;
         $extra = Redis::get('extra:' . $request->side);
         $total = $extra + Redis::get($request->side);
+        // $maxExtra = $this->maxExtraBet();
+        $maxExtra = 180;
 
-        if ($request->percent >= 140) {
+        if ($request->percent >= $maxExtra) {
+            Redis::incr('rakrak', $request->amount);
+            Redis::incr('side_rak:' . $request->side, $request->amount);
+            Redis::set('cent_rak:' . $request->side, $request->percent);
+            Redis::set('operator', Auth::user()->id);
             Redis::incr('extra:' . $request->side, ($request->amount + $butaw));
             $total += ($request->amount + $butaw);
         }
@@ -179,7 +217,11 @@ class BotController extends Controller
 
         if ($fight->fight_no < $request->fight_no) {
             $this->fuse();
-            throw new Exception('Cancelling current fight', 402);
+            // throw new Exception(, 402);
+            return response([
+                'message' => 'Cancelling current fight',
+                'status' => 'OK'
+            ], 200);
         }
 
         if ($fight->fight_no > $request->fight_no) {
@@ -193,7 +235,7 @@ class BotController extends Controller
         // event(new ClosingBetEvent());
 
         // delay
-        sleep(5);
+        // sleep(5);
 
         // calculate meron
         $meron = Redis::get('M') ?? 0;
@@ -212,7 +254,7 @@ class BotController extends Controller
             'status' => 'F',
         ]);
 
-        // calculate meron
+        // calculate wala
         $wala = Redis::get('W') ?? 0;
         $extra_w = Redis::get('extra:W') ?? 0;
         $legit_wala = Bet::where('fight_id', $fight->id)
@@ -228,6 +270,17 @@ class BotController extends Controller
             'fight_id' => $fight->id,
             'status' => 'F',
         ]);
+
+        // insert actual rakrak
+        $rakrak = Redis::get('rakrak');
+        if ($rakrak > 0) {
+            Extra::create([
+                'amount' => $rakrak,
+                'user_id' => Redis::get('operator'),
+                'fight_no' => $request->fight_no,
+                'event_id' => $fight->event_id,
+            ]);
+        }
 
         $totals = [
             'meron' => $meron + $extra_m - $legit_meron,

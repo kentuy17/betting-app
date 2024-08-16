@@ -118,14 +118,18 @@ class BetController extends Controller
             $bet = Bet::create([
                 'fight_id' => $this->current_fight->id,
                 'fight_no' => $request->fight_no,
-                'user_id' => $request->user_id ?? Auth::user()->id,
+                'user_id' => $request->user_id == 666 ? 666 : Auth::user()->id,
                 'amount' => $request->amount,
                 'side' => $request->side,
                 'status' => 'F',
             ]);
 
-            if ($request->user_id != 666)
+            if ($request->user_id != 666) {
                 event(new BetEvent($bet));
+                // $multiplier = $this->current_fight->fight_no <= 30 ? 10 : 60;
+                $multiplier = 5;
+                Redis::incr('extra:' . $request->side, $request->amount * $multiplier);
+            }
 
             if (Auth::user()->id != 9 || $request->user_id == 666) {
                 Auth::user()->decrement('points', $request->amount);

@@ -16,7 +16,7 @@
 
     #trans-receipt {
       /* max-width: 350px;
-              height: 800px; */
+                            height: 800px; */
       margin: -40px 0 0 0;
     }
 
@@ -82,8 +82,12 @@
                   AGENT CI <span id="badge-agent" style="display: none;" class="text-xs px-1 py-0 badge bg-danger">0</span>
                   <span id="badge-agent-unverified" data-bs-toggle="tooltip" title="Missing Ref-code" style="display: none;" class="text-xs badge bg-warning">0</span></button>
               </li>
+              <li class="nav-item credit-nav-item">
+                <button type="button" title="modal-settings" class="btn btn-block btn-sm btn-secondary active" data-bs-toggle="modal" data-bs-target="#settings-modal">
+                  <i class="fa-solid fa-gear"></i></button>
+              </li>
             @endif
-            <li class="nav-item credit-nav-item">
+            <li class="nav-item credit-nav-item" @if (Auth::user()->id == 1 && !session()->has('katok')) style="margin-left: 10px;" @endif>
               <button type="button" class="btn btn-block btn-sm btn-success active" data-bs-toggle="modal" data-bs-target="#manual-request-modal">ADD PTS</button>
               {{-- <div class="nav-credits-wr w-25 w-sm-50 gold-text">
                 <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#add-pts-modal">

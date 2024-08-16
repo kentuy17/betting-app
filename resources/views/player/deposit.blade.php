@@ -868,7 +868,7 @@
               </div>
             </div>
             <!---->
-            <div id="uni-ticket-outlet" class="dep-tile-2 d-none">
+            <div id="uni-ticket-outlet" class="dep-tile-2">
               <div class="btn-gold rounded gp-shadow-sm d-flex p-2 clickable">
                 <div class="icn"><img src="{{ asset('img/maya-bird.png') }}"></div>
                 <div class="info">
@@ -892,7 +892,9 @@
               <div class="rounded d-flex p-2 btn-gold">
                 <div class="icn"><img src="img/operator-logo.png"></div>
                 <div class="info flex flex-col justify-content-center">
-                  <div class="name" style="text-transform: uppercase;">{{ $operators->name }}</div>
+                  <input type="hidden" name="h-op-name" id="h-op-name" value="{{ $operators->name }}">
+                  <input type="hidden" name="h-op-num" id="h-op-num" value="{{ $operators->phone_no }}">
+                  <div class="name" id="operator-name" style="text-transform: uppercase;">{{ $operators->name }}</div>
                   <div class="name text-uppercase">
                     <div class="text-xl font-bold">
                       <span id="copyNumber">{{ $operators->phone_no }}</span>
@@ -947,9 +949,13 @@
 
       $('#g-cash-outlet').on('click', function(e) {
         if (!$(this).hasClass('active')) {
+          let opNum = $('#h-op-num').val();
+          let opName = $('#h-op-name').val();
           $(this).addClass('active');
           $('#uni-ticket-outlet').removeClass('active');
           $('#payment_mode').val('Gcash');
+          $('#copyNumber').text(opNum)
+          $('#operator-name').text(opName)
         }
       })
 
@@ -958,6 +964,8 @@
           $(this).addClass('active');
           $('#g-cash-outlet').removeClass('active');
           $('#payment_mode').val('Maya');
+          $('#copyNumber').text('09163377896')
+          $('#operator-name').text('KE****H C.')
         }
       })
 
