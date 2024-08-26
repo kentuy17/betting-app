@@ -120,18 +120,28 @@ class BotController extends Controller
                 $fight_controller->updateFight($fight_request);
                 sleep(2);
                 Redis::set('fight', $current_fight->fight_no);
+                $bool = [true, false];
+                // Redis::set('reverse_bet', true);
+                Redis::set('reverse_bet', $bool[array_rand($bool)]);
             }
 
-            Redis::set($request->side, $request->total);
-            $extra = Redis::get('extra:' . $request->side);
-            $total = Redis::get($request->side) + $extra;
+            $side = Redis::get('reverse_bet')
+                ? ($request->side == 'M' ? 'W' : 'M')
+                : $request->side;
+                
+            $old_total = Redis::get($side);
+            Redis::set($side, ($old_total != 0 && $old_total > $request->total)
+                ? $old_total
+                : $request->total);
+
+            $extra = Redis::get('extra:' . $side);
+            $total = Redis::get($side) + $extra;
 
             $securedBet = collect([
                 'uuid' => Str::uuid(),
-                'side' => $request->side,
+                'side' => $side,
                 'total' => $total,
             ]);
-
             // event(new SecuredBet($securedBet));
             if ($securedBet) {
                 event(new SecuredBet($securedBet));
@@ -361,7 +371,6 @@ class BotController extends Controller
         $fight = Fight::where('event_id', $this->getEvent())
             ->orderBy('id', 'DESC')
             ->first();
-
 
         if ($fight->status !== 'C' && $request->status == 'D') {
             // throw new Exception('Invalid fight', 402);

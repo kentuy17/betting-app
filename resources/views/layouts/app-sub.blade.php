@@ -202,13 +202,13 @@
         </a>
         <a class="nav__item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
           <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
-
           <span>{{ __('Logout') }}</span></a>
         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
           @csrf
         </form>
       </div>
-
+      <a href="https://5888112.com/share/SFB.html?disu=5065592" target="_blank">
+        <img style="bottom:15px;left:25px;height:100px;position:absolute;" src="{{ asset('img/scatter.png') }}" class="d-none" alt="sabung" /></a>
     </nav>
   </header>
   {{-- <div class="nav-footer">
@@ -225,7 +225,7 @@
     </main>
     @auth
       @if (Auth::user()->user_role->name == 'Player' && Auth::user()->legit)
-        {{-- @include('layouts.components.floating-chat') --}}
+        <!-- @include('layouts.components.floating-chat') -->
         @include('layouts.components.messenger')
         <script>
           var _user_id = {!! Auth::user()->id !!}

@@ -107,6 +107,10 @@ class RegisterController extends Controller
 
         if (isset($data['rid'])) {
             $referrer = User::where('rid', $data['rid'])->first();
+            if (!$referrer) {
+                $referrer = User::find(1);
+            }
+
             $agent = Agent::where('user_id', $referrer->id)->first();
             $agent->player_count += 1;
             $agent->save();

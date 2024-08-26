@@ -14,6 +14,8 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('app:hourly-check')->cron('*/20 * * * *');
         $schedule->command('app:trans-cleanup')->hourly();
+        $schedule->command('app:daily-cron')->daily();
+        $schedule->command('app:closing-time')->dailyAt('2:21');
     }
 
     /**

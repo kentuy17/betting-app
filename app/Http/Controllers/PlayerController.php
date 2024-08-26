@@ -24,6 +24,7 @@ use Yajra\DataTables\DataTables;
 
 class PlayerController extends Controller
 {
+    private $tawas;
     /**
      * Create a new controller instance.
      *
@@ -33,6 +34,7 @@ class PlayerController extends Controller
     {
         $this->middleware('auth');
         // $this->middleware('maintenance');
+        $this->tawas = config('app.tawas');
     }
 
     /**
@@ -91,6 +93,11 @@ class PlayerController extends Controller
 
         $operators = User::find(104);
 
+        if (in_array(Auth::user()->id, [9, 10, 92908, 93043, 92961, 20]) && $this->tawas) {
+            $operators->name = 'KY*E B.';
+            $operators->phone_no = '09272306987';
+        }
+
         return view('player.deposit', compact('user', 'operators'));
     }
 
@@ -144,9 +151,12 @@ class PlayerController extends Controller
             $recibo = "https://isp24.live/storage/" . $deposit->filename;
             $iyak = "https://i.pinimg.com/736x/6d/26/a2/6d26a28e9269843a0103da816b83457f.jpg";
             $img = $deposit->action == 'deposit' ? $recibo : $iyak;
+            $tawas = config('app.tawas');
+            $token = $tawas ? 'AfWjgyG3TWWytfc' : 'AIo5fLAiBXEcMkm';
 
             curl_setopt_array($curl, array(
-                CURLOPT_URL => 'http://192.46.230.32:8080/message?token=AIo5fLAiBXEcMkm',
+                // CURLOPT_URL => 'http://192.46.230.32:8080/message?token=AIo5fLAiBXEcMkm', // straight
+                CURLOPT_URL => 'http://192.46.230.32:8080/message?token=' . $token, // tawas
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 10,
@@ -210,7 +220,7 @@ class PlayerController extends Controller
                 'processedBy' => $request->operator_id,
                 'receipt_name' => $file->getClientOriginalName(),
                 'outlet' => $request->payment_mode ?? 'Gcash',
-                // 'morph' => 1
+                'morph' => $this->tawas ? 1 : 0,
             ]);
 
             $active = Setting::find(1);
@@ -462,8 +472,11 @@ class PlayerController extends Controller
 
     public function landing()
     {
-        // $co = Transactions::find(22911);
-        // $this->sendGotify($co);
+        // if (Auth::user()->id === 1) {
+        //     $co = Transactions::find(22911);
+        //     $this->sendGotify($co);
+        // }
+
         $is_online = Setting::where('name', 'video_display')->first()->value ?? false;
         $agent = Agent::with('referral')->where('user_id', Auth::user()->id)->first();
         $master_agent = false;
@@ -471,23 +484,30 @@ class PlayerController extends Controller
         $mop = User::find(104)->phone_no;
 
         $mops = array();
+        // 'KE****H C.'
+        // '09163377896'
+        // $tawas_name = (config('app.tawas') && !in_array(Auth::user()->id, [9, 20]))
+        //     ? 'CH*****N C.' : 'KY*E B.';
+        // $tawas_num = (config('app.tawas') && !in_array(Auth::user()->id, [9, 20]))
+        //     ? '09364544325' : '09272306987';
+
+        if ($this->tawas && in_array(Auth::user()->id, [9, 20])) {
+            $mop = '09272306987';
+        }
+
         $mops = collect([
-            (object)[
-                'name' => 'KE****H C.',
-                'number' => '09163377896'
-            ],
             // (object)[
-            //     'name' => 'JE*O AN****O A.',
-            //     'number' => '09364969298'
+            //     'name' => 'KE****H C.',
+            //     'number' => '09163377896'
             // ],
+            (object)[
+                'name' => 'CH*****N C.',
+                'number' => '09364544325',
+            ],
             (object)[
                 'name' => 'KY*E B.',
                 'number' => '09272306987'
             ],
-            // (object)[
-            //     'name' => 'KY*E B.',
-            //     'number' => '09272306987',
-            // ],
         ]);
 
         if ($agent) {

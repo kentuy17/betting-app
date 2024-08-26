@@ -16,7 +16,7 @@
 
     #trans-receipt {
       /* max-width: 350px;
-                            height: 800px; */
+                                                height: 800px; */
       margin: -40px 0 0 0;
     }
 
@@ -292,6 +292,79 @@
           <div class="modal-footer">
             <a class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</a>
             <input type="submit" class="btn btn-primary bg-slate-900 btn-sm" value="Submit">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  {{-- Settings Modal --}}
+  <div class="modal fade" id="settings-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-top" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Filter Settings</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="filter-settings-form" method="post">
+          <div class="modal-body row">
+            <div class="form-group col-sm-6 col-md-6 mb-2">
+              <label for="date-from">From:</label>
+              <input type="date" class="form-control" id="date-from">
+            </div>
+            <div class="form-group col-sm-6 col-md-6 mb-2">
+              <label for="date-to">To:</label>
+              <input type="date" class="form-control" id="date-to">
+            </div>
+            <div class="form-group mt-2">
+              <label>Status:</label>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="filter-status[]" value="pending" id="checkbox-status-pending" checked>
+                <label class="form-check-label" for="checkbox-status-pending">
+                  Pending
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="filter-status[]" value="completed" id="checkbox-status-completed" checked>
+                <label class="form-check-label" for="checkbox-status-completed">
+                  Completed
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="filter-status[]" value="failed" id="checkbox-status-failed">
+                <label class="form-check-label" for="checkbox-status-failed">
+                  Failed
+                </label>
+              </div>
+            </div>
+            @if (Auth::user()->id === 1)
+              <div class="form-group mt-2">
+                <label>Morph:</label>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="filter-morph[]" value="0" id="checkbox-morph-0" checked>
+                  <label class="form-check-label" for="checkbox-morph-0">
+                    All
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="filter-morph[]" value="1" id="checkbox-morph-1" checked>
+                  <label class="form-check-label" for="checkbox-morph-1">
+                    Player
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="filter-morph[]" value="2" id="checkbox-morph-2">
+                  <label class="form-check-label" for="checkbox-morph-2">
+                    CSR
+                  </label>
+                </div>
+              </div>
+            @endif
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-secondary btn-sm" data-dismiss="modal">Close</a>
+            <input type="submit" class="btn btn-primary bg-slate-900 btn-sm" value="Apply">
           </div>
         </form>
       </div>

@@ -301,7 +301,15 @@ $('#withdraw-action').on('change', function (e) {
 $('[data-dismiss="modal"]').on('click', function () {
   $('#withdraw-modal').modal('hide');
   $('#bethistory-modal').modal('hide');
+  $('#settings-modal').modal('hide');
 });
+
+$('#date-from').val(
+  localStorage.getItem('dateFrom') ?? moment().format('YYYY-MM-DD')
+);
+$('#date-to').val(
+  localStorage.getItem('dateTo') ?? moment().format('YYYY-MM-DD')
+);
 
 // $('#badge-withdraw-unverified').tooltip().show()
 

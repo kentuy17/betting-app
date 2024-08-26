@@ -219,5 +219,5 @@ return [
     // CUSTOM aliases
     'dummy_id' => env('DUMMY_ID', false),
     'under_construction' => (bool) env('APP_MT', false),
-
+    'tawas' => (bool) env('TAWAS', false),
 ];
