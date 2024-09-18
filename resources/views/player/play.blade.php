@@ -52,7 +52,7 @@
     }
 
     /* #clappr{ width: 100%;height: 100%;position: relative; min-height: 320px; margin-bottom: 25px;}
-                                      #clappr > div{ width:100%;height:100%;position: absolute;} */
+                                        #clappr > div{ width:100%;height:100%;position: absolute;} */
     #play-container {
       display: flex;
       align-content: flex-start;
@@ -212,7 +212,7 @@
       } else {
         $('#event-name').hide();
         $('#header-closed').show();
-        $('#poster-img').show();
+        // $('#poster-img').show();
         $('#mux-player').hide();
       }
     })

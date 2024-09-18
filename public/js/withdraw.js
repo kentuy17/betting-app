@@ -16,131 +16,154 @@ const WINNER = {
   C: 'CANCELLED',
 };
 
-withdrawTable.DataTable({
-  ajax: '/transaction/withdrawals',
-  bPaginate: true,
-  bLengthChange: true,
-  bFilter: true,
-  bInfo: false,
-  bAutoWidth: true,
-  scrollX: true,
-  processing: true,
-  serverSide: true,
-  // "pageLength": 25,
-  order: [[6, 'DESC']],
-  pagingType: 'numbers',
-  language: {
-    search: '',
-    lengthMenu: '_MENU_',
-  },
-  dom:
-    "<'row'<'col-4'l><'col-8'f>>" +
-    "<'row'<'col-sm-12'tr>>" +
-    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-  columnDefs: [
-    {
-      targets: [1],
-      className: 'dt-body-right',
-    },
-    {
-      targets: [0, 2, 3, 4],
-      className: 'dt-body-center',
-    },
-    {
-      targets: [0, 1, 2, 3, 4, 5, 6, 7],
-      className: 'dt-head-center',
-    },
-  ],
-  columns: [
-    // {
-    //   className: "dt-control dt-body-left",
-    //   orderable: false,
-    //   data: null,
-    //   defaultContent: "",
-    //   data: "user_id",
-    // },
-    {
-      data: 'user.name',
-    },
-    {
-      data: null,
-      render: (data) => {
-        return data.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-      },
-    },
-    {
-      data: 'mobile_number',
-    },
+let dateRange = $('#datepicker').val().split('-');
+let dateFrom = localStorage.getItem('dateFrom') ?? dateRange[0];
+let dateTo = localStorage.getItem('dateTo') ?? dateRange[1];
+let statuss = localStorage.getItem('status');
 
-    {
-      data: null,
-      render: (data) => {
-        return data.operator != null ? data.operator.username : '--';
+withdrawTable
+  .on('error.dt', function (e, settings, techNote, message) {
+    console.log(e, 'error');
+    console.log(message, 'message');
+    let prompt = confirm('You are not currently logged in');
+    if (prompt) {
+      window.location.href = '/login';
+    }
+  })
+  .DataTable({
+    ajax: {
+      type: 'GET',
+      url: '/transaction/withdrawals',
+      data: {
+        date_from: dateFrom,
+        date_to: dateTo,
+        status: statuss ? JSON.parse(statuss) : ['pending', 'completed'],
+        morph: [0],
       },
     },
-    {
-      data: 'reference_code',
+    bPaginate: true,
+    bLengthChange: true,
+    bFilter: true,
+    bInfo: false,
+    bAutoWidth: true,
+    scrollX: true,
+    processing: true,
+    serverSide: true,
+    // "pageLength": 25,
+    order: [[6, 'DESC']],
+    pagingType: 'numbers',
+    language: {
+      search: '',
+      lengthMenu: '_MENU_',
     },
+    dom:
+      "<'row'<'col-4'l><'col-8'f>>" +
+      "<'row'<'col-sm-12'tr>>" +
+      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+    columnDefs: [
+      {
+        targets: [1],
+        className: 'dt-body-right',
+      },
+      {
+        targets: [0, 2, 3, 4],
+        className: 'dt-body-center',
+      },
+      {
+        targets: [0, 1, 2, 3, 4, 5, 6, 7],
+        className: 'dt-head-center',
+      },
+    ],
+    columns: [
+      // {
+      //   className: "dt-control dt-body-left",
+      //   orderable: false,
+      //   data: null,
+      //   defaultContent: "",
+      //   data: "user_id",
+      // },
+      {
+        data: 'user.name',
+      },
+      {
+        data: null,
+        render: (data) => {
+          return data.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        },
+      },
+      {
+        data: 'mobile_number',
+      },
 
-    {
-      data: 'created_at',
-    },
-    {
-      data: null,
-      render: (data) => {
-        return data.status.toUpperCase();
+      {
+        data: null,
+        render: (data) => {
+          return data.operator != null ? data.operator.username : '--';
+        },
       },
-    },
-    {
-      data: null,
-      render: (data) => {
-        return `<a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view">
+      {
+        data: 'reference_code',
+      },
+
+      {
+        data: 'created_at',
+      },
+      {
+        data: null,
+        render: (data) => {
+          return data.status.toUpperCase();
+        },
+      },
+      {
+        data: null,
+        render: (data) => {
+          return `<a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view">
           <i class="fa-solid fa-circle-info"></i></a>`;
+        },
       },
+    ],
+    createdRow: function (row, data, dataIndex) {
+      // $(row).find("td").eq(0).attr("style", "color: transparent !important");
+      $(row).attr('data-id', data.id).addClass('cursor-pointer expandable');
+
+      if (data.status == `pending`) {
+        $(row).css({ 'background-color': 'var(--bs-red)' });
+        wPending++;
+
+        let timeDiff = moment(data.created_at, 'MM-DD-YYYY hh:mm:ss').fromNow();
+        $(row).find('td').eq(5).text(timeDiff);
+      }
+
+      if (data.reference_code == null && data.status == 'completed') {
+        $(row).addClass('bg-warning');
+        unverified++;
+      }
+
+      if (data.status == `failed`) {
+        $(row).addClass('failed');
+      }
+
+      if (wPending > 0) {
+        $('#badge-withdraw').show().text(wPending);
+      } else {
+        $('#badge-withdraw').hide().text(wPending);
+      }
+
+      if (unverified > 0) {
+        $('#badge-withdraw-unverified').show().text(unverified);
+      } else {
+        $('#badge-withdraw-unverified').hide().text(unverified);
+      }
     },
-  ],
-  createdRow: function (row, data, dataIndex) {
-    // $(row).find("td").eq(0).attr("style", "color: transparent !important");
-    $(row).attr('data-id', data.id).addClass('cursor-pointer expandable');
-
-    if (data.status == `pending`) {
-      $(row).css({ 'background-color': 'var(--bs-red)' });
-      wPending++;
-
-      let timeDiff = moment(data.created_at, 'MM-DD-YYYY hh:mm:ss').fromNow();
-      $(row).find('td').eq(5).text(timeDiff);
-    }
-
-    if (data.reference_code == null && data.status == 'completed') {
-      $(row).addClass('bg-warning');
-      unverified++;
-    }
-
-    if (data.status == `failed`) {
-      $(row).addClass('failed');
-    }
-
-    if (wPending > 0) {
-      $('#badge-withdraw').show().text(wPending);
-    } else {
-      $('#badge-withdraw').hide().text(wPending);
-    }
-
-    if (unverified > 0) {
-      $('#badge-withdraw-unverified').show().text(unverified);
-    } else {
-      $('#badge-withdraw-unverified').hide().text(unverified);
-    }
-  },
-  drawCallback: function (settings) {
-    let response = settings.json;
-    if (response.pending_count > 0) {
-      $('#badge-withdraw').show().text(response.pending_count);
-    } else {
-      $('#badge-withdraw').hide().text(response.pending_count);
-    }
-  },
-});
+    drawCallback: function (settings) {
+      let response = settings.json;
+      if (response.pending_count > 0) {
+        $('#badge-withdraw').show().text(response.pending_count);
+      } else {
+        $('#badge-withdraw').hide().text(response.pending_count);
+      }
+    },
+  });
 
 function format(d) {
   // `d` is the original data object for the row
@@ -304,12 +327,12 @@ $('[data-dismiss="modal"]').on('click', function () {
   $('#settings-modal').modal('hide');
 });
 
-$('#date-from').val(
-  localStorage.getItem('dateFrom') ?? moment().format('YYYY-MM-DD')
-);
-$('#date-to').val(
-  localStorage.getItem('dateTo') ?? moment().format('YYYY-MM-DD')
-);
+// $('#date-from').val(
+//   localStorage.getItem('dateFrom') ?? moment().format('YYYY-MM-DD')
+// );
+// $('#date-to').val(
+//   localStorage.getItem('dateTo') ?? moment().format('YYYY-MM-DD')
+// );
 
 // $('#badge-withdraw-unverified').tooltip().show()
 

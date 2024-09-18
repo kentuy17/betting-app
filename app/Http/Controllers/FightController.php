@@ -17,6 +17,7 @@ use App\Models\ShareHolder;
 use App\Models\Referral;
 use App\Models\Agent;
 use App\Models\AgentCommission;
+use App\Models\Setting;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
@@ -581,6 +582,11 @@ class FightController extends Controller
                 $event->status = 'ACTIVE';
                 $event->updated_by = Auth::user()->id;
                 $event->save();
+
+                $setting = Setting::where('name', 'video_display')->first();
+                $setting->value = '1';
+                $setting->save();
+
 
                 Redis::set('event', $event->id);
             }

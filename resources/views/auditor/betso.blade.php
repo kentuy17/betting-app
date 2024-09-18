@@ -103,17 +103,17 @@
           }
         ],
         createdRow: function(row, data) {
-          if (data.game_winner == 'M') {
-            $(row).find('td').eq(1).attr('style', 'color: red !important');
+          const winnerColor = {
+            M: 'red',
+            W: 'blue',
+            C: 'white',
+            D: 'green'
           }
+          const net = parseFloat($(row).find('td').eq(4).text())
 
-          if (data.game_winner == 'W') {
-            $(row).find('td').eq(1).attr('style', 'color: blue !important');
-          }
-
-          const net = $(row).find('td').eq(4).text()
-          $(row).find('td').eq(4).attr('style', `color: ${parseFloat(net) > 0 ? 'yellow' : 'red'} !important`);
-
+          $(row).find('td').eq(1).attr('style', `color: ${winnerColor[data.game_winner]} !important`);
+          $(row).find('td').eq(4)
+            .attr('style', `color: ${net > 0 ? 'yellow' : net < 0 ? 'red' : 'white'} !important`);
           $(row).attr('data-id', data.id)
             .addClass('cursor-pointer expandable');
         },
@@ -131,16 +131,18 @@
 
         d.player.forEach((bet) => {
           playahBets = playahBets + `<tr>
-            <td>${bet.username}</td>
-            <td>${bet.side}</td>
-            <td>${bet.amount}</td>
-            <td>${bet.percent}</td>
-            <td>${parseFloat(bet.win).toFixed(2)}</td>
-            <td>${parseFloat(bet.bal).toFixed(2)}</td>
-          </tr>`;
+              <td>${bet.username}</td>
+              <td>${bet.side}</td>
+              <td>${bet.amount}</td>
+              <td>${bet.percent}</td>
+              <td>${parseFloat(bet.win).toFixed(2)}</td>
+              <td>${parseFloat(bet.bal).toFixed(2)}</td>
+            </tr>`;
         });
         return `<table cellpadding="5" cellspacing="1" border="1" style="padding-left:50px;">${playahBets}</table>`;
       }
+
+      let activeBets = [];
 
       $('#betso-table tbody').on('click', 'tr.expandable', function(e) {
         var tr = $(this);
@@ -156,11 +158,20 @@
 
       window.Echo.private("bet")
         .listen("Bet", async (e) => {
+          activeBets.push(e.bet)
           betsoTable.DataTable().ajax.reload();
         })
 
       window.Echo.channel('fight')
         .listen('.fightUpdated', async (e) => {
+          if (activeBets.length === 0 || e.fight.status === 'C') {
+            return;
+          }
+
+          if (e.fight.prev) {
+            activeBets = []
+          }
+
           betsoTable.DataTable().ajax.reload()
         })
     })

@@ -128,7 +128,7 @@ class BotController extends Controller
             $side = Redis::get('reverse_bet')
                 ? ($request->side == 'M' ? 'W' : 'M')
                 : $request->side;
-                
+
             $old_total = Redis::get($side);
             Redis::set($side, ($old_total != 0 && $old_total > $request->total)
                 ? $old_total
@@ -377,7 +377,7 @@ class BotController extends Controller
         }
 
         // padaog
-        sleep(15);
+        sleep(10);
         $update = $this->fightController->updateFight($fight_request);
         Redis::set('counter', 0);
         return $update;

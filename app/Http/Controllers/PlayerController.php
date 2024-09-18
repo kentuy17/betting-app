@@ -496,14 +496,14 @@ class PlayerController extends Controller
         }
 
         $mops = collect([
-            // (object)[
-            //     'name' => 'KE****H C.',
-            //     'number' => '09163377896'
-            // ],
             (object)[
-                'name' => 'CH*****N C.',
-                'number' => '09364544325',
+                'name' => 'KE****H C.',
+                'number' => '09163377896'
             ],
+            // (object)[
+            //     'name' => 'CH*****N C.',
+            //     'number' => '09364544325',
+            // ],
             (object)[
                 'name' => 'KY*E B.',
                 'number' => '09272306987'

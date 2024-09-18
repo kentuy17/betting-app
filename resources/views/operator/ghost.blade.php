@@ -88,8 +88,11 @@
           </video-js> --}}
 
           {{-- OneStream --}}
-          <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
+          {{-- <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
             <iframe src="https://swcsite1.net/Console/Arena?aid=3756" style="position:absolute;width:100%;height:100%;" scrolling="no" frameborder="0" allow="autoplay" allowfullscreen> </iframe>
+          </div> --}}
+          <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
+            <iframe src="https://player.onestream.live/embed?token=ZF9hdXRoXzIwNzg4MDRfMXR0NDJtZnM0&type=psk" style="position:absolute;width:100%;height:100%;" scrolling="no" frameborder="0" allow="autoplay" allowfullscreen> </iframe>
           </div>
         </div>
       </div>

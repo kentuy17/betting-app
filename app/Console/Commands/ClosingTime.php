@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Http\Controllers\FightController;
 use App\Models\Fight;
+use App\Models\Setting;
 use App\Events\Fight as FightEvent;
 
 use Illuminate\Console\Command;
@@ -55,6 +56,11 @@ class ClosingTime extends Command
                 if ($new_fight) {
                     Redis::set('fight', $new_fight->fight_no);
                 }
+
+                // Closed Event Stream
+                $setting = Setting::where('name', 'video_display')->first();
+                $setting->value = '0';
+                $setting->save();
 
                 event(new FightEvent([
                     'prev' => $info,

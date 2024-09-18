@@ -57,7 +57,7 @@ class OperatorController extends Controller
     public function getDepositTrans(Request $request)
     {
         $morp = Auth::user()->id == 1
-             ? [1, 2, 0]
+            ? [1, 2, 0]
             // ? $request->morph
             : [0, 2];
 
@@ -254,13 +254,24 @@ class OperatorController extends Controller
         ], 200);
     }
 
-    public function getWithdrawTrans()
+    public function getWithdrawTrans(Request $request)
     {
+        $morp = Auth::user()->id == 1
+            ? [1, 2, 0]
+            // ? $request->morph
+            : [0, 2];
+
+        $start = $request->date_from ?? date('Y') . '01-01';
+        $from = Carbon::parse($start)->toDateString();
+        $to = $request->date_to ? Carbon::parse($request->date_to) : Carbon::now();
+
         $trans = Transactions::where('action', 'withdraw')
+            ->whereIn('morph', $morp)
+            ->whereIn('status', $request->status)
             ->with('user')
             ->with('operator')
             ->where('deleted', false)
-            ->whereIn('morph', [0, 2])
+            ->whereBetween('created_at', [$from, $to->addDay()->toDateString()])
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -508,12 +519,12 @@ class OperatorController extends Controller
                 // case '09364969298':
                 //     $mop->name = 'JE*O AN****O A.';
                 //     break;
-                // case '09163377896':
-                //     $mop->name = 'KE****H C.';
-                //     break;
-            case '09364544325':
-                $mop->name = 'CH*****N C.';
+            case '09163377896':
+                $mop->name = 'KE****H C.';
                 break;
+                // case '09364544325':
+                //     $mop->name = 'CH*****N C.';
+                //     break;
             case '09272306987':
                 $mop->name = 'KY*E B.';
                 break;

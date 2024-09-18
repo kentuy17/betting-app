@@ -2,6 +2,7 @@
 @section('additional-styles')
   <link rel="stylesheet" href="{{ asset('css/operator.css') }}">
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/gh/dmuy/duDatepicker@2.0.5/dist/duDatepicker.css" rel="stylesheet" />
   <style>
     .receipt-container {
       max-height: 400px;
@@ -15,8 +16,8 @@
     }
 
     #trans-receipt {
-      /* max-width: 350px;
-                                                height: 800px; */
+      /* max-width: 350px; */
+      /* height: 800px; */
       margin: -40px 0 0 0;
     }
 
@@ -76,18 +77,18 @@
                   <span id="badge-withdraw-unverified" data-bs-toggle="tooltip" title="Missing Ref-code" style="display: none;" class="text-xs badge bg-warning">0</span></button>
               </li>
             @endif
-            @if (in_array(Auth::user()->id, [1, 6]) && !session()->has('katok'))
-              <li class="nav-item" role="presentation">
-                <button class="text-xs px-1 nav-link {{ $cashout }}" id="agent-tab" data-bs-toggle="tab" data-bs-target="#agent" type="button" role="tab" aria-controls="agent" aria-selected="false">
-                  AGENT CI <span id="badge-agent" style="display: none;" class="text-xs px-1 py-0 badge bg-danger">0</span>
-                  <span id="badge-agent-unverified" data-bs-toggle="tooltip" title="Missing Ref-code" style="display: none;" class="text-xs badge bg-warning">0</span></button>
-              </li>
-              <li class="nav-item credit-nav-item">
-                <button type="button" title="modal-settings" class="btn btn-block btn-sm btn-secondary active" data-bs-toggle="modal" data-bs-target="#settings-modal">
-                  <i class="fa-solid fa-gear"></i></button>
-              </li>
-            @endif
-            <li class="nav-item credit-nav-item" @if (Auth::user()->id == 1 && !session()->has('katok')) style="margin-left: 10px;" @endif>
+
+            <li class="nav-item" role="presentation">
+              <button class="text-xs px-1 nav-link {{ $cashout }}" id="agent-tab" data-bs-toggle="tab" data-bs-target="#agent" type="button" role="tab" aria-controls="agent" aria-selected="false">
+                AGENT CI <span id="badge-agent" style="display: none;" class="text-xs px-1 py-0 badge bg-danger">0</span>
+                <span id="badge-agent-unverified" data-bs-toggle="tooltip" title="Missing Ref-code" style="display: none;" class="text-xs badge bg-warning">0</span></button>
+            </li>
+            <li class="nav-item credit-nav-item">
+              <button type="button" title="modal-settings" class="btn btn-block btn-sm btn-secondary active" data-bs-toggle="modal" data-bs-target="#settings-modal">
+                <i class="fa-solid fa-gear"></i></button>
+            </li>
+
+            <li class="nav-item credit-nav-item" style="margin-left: 10px;">
               <button type="button" class="btn btn-block btn-sm btn-success active" data-bs-toggle="modal" data-bs-target="#manual-request-modal">ADD PTS</button>
               {{-- <div class="nav-credits-wr w-25 w-sm-50 gold-text">
                 <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#add-pts-modal">
@@ -309,14 +310,18 @@
         </div>
         <form id="filter-settings-form" method="post">
           <div class="modal-body row">
-            <div class="form-group col-sm-6 col-md-6 mb-2">
+            <div class="form-group mb-2 col-sm-12 col-md-12 mb-2">
+              <label for="datepicker">Date Range:</label>
+              <input type="text" class="form-control" id="datepicker" />
+            </div>
+            {{-- <div class="form-group col-sm-6 col-md-6 mb-2">
               <label for="date-from">From:</label>
               <input type="date" class="form-control" id="date-from">
             </div>
             <div class="form-group col-sm-6 col-md-6 mb-2">
               <label for="date-to">To:</label>
               <input type="date" class="form-control" id="date-to">
-            </div>
+            </div> --}}
             <div class="form-group mt-2">
               <label>Status:</label>
               <div class="form-check">
@@ -444,6 +449,10 @@
 @endsection
 @section('additional-scripts')
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+  {{-- <script src="https://cdn.jsdelivr.net/gh/dmuy/duDatepicker@2.0.5/dist/duDatepicker.js"></script> --}}
+  {{-- <script src="https://cdn.jsdelivr.net/gh/dmuy/duDatepicker/duDatepicker.min.js"></script>
+  https://unpkg.com/@dmuy/datepicker@{version}/dist/duDatepicker.css --}}
+  <script type="text/javascript" src="https://unpkg.com/@dmuy/datepicker/dist/duDatepicker.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script>
     function Comma(Num) { //function to add commas to textboxes
@@ -497,6 +506,29 @@
         }
       });
     });
+
+    (function() {
+      let dateFrom = localStorage.getItem('dateFrom') ?? moment().format('MM/DD/YYYY');
+      let dateTo = localStorage.getItem('dateTo') ?? moment().format('MM/DD/YYYY');
+
+      duDatepicker('#datepicker', {
+        range: true,
+        outFormat: 'MM/DD/YYYY',
+        // maxDate: 'today',
+      });
+
+      duDatepicker('#datepicker', 'setValue', `${dateFrom}-${dateTo}`)
+
+      $('#settings-modal').on('show.bs.modal', function(e) {
+        let statuses = localStorage.getItem('status');
+        if (statuses) {
+          statuses = JSON.parse(statuses);
+          ['pending', 'completed', 'failed'].forEach((stat) => {
+            document.getElementById('checkbox-status-' + stat).checked = statuses.includes(stat)
+          });
+        }
+      })
+    })()
   </script>
   @vite('public/js/transactions.js')
   {{-- @vite('public/js/withdraw.js') --}}

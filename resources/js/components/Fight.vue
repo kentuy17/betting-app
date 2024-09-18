@@ -130,20 +130,20 @@
     <div class="self-end mr-2">
       <ButtonSettings />
     </div>
-    <div class="flex gap-2 mb-3"
-      style="display: flex; justify-content: center; flex-wrap: nowrap">
+    <div class="flex gap-2 mb-3 status-controller">
       <button @click="updateFight('O')" :disabled="isDisabled.open"
         class="btn btn-success">
         <span v-show="!isLoading.open">OPEN</span>
         <span v-show="isLoading.open">Processing...</span>
       </button>
-      <!-- <button @click="updateFight('C')" :disabled="isDisabled.close" -->
-      <button :disabled="true" class="btn btn-danger">
+      <button @click="updateFight('C')" :disabled="isDisabled.close"
+        class="btn btn-danger">
         <span v-show="!isLoading.close">CLOSE</span>
         <span v-show="isLoading.close">Processing...</span>
       </button>
-      <!-- <button @click="doneFight()" :disabled="isDisabled.done" -->
-      <button :disabled="true" class="btn btn-secondary">
+      <!-- <button :disabled="true" class="btn btn-secondary"> -->
+      <button @click="doneFight()" :disabled="isDisabled.done"
+        class="btn btn-secondary">
         <span v-show="!isLoading.done">DONE</span>
         <span v-show="isLoading.done">Loading...</span>
       </button>
@@ -152,36 +152,6 @@
         <span v-show="!isLoading.cancel">CANCEL</span>
         <span v-show="isLoading.cancel">Loading...</span>
       </button>
-    </div>
-  </div>
-  <div class="modal fade" id="modal-undo-win" tabindex="-1" role="dialog"
-    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-top">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 id="exampleModalLongTitle">Revert Fight Winner</h5>
-        </div>
-        <div class="modal-body">
-          <div class="form-group mt-2">
-            <label>Fight #</label>
-            <input type="number" class="form-control disabled" id="fight_no" />
-          </div>
-          <div class="revert-btn-group">
-            <div class="form-group mt-2">
-              <button @click="revertFight('M')" class="btn btn-danger btn-sm">
-                MERON </button>
-            </div>
-            <div class="form-group mt-2">
-              <button @click="revertFight('W')" class="btn btn-primary btn-sm">
-                WALA </button>
-            </div>
-            <div class="form-group mt-2">
-              <button @click="revertFight('D')" class="btn btn-warning btn-sm">
-                DRAW </button>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -678,5 +648,11 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+}
+
+.status-controller {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
 }
 </style>

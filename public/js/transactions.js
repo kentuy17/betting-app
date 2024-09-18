@@ -12,148 +12,169 @@ function delay(time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-let dateFrom = localStorage.getItem('dateFrom') ?? $('#date-from').val();
-let dateTo = localStorage.getItem('dateTo') ?? $('#date-to').val();
+let dateRange = $('#datepicker').val().split('-');
+let dateFrom = localStorage.getItem('dateFrom') ?? dateRange[0];
+let dateTo = localStorage.getItem('dateTo') ?? dateRange[1];
 let statuss = localStorage.getItem('status');
 
-transactionsTable.DataTable({
-  ajax: {
-    type: 'GET',
-    url: '/transaction/deposits',
-    data: {
-      date_from: dateFrom,
-      date_to: dateTo,
-      status: statuss ? JSON.parse(statuss) : ['pending', 'completed'],
-      morph: [0],
-    },
-  },
-  bPaginate: true,
-  bLengthChange: true,
-  bFilter: true,
-  bInfo: false,
-  bAutoWidth: true,
-  scrollX: true,
-  processing: true,
-  serverSide: true,
-  pagingType: 'numbers',
-  language: {
-    search: '',
-    lengthMenu: '_MENU_',
-  },
-  order: [[5, 'DESC']],
-  dom:
-    "<'row'<'col-4'l><'col-8'f>>" +
-    "<'row'<'col-sm-12'tr>>" +
-    "<'row'<'col-md-12'p>>",
-  preInit: function (e, settings) {
-    pendingCount = 0;
-    unpaidCount = 0;
-  },
-  columnDefs: [
-    {
-      targets: [1],
-      className: 'dt-body-right',
-    },
-    {
-      targets: [0, 2, 3, 4],
-      className: 'dt-body-center',
-    },
-    {
-      targets: [0, 2, 3, 4, 5],
-      className: 'dt-head-center',
-    },
-  ],
-  columns: [
-    // {
-    //   className: 'dt-control dt-body-left',
-    //   orderable: false,
-    //   data: null,
-    //   defaultContent: '',
-    //   data: "user_id",
-    // },
-    {
-      data: 'user.name',
-    },
-    // {
-    //   "data": "outlet"
-    // },
-    {
-      data: null,
-      render: (data) => {
-        return data.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-      },
-    },
-    {
-      data: 'mobile_number',
-    },
+DataTable.ext.errMode = 'none';
 
-    {
-      data: null,
-      render: (data) => {
-        return data.operator != null ? data.operator.username : '--';
+transactionsTable
+  .on('error.dt', function (e, settings, techNote, message) {
+    console.log(e, 'error');
+    console.log(message, 'message');
+    let prompt = confirm('You are not currently logged in');
+    if (prompt) {
+      window.location.href = '/login';
+    }
+  })
+  .DataTable({
+    ajax: {
+      type: 'GET',
+      url: '/transaction/deposits',
+      data: {
+        date_from: dateFrom,
+        date_to: dateTo,
+        status: statuss ? JSON.parse(statuss) : ['pending', 'completed'],
+        morph: [0],
       },
     },
-    {
-      data: 'reference_code',
+    bPaginate: true,
+    bLengthChange: true,
+    bFilter: true,
+    bInfo: false,
+    bAutoWidth: true,
+    scrollX: true,
+    processing: true,
+    serverSide: true,
+    pagingType: 'numbers',
+    language: {
+      search: '',
+      lengthMenu: '_MENU_',
     },
+    order: [[5, 'DESC']],
+    // onerror
+    dom:
+      "<'row'<'col-4'l><'col-8'f>>" +
+      "<'row'<'col-sm-12'tr>>" +
+      "<'row'<'col-md-12'p>>",
+    preInit: function (e, settings) {
+      pendingCount = 0;
+      unpaidCount = 0;
+    },
+    columnDefs: [
+      {
+        targets: [1],
+        className: 'dt-body-right',
+      },
+      {
+        targets: [0, 2, 3, 4],
+        className: 'dt-body-center',
+      },
+      {
+        targets: [0, 2, 3, 4, 5],
+        className: 'dt-head-center',
+      },
+    ],
+    columns: [
+      // {
+      //   className: 'dt-control dt-body-left',
+      //   orderable: false,
+      //   data: null,
+      //   defaultContent: '',
+      //   data: "user_id",
+      // },
+      {
+        data: 'user.name',
+      },
+      // {
+      //   "data": "outlet"
+      // },
+      {
+        data: null,
+        render: (data) => {
+          return data.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        },
+      },
+      {
+        data: 'mobile_number',
+      },
 
-    {
-      data: 'created_at',
-    },
-    {
-      data: null,
-      render: (data) => {
-        return data.status.toUpperCase();
+      {
+        data: null,
+        render: (data) => {
+          return data.operator != null ? data.operator.username : '--';
+        },
       },
-    },
-    {
-      data: null,
-      render: (data) => {
-        return `<a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view">
+      {
+        data: 'reference_code',
+      },
+
+      {
+        data: 'created_at',
+      },
+      {
+        data: null,
+        render: (data) => {
+          return data.status.toUpperCase();
+        },
+      },
+      {
+        data: null,
+        render: (data) => {
+          return `<a href="javascript:void(0)" data-id="${data.id}" class="btn btn-link text-primary btn-icon btn-sm view">
           <i class="fa-solid fa-circle-info"></i></a>`;
+        },
       },
-    },
-  ],
-  createdRow: function (row, data, dataIndex) {
-    $(row).attr('data-id', data.id).addClass('cursor-pointer expandable');
-    if (data.status == `pending`) {
-      $(row).css({ 'background-color': 'var(--bs-red)' });
-      pendingCount++;
+    ],
+    createdRow: function (row, data, dataIndex) {
+      $(row).attr('data-id', data.id).addClass('cursor-pointer expandable');
+      if (data.status == `pending`) {
+        $(row).css({ 'background-color': 'var(--bs-red)' });
+        pendingCount++;
 
-      let timeDiff = moment(data.created_at, 'MM-DD-YYYY hh:mm:ss').fromNow();
-      $(row).find('td').eq(5).text(timeDiff);
-
-      setInterval(() => {
-        timeDiff = moment(data.created_at, 'MM-DD-YYYY hh:mm:ss').fromNow();
+        let timeDiff = moment(data.created_at, 'MM-DD-YYYY hh:mm:ss').fromNow();
         $(row).find('td').eq(5).text(timeDiff);
-      }, 5000);
-    }
 
-    if (data.status == `completed` && data.reference_code == null) {
-      $(row).css({ 'background-color': 'var(--bs-yellow)' });
-      $(row).addClass('bg-warning');
-    }
+        setInterval(() => {
+          timeDiff = moment(data.created_at, 'MM-DD-YYYY hh:mm:ss').fromNow();
+          $(row).find('td').eq(5).text(timeDiff);
+        }, 5000);
+      }
 
-    if (data.status == `failed`) {
-      $(row).addClass('failed');
-    }
-  },
-  initComplete: function (settings, json) {
-    unpaidCount = json.unpaid_count;
+      if (data.status == `completed` && data.reference_code == null) {
+        $(row).css({ 'background-color': 'var(--bs-yellow)' });
+        $(row).addClass('bg-warning');
+      }
 
-    if (pendingCount > 0) {
-      $('#badge-deposit').show().text(pendingCount);
-    } else {
-      $('#badge-deposit').hide().text(pendingCount);
-    }
+      if (data.status == `failed`) {
+        $(row).addClass('failed');
+      }
 
-    if (unpaidCount > 0) {
-      $('#badge-unpaid').show().text(unpaidCount);
-    } else {
-      $('#badge-unpaid').hide().text(unpaidCount);
-    }
-  },
-});
+      if (data.morph === 1) {
+        $(row).find('td').eq(1).css({ 'text-decoration': 'line-through' });
+      }
+    },
+    initComplete: function (settings, json) {
+      unpaidCount = json.unpaid_count;
+
+      if (pendingCount > 0) {
+        $('#badge-deposit').show().text(pendingCount);
+      } else {
+        $('#badge-deposit').hide().text(pendingCount);
+      }
+
+      if (unpaidCount > 0) {
+        $('#badge-unpaid').show().text(unpaidCount);
+      } else {
+        $('#badge-unpaid').hide().text(unpaidCount);
+      }
+    },
+  });
+
+transactionsTable;
+
+// $.fn.dataTable.ext.errMode = 'none';
 
 const Alert = (action = null, ti = null) => {
   let oldTitle = localStorage.getItem('OLD_TITLE') ?? document.title,
@@ -313,9 +334,15 @@ transactionsTable.on('click', 'tbody td .view', async function () {
 
 $('#filter-settings-form').on('click', 'input[type="submit"]', function (e) {
   e.preventDefault();
-  localStorage.setItem('dateFrom', $('#date-from').val());
-  localStorage.setItem('dateTo', $('#date-to').val());
+  let dateRange = $('#datepicker').val().split('-');
   let statuses = [];
+
+  localStorage.setItem('dateFrom', dateRange[0]);
+  localStorage.setItem(
+    'dateTo',
+    dateRange[1] === undefined ? dateRange[0] : dateRange[1]
+  );
+
   ['pending', 'completed', 'failed'].forEach((stat) => {
     let isChecked = $('#checkbox-status-' + stat).is(':checked');
     if (isChecked) statuses.push(stat);

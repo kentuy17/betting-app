@@ -76,7 +76,7 @@
               <input class="form-check-input" type="checkbox" id="switch-video-display" @if ($setting) checked @endif>
             </div>
           </div>
-          <img id="poster-img" style="display: none;" src="{{ asset('img/poster.png') }}" alt="10-streak-win-promo">
+          <img id="poster-img-tmp" style="display: none;" src="{{ asset('img/poster.png') }}" alt="10-streak-win-promo">
 
           {{-- DaCast --}}
           {{-- <div id="mux-player" style="width:100%;height:0px;position:relative;padding-bottom:56.25%;">
