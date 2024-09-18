@@ -105,7 +105,7 @@ class OperatorController extends Controller
             $trans->processedBy = Auth::user()->id;
             $trans->amount = $request->amount;
             $trans->note = $request->note;
-            $trans->completed_at = date('Y-m-d H:i:s');
+            $trans->completed_at = Carbon::now()->toDateTimeString();
             $trans->save();
 
             $player = User::find($trans->user_id);
