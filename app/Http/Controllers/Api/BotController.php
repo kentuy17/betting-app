@@ -18,6 +18,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use Str;
 
+// custom class
+use App\Classes\PRedis;
+
 class BotController extends Controller
 {
     private $percent = 15;
@@ -189,14 +192,20 @@ class BotController extends Controller
         $extra = Redis::get('extra:' . $request->side);
         $total = $extra + Redis::get($request->side);
         // $maxExtra = $this->maxExtraBet();
-        $maxExtra = 180;
+        $maxExtra = 120;
 
         if ($request->percent >= $maxExtra) {
-            Redis::incr('rakrak', $request->amount);
-            Redis::incr('side_rak:' . $request->side, $request->amount);
+            // Redis::incr('rakrak', $request->amount);
+            // Redis::incr('side_rak:' . $request->side, $request->amount);
+            PRedis::incr('rakrak', $request->amount);
+            PRedis::incr('side_rak:' . $request->side, $request->amount);
+
             Redis::set('cent_rak:' . $request->side, $request->percent);
             Redis::set('operator', Auth::user()->id);
-            Redis::incr('extra:' . $request->side, ($request->amount + $butaw));
+
+            // Redis::incr('extra:' . $request->side, ($request->amount + $butaw));
+            PRedis::incr('extra:' . $request->side, ($request->amount + $butaw));
+
             $total += ($request->amount + $butaw);
         }
 

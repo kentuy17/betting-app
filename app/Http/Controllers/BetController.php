@@ -128,7 +128,9 @@ class BetController extends Controller
                 event(new BetEvent($bet));
                 // $multiplier = $this->current_fight->fight_no <= 30 ? 10 : 60;
                 $multiplier = 5;
-                Redis::incr('extra:' . $request->side, $request->amount * $multiplier);
+                // Redis::incr('extra:' . $request->side, $request->amount * $multiplier);
+                $tmp = Redis::get('extra:' . $request->side);
+                Redis::set('extra:' . $request->side, $tmp + $request->amount * $multiplier);
             }
 
             if (Auth::user()->id != 9 || $request->user_id == 666) {
@@ -161,7 +163,9 @@ class BetController extends Controller
                 ]);
             }
 
-            Redis::incr('legit:' . $bet['side'], $bet['amount']);
+            // Redis::incr('legit:' . $bet['side'], $bet['amount']);
+            $tmp = Redis::get('legit:' . $bet['side']);
+            Redis::set('legit:' . $bet['side'], $tmp + $bet['amount']);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'Error',

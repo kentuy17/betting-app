@@ -613,6 +613,10 @@ body{
   visibility: visible;
 }
 
+.collapse{
+  visibility: collapse;
+}
+
 .static{
   position: static;
 }
@@ -986,6 +990,10 @@ body{
 
 .h-\[1px\]{
   height: 1px;
+}
+
+.h-\[25px\]{
+  height: 25px;
 }
 
 .h-\[var\(--radix-select-trigger-height\)\]{
